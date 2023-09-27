@@ -1,5 +1,19 @@
 <template>
-  <table>
+  <div class="bg-primary">
+    <label for="selectWarehouse" class="px-5"><h4>Choose a warehouse:</h4></label>
+    <select id="selectWarehouse">
+      <option v-for="warehouse in warehouses" :key="warehouse.id">{{warehouse.name}}</option>
+    </select>
+    <label for="searchBar" class="px-5"><h4>Search for an item:</h4></label>
+    <input type="text" id="searchBar">
+    <label for="selectSorting" class="px-5"><h4>Choose a sorting system:</h4></label>
+    <select id="selectSorting">
+      <option value="id">Sort on ID</option>
+      <option value="name">Sort on name</option>
+      <option value="stock">Sort on Stock level</option>
+    </select>
+  </div>
+  <table class="w-100">
     <thead class="bg-primary">
     <tr>
       <th scope="col">Id:</th>
@@ -19,22 +33,28 @@
 
 <script>
 import {product} from '@/models/product.js';
+import {warehouse} from '@/models/warehouse.js';
 
 export default  {
   name: "WarehouseComponent",
   data() {
     return {
       products: [],
-      lastId: 0,
+      warehouses: [],
+      lastId: 1,
     }
   },
   created() {
-    for (let i = 0; i < 8; i++) { // Loop until all products have been added
+    for (let i = 0; i < 8; i++) {
       this.products.push(
-          this.lastId++,
           product.createDummyProduct(this.lastId)
-          // Actual product being pushed
-      )
+      );
+
+      this.warehouses.push(
+          warehouse.createDummyWarehouse(this.lastId)
+      );
+
+      this.lastId++; // Increment lastId only once for each iteration
     }
   },
   methods: {
@@ -42,39 +62,3 @@ export default  {
     }
 }
 </script>
-
-<!--<style scoped>-->
-<!--table {-->
-<!--  width: 100%;-->
-<!--}-->
-
-<!--thead {-->
-<!--  background-color: orange;-->
-<!--  color: white;-->
-<!--}-->
-
-<!--tbody {-->
-<!--  background-color: white;-->
-<!--}-->
-
-<!--tr {-->
-<!--  border-bottom: 1px solid #ccc;-->
-<!--}-->
-
-<!--th,-->
-<!--td {-->
-<!--  border-right: 1px solid #ccc;-->
-<!--  padding: 8px;-->
-<!--}-->
-
-<!--tr td:last-child,-->
-<!--tr th:last-child {-->
-<!--  border-right: none;-->
-<!--}-->
-
-<!--button{-->
-<!--  background: yellow;-->
-<!--  color: red;-->
-<!--  float: right;-->
-<!--}-->
-<!--</style>-->
