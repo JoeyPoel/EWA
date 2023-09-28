@@ -5,7 +5,16 @@ export class warehouse{
         this.location = location;
     }
 
+    static warehouseList = [
+        "Solar clarity",
+        "Solar groen",
+        "4Blue",
+        "Stralend Groen",
+        "Ziezo-Solar",
+        "Baywa"
+    ];
+
     static createDummyWarehouse(id){
-        return new warehouse(id, "dummy warehouse", "dummy location")
+        return new warehouse(id, this.warehouseList[id], "dummy location")
     }
 }

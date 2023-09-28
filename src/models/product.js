@@ -5,7 +5,16 @@ export class product{
         this.quantity = quantity;
     }
 
+    static productList = [
+        "Solar panels",
+        "Solar Cables",
+        "Main Connectors (AC)",
+        "Inverter",
+        "Storage Unit",
+        "Montage Material"
+    ];
+
     static createDummyProduct(id){
-        return new product(id, "dummy", 1)
+        return new product(id, this.productList[id], Math.floor(Math.random() * 100))
     }
 }
