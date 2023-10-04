@@ -22,49 +22,34 @@
       </div>
     </div>
   </div>
-  <div class="container">
-    <table class="table">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">Id:</th>
-        <th scope="col">Name:</th>
-        <th scope="col">Quantity:</th>
-      </tr>
-      </thead>
-      <tbody class="bg-light">
-      <tr v-for="product in products" :key="product.id" class="border-bottom">
-        <td>{{ product.id }}</td>
-        <td>{{ product.name }}</td>
-        <td class="align-self-center">{{ product.quantity }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  <warehouse-table :warehouses="warehouses"></warehouse-table>
 </template>
 
 <script>
 import {product} from '@/models/product.js';
 import {warehouse} from '@/models/warehouse.js';
+import WarehouseTable from "@/components/WarehouseTable";
 
 export default  {
   name: "WarehouseComponent",
+  components: {WarehouseTable},
   data() {
     return {
-      products: [],
       warehouses: [],
+      products: [],
       lastId: 1,
       selected: null,
     }
   },
   created() {
     for (let i = 0; i < 5; i++) {
-      this.products.push(
-          product.createDummyProduct(this.lastId)
-      );
-
       this.warehouses.push(
           warehouse.createDummyWarehouse(this.lastId)
       );
+
+      for (let j = 0; j < 5; j++) {
+        this.warehouses[i].addProduct(product.createDummyProduct(j))
+      }
 
       this.lastId++; // Increment lastId only once for each iteration
     }

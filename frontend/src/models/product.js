@@ -16,6 +16,6 @@ export class product{
     ];
 
     static createDummyProduct(id){
-        return new product(id, this.productList[id], Math.floor(Math.random() * 100))
+        return new product(id, this.productList[id],"Dummy Description" ,Math.floor(Math.random() * 100))
     }
 }
