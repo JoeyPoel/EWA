@@ -44,7 +44,7 @@
 
 <script>
 import {product} from '@/models/product.js';
-import {warehouse} from '@/models/warehouse.js';
+import {Warehouse} from '@/models/warehouse.js';
 
 export default  {
   name: "WarehouseComponent",
@@ -63,7 +63,7 @@ export default  {
       );
 
       this.warehouses.push(
-          warehouse.createDummyWarehouse(this.lastId)
+          Warehouse.createDummyWarehouse(this.lastId)
       );
 
       this.lastId++; // Increment lastId only once for each iteration

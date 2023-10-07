@@ -1,4 +1,4 @@
-export class warehouse{
+export class Warehouse {
     constructor(id, name, location) {
         this.id = id;
         this.name = name;
@@ -25,15 +25,33 @@ export class warehouse{
         "Almere"
     ];
 
+    static getImage() {
+        return require("@/assets/warehouse.png");
+    }
+
     static getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    static createDummyWarehouse(id){
-        return new warehouse(
+    static createDummyWarehouse(id) {
+        return new Warehouse(
             id,
             this.warehouseList[this.getRandomInt(this.warehouseList.length)],
             this.locationList[this.getRandomInt(this.locationList.length)]
         );
+    }
+
+    static equals(warehouse1, warehouse2) {
+        if (!(warehouse1 instanceof Warehouse) || !(warehouse2 instanceof Warehouse)) return false;
+        for (const key in warehouse1) {
+            if (warehouse1[key] !== warehouse2[key]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static copy(warehouse) {
+        return new Warehouse(warehouse.id, warehouse.name, warehouse.location);
     }
 }
