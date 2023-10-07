@@ -14,7 +14,26 @@ export class warehouse{
         "Baywa"
     ];
 
+    static locationList = [
+        "Amsterdam",
+        "Rotterdam",
+        "Den Haag",
+        "Utrecht",
+        "Eindhoven",
+        "Tilburg",
+        "Groningen",
+        "Almere"
+    ];
+
+    static getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
     static createDummyWarehouse(id){
-        return new warehouse(id, this.warehouseList[id], "dummy location")
+        return new warehouse(
+            id,
+            this.warehouseList[this.getRandomInt(this.warehouseList.length)],
+            this.locationList[this.getRandomInt(this.locationList.length)]
+        );
     }
 }
