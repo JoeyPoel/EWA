@@ -41,7 +41,9 @@
               <h2>Admin</h2>
             </a>
             <div class="dropdown-menu" aria-labelledby="adminDropdown">
-              <a class="dropdown-item" href="#">Admin Page 1</a>
+              <router-link class="dropdown-item" :to="{ name: 'User' }">
+                User page
+              </router-link>
               <a class="dropdown-item" href="#">Admin Page 2</a>
             </div>
           </li>
