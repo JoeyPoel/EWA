@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-6 col-lg-4 mb-4">
         <label for="selectWarehouse"><h4>Choose a warehouse:</h4></label>
-        <select id="selectWarehouse" class="form-control form-control-sm">
+        <select id="selectWarehouse" class="form-control form-control-sm" v-model="selectedWarehouse">
           <option v-for="warehouse in warehouses" :key="warehouse.id">{{ warehouse.name }}</option>
         </select>
       </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <warehouse-table :warehouses="warehouses"></warehouse-table>
+  <warehouse-table :selected-warehouse="selectedWarehouse"></warehouse-table>
 </template>
 
 <script>
@@ -35,29 +35,30 @@ export default  {
   components: {WarehouseTable},
   data() {
     return {
-      warehouses: [],
+      selectedWarehouse: null,
       products: [],
-      lastId: 1,
+      warehouses: [],
       selected: null,
     }
   },
   created() {
     for (let i = 0; i < 5; i++) {
       this.warehouses.push(
-          warehouse.createDummyWarehouse(this.lastId)
+          warehouse.createDummyWarehouse(i + 1)
       );
 
       for (let j = 0; j < 5; j++) {
-        this.warehouses[i].addProduct(product.createDummyProduct(j))
+        this.warehouses[i].addProduct(product.createDummyProduct(j + 1))
       }
-
-      this.lastId++; // Increment lastId only once for each iteration
     }
   },
   methods: {
 
     },
   watch: {
+    selectedWarehouse: function(){
+      this.selectedWarehouse = this.selected;
+    },
     selected: function (){
       if(this.selected === "id"){
       this.products.sort((a, b) => a.id - b.id);
