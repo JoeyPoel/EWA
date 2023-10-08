@@ -37,10 +37,10 @@ export default {
   components: {WarehouseTable},
   data() {
     return {
-      selectedWarehouse: null,
       products: [],
       warehouses: [],
-      selectedSorting: null,
+      selectedWarehouse: null,
+      selectedSorting: "id",
     }
   },
   created() {
