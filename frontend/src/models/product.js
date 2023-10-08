@@ -1,5 +1,3 @@
-import {warehouse} from "@/models/warehouse";
-
 export class product{
     constructor(id, name, description, quantity, warehousId) {
         this.id = id;
