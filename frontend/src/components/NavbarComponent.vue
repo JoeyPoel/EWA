@@ -29,21 +29,8 @@
               <h2>Projects</h2>
             </a>
           </li>
-          <li class="nav-item dropdown">
-            <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="adminDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-            >
-              <h2>Admin</h2>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="adminDropdown">
-              <a class="dropdown-item" href="#">Admin Page 1</a>
-              <a class="dropdown-item" href="#">Admin Page 2</a>
-            </div>
+          <li class="nav-item ">
+            <router-link class="nav-link m-1 item" to="/dashboard"><h2>Dashboard</h2></router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link btn btn-success" to="/sign-in">
