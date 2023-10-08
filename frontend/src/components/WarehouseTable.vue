@@ -9,7 +9,7 @@
       </tr>
       </thead>
       <tbody class="bg-light">
-      <tr v-for="product in selectedWarehouse.products" :key="product.id" class="border-bottom">
+      <tr v-for="product in products" :key="product.id" class="border-bottom">
         <td>{{ product.id }}</td>
         <td>{{ product.name }}</td>
         <td class="align-self-center">{{ product.quantity}}</td>
@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import {warehouse} from "@/models/warehouse";
-
 export default {
   name: "WarehouseTable",
   props: {
-    selectedWarehouse: warehouse,
-  },
+    products: {
+      type: Array,
+    },
+  }
 }
 </script>
 

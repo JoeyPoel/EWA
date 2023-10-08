@@ -3,8 +3,8 @@
     <div class="row justify-content-center">
       <div class="col-md-6 col-lg-4 mb-4">
         <label for="selectWarehouse"><h4>Choose a warehouse:</h4></label>
-        <select id="selectWarehouse" class="form-control form-control-sm" v-model="selectedWarehouse">
-          <option v-for="warehouse in warehouses" :key="warehouse.id">{{ warehouse.name }}</option>
+        <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
+          <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
         </select>
       </div>
       <div class="col-md-6 col-lg-4 mb-4">
@@ -13,16 +13,18 @@
       </div>
       <div class="col-md-6 col-lg-4 mb-4">
         <label for="selectSorting"><h4>Choose a sorting system:</h4></label>
-        <select id="selectSorting" v-model="selected" class="form-control form-control-sm">
-          <option disabled value="">Please select one</option>
-          <option value="id" >Sort on ID</option>
+        <select id="selectSorting" v-model="selectedSorting" class="form-control form-control-sm">
+          <option value="id">Sort on ID</option>
           <option value="name">Sort on name</option>
           <option value="stock">Sort on Stock level</option>
         </select>
       </div>
     </div>
   </div>
-  <warehouse-table :selected-warehouse="selectedWarehouse"></warehouse-table>
+  <div class="container" v-if="selectedWarehouse === null">
+    <p class="text-danger">Please select a warehouse.</p>
+  </div>
+  <warehouse-table v-else :products="selectedProducts"></warehouse-table>
 </template>
 
 <script>
@@ -30,7 +32,7 @@ import {product} from '@/models/product.js';
 import {warehouse} from '@/models/warehouse.js';
 import WarehouseTable from "@/components/WarehouseTable";
 
-export default  {
+export default {
   name: "WarehouseComponent",
   components: {WarehouseTable},
   data() {
@@ -38,7 +40,7 @@ export default  {
       selectedWarehouse: null,
       products: [],
       warehouses: [],
-      selected: null,
+      selectedSorting: null,
     }
   },
   created() {
@@ -48,23 +50,22 @@ export default  {
       );
 
       for (let j = 0; j < 5; j++) {
-        this.warehouses[i].addProduct(product.createDummyProduct(j + 1))
+        this.products.push(product.createDummyProduct(j + 1, i + 1))
       }
     }
   },
-  methods: {
-
-    },
+  computed: {
+    selectedProducts() {
+      return this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+    }
+  },
   watch: {
-    selectedWarehouse: function(){
-      this.selectedWarehouse = this.selected;
-    },
-    selected: function (){
-      if(this.selected === "id"){
-      this.products.sort((a, b) => a.id - b.id);
+    selectedSorting: function () {
+      if (this.selectedSorting === "id") {
+        this.products.sort((a, b) => a.id - b.id);
       }
 
-      if(this.selected === "name"){
+      if (this.selectedSorting === "name") {
         this.products.sort((a, b) => {
           const nameA = a.name.toUpperCase(); // ignore upper and lowercase
           const nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -79,8 +80,8 @@ export default  {
         });
       }
 
-      if(this.selected === "stock"){
-      this.products.sort((a, b) => a.quantity - b.quantity);
+      if (this.selectedSorting === "stock") {
+        this.products.sort((a, b) => a.quantity - b.quantity);
       }
     }
   }

@@ -1,9 +1,12 @@
+import {warehouse} from "@/models/warehouse";
+
 export class product{
-    constructor(id, name, description, quantity) {
+    constructor(id, name, description, quantity, warehousId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
+        this.warehouseId = warehousId;
     }
 
     static productList = [
@@ -15,7 +18,7 @@ export class product{
         "Montage Material"
     ];
 
-    static createDummyProduct(id){
-        return new product(id, this.productList[id],"Dummy Description" ,Math.floor(Math.random() * 100))
+    static createDummyProduct(id, warehouseId){
+        return new product(id, this.productList[id],"Dummy Description" ,Math.floor(Math.random() * 100), warehouseId)
     }
 }
