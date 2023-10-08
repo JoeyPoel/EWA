@@ -15,8 +15,11 @@
         <label for="selectSorting"><h4>Choose a sorting system:</h4></label>
         <select id="selectSorting" v-model="selectedSorting" class="form-control form-control-sm">
           <option value="id">Sort on ID</option>
+          <option value="reverse id">Reverse sort on ID</option>
           <option value="name">Sort on name</option>
+          <option value="reverse name">Reverse sort on name</option>
           <option value="stock">Sort on Stock level</option>
+          <option value="reverse stock">Reverse sort on Stock level</option>
         </select>
       </div>
     </div>
@@ -56,6 +59,36 @@ export default {
       }
     }
   },
+  watch: {
+    selectedWarehouse: function () {
+      // Whenever selectedWarehouse changes, set filteredProducts to this.products
+      this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+      this.searchQuery = "";
+    },
+    selectedSorting: function () {
+      if (this.selectedSorting === "id") {
+        this.idSorting();
+      }
+      if (this.selectedSorting === "reverse id") {
+        this.idSorting();
+        this.filteredProducts.reverse();
+      }
+      if (this.selectedSorting === "name") {
+        this.nameSorting();
+      }
+      if (this.selectedSorting === "reverse name") {
+        this.nameSorting();
+        this.filteredProducts.reverse();
+      }
+      if (this.selectedSorting === "stock") {
+        this.stockLevelSorting();
+      }
+      if (this.selectedSorting === "reverse stock") {
+        this.stockLevelSorting();
+        this.filteredProducts.reverse();
+      }
+    },
+  },
   methods: {
     handleSearch() {
       const searchQuery = this.searchQuery.toLowerCase().trim();
@@ -65,38 +98,26 @@ export default {
       } else {
         this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse); // Else return the normal product list of this warehouse
       }
-    }
-  },
-  watch: {
-    selectedWarehouse: function () {
-      // Whenever selectedWarehouse changes, set filteredProducts to this.products
-      this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
-      this.searchQuery = ""
     },
-    selectedSorting: function () {
-      if (this.selectedSorting === "id") {
-        this.filteredProducts.sort((a, b) => a.id - b.id);
-      }
-
-      if (this.selectedSorting === "name") {
-        this.filteredProducts.sort((a, b) => {
-          const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          // names must be equal
-          return 0;
-        });
-      }
-
-      if (this.selectedSorting === "stock") {
-        this.filteredProducts.sort((a, b) => a.quantity - b.quantity);
-      }
-    }
-  }
+    idSorting() {
+      this.filteredProducts.sort((a, b) => a.id - b.id);
+    },
+    nameSorting() {
+      this.filteredProducts.sort((a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+    stockLevelSorting() {
+      this.filteredProducts.sort((a, b) => a.quantity - b.quantity);
+    },
+  },
 }
 </script>
