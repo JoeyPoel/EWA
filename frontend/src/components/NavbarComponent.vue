@@ -46,6 +46,7 @@
               </router-link>
               <a class="dropdown-item" href="#">Admin Page 2</a>
             </div>
+          </li>
           <li class="nav-item ">
             <router-link class="nav-link m-1 item" to="/dashboard"><h2>Dashboard</h2></router-link>
           </li>
