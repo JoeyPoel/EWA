@@ -64,6 +64,7 @@ export default {
       // Whenever selectedWarehouse changes, set filteredProducts to this.products
       this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
       this.searchQuery = "";
+      this.selectedSorting = "id"
     },
     selectedSorting: function () {
       if (this.selectedSorting === "id") {
