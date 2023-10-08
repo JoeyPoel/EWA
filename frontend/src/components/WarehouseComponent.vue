@@ -9,7 +9,7 @@
       </div>
       <div class="col-md-6 col-lg-4 mb-4">
         <label for="searchBar"><h4>Search for an item:</h4></label>
-        <input type="text" id="searchBar" class="form-control form-control-sm">
+        <input type="text" id="searchBar" class="form-control form-control-sm" v-model="searchQuery" @input="handleSearch">
       </div>
       <div class="col-md-6 col-lg-4 mb-4">
         <label for="selectSorting"><h4>Choose a sorting system:</h4></label>
@@ -24,7 +24,7 @@
   <div class="container" v-if="selectedWarehouse === null">
     <p class="text-danger">Please select a warehouse.</p>
   </div>
-  <warehouse-table v-else :products="selectedProducts"></warehouse-table>
+  <warehouse-table v-else :products="filteredProducts"></warehouse-table>
 </template>
 
 <script>
@@ -37,10 +37,12 @@ export default {
   components: {WarehouseTable},
   data() {
     return {
-      products: [],
+      products: [], // Normal product list
       warehouses: [],
+      filteredProducts: [], // List of products filtered on name by searchQuery
       selectedWarehouse: null,
       selectedSorting: "id",
+      searchQuery: ""
     }
   },
   created() {
@@ -54,19 +56,29 @@ export default {
       }
     }
   },
-  computed: {
-    selectedProducts() {
-      return this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+  methods: {
+    handleSearch() {
+      const searchQuery = this.searchQuery.toLowerCase().trim();
+      if (searchQuery !== "") { // If searchQuery is not null
+        const products = this.products.filter(product => product.warehouseId === this.selectedWarehouse); // Only from this warehouse
+        this.filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchQuery)); // Filter it on includes searchQuery
+      } else {
+        this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse); // Else return the normal product list of this warehouse
+      }
     }
   },
   watch: {
+    selectedWarehouse: function () {
+      // Whenever selectedWarehouse changes, set filteredProducts to this.products
+      this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+    },
     selectedSorting: function () {
       if (this.selectedSorting === "id") {
-        this.products.sort((a, b) => a.id - b.id);
+        this.filteredProducts.sort((a, b) => a.id - b.id);
       }
 
       if (this.selectedSorting === "name") {
-        this.products.sort((a, b) => {
+        this.filteredProducts.sort((a, b) => {
           const nameA = a.name.toUpperCase(); // ignore upper and lowercase
           const nameB = b.name.toUpperCase(); // ignore upper and lowercase
           if (nameA < nameB) {
@@ -81,7 +93,7 @@ export default {
       }
 
       if (this.selectedSorting === "stock") {
-        this.products.sort((a, b) => a.quantity - b.quantity);
+        this.filteredProducts.sort((a, b) => a.quantity - b.quantity);
       }
     }
   }
