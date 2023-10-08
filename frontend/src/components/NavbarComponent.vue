@@ -15,21 +15,14 @@ export default {
           <router-link class="nav-link m-1 item" to="/warehouse"><h2>Inventory</h2></router-link>
 
         </li>
-        <li class="nav-item ">
+        <li class="nav-item">
           <a class="nav-link m-1 item" href="#">
             <h2>Projects</h2>
           </a>
         </li>
-        <li class="nav-item">
-          <div class="nav-item dropdown m-1">
-            <a class="nav-link item" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <h2>Admin</h2>
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Admin page 1</a>
-              <a class="dropdown-item" href="#">Admin page 2</a>
-            </div>
-          </div>
+        <li class="nav-item ">
+          <router-link class="nav-link m-1 item" to="/dashboard"><h2>Dashboard</h2></router-link>
+
         </li>
       </ul>
       <router-link class="nav-link btn btn-lg btn-success m-1" to="/sign-in">Log in</router-link>
