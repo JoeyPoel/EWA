@@ -48,9 +48,9 @@ export default {
       </li>
 
       <li class="nav-item">
-        <a class="nav-link text-white" href="#">
+        <router-link class="nav-link text-white" to="/project">
           Projects
-        </a>
+        </router-link>
       </li>
 
       <li class="nav-item dropdown">
