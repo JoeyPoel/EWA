@@ -98,7 +98,7 @@
 
 <script>
 
-import {warehouse} from "@/models/warehouse.js";
+import {Warehouse} from "@/models/warehouse.js";
 export default {
   name: "DashboardComponent",
 
@@ -128,7 +128,7 @@ export default {
   created() {
     // warehouses
     for (let i = 0; i < 5; i++) {
-      this.warehouses.push(warehouse.createDummyWarehouse(i + 1))
+      this.warehouses.push(Warehouse.createDummyWarehouse(i + 1))
       this.warehouseCount++;
     }
   },

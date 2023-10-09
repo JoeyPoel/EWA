@@ -1,4 +1,4 @@
-import {warehouse} from "@/models/warehouse";
+import {Warehouse} from "@/models/warehouse";
 
 export class User{
     constructor(id, name, email, team, role) {
@@ -19,6 +19,6 @@ export class User{
     ];
 
     static createDummyUser(id){
-        return new User(id, this.userList[id], "dummy@email.com", warehouse.warehouseList[id], "Viewer");
+        return new User(id, this.userList[id], "dummy@email.com", Warehouse.warehouseList[id], "Viewer");
     }
 }

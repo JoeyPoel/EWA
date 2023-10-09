@@ -37,7 +37,9 @@
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-            >
+            ></a>
+          </li>
+        </ul>
       <ul class="navbar-nav me-auto">
         <li class="nav-item ">
           <router-link class="nav-link m-1 item" to="/"><h2>Home</h2></router-link>
@@ -64,6 +66,7 @@
               </router-link>
               <a class="dropdown-item" href="#">Admin Page 2</a>
             </div>
+          </div>
           </li>
           <li class="nav-item ">
             <router-link class="nav-link m-1 item" to="/dashboard"><h2>Dashboard</h2></router-link>
