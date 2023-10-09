@@ -1,25 +1,24 @@
 <template>
-  <div class="col container-fluid">
-    <div class="row">
-      <div class="col px-5 text-center border border-2 border-light-subtle rounded-4 mx-2">
-        <div class="row pt-1">
-          <div class="col col-auto align-self-center">
+      <div class="row px-5 text-center border border-2 border-light-subtle rounded-4 mx-2">
+        <div class="col col-2 pt-1">
+          <div class="row">
             <button class="btn btn-lg btn-success" @click="onNewWarehouse()">
               New Warehouse
             </button>
           </div>
-          <div class="col col-xl-10">
-            <div class="row flex-nowrap overflow-auto p-2 border border-2 border-light-subtle rounded-4"
+          <div class="row">
+            <div class="col overflow-auto border border-2 border-light-subtle rounded-4 scrollPanel align-self-center"
                  ref="scrollPanel">
-              <div class="warehouse col col-2 border border-secondary-subtle rounded-2 justify-content-center mx-1 "
+              <div class="warehouse col col-auto border border-secondary-subtle rounded-2 justify-content-center mt-1
+              align-self-center"
                    type="button"
                    v-for="warehouse in warehouses" :key="warehouse.id" @click="selectWarehouse(warehouse)"
                    :class="{active:this.findSelectedWarehouseFromRoute() === warehouse}">
                 <div class="row justify-content-center">
-                  <img class="card-img rounded" :src="Warehouse.getImage()" alt="Card image cap">
+                  <img class="img rounded col col-4 align-self-center" :src="Warehouse.getImage()" alt="Card image cap">
+                  <h6 class="fw-medium col align-self-center">Warehouse {{ warehouse.id }}</h6>
                 </div>
                 <div class="mt-1">
-                  <h6 class="fw-medium">Warehouse {{ warehouse.id }}</h6>
                   <p class="fw-light">
                     <strong>Name:</strong> {{ warehouse.name }}
                     <br><strong>Location:</strong> {{ warehouse.location }}
@@ -29,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="row" v-if="findSelectedWarehouseFromRoute()">
+        <div class="col col-10" v-if="findSelectedWarehouseFromRoute()">
           <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
                        :vendors="vendors" :products="products" :transactions="transactions"
                        @delete="onDelete" @save="onSave"></router-view>
@@ -40,8 +39,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -120,19 +117,13 @@ export default {
 </script>
 
 <style scoped>
-.card-img {
-  width: 50%;
-  height: 50%;
-}
-
-.warehouse {
-  min-width: 100px;
-  min-height: fit-content;
-  max-width: 200px;
-  max-height: 250px;
-}
 
 .active {
   background: lightgrey;
+}
+
+.scrollPanel {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 </style>

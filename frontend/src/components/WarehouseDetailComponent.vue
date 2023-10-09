@@ -1,6 +1,6 @@
 <template>
-  <div class="row detail justify-content-center  p-0 px-3 mt-1">
-    <div class="col col-4 align-self-center">
+  <div class="row detail justify-content-center px-1 mt-1">
+    <div class="col col-4 align-self-center border border-2 rounded-2 border-light-subtle">
       <div class="row justify-content-center">
         <img class="img" alt="Cabin image" :src="Warehouse.getImage()"/>
       </div>
@@ -9,14 +9,18 @@
           <h3>Warehouse {{ selectedWarehouse.id }}</h3>
           <p class="text-muted">Details</p>
           <div class="mt-1 mb-1 row">
-            <div class="row">
+            <div class="col col-4 align-self-center text-end">
               <label class="form-label" for="name">Name</label>
+            </div>
+            <div class="col col-8">
               <input class="form-control" id="name" type="text" v-model="this.copyOfWarehouse.name"/>
             </div>
           </div>
           <div class="mt-1 mb-1 row">
-            <div class="col">
+            <div class="col col-4 align-self-center text-end">
               <label class="form-label" for="location">Location</label>
+            </div>
+            <div class="col col-8">
               <select class="form-control" id="location" v-model="this.copyOfWarehouse.location">
                 <option v-for="location in Warehouse.locationList" :key="location">
                   {{ location }}
@@ -24,33 +28,85 @@
               </select>
             </div>
           </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="postcode">Postcode</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="postcode" type="text" v-model="this.copyOfWarehouse.postcode"/>
+            </div>
+          </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="city">City</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="city" type="text" v-model="this.copyOfWarehouse.city"/>
+            </div>
+          </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="country">Country</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="country" type="text" v-model="this.copyOfWarehouse.country"/>
+            </div>
+          </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="contactName">Contact Name</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="contactName" type="text" v-model="this.copyOfWarehouse.contactName"/>
+            </div>
+          </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="contactEmail">Contact Email</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="contactEmail" type="text" v-model="this.copyOfWarehouse.contactEmail"/>
+            </div>
+          </div>
+          <div class="mt-1 mb-1 row">
+            <div class="col col-4 align-self-center text-end">
+              <label class="form-label" for="contactPhone">Contact Phone</label>
+            </div>
+            <div class="col col-8">
+              <input class="form-control" id="contactPhone" type="text" v-model="this.copyOfWarehouse.contactPhone"/>
+            </div>
+          </div>
         </form>
       </div>
-      <div class="row p-2 m-0 justify-content-center">
-        <div class="col col-auto">
-          <button class="btn btn-lg btn-secondary" @click="onReset()" :disabled="!hasChanged">
+      <div class="mt-5 py-4">
+        <div class="row p-1 justify-content-between">
+          <button class="btn col col-3 align-self-center btn-lg btn-secondary" @click="onReset()" :disabled="!hasChanged">
             Reset
           </button>
-          <button class="btn btn-lg btn-secondary mx-1" @click="onClear()" :disabled="!hasChanged">
+          <button class="btn col col-3 btn-lg btn-secondary" @click="onClear()" :disabled="!hasChanged">
             Clear
           </button>
-          <button class="btn btn-lg btn-danger" @click="onDelete()">
-            Delete
-          </button>
-        </div>
-        <div class="col col-auto mt-2">
-          <button class="btn btn-lg btn-success mx-1" @click="onSave()" :disabled="!hasChanged">
-            Save
-          </button>
-          <button class="btn btn-lg btn-secondary" @click="onCancel()" :disabled="!hasChanged">
+          <button class="btn col col-3 btn-lg btn-secondary" @click="onCancel()" :disabled="!hasChanged">
             Cancel
           </button>
         </div>
+        <div class="row p-1 justify-content-center">
+          <button class="btn col col-12 btn-lg " @click="onSave()" :class="hasChanged ? 'btn-success' : 'btn-secondary'"
+                  :disabled="!hasChanged">
+            Save
+          </button>
+        </div>
+        <div class="row p-1  justify-content-center">
+          <button class="btn col col-12 btn-lg btn-danger" :disabled="hasChanged"
+                  @click="onDelete()">
+            Delete
+          </button>
+        </div>
       </div>
-    </div>
+      </div>
     <div class="col col-8">
       <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"
-      :products="products" :vendors="vendors" :transactions="transactions"/>
+                                         :products="products" :vendors="vendors" :transactions="transactions"/>
     </div>
   </div>
 </template>
@@ -131,7 +187,7 @@ export default {
 
 <style scoped>
 .img {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 80px;
 }
 </style>
