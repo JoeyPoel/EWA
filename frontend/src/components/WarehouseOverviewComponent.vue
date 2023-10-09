@@ -8,7 +8,7 @@
               New Warehouse
             </button>
           </div>
-          <div class="col col-10">
+          <div class="col col-xl-10">
             <div class="row flex-nowrap overflow-auto p-2 border border-2 border-light-subtle rounded-4"
                  ref="scrollPanel">
               <div class="warehouse col col-2 border border-secondary-subtle rounded-2 justify-content-center mx-1 "
@@ -29,8 +29,15 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <router-view :warehouses="warehouses" @delete="onDelete" @save="onSave"/>
+        <div class="row" v-if="findSelectedWarehouseFromRoute()">
+          <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
+                       :vendors="vendors" :products="products" :transactions="transactions"
+                       @delete="onDelete" @save="onSave"></router-view>
+        </div>
+        <div class="row" v-else>
+          <div class="col align-self-center">
+            <h3 class="fw-light">Select a Warehouse</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -39,6 +46,9 @@
 
 <script>
 import {Warehouse} from '@/models/warehouse.js';
+import {Vendor} from "@/models/Vendor";
+import {Product} from "@/models/product_MERGE_ME";
+import {ProductTransaction} from "@/models/productTransaction";
 
 export default {
   name: "WarehouseOverviewComponent",
@@ -46,6 +56,9 @@ export default {
   data() {
     return {
       warehouses: [],
+      vendors: [],
+      products: [],
+      transactions: [],
       lastId: 10000,
       isActive: true,
       Warehouse: Warehouse
@@ -53,12 +66,7 @@ export default {
   },
 
   created() {
-    for (let i = 0; i < 8; i++) {
-      this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      this.warehouses.push(
-          Warehouse.createDummyWarehouse(this.lastId)
-      )
-    }
+    this.createDummyData()
   },
 
   methods: {
@@ -84,7 +92,29 @@ export default {
     findSelectedWarehouseFromRoute() {
       const id = parseInt(this.$route.params.id)
       return this.warehouses.find(c => c.id === id)
-    }
+    },
+    createDummyData(){
+      for (let i = 0; i < 8; i++) {
+        this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
+        this.warehouses.push(Warehouse.createDummyWarehouse(this.lastId))
+        this.vendors.push(Vendor.createDummyVendor(this.lastId))
+        this.products.push(Product.createDummyProduct(this.lastId, this.vendors, i))
+      }
+      this.transactions = this.createDummyTransactions()
+    },
+    createDummyTransactions() {
+      let transactions = []
+      for (let i = 0; i < this.warehouses.length; i++){
+        for (let j = 0; j < this.products.length; j++){
+          for (let k = 0; k < 2; k++){
+            transactions.push(
+                ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
+            )
+          }
+        }
+      }
+      return transactions
+    },
   }
 }
 </script>
@@ -103,6 +133,6 @@ export default {
 }
 
 .active {
-  background: lightslategray;
+  background: lightgrey;
 }
 </style>
