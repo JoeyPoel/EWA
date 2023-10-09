@@ -27,17 +27,17 @@
   <div class="container" v-if="selectedWarehouse === null">
     <p class="text-danger">Please select a warehouse.</p>
   </div>
-  <warehouse-table v-else :products="filteredProducts"></warehouse-table>
+  <warehouse-inventory-table v-else :products="filteredProducts"></warehouse-inventory-table>
 </template>
 
 <script>
 import {product} from '@/models/product.js';
-import {warehouse} from '@/models/warehouse.js';
-import WarehouseTable from "@/components/WarehouseTable";
+import {Warehouse} from '@/models/warehouse.js';
+import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
   name: "WarehouseComponent",
-  components: {WarehouseTable},
+  components: {WarehouseInventoryTable},
   data() {
     return {
       products: [], // Normal product list
@@ -51,7 +51,7 @@ export default {
   created() {
     for (let i = 0; i < 5; i++) {
       this.warehouses.push(
-          warehouse.createDummyWarehouse(i + 1)
+          Warehouse.createDummyWarehouse(i + 1)
       );
 
       for (let j = 0; j < 5; j++) {
