@@ -40,7 +40,6 @@ export default {
   components: {WarehouseInventoryTable},
   data() {
     return {
-      warehouse: Warehouse,
       products: [], // Normal product list
       warehouses: [],
       filteredProducts: [], // List of products filtered on name by searchQuery
@@ -52,7 +51,7 @@ export default {
   created() {
     for (let i = 0; i < 5; i++) {
       this.warehouses.push(
-          Warehouse.createDummyWarehouse(this.lastId)
+          Warehouse.createDummyWarehouse(i + 1)
       );
 
       for (let j = 0; j < 5; j++) {
