@@ -3,6 +3,9 @@ import warehouseComponent from "@/components/WarehouseComponent";
 import WarehouseDetailComponent from "@/components/WarehouseDetailComponent.vue";
 import warehouseOverviewComponent from "@/components/WarehouseOverviewComponent.vue";
 
+import dashboardComponent from "@/components/DashboardComponent.vue";
+import userComponent from "@/components/userComponent.vue";
+
 const routes = [
     {
         path: '/warehouse',
@@ -35,6 +38,16 @@ const routes = [
             }
         ]
     },
+    {
+        path: '/user',
+        name: 'User',
+        component: userComponent
+    },
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: dashboardComponent
+    }
 ];
 
 export const router = createRouter({
