@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import warehouseComponent from "@/components/WarehouseComponent";
+import warehouseInventoryComponent from "@/components/WarehouseInventoryComponent.vue";
 import WarehouseDetailComponent from "@/components/WarehouseDetailComponent.vue";
 import warehouseOverviewComponent from "@/components/WarehouseOverviewComponent.vue";
 
@@ -14,15 +14,8 @@ const routes = [
             {
                 path: 'inventory',
                 name: 'WarehouseComponent',
-                component: warehouseComponent,
+                component: warehouseInventoryComponent,
                 // TODO: add navigation by id
-                // children: [
-                //     {
-                //         path: ':id',
-                //         name: 'WarehouseDetailComponent',
-                //         component: WarehouseDetailComponent
-                //     }
-                // ]
             },
             {
                 path: 'overview',

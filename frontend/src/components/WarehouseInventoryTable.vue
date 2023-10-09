@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "WarehouseTable",
+  name: "WarehouseInventoryTable",
   props: {
     products: {
       type: Array,

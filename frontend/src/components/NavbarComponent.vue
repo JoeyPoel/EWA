@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/warehouse">
+            <router-link class="nav-link" to="/warehouse/inventory">
               <h2>Inventory</h2>
             </router-link>
           </li>
@@ -39,19 +39,6 @@
                 aria-expanded="false"
             ></a>
           </li>
-        </ul>
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item ">
-          <router-link class="nav-link m-1 item" to="/"><h2>Home</h2></router-link>
-        </li>
-        <li class="nav-item ">
-          <router-link class="nav-link m-1 item" to="/warehouse/inventory"><h2>Inventory</h2></router-link>
-        </li>
-        <li class="nav-item ">
-          <a class="nav-link m-1 item" href="#">
-            <h2>Projects</h2>
-          </a>
-        </li>
         <li class="nav-item ">
             <router-link class="nav-link m-1 item" to="/warehouse/overview"><h2>Warehouses</h2></router-link>
         </li>

@@ -27,17 +27,17 @@
   <div class="container" v-if="selectedWarehouse === null">
     <p class="text-danger">Please select a warehouse.</p>
   </div>
-  <warehouse-table v-else :products="filteredProducts"></warehouse-table>
+  <warehouse-inventory-table v-else :products="filteredProducts"></warehouse-inventory-table>
 </template>
 
 <script>
 import {product} from '@/models/product.js';
 import {Warehouse} from '@/models/warehouse.js';
-import WarehouseTable from "@/components/WarehouseTable";
+import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
   name: "WarehouseComponent",
-  components: {WarehouseTable},
+  components: {WarehouseInventoryTable},
   data() {
     return {
       warehouse: Warehouse,
