@@ -1,39 +1,73 @@
 <template>
-  <div v-if="selectedWarehouse">
-    <div class="row mt-2 border border-2 rounded border-light-subtle">
-      <div class="row justify-content-center">
-        <div class="col align-self-center">
-          <h3 class="fw-light">Inventory</h3>
-        </div>
-        <div class="col-auto align-self-center">
-          <button class="btn btn-lg btn-success" @click="addProduct()">
-            addProduct
-          </button>
-        </div>
+  <div class="m-0 border border-2 rounded border-light-subtle">
+    <div class="row pt-2">
+      <div class="col col-8">
       </div>
-      <div class="row">
-        <div class="col overflow-auto">
-          <div v-for="product in inventory" :key="product.id" class="row border border-2 rounded border-light-subtle">
-            <div class="col">
-              <h6 class="fw-medium">ProductID {{ product.productId }}</h6>
-            </div>
-            <div class="col">
-              <h6 class="fw-medium">Product Name {{ WarehouseProduct.getProductName(product.productId, products) }}</h6>
-            </div>
-            <div class="col">
-              <h6 class="fw-medium">Current quantity {{
-                  ProductTransaction.getCurrentQuantity(product.productId, selectedWarehouse.id, transactions)
-                }}</h6>
+      <div class="col col-4 ">
+        <button class="btn btn-lg btn-success" @click="addProduct()">
+          addProduct
+        </button>
+      </div>
+    </div>
+    <div class="row m-0 justify-content-center">
+      <div class="col m-0 align-self-center mx-4">
+        <div class="row m-0 justify-content-center">
+          <div class="col align-self-center">
+            <h3 class="fw-light">Inventory</h3>
+          </div>
+          <div class="scrollPanel">
+            <div v-for="product in this.getInventory(true)" :key="product.id" class="row m-0 border border-2 rounded
+            border-light-subtle
+        justify-content-center">
+              <div class="col col-6">
+                <div class="row">
+                  <div class="text-muted col col-5 text-end">Product ID</div>
+                  <div class="col col-7 text-start">{{ product.productId }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-muted col col-5 text-end">Product Name</div>
+                  <div class="col col-7 text-start">{{
+                      WarehouseProduct.getProductName(product.productId, products)
+                    }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-muted col col-5 text-end">Current stock</div>
+                  <div class="col col-7 text-start">
+                    {{
+                      ProductTransaction.getCurrentQuantity(product.productId, selectedWarehouse.id, transactions)
+                    }}
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 align-self-center">
+                <div class="row justify-content-center">
+                  <div class="col col-9 align-self-center">
+                    <div class="row">
+                      <div class="col col-6 align-self-center">
+                        <h6 class="fw-medium">Minimum stock level</h6>
+                      </div>
+                      <div class="col col-6 align-self-center" ref="f">
+                        <input class="form-control" type="number" v-model="product.minimumQuantity"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col col-3 align-self-center">
+                    <div class="row p-1">
+                      <button class="btn btn-success" @click="saveProduct(product)">
+                        Save
+                      </button>
+                      <button class="btn btn-danger mt-1" @click="removeProduct(product)">
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div v-else>
-    <div class="row justify-content-center">
-      <div class="col align-self-center">
-        <h3 class="fw-light">Select a Warehouse</h3>
       </div>
     </div>
   </div>
@@ -43,7 +77,6 @@
 import {Warehouse} from "@/models/warehouse";
 import {WarehouseProduct} from "@/models/WarehouseProduct";
 import {ProductTransaction} from "@/models/productTransaction";
-// import {Product} from "@/models/product_MERGE_ME";
 
 export default {
   name: "WarehouseDetailInventoryComponent",
@@ -67,46 +100,53 @@ export default {
     transactions: {
       type: Array,
       required: true
+    },
+    inventory: {
+      type: [Object],
+      required: true
     }
   },
   data() {
     return {
-      inventory: [],
       lastId: 1000,
       isActive: true,
       Warehouse: Warehouse,
       WarehouseProduct: WarehouseProduct,
-      ProductTransaction: ProductTransaction
+      ProductTransaction: ProductTransaction,
     }
   },
+  computed: {
+  },
   created() {
-    this.inventory = this.createDummyWarehouseInventory()
   },
   methods: {
-    createDummyWarehouseInventory() {
-      let inventory = []
-      for (let i = 0; i < 8; i++) {
-        this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-        inventory.push(WarehouseProduct.createDummyWarehouseProduct(this.selectedWarehouse.id, this.products[i].id))
-      }
-      return inventory
-    },
     addProduct() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      this.inventory.push(
-          WarehouseProduct.createDummyWarehouseProduct(this.lastId,
-              this.selectedWarehouse.id,
-              this.vendors[Math.floor(Math.random() * this.vendors.length)].id)
-      )
+      this.$emit('add-product',
+          WarehouseProduct.createDummyWarehouseProduct(this.lastId, this.selectedWarehouse.id))
     },
     removeProduct(product) {
-      this.inventory = this.inventory.filter(item => item !== product)
+      this.$emit('remove-product', product)
+    },
+    saveProduct(product) {
+      this.$emit('save-product', product)
+    },
+    getInventory(copy) {
+      let inv = []
+      for (let i = 0; i < this.inventory.length; i++) {
+        if (this.inventory[i].warehouseId === this.selectedWarehouse.id) {
+          inv.push(copy ? WarehouseProduct.copy(this.inventory[i]) : this.inventory[i])
+        }
+      }
+      return inv
     }
   }
 }
 </script>
 
-
 <style scoped>
-
+.scrollPanel {
+  max-height: 74vh;
+  overflow-y: auto;
+}
 </style>

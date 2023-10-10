@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col overflow-auto border border-2 border-light-subtle rounded-4 scrollPanel align-self-center"
                  ref="scrollPanel">
-              <div class="warehouse col col-auto border border-secondary-subtle rounded-2 justify-content-center mt-1
+              <div class="warehouse col col-auto border border-secondary-subtle rounded-2 justify-content-center
               align-self-center"
                    type="button"
                    v-for="warehouse in warehouses" :key="warehouse.id" @click="selectWarehouse(warehouse)"
@@ -30,8 +30,8 @@
         </div>
         <div class="col col-10" v-if="findSelectedWarehouseFromRoute()">
           <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
-                       :vendors="vendors" :products="products" :transactions="transactions"
-                       @delete="onDelete" @save="onSave"></router-view>
+                       :vendors="vendors" :products="products" :transactions="transactions" :inventories="inventories"
+                       @delete="onDelete" @save="onSave" @saveProduct="onSaveProduct"></router-view>
         </div>
         <div class="row" v-else>
           <div class="col align-self-center">
@@ -46,6 +46,7 @@ import {Warehouse} from '@/models/warehouse.js';
 import {Vendor} from "@/models/Vendor";
 import {Product} from "@/models/product_MERGE_ME";
 import {ProductTransaction} from "@/models/productTransaction";
+import {WarehouseProduct} from "@/models/WarehouseProduct";
 
 export default {
   name: "WarehouseOverviewComponent",
@@ -56,6 +57,7 @@ export default {
       vendors: [],
       products: [],
       transactions: [],
+      inventories: [],
       lastId: 10000,
       isActive: true,
       Warehouse: Warehouse
@@ -83,6 +85,9 @@ export default {
     onSave(warehouse) {
       this.warehouses = this.warehouses.map(c => c === warehouse ? warehouse : c)
     },
+    onSaveProduct(product) {
+      this.products = this.products.map(c => c === product ? product : c)
+    },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
     },
@@ -97,20 +102,18 @@ export default {
         this.vendors.push(Vendor.createDummyVendor(this.lastId))
         this.products.push(Product.createDummyProduct(this.lastId, this.vendors, i))
       }
-      this.transactions = this.createDummyTransactions()
-    },
-    createDummyTransactions() {
-      let transactions = []
       for (let i = 0; i < this.warehouses.length; i++){
         for (let j = 0; j < this.products.length; j++){
-          for (let k = 0; k < 2; k++){
-            transactions.push(
+          this.inventories.push(
+              WarehouseProduct.createDummyWarehouseProduct(this.warehouses[i].id, this.products[j].id)
+          )
+          for (let k = 0; k < 2; k++) {
+            this.transactions.push(
                 ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
             )
           }
         }
       }
-      return transactions
     },
   }
 }

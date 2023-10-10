@@ -17,4 +17,9 @@ export class WarehouseProduct {
         }
         return "Product not found";
     }
+
+    static copy(warehouseProduct){
+        return new WarehouseProduct(warehouseProduct.warehouseId, warehouseProduct.productId,
+            warehouseProduct.minimumQuantity);
+    }
 }

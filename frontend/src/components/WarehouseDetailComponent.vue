@@ -80,7 +80,8 @@
       </div>
       <div class="mt-5 py-4">
         <div class="row p-1 justify-content-between">
-          <button class="btn col col-3 align-self-center btn-lg btn-secondary" @click="onReset()" :disabled="!hasChanged">
+          <button class="btn col col-3 align-self-center btn-lg btn-secondary" @click="onReset()"
+                  :disabled="!hasChanged">
             Reset
           </button>
           <button class="btn col col-3 btn-lg btn-secondary" @click="onClear()" :disabled="!hasChanged">
@@ -103,10 +104,11 @@
           </button>
         </div>
       </div>
-      </div>
+    </div>
     <div class="col col-8">
       <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"
-                                         :products="products" :vendors="vendors" :transactions="transactions"/>
+                                         :products="products" :vendors="vendors" :transactions="transactions"
+                                         :inventory="this.getInventory()" @save-product="saveProduct(product)"/>
     </div>
   </div>
 </template>
@@ -143,6 +145,10 @@ export default {
       type: Array,
       required: true
     },
+    inventories: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {
@@ -174,6 +180,18 @@ export default {
     },
     findSelectedWarehouseFromRoute() {
       return this.warehouses.find(warehouse => warehouse.id === parseInt(this.$route.params.id))
+    },
+    getInventory() {
+      let inv = []
+      for (let i = 0; i < this.inventories.length; i++) {
+        if (this.inventories[i].warehouseId === this.selectedWarehouse.id) {
+          inv.push(this.inventories[i])
+        }
+      }
+      return inv
+    },
+    saveProduct(product) {
+      this.$emit('saveProduct', product)
     }
   },
   watch: {
