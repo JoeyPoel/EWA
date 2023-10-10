@@ -6,6 +6,7 @@ import warehouseOverviewComponent from "@/components/WarehouseOverviewComponent.
 import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
+import projectComponent from "@/components/ProjectComponent.vue";
 
 const routes = [
     {
@@ -36,6 +37,11 @@ const routes = [
         path: '/product',
         name: 'Product',
         component: productComponent
+    },
+    {
+        path: '/project',
+        name: 'Project',
+        component: projectComponent
     },
     {
         path: '/user',
