@@ -16,7 +16,7 @@
             <h3 class="fw-light">Inventory</h3>
           </div>
           <div class="scrollPanel">
-            <div v-for="product in this.getInventory(true)" :key="product.id" class="row m-0 border border-2 rounded
+            <div v-for="product in inventoryCopy" :key="product.id" class="row m-0 border border-2 rounded
             border-light-subtle
         justify-content-center">
               <div class="col col-6">
@@ -116,8 +116,9 @@ export default {
     }
   },
   computed: {
-  },
-  created() {
+    inventoryCopy() {
+      return this.getInventory(true)
+    }
   },
   methods: {
     addProduct() {
@@ -140,7 +141,7 @@ export default {
       }
       return inv
     }
-  }
+  },
 }
 </script>
 

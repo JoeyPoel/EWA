@@ -108,7 +108,7 @@
     <div class="col col-8">
       <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"
                                          :products="products" :vendors="vendors" :transactions="transactions"
-                                         :inventory="this.getInventory()" @save-product="saveProduct(product)"/>
+                                         :inventory="this.getInventory()" @save-product="saveProduct"/>
     </div>
   </div>
 </template>
@@ -191,7 +191,7 @@ export default {
       return inv
     },
     saveProduct(product) {
-      this.$emit('saveProduct', product)
+      this.$emit('save-product', product)
     }
   },
   watch: {

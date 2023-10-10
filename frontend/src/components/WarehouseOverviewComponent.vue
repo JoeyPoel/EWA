@@ -31,7 +31,7 @@
         <div class="col col-10" v-if="findSelectedWarehouseFromRoute()">
           <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
                        :vendors="vendors" :products="products" :transactions="transactions" :inventories="inventories"
-                       @delete="onDelete" @save="onSave" @saveProduct="onSaveProduct"></router-view>
+                       @delete="onDelete" @save="onSave" @save-product="onSaveProduct"></router-view>
         </div>
         <div class="row" v-else>
           <div class="col align-self-center">
@@ -85,8 +85,14 @@ export default {
     onSave(warehouse) {
       this.warehouses = this.warehouses.map(c => c === warehouse ? warehouse : c)
     },
-    onSaveProduct(product) {
-      this.products = this.products.map(c => c === product ? product : c)
+    onSaveProduct(savedProduct) {
+      console.log('saving product')
+      for (let i = 0; i < this.inventories.length; i++) {
+        if (this.inventories[i].productId === savedProduct.productId) {
+          this.inventories[i] = savedProduct
+          return;
+        }
+      }
     },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
