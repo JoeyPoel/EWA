@@ -173,11 +173,12 @@ export default {
     },
     onSave() {
       this.$emit('save', this.copyOfWarehouse)
-      this.$router.push("/warehouse/overview")
+      console.log(this.copyOfWarehouse)
+      console.log(this.selectedWarehouse)
+      this.copyOfWarehouse = this.Warehouse.copy(this.selectedWarehouse)
     },
     onDelete() {
       this.$emit('delete', this.copyOfWarehouse)
-      this.$router.push("/warehouse/overview")
     },
     findSelectedWarehouseFromRoute() {
       return this.warehouses.find(warehouse => warehouse.id === parseInt(this.$route.params.id))

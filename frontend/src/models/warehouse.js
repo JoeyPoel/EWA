@@ -60,6 +60,8 @@ export class Warehouse {
     }
 
     static copy(warehouse) {
-        return new Warehouse(warehouse.id, warehouse.name, warehouse.location);
+        return new Warehouse(warehouse.id, warehouse.name, warehouse.location, warehouse.address,
+            warehouse.postcode, warehouse.city, warehouse.country, warehouse.contactName, warehouse.contactEmail,
+            warehouse.contactPhone, warehouse.note);
     }
 }

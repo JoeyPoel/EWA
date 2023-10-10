@@ -91,7 +91,6 @@ export default {
       this.$router.push("/warehouse/overview")
     },
     onSave(warehouse) {
-      this.warehouses = this.warehouses.map(c => c === warehouse ? warehouse : c)
       for (let i = 0; i < this.warehouses.length; i++) {
         if (this.warehouses[i].id === warehouse.id) {
           this.warehouses[i] = warehouse
