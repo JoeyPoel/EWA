@@ -45,7 +45,15 @@ export class Warehouse {
         return new Warehouse(
             id,
             this.warehouseList[this.getRandomInt(this.warehouseList.length)],
-            this.locationList[this.getRandomInt(this.locationList.length)]
+            this.locationList[this.getRandomInt(this.locationList.length)],
+            "Kerkstraat 1",
+            "1234 AB",
+            this.locationList[this.getRandomInt(this.locationList.length)],
+            "Nederland",
+            "Jan Jansen",
+            "janjansen@gmail.com",
+            "0612345678",
+            "Dit is een dummy warehouse"
         );
     }
 
