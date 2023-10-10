@@ -108,7 +108,8 @@
     <div class="col col-8">
       <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"
                                          :products="products" :vendors="vendors" :transactions="transactions"
-                                         :inventory="this.getInventory()" @save-product="saveProduct"/>
+                                         :inventory="this.getInventory()" @save-product="saveProduct"
+      @remove-product="removeProduct"/>
     </div>
   </div>
 </template>
@@ -192,6 +193,9 @@ export default {
     },
     saveProduct(product) {
       this.$emit('save-product', product)
+    },
+    removeProduct(product) {
+      this.$emit('remove-product', product)
     }
   },
   watch: {

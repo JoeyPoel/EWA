@@ -31,7 +31,9 @@
         <div class="col col-10" v-if="findSelectedWarehouseFromRoute()">
           <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
                        :vendors="vendors" :products="products" :transactions="transactions" :inventories="inventories"
-                       @delete="onDelete" @save="onSave" @save-product="onSaveProduct"></router-view>
+                       @delete="onDelete" @save="onSave" @save-product="onSaveProduct"
+                       @remove-product="onRemoveProduct">
+          </router-view>
         </div>
         <div class="row" v-else>
           <div class="col align-self-center">
@@ -86,10 +88,17 @@ export default {
       this.warehouses = this.warehouses.map(c => c === warehouse ? warehouse : c)
     },
     onSaveProduct(savedProduct) {
-      console.log('saving product')
       for (let i = 0; i < this.inventories.length; i++) {
         if (this.inventories[i].productId === savedProduct.productId) {
           this.inventories[i] = savedProduct
+          return;
+        }
+      }
+    },
+    onRemoveProduct(product) {
+      for (let i = 0; i < this.inventories.length; i++) {
+        if (this.inventories[i].productId === product.productId) {
+          this.inventories.splice(i, 1)
           return;
         }
       }
