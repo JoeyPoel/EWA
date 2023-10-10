@@ -38,14 +38,6 @@
           </div>
           <div class="mt-1 mb-1 row">
             <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="city">City</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="city" type="text" v-model="this.copyOfWarehouse.city"/>
-            </div>
-          </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
               <label class="form-label" for="country">Country</label>
             </div>
             <div class="col col-8">
@@ -81,13 +73,13 @@
               <label class="form-label" for="note">Note</label>
             </div>
             <div class="col col-8">
-              <textarea class="form-control" id="note" type="text" v-model="this.copyOfWarehouse.note" cols="1">
+              <textarea class="form-control" id="note" type="text" v-model="this.copyOfWarehouse.note">
               </textarea>
             </div>
           </div>
         </form>
       </div>
-      <div class="mt-2 py-2">
+      <div class="mt-3 py-2">
         <div class="row p-1 justify-content-between">
           <button class="btn col col-3 align-self-center btn-lg btn-secondary" @click="onReset()"
                   :disabled="!hasChanged">
@@ -117,8 +109,8 @@
     <div class="col col-8">
       <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"
                                          :products="products" :vendors="vendors" :transactions="transactions"
-                                         :inventory="this.getInventory()" @save-product="saveProduct"
-      @remove-product="removeProduct"/>
+                                         :inventory="inventories" @save-product="saveProduct"
+      @remove-product="removeProduct" @add-product="addProduct"/>
     </div>
   </div>
 </template>
@@ -182,8 +174,6 @@ export default {
     },
     onSave() {
       this.$emit('save', this.copyOfWarehouse)
-      console.log(this.copyOfWarehouse)
-      console.log(this.selectedWarehouse)
       this.copyOfWarehouse = this.Warehouse.copy(this.selectedWarehouse)
     },
     onDelete() {
@@ -192,20 +182,14 @@ export default {
     findSelectedWarehouseFromRoute() {
       return this.warehouses.find(warehouse => warehouse.id === parseInt(this.$route.params.id))
     },
-    getInventory() {
-      let inv = []
-      for (let i = 0; i < this.inventories.length; i++) {
-        if (this.inventories[i].warehouseId === this.selectedWarehouse.id) {
-          inv.push(this.inventories[i])
-        }
-      }
-      return inv
-    },
     saveProduct(product) {
       this.$emit('save-product', product)
     },
     removeProduct(product) {
       this.$emit('remove-product', product)
+    },
+    addProduct(product) {
+      this.$emit('add-product', product)
     }
   },
   watch: {

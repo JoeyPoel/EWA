@@ -1,13 +1,7 @@
 <template>
   <div class="m-0 border border-2 rounded border-light-subtle">
-    <div class="row pt-2">
-      <div class="col col-8">
-      </div>
-      <div class="col col-4 ">
-        <button class="btn btn-lg btn-success" @click="addProduct()">
-          addProduct
-        </button>
-      </div>
+    <div class="row m-0 mx-2 justify-content-center border border-2 rounded border-light-subtle">
+      <new-warehouse-product-component :products="products" :warehouses="warehouses" @add-product="addProduct"/>
     </div>
     <div class="row m-0 justify-content-center">
       <div class="col m-0 align-self-center mx-4">
@@ -77,16 +71,18 @@
 import {Warehouse} from "@/models/warehouse";
 import {WarehouseProduct} from "@/models/WarehouseProduct";
 import {ProductTransaction} from "@/models/productTransaction";
+import NewWarehouseProductComponent from "@/components/NewWarehouseProductComponent.vue";
 
 export default {
   name: "WarehouseDetailInventoryComponent",
+  components: {NewWarehouseProductComponent},
   props: {
     selectedWarehouse: {
       type: Object,
       required: true
     },
     warehouses: {
-      type: Object,
+      type: Array,
       required: true
     },
     vendors: {
@@ -121,10 +117,8 @@ export default {
     }
   },
   methods: {
-    addProduct() {
-      this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      this.$emit('add-product',
-          WarehouseProduct.createDummyWarehouseProduct(this.lastId, this.selectedWarehouse.id))
+    addProduct(product) {
+      this.$emit('add-product',product)
     },
     removeProduct(product) {
       this.$emit('remove-product', product)

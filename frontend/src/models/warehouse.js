@@ -1,11 +1,10 @@
 export class Warehouse {
-    constructor(id, name, location, address, postcode, city, country, contactName, contactEmail, contactPhone, note) {
+    constructor(id, name, location, address, postcode, country, contactName, contactEmail, contactPhone, note) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.address = address;
         this.postcode = postcode;
-        this.city = city;
         this.country = country;
         this.contactName = contactName;
         this.contactEmail = contactEmail;
@@ -48,7 +47,6 @@ export class Warehouse {
             this.locationList[this.getRandomInt(this.locationList.length)],
             "Kerkstraat 1",
             "1234 AB",
-            this.locationList[this.getRandomInt(this.locationList.length)],
             "Nederland",
             "Jan Jansen",
             "janjansen@gmail.com",
@@ -69,7 +67,7 @@ export class Warehouse {
 
     static copy(warehouse) {
         return new Warehouse(warehouse.id, warehouse.name, warehouse.location, warehouse.address,
-            warehouse.postcode, warehouse.city, warehouse.country, warehouse.contactName, warehouse.contactEmail,
+            warehouse.postcode, warehouse.country, warehouse.contactName, warehouse.contactEmail,
             warehouse.contactPhone, warehouse.note);
     }
 }

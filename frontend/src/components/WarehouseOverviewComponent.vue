@@ -32,7 +32,7 @@
           <router-view :selected-warehouse="findSelectedWarehouseFromRoute()" :warehouses="warehouses"
                        :vendors="vendors" :products="products" :transactions="transactions" :inventories="inventories"
                        @delete="onDelete" @save="onSave" @save-product="onSaveProduct"
-                       @remove-product="onRemoveProduct">
+                       @remove-product="onRemoveProduct" @add-product="onAddProduct">
           </router-view>
         </div>
         <div class="col col-10 align-self-center" v-else>
@@ -107,12 +107,17 @@ export default {
       }
     },
     onRemoveProduct(product) {
+      console.log(product)
       for (let i = 0; i < this.inventories.length; i++) {
         if (this.inventories[i].productId === product.productId) {
           this.inventories.splice(i, 1)
           return;
         }
       }
+    },
+    onAddProduct(product) {
+      console.log(product)
+      this.inventories.push(product)
     },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
