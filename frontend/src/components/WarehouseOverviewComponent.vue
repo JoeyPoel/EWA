@@ -35,8 +35,8 @@
                        @remove-product="onRemoveProduct">
           </router-view>
         </div>
-        <div class="row" v-else>
-          <div class="col align-self-center">
+        <div class="col col-10 align-self-center" v-else>
+          <div class="row justify-content-center">
             <h3 class="fw-light">Select a Warehouse</h3>
           </div>
         </div>
@@ -82,10 +82,22 @@ export default {
       })
     },
     onDelete(warehouse) {
-      this.warehouses = this.warehouses.filter(c => c !== warehouse)
+      for (let i = 0; i < this.warehouses.length; i++) {
+        if (this.warehouses[i].id === warehouse.id) {
+          this.warehouses.splice(i, 1)
+          return;
+        }
+      }
+      this.$router.push("/warehouse/overview")
     },
     onSave(warehouse) {
       this.warehouses = this.warehouses.map(c => c === warehouse ? warehouse : c)
+      for (let i = 0; i < this.warehouses.length; i++) {
+        if (this.warehouses[i].id === warehouse.id) {
+          this.warehouses[i] = warehouse
+          return;
+        }
+      }
     },
     onSaveProduct(savedProduct) {
       for (let i = 0; i < this.inventories.length; i++) {
