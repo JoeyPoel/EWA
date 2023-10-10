@@ -25,8 +25,6 @@ export class ProductTransaction {
     static getCurrentQuantity(productId, warehouseId, transactions) {
         let quantity = 0;
         for (let i = 0; i < transactions.length; i++) {
-            // console.log(transactions[i])
-            // console.log(transactions[i].productId, productId, transactions[i].warehouseId, warehouseId)
             if (transactions[i].productId === productId && transactions[i].warehouseId === warehouseId) {
                 quantity += transactions[i].quantity;
             }

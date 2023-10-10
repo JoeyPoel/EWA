@@ -6,7 +6,7 @@ export class WarehouseProduct {
     }
 
     static createDummyWarehouseProduct(warehouseId, productId){
-        return new WarehouseProduct(warehouseId, productId, Math.floor(Math.random() * 100) + 1,)
+        return new WarehouseProduct(warehouseId, productId, Math.floor(Math.random() * 20) + 1,)
     }
 
     static getProductName(productId, products){

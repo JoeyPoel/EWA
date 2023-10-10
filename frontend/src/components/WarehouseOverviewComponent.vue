@@ -138,7 +138,7 @@ export default {
           this.inventories.push(
               WarehouseProduct.createDummyWarehouseProduct(this.warehouses[i].id, this.products[j].id)
           )
-          for (let k = 0; k < 2; k++) {
+          for (let k = 0; k < 5; k++) {
             this.transactions.push(
                 ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
             )
