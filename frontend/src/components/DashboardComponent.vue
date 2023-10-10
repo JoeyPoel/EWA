@@ -8,7 +8,9 @@
             <h2 class="card-number">{{ panelCount }}</h2>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary">More Info</button>
+            <router-link class="btn btn-primary" to="/product">
+              More Info
+            </router-link>
           </div>
         </div>
       </div>
@@ -19,7 +21,9 @@
             <h2 class="card-number">{{ teamCount }}</h2>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary">More Info</button>
+            <router-link class="btn btn-primary" :to="{ name: 'User' }">
+              More Info
+            </router-link>
           </div>
         </div>
       </div>
@@ -30,7 +34,9 @@
             <h2 class="card-number">{{ warehouseCount }}</h2>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary">More Info</button>
+            <router-link class="btn btn-primary" to="/warehouse/overview">
+              More Info
+            </router-link>
           </div>
         </div>
       </div>
@@ -41,7 +47,9 @@
             <h2 class="card-number">{{ projectCount }}</h2>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary">More Info</button>
+            <router-link class="btn btn-primary" to="/project">
+              More Info
+            </router-link>
           </div>
         </div>
       </div>
