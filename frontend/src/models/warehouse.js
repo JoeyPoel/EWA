@@ -43,7 +43,7 @@ export class Warehouse {
     static createDummyWarehouse(id) {
         return new Warehouse(
             id,
-            this.warehouseList[this.getRandomInt(this.warehouseList.length)],
+            this.warehouseList[id],
             this.locationList[this.getRandomInt(this.locationList.length)],
             "Kerkstraat 1",
             "1234 AB",
