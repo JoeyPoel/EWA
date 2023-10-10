@@ -1,13 +1,13 @@
 <template>
       <div class="row px-5 text-center border border-2 border-light-subtle rounded-4 mx-2">
-        <div class="col col-2 pt-1">
+        <div class="col col-2 mt-1">
           <div class="row">
             <button class="btn btn-lg btn-success" @click="onNewWarehouse()">
               New Warehouse
             </button>
           </div>
           <div class="row">
-            <div class="col overflow-auto border border-2 border-light-subtle rounded-4 scrollPanel align-self-center"
+            <div class="col mt-2 overflow-auto border border-2 border-light-subtle rounded-4 scrollPanel align-self-center"
                  ref="scrollPanel">
               <div class="warehouse col col-auto border border-secondary-subtle rounded-2 justify-content-center
               align-self-center"
@@ -157,7 +157,7 @@ export default {
 }
 
 .scrollPanel {
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 </style>

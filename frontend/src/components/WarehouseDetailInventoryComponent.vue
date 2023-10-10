@@ -1,6 +1,6 @@
 <template>
   <div class="m-0 border border-2 rounded border-light-subtle">
-    <div class="row m-0 mx-2 justify-content-center border border-2 rounded border-light-subtle">
+    <div class="row m-0 justify-content-center border border-2 rounded border-light-subtle py-3">
       <new-warehouse-product-component :products="products" :warehouses="warehouses" @add-product="addProduct"/>
     </div>
     <div class="row m-0 justify-content-center">
@@ -141,7 +141,7 @@ export default {
 
 <style scoped>
 .scrollPanel {
-  max-height: 74vh;
+  max-height: 85.5vh;
   overflow-y: auto;
 }
 </style>
