@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import {product} from '@/models/product.js';
-import {Warehouse} from '@/models/warehouse.js';
+// import {product} from '@/models/product.js';
+// import {Warehouse} from '@/models/warehouse.js';
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
@@ -45,19 +45,41 @@ export default {
       filteredProducts: [], // List of products filtered on name by searchQuery
       selectedWarehouse: null,
       selectedSorting: "id",
-      searchQuery: ""
+      searchQuery: "",
     }
   },
   created() {
-    for (let i = 0; i < 5; i++) {
-      this.warehouses.push(
-          Warehouse.createDummyWarehouse(i + 1)
-      );
+    fetch('http://localhost:8090/products/getAll')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          this.products = data;
+        })
+        .catch(error => {
+          console.error('Error fetching data', error);
+        });
 
-      for (let j = 0; j < 5; j++) {
-        this.products.push(product.createDummyProduct(j + 1, i + 1))
-      }
-    }
+    fetch('http://localhost:8090/warehouses/getAll')
+        .then(response => response.json())
+        .then(data => {
+          this.warehouses = data;
+        })
+        .catch(error => {
+          console.error('Error fetching data', error);
+        });
+
+    // for (let i = 0; i < 5; i++) {
+    //   this.warehouses.push(
+    //       // Warehouse.createDummyWarehouse(i + 1)
+    //   );
+    //
+    //   for (let j = 0; j < 5; j++) {
+    //     // this.products.push(product.createDummyProduct(j + 1, i + 1))
+    //     this.products.push(
+    //
+    //     )
+    //   }
+    // }
   },
   watch: {
     selectedWarehouse: function () {
