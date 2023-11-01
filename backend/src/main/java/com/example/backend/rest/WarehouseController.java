@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/warehouses")
 public class WarehouseController {
-
     @Autowired
     WarehouseRepository<Warehouse> warehouseRepository;
     @GetMapping("test")
@@ -22,7 +21,7 @@ public class WarehouseController {
         );
     }
 
-    @GetMapping("")
+    @GetMapping("getAll")
     public List<Warehouse> getAll(){
         return this.warehouseRepository.findAll();
     }

@@ -1,6 +1,4 @@
 package com.example.backend.rest;
-
-
 import com.example.backend.models.Product;
 import com.example.backend.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,7 @@ public class ProductController {
 
     @Autowired
     ProductRepository<Product> productRepository;
-    @GetMapping("test")
+    @GetMapping("/test")
     public List<Product> getTestOffers() {
         return List.of(
                 new Product(1),
@@ -24,7 +22,7 @@ public class ProductController {
         );
     }
 
-    @GetMapping("")
+    @GetMapping("/getAll")
     public List<Product> getAll(){
         return this.productRepository.findAll();
     }
