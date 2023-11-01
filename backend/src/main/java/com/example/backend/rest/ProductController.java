@@ -28,4 +28,9 @@ public class ProductController {
     public List<Product> getAll(){
         return this.productRepository.findAll();
     }
+
+    @GetMapping("/getAllTypes")
+    public List<String> getAllTypes(){
+        return this.productRepository.findAllTypes();
+    }
 }

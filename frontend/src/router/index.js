@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import warehouseInventoryComponent from "@/components/WarehouseInventoryComponent.vue";
 import WarehouseDetailComponent from "@/components/WarehouseDetailComponent.vue";
 import warehouseOverviewComponent from "@/components/WarehouseOverviewComponent.vue";
-
+import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
 import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
@@ -52,6 +52,11 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: dashboardComponent
+    },
+    {
+        path: '/admin/products',
+        name: 'AdminProducts',
+        component: AdminProductsComponent
     }
 ];
 

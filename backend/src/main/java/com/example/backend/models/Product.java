@@ -5,7 +5,7 @@ public class Product {
     private String description;
     private int quantity;
     private String name;
-    private long id;
+    private int id;
 
     public Product(int id) {
         this.id = id;
@@ -23,7 +23,7 @@ public class Product {
     public long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
     public String getName() {

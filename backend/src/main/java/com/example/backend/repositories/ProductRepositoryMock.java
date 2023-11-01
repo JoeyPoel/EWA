@@ -14,6 +14,10 @@ public class ProductRepositoryMock implements ProductRepository<Product> {
     public List<Product> findAll() {
         return this.products;
     }
+    @Override
+    public List<String> findAllTypes() {
+        return productList;
+    }
 
     private List<Product> products = new ArrayList<>();
     static List<String> productList = Arrays.asList(

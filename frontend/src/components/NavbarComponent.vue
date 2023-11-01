@@ -61,6 +61,9 @@ export default {
           <li><router-link class="dropdown-item" :to="{ name: 'User' }">
             User page
           </router-link></li>
+          <li><router-link class="dropdown-item" :to="{ name: 'AdminProducts' }">
+            Products page
+          </router-link></li>
           <li><a class="dropdown-item" href="#">
             Administration
           </a></li>
