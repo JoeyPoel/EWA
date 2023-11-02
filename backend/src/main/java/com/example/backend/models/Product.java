@@ -11,7 +11,7 @@ public class Product {
         this.id = id;
     }
 
-    public static Product CreateSampleOffer(int id, String name, String description, int quantity, int warehouseId){
+    public static Product CreateProduct(int id, String name, String description, int quantity, int warehouseId){
         Product product = new Product(id);
         product.setName(name);
         product.setDescription(description);

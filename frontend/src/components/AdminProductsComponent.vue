@@ -1,21 +1,28 @@
 <template>
-<!--  TODO ADD STYLING -->
-  <div>
-    <label for="id">Id</label>
-    <input type="text" id="id" class="form-control">
+  <!-- TODO Per geselecteerd warehouse moet je de stock level in kunnen vullen, daarna in backend maak per geselecteerd warehouse een product aan -->
+  <div class="bg-light p-3">
     <label for="name">Name</label>
-    <input type="text" id="name" class="form-control">
-    <label for="quantity">Quantity</label>
-    <input type="number" id="quantity" class="form-control">
+    <input type="text" v-model="productName" class="form-control">
     <label for="chooseWarehouse">Warehouse</label>
-    <select name="chooseWarehouse" id="chooseWarehouse" class="form-select">
-      <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
-    </select>
-    <button  class="btn btn-primary">
+    <div v-for="warehouse in warehouses" :key="warehouse.id" class="dropdown-item">
+      <label>
+        <input type="checkbox" :value="warehouse.id" v-model="selectedWarehouses">
+        {{ warehouse.name }}
+      </label>
+      <br />
+      <label for="quantity" v-if="selectedWarehouses.includes(warehouse.id)">Quantity</label>
+      <input
+          type="number"
+          class="form-control"
+          v-model="quantityPerWarehouse[warehouses.indexOf(warehouse)]"
+          v-if="selectedWarehouses.includes(warehouse.id)"
+      />
+    </div>
+    <button class="btn btn-primary mt-3" @click="addProduct">
       Save
     </button>
   </div>
-  <div class="container">
+  <div class="container mt-3">
     <table class="table">
       <thead class="thead-dark">
       <tr>
@@ -34,43 +41,70 @@
 
 <script>
 export default {
-name: "AdminProducts",
-  data(){
-    return{
-      products: {
-        type: Array,
-      },
-      warehouses: {
-        type: Array,
-      },
-    }
+  name: "AdminProducts",
+  data() {
+    return {
+      products: [],
+      warehouses: [],
+      selectedWarehouses: [],
+      productName: "",
+      quantityPerWarehouse: [],
+    };
   },
   created() {
-    fetch('http://localhost:8090/products/getAllTypes')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
+    fetch("http://localhost:8090/products/getAllTypes")
+        .then((response) => response.json())
+        .then((data) => {
           this.products = data;
         })
-        .catch(error => {
-          console.error('Error fetching data', error);
+        .catch((error) => {
+          console.error("Error fetching data", error);
         });
 
-    fetch('http://localhost:8090/warehouses/getAll')
-        .then(response => response.json())
-        .then(data => {
+    fetch("http://localhost:8090/warehouses/getAll")
+        .then((response) => response.json())
+        .then((data) => {
           this.warehouses = data;
         })
-        .catch(error => {
-          console.error('Error fetching data', error);
+        .catch((error) => {
+          console.error("Error fetching data", error);
         });
   },
-  methods(){
+  methods: {
+    addProduct() {
+      const selectedWarehouseData = [];
+      this.selectedWarehouses.forEach((warehouseId, index) => {
+        selectedWarehouseData.push({
+          id: warehouseId,
+          quantity: this.quantityPerWarehouse[index] || 0,
+        });
+      });
 
-  }
-}
+      const productData = {
+        name: this.productName,
+        warehouses: selectedWarehouseData,
+      };
+      console.log(productData)
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productData),
+      };
+
+      fetch("http://localhost:8090/products/addProduct", requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            // handle the response data here
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error adding product", error);
+          });
+    },
+  },
+};
 </script>
 
 <style scoped>
-
+/* Add any necessary custom styling here */
 </style>

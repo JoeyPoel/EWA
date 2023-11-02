@@ -37,8 +37,12 @@ public class ProductRepositoryMock implements ProductRepository<Product> {
     public ProductRepositoryMock(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < productList.size(); j++) {
-                products.add(Product.CreateSampleOffer(j, productList.get(j), "Dummy Description", (int) Math.floor(Math.random() * 100), i));
+                products.add(Product.CreateProduct(j, productList.get(j), "Dummy Description", (int) Math.floor(Math.random() * 100), i));
             }
         }
+    }
+    @Override
+    public void AddProduct(int id, String name, String description, int quantity, int warehouseId){
+        this.products.add(Product.CreateProduct(id, name, description, quantity, warehouseId));
     }
 }

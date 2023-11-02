@@ -16,7 +16,7 @@ public class Warehouse {
         this.id = id;
     }
 
-    public static Warehouse CreateSampleWarehouse(int id, String name, String location, String address, String postcode, String country, String contactName, String contactEmail, String contactPhone, String note){
+    public static Warehouse CreateWarehouse(int id, String name, String location, String address, String postcode, String country, String contactName, String contactEmail, String contactPhone, String note){
         Warehouse warehouse = new Warehouse(id);
         warehouse.setName(name);
         warehouse.setLocation(location);

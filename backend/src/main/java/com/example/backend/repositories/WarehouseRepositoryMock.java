@@ -37,7 +37,7 @@ public class WarehouseRepositoryMock implements WarehouseRepository<Warehouse> {
     public WarehouseRepositoryMock() {
         for (int i = 0; i < warehouseList.size(); i++) {
             warehouses.add(
-                    Warehouse.CreateSampleWarehouse(
+                    Warehouse.CreateWarehouse(
                             i,
                             warehouseList.get(i),
                             locationList.get(getRandomInt(locationList.size())),
