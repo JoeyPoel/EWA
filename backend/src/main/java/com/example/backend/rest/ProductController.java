@@ -1,11 +1,7 @@
 package com.example.backend.rest;
 import com.example.backend.models.Product;
-import com.example.backend.models.ProductRequest;
-import com.example.backend.models.Warehouse;
 import com.example.backend.repositories.ProductRepository;
-import com.example.backend.repositories.ProductRepositoryMock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,27 +34,15 @@ public class ProductController {
     }
 
     @PostMapping("/addProduct")
-    public ResponseEntity<String> addProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<String> addProduct(@RequestBody List<Product> products) {
         try {
-            String productName = productRequest.getName();
 
-            // Check if the required fields are present in the request
-            if (productName == null) {
-                return new ResponseEntity<>("Product name is required.", HttpStatus.BAD_REQUEST);
-            }
-
-            List<Warehouse> warehouses = productRequest.getWarehouses(); // Extract the list of warehouses
-
-            for (Warehouse warehouse : warehouses) {
-                int warehouseId = warehouse.getId();
-                int quantity = productRequest.getQuantity(); // Get the quantity from the warehouse
-
-                // Generate the ID as per your logic
-                int generatedId = generateProductId();
+            for (Product product: products) {
 
                 // Call the AddProduct method for each warehouse
-                productRepository.AddProduct(generatedId, productName, "Dummy Description", quantity, warehouseId);
+                productRepository.AddProduct(this.generateProductId(), product.getName(), product.getDescription(), product.getQuantity(), product.getWarehouseId());
             }
+            productRepository.AddProductToProductList(products.get(0).getName());
 
             return new ResponseEntity<>("Product added successfully for all warehouses", HttpStatus.OK);
         } catch (Exception e) {

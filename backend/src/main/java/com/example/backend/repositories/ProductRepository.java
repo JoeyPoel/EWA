@@ -8,4 +8,6 @@ public interface ProductRepository<Product> {
     List<String> findAllTypes();
 
     void AddProduct(int id, String name, String description, int quantity, int warehouseId);
+
+    void AddProductToProductList(String name);
 }

@@ -45,4 +45,9 @@ public class ProductRepositoryMock implements ProductRepository<Product> {
     public void AddProduct(int id, String name, String description, int quantity, int warehouseId){
         this.products.add(Product.CreateProduct(id, name, description, quantity, warehouseId));
     }
+
+    @Override
+    public void AddProductToProductList(String name){
+        this.productList.add(name);
+    }
 }

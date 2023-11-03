@@ -3,6 +3,8 @@
   <div class="bg-light p-3">
     <label for="name">Name</label>
     <input type="text" v-model="productName" class="form-control">
+    <label for="productDescription">Description</label>
+    <input type="text" v-model="productDescription" class="form-control">
     <label for="chooseWarehouse">Warehouse</label>
     <div v-for="warehouse in warehouses" :key="warehouse.id" class="dropdown-item">
       <label>
@@ -48,6 +50,7 @@ export default {
       warehouses: [],
       selectedWarehouses: [],
       productName: "",
+      productDescription: "",
       quantityPerWarehouse: [],
     };
   },
@@ -75,14 +78,15 @@ export default {
       const selectedWarehouseData = [];
       this.selectedWarehouses.forEach((warehouseId, index) => {
         selectedWarehouseData.push({
-          id: warehouseId,
-          quantity: this.quantityPerWarehouse[index] || 0,
+          warehouseId: warehouseId,
+          name: this.productName,
+          description: this.productDescription,
+          quantity: this.quantityPerWarehouse[index] || 0, // TODO FIX THIS
         });
       });
 
       const productData = {
-        name: this.productName,
-        warehouses: selectedWarehouseData,
+        productRequests: selectedWarehouseData,
       };
       console.log(productData)
       const requestOptions = {
