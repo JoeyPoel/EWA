@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO Per geselecteerd warehouse moet je de stock level in kunnen vullen, daarna in backend maak per geselecteerd warehouse een product aan -->
   <div class="bg-light p-3">
     <label for="name">Name</label>
     <input type="text" v-model="productName" class="form-control">
@@ -27,6 +26,7 @@
   <div class="container mt-3">
     <table class="table">
       <thead class="thead-dark">
+      <h2>Products:</h2>
       <tr>
         <th scope="col">Name:</th>
       </tr>
@@ -75,10 +75,15 @@ export default {
   },
   methods: {
     addProduct() {
+      if(this.selectedWarehouses.length === 0){
+        console.log("Please select at least 1 warehouse.")
+      }
+
       const selectedWarehouseData = [];
       this.selectedWarehouses.forEach((warehouseId, index) => {
         selectedWarehouseData.push({
           warehouseId: warehouseId,
+          id: 0,
           name: this.productName,
           description: this.productDescription,
           quantity: this.quantityPerWarehouse[index] || 0, // TODO FIX THIS

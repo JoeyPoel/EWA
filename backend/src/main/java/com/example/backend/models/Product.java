@@ -11,7 +11,9 @@ public class Product {
         this.id = id;
     }
 
-    public static Product CreateProduct(int id, String name, String description, int quantity, int warehouseId){
+    public Product() {}
+
+    public static Product createProduct(int id, String name, String description, int quantity, int warehouseId){
         Product product = new Product(id);
         product.setName(name);
         product.setDescription(description);
@@ -20,7 +22,7 @@ public class Product {
         return product;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
     public void setId(int id) {

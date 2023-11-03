@@ -15,6 +15,7 @@ public class ProductController {
 
     @Autowired
     ProductRepository<Product> productRepository;
+
     @GetMapping("/test")
     public List<Product> getTestOffers() {
         return List.of(
@@ -24,12 +25,12 @@ public class ProductController {
     }
 
     @GetMapping("/getAll")
-    public List<Product> getAll(){
+    public List<Product> getAll() {
         return this.productRepository.findAll();
     }
 
     @GetMapping("/getAllTypes")
-    public List<String> getAllTypes(){
+    public List<String> getAllTypes() {
         return this.productRepository.findAllTypes();
     }
 
@@ -37,10 +38,10 @@ public class ProductController {
     public ResponseEntity<String> addProduct(@RequestBody List<Product> products) {
         try {
 
-            for (Product product: products) {
+            for (Product product : products) {
 
                 // Call the AddProduct method for each warehouse
-                productRepository.AddProduct(this.generateProductId(), product.getName(), product.getDescription(), product.getQuantity(), product.getWarehouseId());
+                productRepository.AddProduct(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getWarehouseId());
             }
             productRepository.AddProductToProductList(products.get(0).getName());
 
@@ -48,14 +49,5 @@ public class ProductController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-
-    // Generate product ID logic
-    private int generateProductId() {
-        // Implement your logic for generating a unique product ID
-        // This can be a simple auto-increment or any custom ID generation strategy
-        // Return the generated ID
-        return 0;
     }
 }
