@@ -79,25 +79,22 @@ export default {
         console.log("Please select at least 1 warehouse.")
       }
 
-      const selectedWarehouseData = [];
+      const productRequests = [];
       this.selectedWarehouses.forEach((warehouseId, index) => {
-        selectedWarehouseData.push({
-          warehouseId: warehouseId,
+        productRequests.push({
           id: 0,
           name: this.productName,
           description: this.productDescription,
           quantity: this.quantityPerWarehouse[index] || 0, // TODO FIX THIS
+          warehouseId: warehouseId,
         });
       });
 
-      const productData = {
-        productRequests: selectedWarehouseData,
-      };
-      console.log(productData)
+      console.log(productRequests)
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
+        body: JSON.stringify(productRequests),
       };
 
       fetch("http://localhost:8090/products/addProduct", requestOptions)

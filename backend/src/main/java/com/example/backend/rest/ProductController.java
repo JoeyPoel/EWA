@@ -37,9 +37,7 @@ public class ProductController {
     @PostMapping("/addProduct")
     public ResponseEntity<String> addProduct(@RequestBody List<Product> products) {
         try {
-
             for (Product product : products) {
-
                 // Call the AddProduct method for each warehouse
                 productRepository.AddProduct(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getWarehouseId());
             }
