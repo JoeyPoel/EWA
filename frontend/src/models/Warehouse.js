@@ -1,5 +1,5 @@
 export class Warehouse {
-    constructor(id, name, location, address, postcode, country, contactName, contactEmail, contactPhone, note) {
+    constructor(id, name, location, address, postcode, country, contactName, contactEmail, contactPhone) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -9,7 +9,6 @@ export class Warehouse {
         this.contactName = contactName;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
-        this.note = note;
     }
 
     static warehouseList = [

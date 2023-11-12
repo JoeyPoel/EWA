@@ -44,30 +44,23 @@
 </template>
 
 <script>
-import {Warehouse} from '@/models/warehouse.js';
-import {Vendor} from "@/models/Vendor";
-import {Product} from "@/models/product_MERGE_ME";
-import {ProductTransaction} from "@/models/productTransaction";
-import {WarehouseProduct} from "@/models/WarehouseProduct";
+import {Warehouse} from '@/models/Warehouse.js';
 
 export default {
   name: "WarehouseOverviewComponent",
+  inject: ['warehousesService'],
   components: {},
   data() {
     return {
       warehouses: [],
-      vendors: [],
-      products: [],
-      transactions: [],
-      inventories: [],
       lastId: 10000,
       isActive: true,
       Warehouse: Warehouse
     }
   },
 
-  created() {
-    this.createDummyData()
+  async created() {
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
 
   methods: {
@@ -126,26 +119,26 @@ export default {
       const id = parseInt(this.$route.params.id)
       return this.warehouses.find(c => c.id === id)
     },
-    createDummyData(){
-      for (let i = 0; i < 8; i++) {
-        this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-        this.warehouses.push(Warehouse.createDummyWarehouse(this.lastId))
-        this.vendors.push(Vendor.createDummyVendor(this.lastId))
-        this.products.push(Product.createDummyProduct(this.lastId, this.vendors, i))
-      }
-      for (let i = 0; i < this.warehouses.length; i++){
-        for (let j = 0; j < this.products.length; j++){
-          this.inventories.push(
-              WarehouseProduct.createDummyWarehouseProduct(this.warehouses[i].id, this.products[j].id)
-          )
-          for (let k = 0; k < 5; k++) {
-            this.transactions.push(
-                ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
-            )
-          }
-        }
-      }
-    },
+    // createDummyData(){
+    //   for (let i = 0; i < 8; i++) {
+    //     this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
+    //     this.warehouses.push(Warehouse.createDummyWarehouse(this.lastId))
+    //     this.vendors.push(Vendor.createDummyVendor(this.lastId))
+    //     this.products.push(Product.createDummyProduct(this.lastId, this.vendors, i))
+    //   }
+    //   for (let i = 0; i < this.warehouses.length; i++){
+    //     for (let j = 0; j < this.products.length; j++){
+    //       this.inventories.push(
+    //           WarehouseProduct.createDummyWarehouseProduct(this.warehouses[i].id, this.products[j].id)
+    //       )
+    //       for (let k = 0; k < 5; k++) {
+    //         this.transactions.push(
+    //             ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
+    //         )
+    //       }
+    //     }
+    //   }
+    // },
   }
 }
 </script>

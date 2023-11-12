@@ -1,4 +1,4 @@
-package com.example.backend.repositories;
+package teamx.app.backend.repositories;
 
 import java.util.List;
 

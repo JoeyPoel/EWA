@@ -32,7 +32,7 @@
 
 <script>
 // import {product} from '@/models/product.js';
-// import {Warehouse} from '@/models/warehouse.js';
+// import {Warehouse} from '@/models/Warehouse.js';
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {

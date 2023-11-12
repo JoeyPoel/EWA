@@ -106,7 +106,7 @@
 
 <script>
 
-import {Warehouse} from "@/models/warehouse.js";
+import {Warehouse} from "@/models/Warehouse.js";
 export default {
   name: "DashboardComponent",
 

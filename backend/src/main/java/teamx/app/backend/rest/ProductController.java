@@ -1,6 +1,6 @@
-package com.example.backend.rest;
-import com.example.backend.models.Product;
-import com.example.backend.repositories.ProductRepository;
+package teamx.app.backend.rest;
+import teamx.app.backend.models.Product;
+import teamx.app.backend.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-import {Warehouse} from "@/models/warehouse";
+import {Warehouse} from "@/models/Warehouse";
 
 export class User{
     constructor(id, name, email, team, role) {

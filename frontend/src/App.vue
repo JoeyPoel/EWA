@@ -10,11 +10,19 @@
 <script>
 
 import NavbarComponent from "@/components/NavbarComponent";
+import WarehousesAdaptor from "@/services/WarehousesAdaptor";
+import {CONFIG} from "../app-config";
 
 export default {
   name: 'App',
   components: {
     NavbarComponent
+  },
+  provide() {
+    return {
+      // stateless data services adaptor singletons
+      warehousesService: new WarehousesAdaptor(CONFIG.BACKEND_URL + "/warehouses/"),
+    }
   }
-}
+  }
 </script>

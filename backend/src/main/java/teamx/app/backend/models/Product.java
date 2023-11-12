@@ -1,4 +1,4 @@
-package com.example.backend.models;
+package teamx.app.backend.models;
 
 public class Product {
     private int warehouseId;

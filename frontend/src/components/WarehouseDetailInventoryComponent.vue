@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import {Warehouse} from "@/models/warehouse";
+import {Warehouse} from "@/models/Warehouse";
 import {WarehouseProduct} from "@/models/WarehouseProduct";
 import {ProductTransaction} from "@/models/productTransaction";
 import NewWarehouseProductComponent from "@/components/NewWarehouseProductComponent.vue";

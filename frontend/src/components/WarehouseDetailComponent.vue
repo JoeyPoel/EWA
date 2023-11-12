@@ -68,15 +68,6 @@
               <input class="form-control" id="contactPhone" type="text" v-model="this.copyOfWarehouse.contactPhone"/>
             </div>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="note">Note</label>
-            </div>
-            <div class="col col-8">
-              <textarea class="form-control" id="note" type="text" v-model="this.copyOfWarehouse.note">
-              </textarea>
-            </div>
-          </div>
         </form>
       </div>
       <div class="mt-3 py-2">
@@ -116,7 +107,7 @@
 </template>
 
 <script>
-import {Warehouse} from "@/models/warehouse";
+import {Warehouse} from "@/models/Warehouse";
 import WarehouseDetailInventoryComponent from "@/components/WarehouseDetailInventoryComponent.vue";
 
 export default {

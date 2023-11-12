@@ -1,6 +1,6 @@
-package com.example.backend.repositories;
+package teamx.app.backend.repositories;
 
-import com.example.backend.models.Product;
+import teamx.app.backend.models.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
