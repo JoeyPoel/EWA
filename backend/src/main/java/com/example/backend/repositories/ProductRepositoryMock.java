@@ -45,9 +45,27 @@ public class ProductRepositoryMock implements ProductRepository<Product> {
     public void AddProduct(int id, String name, String description, int quantity, int warehouseId){
         this.products.add(Product.createProduct(id, name, description, quantity, warehouseId));
     }
+    @Override
+    public void editProduct(int id, String name, String description, int quantity, int warehouseId){
+        Product product = Product.createProduct(id, name, description, quantity, warehouseId);
+        for (int i = 0; i < this.products.size(); i++) {
+            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
+                this.products.set(i,product);
+            }
+        }
+    }
+    @Override
+    public void removeProduct(int id, String name, String description, int quantity, int warehouseId){
+        Product product = Product.createProduct(id, name, description, quantity, warehouseId);
+        for (int i = 0; i < this.products.size(); i++) {
+            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
+                this.products.remove(product);
+            }
+        }
+    }
 
     @Override
     public void AddProductToProductList(String name){
-        this.productList.add(name);
+        productList.add(name);
     }
 }

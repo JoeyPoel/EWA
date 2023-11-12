@@ -13,8 +13,12 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
+    private final ProductRepository<Product> productRepository;
+
     @Autowired
-    ProductRepository<Product> productRepository;
+    public ProductController(ProductRepository<Product> productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @GetMapping("/test")
     public List<Product> getTestOffers() {

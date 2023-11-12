@@ -9,5 +9,9 @@ public interface ProductRepository<Product> {
 
     void AddProduct(int id, String name, String description, int quantity, int warehouseId);
 
+    void editProduct(int id, String name, String description, int quantity, int warehouseId);
+
+    void removeProduct(int id, String name, String description, int quantity, int warehouseId);
+
     void AddProductToProductList(String name);
 }
