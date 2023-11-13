@@ -1,4 +1,9 @@
 package teamx.app.backend.repositories;
 
-public interface UserRepository {
+import java.util.List;
+
+public interface UserRepository<User>{
+    List<User> findAll();
+
+
 }
