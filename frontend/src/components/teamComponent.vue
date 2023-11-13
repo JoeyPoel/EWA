@@ -1,12 +1,22 @@
 <template>
   <div class="bg-light p-3">
     <label for="name">Name</label>
-    <input v-if="!editingTeam" type="text" v-model="teamName" class="form-control">
+    <input type="text" v-model="teamName" class="form-control">
 
     <label for="chooseWarehouse">Warehouse</label>
-    <select v-if="!editingTeam" v-model="selectedWarehouse" class="form-control">
+
+    <select v-model="selectedWarehouse" class="form-control">
       <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
         {{ warehouse.name }}
+      </option>
+      <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
+        {{ warehouse.name }}
+      </option>
+    </select>
+
+    <select v-model="this.selectedWarehouse">
+      <option v-for="w in warehouses" :key="w">
+        {{w.name}}
       </option>
     </select>
 
@@ -30,7 +40,8 @@
         <td>{{ team.name }}</td>
         <td>{{ team.warehouseId }}</td>
         <td>
-          <button type="button" class="btn btn-dark" @click="editTeam(team)">Edit</button>
+          <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">Edit</button>
+          <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
         </td>
       </tr>
       </tbody>
@@ -55,6 +66,8 @@ export default {
     this.teams = await this.teamsService.asyncFindAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
   },
+  computed: {
+  },
   methods: {
     async addTeam() {
       const team = {
@@ -62,27 +75,38 @@ export default {
         name: this.teamName,
         warehouseId: this.selectedWarehouse,
       };
-      await this.teamsService.asyncSave(team);
-      this.resetForm();
+      const savedTeam = await this.teamsService.asyncSave(team);
+      if (savedTeam) {
+        this.teams.add(savedTeam)
+        this.resetForm();
+      }
     },
-    editTeam(team) {
+    async editTeam(team) {
       this.editingTeam = team;
       this.teamName = team.name;
-      this.selectedWarehouse = this.warehousesService.asyncFindById(team.warehouseId);
+      this.selectedWarehouse = await this.warehousesService.asyncFindById(team.warehouseId);
     },
     async updateTeam() {
       if (!this.editingTeam) return;
 
-      const updatedTeam = {
+      const team = {
         id: this.editingTeam.id,
         name: this.teamName,
         warehouseId: this.selectedWarehouse,
       };
-
-      await this.teamsService.asyncSave(updatedTeam);
+      const updatedTeam = await this.teamsService.asyncSave(team);
+      if(updatedTeam){
+        let index = this.teams.findIndex(t => t.id === updatedTeam.id);
+        if (index !== -1) {
+          this.teams[index] = updatedTeam;
+        }
+      }
       this.resetForm();
     },
-    resetForm() {
+    async deleteTeam(team) {
+      this.teamsService.asyncDeleteById(team.id)
+    },
+      resetForm() {
       this.editingTeam = null;
       this.teamName = '';
       this.selectedWarehouse = null;

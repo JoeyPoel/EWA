@@ -32,7 +32,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + "/"+ id));
     }
 
     /**
