@@ -7,6 +7,7 @@ import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
+import TeamComponent from "@/components/teamComponent";
 
 const routes = [
     {
@@ -57,6 +58,11 @@ const routes = [
         path: '/admin/products',
         name: 'AdminProducts',
         component: AdminProductsComponent
+    },
+    {
+        path: '/teams',
+        name: 'Teams',
+        component: TeamComponent
     }
 ];
 

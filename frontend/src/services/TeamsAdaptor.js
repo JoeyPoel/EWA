@@ -1,63 +1,63 @@
 import {Adaptor} from "./Adaptor.js";
-import {Warehouse} from "@/models/Warehouse.js";
+import {Team} from "@/models/Team.js";
 
 /**
- * Adaptor for the warehouses REST API.
+ * Adaptor for the teams REST API.
  *
  * @extends Adaptor
  * @category Services
- * @Author Junior Javier Brito Perez
+ * @Author Joey van der Poel
  */
-export default class WarehousesAdaptor extends Adaptor {
+export default class TeamsAdaptor extends Adaptor {
     constructor() {
-        super("http://localhost:8086/api/warehouses");
+        super("http://localhost:8086/api/teams");
     }
 
     /**
-     * Fetches all warehouses from the REST API.
+     * Fetches all teams from the REST API.
      *
      * @async
      * @returns {Promise<*>} The warehouses.
      */
     async asyncFindAll() {
         return (await this.fetchJson(this.resourceUrl + "/all"))
-            .map(warehouse => Object.assign(new Warehouse(), warehouse));
+            .map(team => Object.assign(new Team(), team));
     }
 
     /**
-     * Fetches a warehouse by its ID from the REST API.
+     * Fetches a team by its ID from the REST API.
      *
      * @async
      * @param {string} id - The ID of the warehouse.
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + id));
     }
 
     /**
-     * Saves a warehouse to the REST API.
+     * Saves a team to the REST API.
      *
      * @async
-     * @param {Warehouse} warehouse - The warehouse to save.
-     * @returns {Promise<*>} The saved warehouse.
+     * @param {Team} team - The team to save.
+     * @returns {Promise<*>} The saved team.
      */
-    async asyncSave(warehouse) {
+    async asyncSave(team) {
         const options = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(warehouse)
+            body: JSON.stringify(team)
         }
 
         let response = await this.fetchJson(this.resourceUrl, options);
 
         if (response.status === 409) {
             options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + warehouse.id, options);
+            response = await this.fetchJson(this.resourceUrl + team.id, options);
         }
 
         if (response.ok) {
-            return Object.assign(new Warehouse(), await response.json());
+            return Object.assign(new Team(), await response.json());
         } else {
             console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;
@@ -65,7 +65,7 @@ export default class WarehousesAdaptor extends Adaptor {
     }
 
     /**
-     * Deletes a warehouse by its ID from the REST API.
+     * Deletes a team by its ID from the REST API.
      *
      * @async
      * @param {string} id - The ID of the warehouse.
@@ -78,7 +78,7 @@ export default class WarehousesAdaptor extends Adaptor {
         }
         const response = await this.fetchJson(this.resourceUrl + id, options);
         if (response.ok) {
-            return Object.assign(new Warehouse(), await response.json());
+            return Object.assign(new Team(), await response.json());
         } else {
             console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;

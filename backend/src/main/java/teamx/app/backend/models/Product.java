@@ -1,5 +1,9 @@
 package teamx.app.backend.models;
-
+/**
+ * Product class
+ *
+ * @author Joey van der Poel
+ */
 public class Product {
     private int warehouseId;
     private String description;
