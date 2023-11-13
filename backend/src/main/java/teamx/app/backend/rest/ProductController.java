@@ -37,7 +37,7 @@ public class ProductController {
         return this.productRepository.findAll();
     }
 
-    @GetMapping("/getAllTypes")
+    @GetMapping("/allTypes")
     public List<String> getAllTypes() {
         return this.productRepository.findAllTypes();
     }

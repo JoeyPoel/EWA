@@ -36,7 +36,7 @@
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
-  inject: ['teamsService', 'warehousesService'],
+  inject: ['productsService', 'warehousesService'],
   name: "WarehouseComponent",
   components: {WarehouseInventoryTable},
   data() {
@@ -50,8 +50,8 @@ export default {
     }
   },
   async created() {
-    // this.products = await this.productsService.asyncFindAll()
-      this.warehouses = await this.warehousesService.asyncFindAll();
+    this.products = await this.productsService.asyncFindAll()
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
   watch: {
     selectedWarehouse: function () {

@@ -9,8 +9,8 @@ import {Team} from "@/models/Team.js";
  * @Author Joey van der Poel
  */
 export default class TeamsAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/teams");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
@@ -32,7 +32,7 @@ export default class TeamsAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + "/" + id));
     }
 
     /**
@@ -48,6 +48,8 @@ export default class TeamsAdaptor extends Adaptor {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(team)
         }
+
+        console.log(team)
 
         let response = await this.fetchJson(this.resourceUrl, options);
 

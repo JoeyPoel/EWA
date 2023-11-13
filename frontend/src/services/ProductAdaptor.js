@@ -25,6 +25,17 @@ export default class ProductAdaptor extends Adaptor {
     }
 
     /**
+     * Fetches all product names from the REST API.
+     *
+     * @async
+     * @returns {Promise<*>} The products.
+     */
+    async asyncFindAllTypes() {
+        return (await this.fetchJson(this.resourceUrl + "/allTypes"))
+            .map(product => Object.assign(new Product(), product));
+    }
+
+    /**
      * Fetches a product by its ID from the REST API.
      *
      * @async

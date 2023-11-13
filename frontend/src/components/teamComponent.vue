@@ -10,7 +10,7 @@
       </option>
     </select>
 
-    <button class="btn btn-primary mt-3" @click="editingTeam ? updateTeam() : addTeam">
+    <button class="btn btn-primary mt-3" @click="editingTeam ? updateTeam() : addTeam()">
       {{ editingTeam ? 'Update' : 'Save' }}
     </button>
   </div>
@@ -58,6 +58,7 @@ export default {
   methods: {
     async addTeam() {
       const team = {
+        id: Math.floor(Math.random() * 100000),
         name: this.teamName,
         warehouseId: this.selectedWarehouse,
       };
@@ -73,7 +74,7 @@ export default {
       if (!this.editingTeam) return;
 
       const updatedTeam = {
-        id: this.editingTeam.id, // Assuming teams have an id property
+        id: this.editingTeam.id,
         name: this.teamName,
         warehouseId: this.selectedWarehouse,
       };

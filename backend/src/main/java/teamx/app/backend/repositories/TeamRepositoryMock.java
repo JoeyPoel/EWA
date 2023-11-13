@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TeamRepositoryMock implements TeamRepository {
+public class TeamRepositoryMock implements ModelRepository<Team> {
 
     private List<Team> teams = new ArrayList<>();
 
@@ -24,12 +24,13 @@ public class TeamRepositoryMock implements TeamRepository {
     }
 
 
-//    @Override
-//    public void save(Team team) {
-//        teams.add(team);
-//    }
-
     @Override
+    public Team save(Team team) {
+        teams.add(team);
+        return team;
+    }
+
+
     public void put(int id, String name, int warehouseId) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
@@ -39,13 +40,13 @@ public class TeamRepositoryMock implements TeamRepository {
         }
     }
 
-    @Override
-    public void delete(int index) {
-        teams.remove(index);
-    }
+//    @Override
+//    public Team delete(int index) {
+//        teams.remove(index);
+//    }
 
     @Override
-    public Object findById(int id) {
+    public Team findById(int id) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
                 return teams.get(i);
@@ -55,10 +56,12 @@ public class TeamRepositoryMock implements TeamRepository {
     }
 
     @Override
-    public Object deleteById(int id) {
+    public Team deleteById(int id) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
-                return teams.remove(teams.get(i));
+                Team removedTeam = teams.get(i);
+                teams.remove(teams.get(i));
+                return removedTeam;
             }
         }
         return null;

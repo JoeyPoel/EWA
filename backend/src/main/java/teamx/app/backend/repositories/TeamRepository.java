@@ -8,10 +8,10 @@ import java.util.List;
  *
  * @author Joey van der Poel
  */
-public interface TeamRepository<Team> {
+public interface TeamRepository extends ModelRepository<Team> {
     List<Team> findAll();
 
-//    void save(Team team);
+    Team save(Team team);
 
     void put(int id, String name, int warehouseId);
 
