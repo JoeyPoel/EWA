@@ -7,6 +7,7 @@ import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
+import ProductDetail from "@/components/products/ProductDetail.vue";
 
 const routes = [
     {
@@ -36,7 +37,15 @@ const routes = [
     {
         path: '/product',
         name: 'Product',
-        component: productComponent
+        component: productComponent,
+        children: [
+            {
+                path: ':id',
+                name: 'ProductDetail',
+                component: ProductDetail,
+                props: true
+            }
+        ]
     },
     {
         path: '/project',
