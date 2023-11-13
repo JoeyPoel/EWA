@@ -36,6 +36,7 @@
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
+  inject: ['teamsService', 'warehousesService'],
   name: "WarehouseComponent",
   components: {WarehouseInventoryTable},
   data() {
@@ -48,38 +49,9 @@ export default {
       searchQuery: "",
     }
   },
-  created() {
-    fetch('http://localhost:8090/products/getAll')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          this.products = data;
-        })
-        .catch(error => {
-          console.error('Error fetching data', error);
-        });
-
-    fetch('http://localhost:8090/warehouses/getAll')
-        .then(response => response.json())
-        .then(data => {
-          this.warehouses = data;
-        })
-        .catch(error => {
-          console.error('Error fetching data', error);
-        });
-
-    // for (let i = 0; i < 5; i++) {
-    //   this.warehouses.push(
-    //       // Warehouse.createDummyWarehouse(i + 1)
-    //   );
-    //
-    //   for (let j = 0; j < 5; j++) {
-    //     // this.products.push(product.createDummyProduct(j + 1, i + 1))
-    //     this.products.push(
-    //
-    //     )
-    //   }
-    // }
+  async created() {
+    // this.products = await this.productsService.asyncFindAll()
+      this.warehouses = await this.warehousesService.asyncFindAll();
   },
   watch: {
     selectedWarehouse: function () {

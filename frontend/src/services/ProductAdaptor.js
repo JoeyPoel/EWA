@@ -1,63 +1,63 @@
 import {Adaptor} from "./Adaptor.js";
-import {Team} from "@/models/Team.js";
+import {Product} from "@/models/product_MERGE_ME";
 
 /**
- * Adaptor for the teams REST API.
+ * Adaptor for the product REST API.
  *
  * @extends Adaptor
  * @category Services
  * @Author Joey van der Poel
  */
-export default class TeamsAdaptor extends Adaptor {
+export default class ProductAdaptor extends Adaptor {
     constructor() {
-        super("http://localhost:8086/api/teams");
+        super("http://localhost:8086/api/products");
     }
 
     /**
-     * Fetches all teams from the REST API.
+     * Fetches all product from the REST API.
      *
      * @async
-     * @returns {Promise<*>} The teams.
+     * @returns {Promise<*>} The products.
      */
     async asyncFindAll() {
         return (await this.fetchJson(this.resourceUrl + "/all"))
-            .map(team => Object.assign(new Team(), team));
+            .map(product => Object.assign(new Product(), product));
     }
 
     /**
-     * Fetches a team by its ID from the REST API.
+     * Fetches a product by its ID from the REST API.
      *
      * @async
-     * @param {string} id - The ID of the team.
-     * @returns {Promise<*>} The warehouse.
+     * @param {string} id - The ID of the product.
+     * @returns {Promise<*>} The product.
      */
     async asyncFindById(id) {
-        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Product(), await this.fetchJson(this.resourceUrl + id));
     }
 
     /**
-     * Saves a team to the REST API.
+     * Saves a product to the REST API.
      *
      * @async
-     * @param {Team} team - The team to save.
-     * @returns {Promise<*>} The saved team.
+     * @param {Team} team - The product to save.
+     * @returns {Promise<*>} The saved product.
      */
-    async asyncSave(team) {
+    async asyncSave(product) {
         const options = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(team)
+            body: JSON.stringify(product)
         }
 
         let response = await this.fetchJson(this.resourceUrl, options);
 
         if (response.status === 409) {
             options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + team.id, options);
+            response = await this.fetchJson(this.resourceUrl + product.id, options);
         }
 
         if (response.ok) {
-            return Object.assign(new Team(), await response.json());
+            return Object.assign(new Product(), await response.json());
         } else {
             console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;
@@ -65,11 +65,11 @@ export default class TeamsAdaptor extends Adaptor {
     }
 
     /**
-     * Deletes a team by its ID from the REST API.
+     * Deletes a product by its ID from the REST API.
      *
      * @async
-     * @param {string} id - The ID of the team.
-     * @returns {Promise<*>} The deleted team.
+     * @param {string} id - The ID of the product.
+     * @returns {Promise<*>} The deleted product.
      */
     async asyncDeleteById(id) {
         const options = {
@@ -78,7 +78,7 @@ export default class TeamsAdaptor extends Adaptor {
         }
         const response = await this.fetchJson(this.resourceUrl + id, options);
         if (response.ok) {
-            return Object.assign(new Team(), await response.json());
+            return Object.assign(new Product(), await response.json());
         } else {
             console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;
