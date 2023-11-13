@@ -3,7 +3,7 @@
     <!-- Search bar and Add Product Button -->
     <div class="d-flex justify-content-between mb-3">
       <input v-model="searchTerm" type="text" class="form-control w-25" placeholder="Search for name...">
-      <button @click="addProduct" class="btn btn-success">Add Product</button>
+      <button @click="showAddModal" class="btn btn-success">Add Product</button>
     </div>
 
     <!-- Product List -->
@@ -24,6 +24,7 @@
         v-if="selectedProduct !== null"
         :product="selectedProduct"
         @close-modal="deselectProduct"
+        @add-product="addProduct"
     ></router-view>
 
   </div>
@@ -64,13 +65,17 @@ export default {
 
     selectProduct(product) {
       this.selectedProduct = product;
-      this.$router.push({ name: 'ProductDetail', params: { id: product.id } });
+      this.$router.push({name: 'ProductDetail', params: {id: product.id}});
     },
 
     deselectProduct() {
       this.selectedProduct = null;
-      this.$router.push({ name: 'Product' });
+      this.$router.push({name: 'Product'});
     },
+
+    showAddModal() {
+      this.$router.push({ name: 'ProductAdd', params: {}});
+    }
   },
 
   computed: {
@@ -84,7 +89,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .list-group-item:hover {
   cursor: pointer;

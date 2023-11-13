@@ -53,12 +53,15 @@
 </template>
 
 <script>
-import { Modal } from 'bootstrap';
+import {Modal} from 'bootstrap';
 
 export default {
+  name: "ProductDetail",
+
   props: {
     product: Object
   },
+
   mounted() {
     this.modal = new Modal(this.$refs.modalRef);
 

@@ -8,6 +8,7 @@ import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";
+import ProductAdd from "@/components/products/ProductAdd.vue";
 
 const routes = [
     {
@@ -44,6 +45,11 @@ const routes = [
                 name: 'ProductDetail',
                 component: ProductDetail,
                 props: true
+            },
+            {
+                path: 'add',
+                name: 'ProductAdd',
+                component: ProductAdd,
             }
         ]
     },
