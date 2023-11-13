@@ -67,7 +67,6 @@
               <div class="tab-pane fade" id="stock-content">
                 <h5 class="card-title">In Development</h5>
               </div>
-
             </div>
 
           </div>
