@@ -1,11 +1,14 @@
 package teamx.app.backend.rest;
+import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Product;
-import teamx.app.backend.repositories.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import teamx.app.backend.repositories.ProductRepositoryMock;
+
 import java.util.List;
 /**
  * Product Controller
@@ -17,10 +20,10 @@ import java.util.List;
 @RequestMapping("products")
 public class ProductController {
 
-    private final ProductRepository<Product> productRepository;
+    private final ProductRepositoryMock productRepository;
 
     @Autowired
-    public ProductController(ProductRepository<Product> productRepository) {
+    public ProductController(ProductRepositoryMock productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -37,23 +40,13 @@ public class ProductController {
         return this.productRepository.findAll();
     }
 
-    @GetMapping("/allTypes")
-    public List<String> getAllTypes() {
-        return this.productRepository.findAllTypes();
-    }
-
-    @PostMapping("/addProduct")
-    public ResponseEntity<String> addProduct(@RequestBody List<Product> products) {
-        try {
-            for (Product product : products) {
-                // Call the AddProduct method for each warehouse
-                productRepository.AddProduct(product.getId(), product.getName(), product.getDescription(), product.getQuantity(), product.getWarehouseId());
-            }
-            productRepository.AddProductToProductList(products.get(0).getName());
-
-            return new ResponseEntity<>("Product added successfully for all warehouses", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    @PostMapping("/add")
+    public ResponseEntity<?> add(@RequestBody Product product) {
+        if (productRepository.findById(product.getId()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
         }
+
+        productRepository.save(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 }

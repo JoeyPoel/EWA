@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import {product} from '@/models/product.js';
+
+import {Product} from '@/models/Product'
 
 export default {
   name: "ProductComponent",

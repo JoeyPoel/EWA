@@ -1,74 +1,52 @@
-package teamx.app.backend.repositories;
-
+package teamx.app.backend.rest;
+import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Product;
-import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import teamx.app.backend.repositories.ProductRepositoryMock;
+
 import java.util.List;
 /**
- * Repository for product
+ * Product Controller
  *
  * @author Joey van der Poel
  */
-@Repository("PRODUCTS.MOCK")
-public class ProductRepositoryMock implements ProductRepository<Product> {
+@CrossOrigin(origins = "http://localhost:8080")
+@RestController
+@RequestMapping("products")
+public class ProductController {
 
-    @Override
-    public List<Product> findAll() {
-        return this.products;
-    }
-    @Override
-    public List<String> findAllTypes() {
-        return productList;
-    }
-    private final List<Product> products;
+    private final ProductRepositoryMock productRepository;
 
-    public ProductRepositoryMock(){
-        this.products = Product.generateRandomProducts();
+    @Autowired
+    public ProductController(ProductRepositoryMock productRepository) {
+        this.productRepository = productRepository;
     }
 
-    @Override
-    public void AddProduct(int id, String name, String description, int quantity, int warehouseId){
-        this.products.add(new Product(id, warehouseId, description, quantity, name));
+    @GetMapping("/test")
+    public List<Product> getTestOffers() {
+        return List.of(
+                new Product(1),
+                new Product(2)
+        );
     }
 
-    @Override
-    public void editProduct(int id, String name, String description, int quantity, int warehouseId){
-        Product product = new Product(id, warehouseId, description, quantity, name);
-        for (int i = 0; i < this.products.size(); i++) {
-            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
-                this.products.set(i,product);
-            }
+    @GetMapping("/all")
+    public List<Product> getAll() {
+        return this.productRepository.findAll();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> add(@RequestBody Product product) {
+        if (productRepository.findById(product.getId()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
         }
-    }
 
-    @Override
-    public void removeProduct(int id, String name, String description, int quantity, int warehouseId){
-        Product product = new Product(id, warehouseId, description, quantity, name);
-        for (int i = 0; i < this.products.size(); i++) {
-            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
-                this.products.remove(product);
-            }
-        }
+        productRepository.save(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
-
-    @Override
-    public void AddProductToProductList(String name){
-        productList.add(name);
-    }
-
-    static List<String> productList = Arrays.asList(
-            "Solar panels",
-            "Solar Cables",
-            "Main Connectors (AC)",
-            "Inverter",
-            "Storage Unit",
-            "Montage Material",
-            "Battery Pack",
-            "LED Light",
-            "Solar Inverter",
-            "Electric Motor",
-            "Charging Station"
-    );
 }

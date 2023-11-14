@@ -50,7 +50,7 @@ export default class ProductAdaptor extends Adaptor {
      * Saves a product to the REST API.
      *
      * @async
-     * @param {Team} team - The product to save.
+     * @param {Product} product - The product to save.
      * @returns {Promise<*>} The saved product.
      */
     async asyncSave(product) {
