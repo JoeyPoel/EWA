@@ -12,6 +12,8 @@
 import NavbarComponent from "@/components/NavbarComponent";
 import WarehousesAdaptor from "@/services/WarehousesAdaptor";
 import {CONFIG} from "../app-config";
+import TeamsAdaptor from "@/services/TeamsAdaptor";
+import ProductAdaptor from "@/services/ProductAdaptor";
 
 export default {
   name: 'App',
@@ -22,6 +24,9 @@ export default {
     return {
       // stateless data services adaptor singletons
       warehousesService: new WarehousesAdaptor(CONFIG.BACKEND_URL + "/warehouses/"),
+      teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
+      productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products/"),
+
     }
   }
   }

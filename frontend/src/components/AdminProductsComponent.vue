@@ -43,6 +43,7 @@
 
 <script>
 export default {
+  inject: ['productsService', 'warehousesService'],
   name: "AdminProducts",
   data() {
     return {
@@ -54,24 +55,9 @@ export default {
       quantityPerWarehouse: [],
     };
   },
-  created() {
-    fetch("http://localhost:8090/products/getAllTypes")
-        .then((response) => response.json())
-        .then((data) => {
-          this.products = data;
-        })
-        .catch((error) => {
-          console.error("Error fetching data", error);
-        });
-
-    fetch("http://localhost:8090/warehouses/getAll")
-        .then((response) => response.json())
-        .then((data) => {
-          this.warehouses = data;
-        })
-        .catch((error) => {
-          console.error("Error fetching data", error);
-        });
+  async created() {
+    this.products = await this.productsService.asyncFindAllTypes()
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
   methods: {
     addProduct() {

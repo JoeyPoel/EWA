@@ -6,8 +6,12 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-@Repository("OFFERS.MOCK")
+/**
+ * Repository for product
+ *
+ * @author Joey van der Poel
+ */
+@Repository("PRODUCTS.MOCK")
 public class ProductRepositoryMock implements ProductRepository<Product> {
 
     @Override

@@ -1,7 +1,11 @@
 package teamx.app.backend.repositories;
 
 import java.util.List;
-
+/**
+ * Interface of repository of product
+ *
+ * @author Joey van der Poel
+ */
 public interface ProductRepository<Product> {
     List<Product> findAll();
 

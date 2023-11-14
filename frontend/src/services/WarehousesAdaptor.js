@@ -10,7 +10,7 @@ import {Warehouse} from "@/models/Warehouse.js";
  */
 export default class WarehousesAdaptor extends Adaptor {
     constructor() {
-        super("http://localhost:8086/api/warehouses/");
+        super("http://localhost:8086/api/warehouses");
     }
 
     /**
@@ -32,7 +32,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + "/"+ id));
     }
 
     /**

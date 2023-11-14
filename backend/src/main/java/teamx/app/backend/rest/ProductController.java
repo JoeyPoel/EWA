@@ -7,7 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
-
+/**
+ * Product Controller
+ *
+ * @author Joey van der Poel
+ */
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/products")
@@ -28,12 +32,12 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public List<Product> getAll() {
         return this.productRepository.findAll();
     }
 
-    @GetMapping("/getAllTypes")
+    @GetMapping("/allTypes")
     public List<String> getAllTypes() {
         return this.productRepository.findAllTypes();
     }
