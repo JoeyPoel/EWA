@@ -86,16 +86,12 @@ export default {
 
 </template>
 
+<!--border border-1 border-dark-subtle rounded-2-->
 
+<style scoped>
 
-<style>
-:root {
-  --gradient-color-start: rgba(232, 241, 82, 0.36);
-  --gradient-color-middle: rgba(91, 46, 24, 0.13);
-  --gradient-color-almost-end: rgba(223, 226, 177, 0.26);
-  --gradient-color-end: rgba(255, 255, 255, 1);
-
-  --button-color: rgba(232, 241, 82, .3);
+.nav-link {
+  margin: .2em;
 }
 
 .nav-link:hover {
@@ -103,8 +99,20 @@ export default {
 }
 
 .nav-link.router-link-exact-active {
-  background-color: var(--button-color); /* Adjust to use gradient start color */
-  color: #fff;
+  position: relative;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid rgba(108, 117, 125, 0.45);
+  border-radius: 0.2rem;
+  box-shadow: 0 0 4px rgba(108, 117, 125, 0.35);
+}
+
+.nav-link.router-link-exact-active::after {
+  background-color: var(--button-color);
+  border: 1px solid #6c757d;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 2px #6c757d;
+  outline: black 1em;
 }
 
 .nav-height {

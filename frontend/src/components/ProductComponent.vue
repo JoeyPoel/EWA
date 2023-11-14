@@ -48,29 +48,21 @@ export default {
 
   async created() {
     this.products = await this.productsService.asyncFindAll()
-
-    // for (let i = 0; i < 3; i++) {
-    //   this.productCount++
-    //   this.products.push(
-    //       product.createRandomDummyProduct(this.productCount)
-    //   );
-    // }
   },
 
   methods: {
-    addProduct() {
+    async handleNewProduct(newProduct) {
       this.searchTerm = ""
+      const product = Product.createRandomDummyProduct(this.productCount);
+      product.name = newProduct.name;
+      product.description = newProduct.description;
+      const savedProduct = await this.productsService.asyncSave(product);
 
-      this.productCount++
-      this.products.push(product.createRandomDummyProduct(this.productCount));
-    },
+      if (savedProduct){
+        this.products.push(product);
+        this.deselectProduct();
+      }
 
-    handleNewProduct(newProduct) {
-      const Product = product.createRandomDummyProduct(this.productCount);
-      Product.name = newProduct.name;
-      Product.description = newProduct.description;
-      this.products.push(Product);
-      this.deselectProduct();
     },
 
     selectProduct(product) {

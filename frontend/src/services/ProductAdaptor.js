@@ -60,7 +60,7 @@ export default class ProductAdaptor extends Adaptor {
             body: JSON.stringify(product)
         }
 
-        let response = await this.fetchJson(this.resourceUrl, options);
+        let response = await this.fetchJson(this.resourceUrl + "/add", options);
 
         if (response.status === 409) {
             options.method = "PUT";
