@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Product class
  *
@@ -30,5 +33,27 @@ public class Product {
 
     public Product(int id) {
         this.id = id;
+    }
+
+    private static String[] productList = {
+            "Solar panels",
+            "Solar Cables",
+            "Main Connectors (AC)",
+            "Inverter",
+            "Storage Unit",
+            "Montage Material",
+            "Battery Pack",
+            "LED Light",
+            "Solar Inverter",
+            "Electric Motor",
+            "Charging Station"
+    };
+
+    public static List<Product> generateRandomProducts(){
+        List<Product> products = new ArrayList<>();
+            for (int j = 0; j < productList.length; j++) {
+                products.add(new Product(j, j, "Dummy Description", (int) Math.floor(Math.random() * 100), productList[j]));
+            }
+        return products;
     }
 }

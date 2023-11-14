@@ -35,7 +35,7 @@ import {product} from '@/models/product.js';
 
 export default {
   name: "ProductComponent",
-  inject: ['productsService', 'warehousesService'],
+  inject: ['productsService'],
   data() {
     return {
       products: [],

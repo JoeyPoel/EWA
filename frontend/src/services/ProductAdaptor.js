@@ -9,8 +9,8 @@ import {Product} from "@/models/product_MERGE_ME";
  * @Author Joey van der Poel
  */
 export default class ProductAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/products");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
