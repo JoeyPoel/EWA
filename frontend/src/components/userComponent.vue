@@ -74,10 +74,10 @@
 </template>
 
 <script>
-import { User } from "@/models/user";
 
 export default {
   name: "UserComponent",
+  inject: ['userDetailService'],
   data() {
     return {
       users: [], // Initialize an empty array to store user data
@@ -119,6 +119,7 @@ export default {
 
       // Add the new user to the users array
       this.users.push({ ...this.newUser });
+      this.$emit('add-User', {...this.newUser});
 
       // Close the modal
       this.closeCreateUserModal();
@@ -127,11 +128,14 @@ export default {
       // Logic for updating a user (you can implement this based on your requirements)
       console.log("Update user:", user);
     },
-  },
-  created() {
-    for (let i = 0; i < 6; i++) {
-      this.users.push(User.createDummyUser(i));
+    saveProduct() {
+      this.$emit('add-User', {...this.newUser});
+      this.closeCreateUserModal();
     }
+  },
+  async created() {
+
+    this.users = await this.userDetailService.asyncFindAll();
   },
 };
 </script>
