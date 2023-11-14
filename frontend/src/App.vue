@@ -14,6 +14,7 @@ import WarehousesAdaptor from "@/services/WarehousesAdaptor";
 import {CONFIG} from "../app-config";
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
+import UserAdaptor from "@/services/UserAdaptor";
 
 export default {
   name: 'App',
@@ -25,6 +26,7 @@ export default {
       // stateless data services adaptor singletons
       warehousesService: new WarehousesAdaptor(CONFIG.BACKEND_URL + "/warehouses/"),
       teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
+      usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/user"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products"),
 
     }

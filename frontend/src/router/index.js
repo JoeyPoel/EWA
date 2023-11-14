@@ -10,6 +10,7 @@ import projectComponent from "@/components/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";
 import ProductAdd from "@/components/products/ProductAdd.vue";
 import TeamComponent from "@/components/teamComponent";
+import LoginComponent from "@/components/LoginComponent.vue";
 
 const routes = [
     {
@@ -78,7 +79,12 @@ const routes = [
         path: '/teams',
         name: 'Teams',
         component: TeamComponent
-    }
+    },
+    {
+        path: '/log-in',
+        name: 'Login',
+        component: LoginComponent
+    },
 ];
 
 export const router = createRouter({
