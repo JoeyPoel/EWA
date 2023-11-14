@@ -6,16 +6,24 @@ export default {
   name: "NavbarComponent",
   data() {
     return {
-      logo: logo
-    };
+      logo: logo,
+      session: !!sessionStorage.getItem('email')
+    }
+  },
+  methods: {
+    logout() {
+      sessionStorage.clear();
+      this.$router.push("/log-in");
+    },
   }
 };
 </script>
 
 <template>
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100 w-auto sticky-top">
+<!--<div v-if="session" class="d-flex flex-column flex-shrink-0 p-3 text-black bg-custom vh-100 w-auto sticky-top">-->
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-black bg-custom vh-100 w-auto sticky-top">
     <!-- Home Link with Icon -->
-    <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" to="/dashboard">
+    <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none" to="/dashboard">
       <img :src="logo" alt="Your Company Logo" class="me-2 nav-height">
     </router-link>
 
@@ -24,43 +32,43 @@ export default {
     <ul class="nav nav-pills flex-column mb-auto">
 
       <li class="nav-item">
-        <router-link class="nav-link text-white" to="/dashboard">
+        <router-link class="nav-link text-black" to="/dashboard">
           Dashboard
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link class="nav-link text-white" to="/warehouse/inventory">
+        <router-link class="nav-link text-black" to="/warehouse/inventory">
           Inventory
         </router-link>
       </li>
 
-      <li class="nav-item">
-        <router-link class="nav-link text-white" to="/warehouse/overview">
+      <li class="nav-item ">
+        <router-link class="nav-link text-black " to="/warehouse/overview">
           Warehouses
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link class="nav-link text-white" to="/product">
+        <router-link class="nav-link text-black" to="/product">
           Products
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link class="nav-link text-white" to="/project">
+        <router-link class="nav-link text-black" to="/project">
           Projects
         </router-link>
       </li>
 
       <li class="nav-item">
-        <router-link class="nav-link text-white" to="/teams">
+        <router-link class="nav-link text-black" to="/teams">
           Teams
         </router-link>
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link text-white dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           Admin
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
@@ -76,45 +84,54 @@ export default {
         </ul>
       </li>
 
-      <li class="nav-item">
-        <router-link class="nav-link text-white" to="/sign-in">
-          Log in
-        </router-link>
+      <li class="nav-item" @click="logout">
+      <a class="nav-link text-black">
+        Log out
+      </a>
       </li>
     </ul>
-
-    <hr>
-
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2">
-        <strong>mdo</strong>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-        <li><a class="dropdown-item" href="#">New project...</a></li>
-        <li><a class="dropdown-item" href="#">Settings</a></li>
-        <li><a class="dropdown-item" href="#">Account</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
-      </ul>
-    </div>
   </div>
 
 </template>
 
-
-
 <style scoped>
+
+.nav-link {
+  margin: .2em;
+}
+
 .nav-link:hover {
-  background-color: lightgreen;
+  background-color: var(--button-color);
 }
 
 .nav-link.router-link-exact-active {
-  background-color: #007bff;
-  color: #fff;
+  position: relative;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid rgba(108, 117, 125, 0.45);
+  border-radius: 0.2rem;
+  box-shadow: 0 0 4px rgba(108, 117, 125, 0.35);
+}
+
+.nav-link.router-link-exact-active::after {
+  background-color: var(--button-color);
+  border: 1px solid #6c757d;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 2px #6c757d;
+  outline: black 1em;
 }
 
 .nav-height {
   height: 4em;
+}
+
+.bg-custom {
+  background: linear-gradient(
+      25deg,
+      var(--gradient-color-start) 0%,
+      var(--gradient-color-middle) 30%,
+      var(--gradient-color-almost-end) 75%,
+      var(--gradient-color-end) 100%
+  );
 }
 </style>

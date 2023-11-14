@@ -31,7 +31,7 @@
 </template>
 
 <script>
-// import {product} from '@/models/product.js';
+// import {product} from '@/models/Product.js';
 // import {Warehouse} from '@/models/Warehouse.js';
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 

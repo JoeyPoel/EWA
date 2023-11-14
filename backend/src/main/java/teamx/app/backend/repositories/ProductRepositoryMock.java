@@ -11,19 +11,39 @@ import java.util.List;
  *
  * @author Joey van der Poel
  */
-@Repository("PRODUCTS.MOCK")
-public class ProductRepositoryMock implements ProductRepository<Product> {
+@Repository()
+public class ProductRepositoryMock implements ModelRepository<Product> {
+    private final List<Product> products;
+
+    public ProductRepositoryMock(){
+        this.products = Product.generateRandomProducts();
+    }
 
     @Override
     public List<Product> findAll() {
         return this.products;
     }
-    @Override
-    public List<String> findAllTypes() {
-        return productList;
+
+    public Product findById(int id) {
+        return this.products.stream().filter(product -> product.getId() == id).findFirst().orElse(null);
     }
 
-    private List<Product> products = new ArrayList<>();
+    @Override
+    public Product save(Product product) {
+        if (!this.products.contains(product)) {
+            this.products.add(product);
+            return product;
+        }
+        this.products.set(this.products.indexOf(product), product);
+        return product;
+    }
+
+    @Override
+    public Product deleteById(int id) {
+        return null;
+    }
+
+
     static List<String> productList = Arrays.asList(
             "Solar panels",
             "Solar Cables",
@@ -37,39 +57,4 @@ public class ProductRepositoryMock implements ProductRepository<Product> {
             "Electric Motor",
             "Charging Station"
     );
-
-    public ProductRepositoryMock(){
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < productList.size(); j++) {
-                products.add(Product.createProduct(j, productList.get(j), "Dummy Description", (int) Math.floor(Math.random() * 100), i));
-            }
-        }
-    }
-    @Override
-    public void AddProduct(int id, String name, String description, int quantity, int warehouseId){
-        this.products.add(Product.createProduct(id, name, description, quantity, warehouseId));
-    }
-    @Override
-    public void editProduct(int id, String name, String description, int quantity, int warehouseId){
-        Product product = Product.createProduct(id, name, description, quantity, warehouseId);
-        for (int i = 0; i < this.products.size(); i++) {
-            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
-                this.products.set(i,product);
-            }
-        }
-    }
-    @Override
-    public void removeProduct(int id, String name, String description, int quantity, int warehouseId){
-        Product product = Product.createProduct(id, name, description, quantity, warehouseId);
-        for (int i = 0; i < this.products.size(); i++) {
-            if(this.products.get(i).getId() == product.getId() && this.products.get(i).getWarehouseId() == product.getWarehouseId() ){
-                this.products.remove(product);
-            }
-        }
-    }
-
-    @Override
-    public void AddProductToProductList(String name){
-        productList.add(name);
-    }
 }

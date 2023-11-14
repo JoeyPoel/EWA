@@ -7,7 +7,10 @@ import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
+import ProductDetail from "@/components/products/ProductDetail.vue";
+import ProductAdd from "@/components/products/ProductAdd.vue";
 import TeamComponent from "@/components/teamComponent";
+import LoginComponent from "@/components/LoginComponent.vue";
 import WarehouseDetailModalComponent from "@/components/WarehouseDetailModalComponent.vue";
 
 const routes = [
@@ -43,7 +46,20 @@ const routes = [
     {
         path: '/product',
         name: 'Product',
-        component: productComponent
+        component: productComponent,
+        children: [
+            {
+                path: ':id',
+                name: 'ProductDetail',
+                component: ProductDetail,
+                props: true
+            },
+            {
+                path: 'add',
+                name: 'ProductAdd',
+                component: ProductAdd,
+            }
+        ]
     },
     {
         path: '/project',
@@ -69,7 +85,12 @@ const routes = [
         path: '/teams',
         name: 'Teams',
         component: TeamComponent
-    }
+    },
+    {
+        path: '/log-in',
+        name: 'Login',
+        component: LoginComponent
+    },
 ];
 
 export const router = createRouter({

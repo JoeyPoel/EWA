@@ -1,59 +1,59 @@
 package teamx.app.backend.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Product class
  *
- * @author Joey van der Poel
+ * @author Jayden Gunhan
  */
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
+
+    @Id
+    private int id;
     private int warehouseId;
     private String description;
     private int quantity;
     private String name;
-    private int id;
+
 
     public Product(int id) {
         this.id = id;
     }
 
-    public Product() {}
+    private static String[] productList = {
+            "Solar panels",
+            "Solar Cables",
+            "Main Connectors (AC)",
+            "Inverter",
+            "Storage Unit",
+            "Montage Material",
+            "Battery Pack",
+            "LED Light",
+            "Solar Inverter",
+            "Electric Motor",
+            "Charging Station"
+    };
 
-    public static Product createProduct(int id, String name, String description, int quantity, int warehouseId){
-        Product product = new Product(id);
-        product.setName(name);
-        product.setDescription(description);
-        product.setQuantity(quantity);
-        product.setWarehouseId(warehouseId);
-        return product;
-    }
-
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public int getWarehouseId() {
-        return warehouseId;
-    }
-    public void setWarehouseId(int warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public int getQuantity() {
-        return quantity;
-    }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public static List<Product> generateRandomProducts(){
+        List<Product> products = new ArrayList<>();
+            for (int j = 0; j < productList.length; j++) {
+                products.add(new Product(j, j, "Dummy Description", (int) Math.floor(Math.random() * 100), productList[j]));
+            }
+        return products;
     }
 }

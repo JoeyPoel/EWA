@@ -3,15 +3,13 @@
     <!-- Search bar and Add Product Button -->
     <div class="d-flex justify-content-between mb-3">
       <input v-model="searchTerm" type="text" class="form-control w-25" placeholder="Search for name...">
-      <button @click="addProduct" class="btn btn-success">Add Product</button>
+      <button @click="showAddModal" class="btn btn-success">Add Product</button>
     </div>
 
     <!-- Product List -->
     <ul class="list-group product-list">
       <li
           class="list-group-item d-flex justify-content-between align-items-start"
-          data-bs-toggle="modal"
-          data-bs-target="#Modal"
           v-for="(product, index) in filteredProducts"
           :key="index"
           @click="selectProduct(product)">
@@ -22,109 +20,61 @@
       </li>
     </ul>
 
-    <!-- Product Item Modal -->
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">{{ selectedProduct.name }}</h5>
-            <button @click="deselectProduct" type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-          </div>
-
-          <div class="card text-center">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-
-                <li class="nav-item">
-                  <a class="nav-link active"
-                     aria-current="true"
-                     data-bs-target="#details-content"
-                     data-bs-toggle="tab">
-                    Details
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link"
-                     data-bs-target="#stock-content"
-                     data-bs-toggle="tab">
-                    Stock
-                  </a>
-                </li>
-
-              </ul>
-            </div>
-
-            <div class="card-body tab-content">
-
-              <div class="tab-pane fade show active" id="details-content">
-                <h6>Description: </h6>
-                {{ selectedProduct.description }}
-              </div>
-
-              <div class="tab-pane fade" id="stock-content">
-                <h5 class="card-title">In Development</h5>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-view
+        v-if="shouldShowModal"
+        :product="selectedProduct"
+        @close-modal="deselectProduct"
+        @add-product="handleNewProduct"
+    ></router-view>
 
   </div>
 </template>
 
 <script>
-import {product} from '@/models/product.js';
+
+import {Product} from '@/models/Product'
 
 export default {
   name: "ProductComponent",
-
+  inject: ['productsService'],
   data() {
     return {
       products: [],
       productCount: 0,
-      selectedProduct: {},
-      searchTerm: ""
+      selectedProduct: null,
+      searchTerm: "",
+      isModalVisible: false
     }
   },
 
-  created() {
-    for (let i = 0; i < 3; i++) {
-      this.productCount++
-      this.products.push(
-          product.createRandomDummyProduct(this.productCount)
-      );
-    }
+  async created() {
+    this.products = await this.productsService.asyncFindAll()
   },
 
   methods: {
-    addProduct() {
-
-      /**
-       * Reset searchTerm because it would just be awkward if you have a search term that doesn't correspond with
-       * the newly created random product. It wouldn't show if it didn't match, and I don't really like that.
-       */
-
+    async handleNewProduct(newProduct) {
       this.searchTerm = ""
+      const product = Product.createRandomDummyProduct(Math.floor(Math.random() * 2000) + 100);
+      product.name = newProduct.name;
+      product.description = newProduct.description;
 
-      /**
-       * Here we just push a new product with random values for title and description.
-       */
-
-      this.productCount++
-      this.products.push(product.createRandomDummyProduct(this.productCount));
+      await this.productsService.asyncSave(product);
+        this.products.push(product);
+        this.deselectProduct();
     },
 
     selectProduct(product) {
       this.selectedProduct = product;
+      this.$router.push({name: 'ProductDetail', params: {id: product.id}});
     },
 
     deselectProduct() {
-      this.selectedProduct = {};
+      this.selectedProduct = null;
+      this.$router.push({name: 'Product'});
+    },
+
+    showAddModal() {
+      this.$router.push({ name: 'ProductAdd'});
     }
   },
 
@@ -135,24 +85,14 @@ export default {
       return this.products.filter(product => {
         return product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
       });
+    },
+    shouldShowModal() {
+      return this.selectedProduct !== null || this.$route.name === 'ProductAdd';
     }
   }
 }
 </script>
-
 <style scoped>
-.modal {
-  --bs-modal-header-border-color: transparent;
-}
-
-.modal-header {
-  outline: none;
-}
-
-.card {
-  --bs-card-border-radius: none;
-}
-
 .list-group-item:hover {
   cursor: pointer;
   background-color: #f5f5f5;

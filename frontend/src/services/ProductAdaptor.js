@@ -9,8 +9,8 @@ import {Product} from "@/models/product_MERGE_ME";
  * @Author Joey van der Poel
  */
 export default class ProductAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/products");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
@@ -50,7 +50,7 @@ export default class ProductAdaptor extends Adaptor {
      * Saves a product to the REST API.
      *
      * @async
-     * @param {Team} team - The product to save.
+     * @param {Product} product - The product to save.
      * @returns {Promise<*>} The saved product.
      */
     async asyncSave(product) {
@@ -60,7 +60,7 @@ export default class ProductAdaptor extends Adaptor {
             body: JSON.stringify(product)
         }
 
-        let response = await this.fetchJson(this.resourceUrl, options);
+        let response = await this.fetchJson(this.resourceUrl + "/add", options);
 
         if (response.status === 409) {
             options.method = "PUT";
@@ -70,7 +70,7 @@ export default class ProductAdaptor extends Adaptor {
         if (response.ok) {
             return Object.assign(new Product(), await response.json());
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
+            console.log(response, !response.bodyUsed ? response.te : "");
             return null;
         }
     }
