@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h1 class="text-center card text-light bg-dark p-3">User List</h1>
+    <h1 class="text-center card text-light bg-dark mb-2 p-3">User List</h1>
 
     <!-- "Create User" button -->
     <button class="btn btn-dark mb-2" data-bs-toggle="modal"
@@ -62,7 +62,8 @@
                 <input type="text" class="form-control" id="newUserTeam" v-model="newUser.team" required>
               </div>
 
-              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="submit" class="btn btn-dark" data-bs-toggle="modal"
+                      data-bs-target="#createUserModal">Create</button>
 
             </form>
           </div>
