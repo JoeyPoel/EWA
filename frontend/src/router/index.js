@@ -8,6 +8,7 @@ import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
 import TeamComponent from "@/components/teamComponent";
+import WarehouseDetailModalComponent from "@/components/WarehouseDetailModalComponent.vue";
 
 const routes = [
     {
@@ -29,6 +30,11 @@ const routes = [
                         path: ':id',
                         name: 'WarehouseDetailComponent',
                         component: WarehouseDetailComponent
+                    },
+                    {
+                        path: 'modal/:id',
+                        name: 'WarehouseDetailComponent',
+                        component: WarehouseDetailModalComponent
                     }
                 ]
             }

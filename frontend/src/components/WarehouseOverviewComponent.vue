@@ -65,8 +65,9 @@
     </tr>
     </tbody>
   </table>
+    <RouterView>
 
-
+    </RouterView>
   </div>
 </template>
 
