@@ -4,7 +4,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="ModalLabel">Add Product</h1>
           <button @click="closeModal" type="button" class="btn-close" data-bs-dismiss="modal"
                   aria-label="Close"></button>
         </div>
@@ -25,7 +25,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="saveProduct">Save Product</button>
+          <button type="button" class="btn btn-primary" @click="saveProduct" :disabled="!isFormValid">Save Product
+          </button>
         </div>
       </div>
     </div>
@@ -58,6 +59,12 @@ export default {
     });
   },
 
+  computed: {
+    isFormValid() {
+      return this.newProduct.name.trim() !== '' && this.newProduct.description.trim() !== '';
+    }
+  },
+
   methods: {
     closeModal() {
       if (this.modal) {
@@ -66,15 +73,15 @@ export default {
       this.$emit('close-modal');
     },
 
-    saveProduct() {
-      this.$emit('add-product', { ...this.newProduct });
-      this.closeModal();
-    }
-  },
+    resetForm() {
+      this.newProduct.name = '';
+      this.newProduct.description = '';
+    },
 
-  beforeUnmount() {
-    if (this.$refs.modalRef) {
-      this.$refs.modalRef.removeEventListener('hidden.bs.modal', this.closeModal);
+    saveProduct() {
+      this.$emit('add-product', {...this.newProduct});
+      this.resetForm();
+      this.closeModal();
     }
   },
 };
