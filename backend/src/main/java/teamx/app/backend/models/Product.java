@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Product class
  *
- * @author Joey van der Poel
+ * @author Jayden Gunhan
  */
 
 @Entity
