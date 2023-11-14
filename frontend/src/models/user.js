@@ -1,12 +1,13 @@
 import {Warehouse} from "@/models/Warehouse";
 
 export class User{
-    constructor(id, name, email, team, role) {
+    constructor(id, name, email, team, role, password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.team = team;
         this.role = role;
+        this.password = password;
     }
 
     static userList = [
