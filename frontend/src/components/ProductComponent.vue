@@ -35,7 +35,7 @@ import {product} from '@/models/product.js';
 
 export default {
   name: "ProductComponent",
-
+  inject: ['productsService', 'warehousesService'],
   data() {
     return {
       products: [],
@@ -46,13 +46,15 @@ export default {
     }
   },
 
-  created() {
-    for (let i = 0; i < 3; i++) {
-      this.productCount++
-      this.products.push(
-          product.createRandomDummyProduct(this.productCount)
-      );
-    }
+  async created() {
+    this.products = await this.productsService.asyncFindAllTypes()
+
+    // for (let i = 0; i < 3; i++) {
+    //   this.productCount++
+    //   this.products.push(
+    //       product.createRandomDummyProduct(this.productCount)
+    //   );
+    // }
   },
 
   methods: {
