@@ -84,4 +84,6 @@ export default class WarehousesAdaptor extends Adaptor {
             return null;
         }
     }
+
+
 }

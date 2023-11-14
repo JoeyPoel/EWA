@@ -1,17 +1,18 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import warehouseInventoryComponent from "@/components/WarehouseInventoryComponent.vue";
-import WarehouseDetailComponent from "@/components/WarehouseDetailComponent.vue";
-import warehouseOverviewComponent from "@/components/WarehouseOverviewComponent.vue";
+// import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
+import warehouseOverviewComponent from "@/components/warehouses/WarehouseOverviewComponent.vue";
 import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
 import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
-import productComponent from "@/components/ProductComponent.vue";
+import productComponent from "@/components/products/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";
 import ProductAdd from "@/components/products/ProductAdd.vue";
 import TeamComponent from "@/components/teamComponent";
 import LoginComponent from "@/components/LoginComponent.vue";
-import WarehouseDetailModalComponent from "@/components/WarehouseDetailModalComponent.vue";
+import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseDetailModalComponent.vue";
+import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
 
 const routes = [
     {
@@ -29,15 +30,20 @@ const routes = [
                 name: 'WarehouseOverviewComponent',
                 component: warehouseOverviewComponent,
                 children: [
+                    // {
+                    //     path: ':id',
+                    //     name: 'WarehouseDetailComponent',
+                    //     component: WarehouseDetailComponent
+                    // },
                     {
                         path: ':id',
-                        name: 'WarehouseDetailComponent',
-                        component: WarehouseDetailComponent
+                        name: 'WarehouseDetailModalComponent',
+                        component: WarehouseDetailModalComponent
                     },
                     {
-                        path: 'modal/:id',
-                        name: 'WarehouseDetailComponent',
-                        component: WarehouseDetailModalComponent
+                        path: 'add',
+                        name: 'WarehouseAddComponent',
+                        component: WarehouseAddModalComponent
                     }
                 ]
             }

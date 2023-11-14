@@ -7,18 +7,36 @@
     </div>
 
     <!-- Product List -->
-    <ul class="list-group product-list">
-      <li
-          class="list-group-item d-flex justify-content-between align-items-start"
+<!--    <ul class="list-group product-list">-->
+<!--      <li-->
+<!--          class="list-group-item d-flex justify-content-between align-items-start"-->
+<!--          v-for="(product, index) in filteredProducts"-->
+<!--          :key="index"-->
+<!--          @click="selectProduct(product)">-->
+<!--        <div class="ms-2 me-auto">-->
+<!--          <div class="fw-bold">{{ product.name }}</div>-->
+<!--          {{ product.description }}-->
+<!--        </div>-->
+<!--      </li>-->
+<!--    </ul>-->
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
           v-for="(product, index) in filteredProducts"
           :key="index"
           @click="selectProduct(product)">
-        <div class="ms-2 me-auto">
-          <div class="fw-bold">{{ product.name }}</div>
-          {{ product.description }}
-        </div>
-      </li>
-    </ul>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+      </tr>
+      </tbody>
+    </table>
+
 
     <router-view
         v-if="shouldShowModal"
