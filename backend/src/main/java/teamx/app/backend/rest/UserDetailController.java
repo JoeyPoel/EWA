@@ -5,23 +5,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.User;
-import teamx.app.backend.repositories.UserRepositoryMock;
+import teamx.app.backend.models.UserDetail;
+import teamx.app.backend.repositories.UserDetailRepositoryMock;
 
 /**
- * User controller.
- * This class is a REST controller for the User model.
+ * UserDetail controller.
+ * This class is a REST controller for the UserDetail model.
  *
  * @author Kaifie Dil.
  */
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/users")
-public class UserController implements Controller<User> {
-    private final UserRepositoryMock userRepository;
+public class UserDetailController implements Controller<UserDetail> {
+    private final UserDetailRepositoryMock userRepository;
 
     @Autowired
-    public UserController(UserRepositoryMock userRepository) {
+    public UserDetailController(UserDetailRepositoryMock userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -37,24 +37,24 @@ public class UserController implements Controller<User> {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable int id) {
-        User user = userRepository.findById(id);
+        UserDetail user = userRepository.findById(id);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserDetail not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PostMapping()
-    public ResponseEntity<?> add(User user) {
+    public ResponseEntity<?> add(UserDetail user) {
         if (userRepository.findById(user.getUserId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "UserDetail already exists");
         }
-        User savedUser = userRepository.save(user);
+        UserDetail savedUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @Override
-    public ResponseEntity<?> update(int id, User user) {
+    public ResponseEntity<?> update(int id, UserDetail user) {
         return null;
     }
 

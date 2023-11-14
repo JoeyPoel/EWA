@@ -1,9 +1,10 @@
 <template>
   <div class="container mt-5">
-    <h1 class="text-center text-light bg-dark p-3">User List</h1>
+    <h1 class="text-center card text-light bg-dark p-3">User List</h1>
 
     <!-- "Create User" button -->
-    <button class="btn btn-dark mb-2" @click="openCreateUserModal">Create User</button>
+    <button class="btn btn-dark mb-2" data-bs-toggle="modal"
+            data-bs-target="#createUserModal" @click="openCreateUserModal">Create User</button>
 
     <div class="row">
       <div class="col-md-6" v-for="(user, index) in users" :key="index">
@@ -11,7 +12,7 @@
           <!-- Your card component -->
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title">{{ user.name }}</h5>
-            <button class="btn btn-dark" @click="openUpdateUserModal(user)">Update</button>
+            <button class="btn btn-dark"  @click="openUpdateUserModal(user)">Update</button>
           </div>
           <div class="card-body">
             <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>

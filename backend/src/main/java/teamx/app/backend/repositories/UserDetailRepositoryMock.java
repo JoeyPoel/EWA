@@ -1,33 +1,33 @@
 package teamx.app.backend.repositories;
 
 import org.springframework.stereotype.Repository;
-import teamx.app.backend.models.User;
+import teamx.app.backend.models.UserDetail;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @Repository
-public class UserRepositoryMock implements UserRepository<User> {
-    private ArrayList<User> users = new ArrayList<>();
+public class UserDetailRepositoryMock implements UserDetailRepository<UserDetail> {
+    private ArrayList<UserDetail> users = new ArrayList<>();
     private final int USER_ID_MIN = 0;
     private final int USER_ID_MAX = 100;
 
-    public UserRepositoryMock(){
-        User user = new User(1, "name", "email", "team", "viewer");
+    public UserDetailRepositoryMock(){
+        UserDetail user = new UserDetail(1, "name", "email", "team", "viewer");
         users.add(user);
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserDetail> findAll() {
         return users;
     }
 
-    public User findById(int id) {
+    public UserDetail findById(int id) {
         return users.stream().filter(user -> user.getUserId() == id).findFirst().orElse(null);
     }
 
-    public User save(User user) {
+    public UserDetail save(UserDetail user) {
         if (!users.contains(user)) {
             if (user.getUserId() == 0) {
                 do {
@@ -41,9 +41,9 @@ public class UserRepositoryMock implements UserRepository<User> {
         return user;
     }
 
-    public User deleteById(int id) {
-        User userToRemove = null;
-        for (User user : users) {
+    public UserDetail deleteById(int id) {
+        UserDetail userToRemove = null;
+        for (UserDetail user : users) {
             if (user.getUserId() == id) {
                 userToRemove = user;
                 break;
