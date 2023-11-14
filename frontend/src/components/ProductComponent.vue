@@ -47,7 +47,7 @@ export default {
   },
 
   async created() {
-    this.products = await this.productsService.asyncFindAllTypes()
+    this.products = await this.productsService.asyncFindAll()
 
     // for (let i = 0; i < 3; i++) {
     //   this.productCount++
