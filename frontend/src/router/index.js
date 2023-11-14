@@ -8,6 +8,7 @@ import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
 import TeamComponent from "@/components/teamComponent";
+import LoginComponent from "@/components/LoginComponent.vue";
 
 const routes = [
     {
@@ -63,7 +64,12 @@ const routes = [
         path: '/teams',
         name: 'Teams',
         component: TeamComponent
-    }
+    },
+    {
+        path: '/log-in',
+        name: 'Login',
+        component: LoginComponent
+    },
 ];
 
 export const router = createRouter({

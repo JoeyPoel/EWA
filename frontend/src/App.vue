@@ -14,6 +14,7 @@ import WarehousesAdaptor from "@/services/WarehousesAdaptor";
 import {CONFIG} from "../app-config";
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
+import UserAdaptor from "@/services/UserAdaptor";
 
 export default {
   name: 'App',
@@ -26,7 +27,7 @@ export default {
       warehousesService: new WarehousesAdaptor(CONFIG.BACKEND_URL + "/warehouses/"),
       teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products/"),
-
+      usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/user"),
     }
   }
   }

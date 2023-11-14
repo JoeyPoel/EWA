@@ -6,14 +6,21 @@ export default {
   name: "NavbarComponent",
   data() {
     return {
-      logo: logo
-    };
+      logo: logo,
+      session: !!sessionStorage.getItem('email')
+    }
+  },
+  methods: {
+    logout() {
+      sessionStorage.clear();
+      this.$router.push("/log-in");
+    },
   }
 };
 </script>
 
 <template>
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100 w-auto sticky-top">
+  <div v-if="session" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100 w-auto sticky-top">
     <!-- Home Link with Icon -->
     <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" to="/dashboard">
       <img :src="logo" alt="Your Company Logo" class="me-2 nav-height">
@@ -76,10 +83,8 @@ export default {
         </ul>
       </li>
 
-      <li class="nav-item">
-        <router-link class="nav-link text-white" to="/sign-in">
-          Log in
-        </router-link>
+      <li class="nav-item"  @click="logout">
+        <button class="btn btn-danger ms-2 mt-2">Log out</button>
       </li>
     </ul>
 
