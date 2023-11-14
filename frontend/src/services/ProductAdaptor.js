@@ -70,7 +70,7 @@ export default class ProductAdaptor extends Adaptor {
         if (response.ok) {
             return Object.assign(new Product(), await response.json());
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
+            console.log(response, !response.bodyUsed ? response.te : "");
             return null;
         }
     }

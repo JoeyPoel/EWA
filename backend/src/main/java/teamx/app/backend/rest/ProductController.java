@@ -43,7 +43,7 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody Product product) {
         if (productRepository.findById(product.getId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Product already exists");
         }
 
         productRepository.save(product);

@@ -54,16 +54,13 @@ export default {
   methods: {
     async handleNewProduct(newProduct) {
       this.searchTerm = ""
-      const product = Product.createRandomDummyProduct(this.productCount);
+      const product = Product.createRandomDummyProduct(Math.floor(Math.random() * 2000) + 100);
       product.name = newProduct.name;
       product.description = newProduct.description;
-      const savedProduct = await this.productsService.asyncSave(product);
 
-      if (savedProduct){
+      await this.productsService.asyncSave(product);
         this.products.push(product);
         this.deselectProduct();
-      }
-
     },
 
     selectProduct(product) {
