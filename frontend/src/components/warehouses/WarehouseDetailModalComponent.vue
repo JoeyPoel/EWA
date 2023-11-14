@@ -21,6 +21,7 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link"
+                      aria-current="false"
                      data-bs-target="#inventory-content"
                      data-bs-toggle="tab">
                     Inventory

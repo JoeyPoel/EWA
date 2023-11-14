@@ -51,9 +51,13 @@ public class Product {
 
     public static List<Product> generateRandomProducts(){
         List<Product> products = new ArrayList<>();
+        int id = 0;
+        for (int i = 0; i < 6; i++){
             for (int j = 0; j < productList.length; j++) {
-                products.add(new Product(j, j, "Dummy Description", (int) Math.floor(Math.random() * 100), productList[j]));
+                products.add(new Product(id++, i, "Dummy Description", (int) Math.floor(Math.random() * 100), productList[j]));
             }
+        }
+
         return products;
     }
 }
