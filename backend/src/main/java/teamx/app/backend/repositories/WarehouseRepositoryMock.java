@@ -15,7 +15,7 @@ import java.util.Random;
 @Repository
 public class WarehouseRepositoryMock implements ModelRepository<Warehouse>{
     private final ArrayList<Warehouse> warehouses;
-    private final int WAREHOUSE_COUNT = 10;
+    private final int WAREHOUSE_COUNT = 6;
     private final int WAREHOUSE_ID_MIN = 100;
     private final int WAREHOUSE_ID_MAX = 1000;
 
