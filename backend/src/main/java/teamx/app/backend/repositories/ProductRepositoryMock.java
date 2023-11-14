@@ -1,52 +1,60 @@
-package teamx.app.backend.rest;
-import org.springframework.web.server.ResponseStatusException;
+package teamx.app.backend.repositories;
+
 import teamx.app.backend.models.Product;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import teamx.app.backend.repositories.ProductRepositoryMock;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /**
- * Product Controller
+ * Repository for product
  *
  * @author Joey van der Poel
  */
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController
-@RequestMapping("products")
-public class ProductController {
+@Repository()
+public class ProductRepositoryMock implements ModelRepository<Product> {
+    private final List<Product> products;
 
-    private final ProductRepositoryMock productRepository;
-
-    @Autowired
-    public ProductController(ProductRepositoryMock productRepository) {
-        this.productRepository = productRepository;
+    public ProductRepositoryMock(){
+        this.products = Product.generateRandomProducts();
     }
 
-    @GetMapping("/test")
-    public List<Product> getTestOffers() {
-        return List.of(
-                new Product(1),
-                new Product(2)
-        );
+    @Override
+    public List<Product> findAll() {
+        return this.products;
     }
 
-    @GetMapping("/all")
-    public List<Product> getAll() {
-        return this.productRepository.findAll();
+    public Product findById(int id) {
+        return this.products.stream().filter(product -> product.getId() == id).findFirst().orElse(null);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody Product product) {
-        if (productRepository.findById(product.getId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
+    @Override
+    public Product save(Product product) {
+        if (!this.products.contains(product)) {
+            this.products.add(product);
+            return product;
         }
-
-        productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(product);
+        this.products.set(this.products.indexOf(product), product);
+        return product;
     }
+
+    @Override
+    public Product deleteById(int id) {
+        return null;
+    }
+
+
+    static List<String> productList = Arrays.asList(
+            "Solar panels",
+            "Solar Cables",
+            "Main Connectors (AC)",
+            "Inverter",
+            "Storage Unit",
+            "Montage Material",
+            "Battery Pack",
+            "LED Light",
+            "Solar Inverter",
+            "Electric Motor",
+            "Charging Station"
+    );
 }
