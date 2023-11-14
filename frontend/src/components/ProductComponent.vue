@@ -21,10 +21,10 @@
     </ul>
 
     <router-view
-        v-if="selectedProduct !== null"
+        v-if="shouldShowModal"
         :product="selectedProduct"
         @close-modal="deselectProduct"
-        @add-product="addProduct"
+        @add-product="handleNewProduct"
     ></router-view>
 
   </div>
@@ -63,6 +63,14 @@ export default {
       this.products.push(product.createRandomDummyProduct(this.productCount));
     },
 
+    handleNewProduct(newProduct) {
+      const Product = product.createRandomDummyProduct(this.productCount);
+      Product.name = newProduct.name;
+      Product.description = newProduct.description;
+      this.products.push(Product);
+      this.deselectProduct();
+    },
+
     selectProduct(product) {
       this.selectedProduct = product;
       this.$router.push({name: 'ProductDetail', params: {id: product.id}});
@@ -74,7 +82,7 @@ export default {
     },
 
     showAddModal() {
-      this.$router.push({ name: 'ProductAdd', params: {}});
+      this.$router.push({ name: 'ProductAdd'});
     }
   },
 
@@ -85,6 +93,9 @@ export default {
       return this.products.filter(product => {
         return product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
       });
+    },
+    shouldShowModal() {
+      return this.selectedProduct !== null || this.$route.name === 'ProductAdd';
     }
   }
 }

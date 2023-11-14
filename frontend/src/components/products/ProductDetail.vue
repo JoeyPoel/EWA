@@ -70,6 +70,7 @@ export default {
     }
 
     this.$refs.modalRef.addEventListener('hidden.bs.modal', this.closeModal);
+    console.log('Modal ref:', this.$refs);
   },
 
   beforeUnmount() {
