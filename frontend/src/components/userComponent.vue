@@ -23,35 +23,46 @@
     </div>
 
     <!-- Modal for creating a new user -->
-    <div class="modal" ref="createUserModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal fade" id="createUserModal" ref="createUserModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
         <div class="modal-content">
-          <div class="modal-header">
+
+          <div class="modal-header bg-dark text-white">
+
             <h5 class="modal-title">Create User</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeCreateUserModal">
-              <span aria-hidden="true">&times;</span>
-            </button>
+
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @click="closeCreateUserModal"></button>
+
           </div>
+
           <div class="modal-body">
             <!-- Form to fill in name, email, role, and team for creating a new user -->
+
             <form @submit.prevent="createUser">
+
               <div class="mb-3">
                 <label for="newUserName" class="form-label">Name</label>
                 <input type="text" class="form-control" id="newUserName" v-model="newUser.name" required>
               </div>
+
               <div class="mb-3">
                 <label for="newUserEmail" class="form-label">Email</label>
                 <input type="email" class="form-control" id="newUserEmail" v-model="newUser.email" required>
               </div>
+
               <div class="mb-3">
                 <label for="newUserRole" class="form-label">Role</label>
                 <input type="text" class="form-control" id="newUserRole" v-model="newUser.role" required>
               </div>
+
               <div class="mb-3">
                 <label for="newUserTeam" class="form-label">Team</label>
                 <input type="text" class="form-control" id="newUserTeam" v-model="newUser.team" required>
               </div>
+
               <button type="submit" class="btn btn-dark">Create</button>
+
             </form>
           </div>
         </div>
@@ -71,6 +82,7 @@ export default {
       newUser: {
         name: "",
         email: "",
+        team: "",
         role: "",
       },
     };
@@ -81,6 +93,7 @@ export default {
       this.newUser = {
         name: "",
         email: "",
+        team: "",
         role: "",
       };
 
@@ -93,7 +106,7 @@ export default {
       // Hide the modal using the $refs object
       this.$refs.createUserModal.classList.remove("show");
       this.$refs.createUserModal.style.display = "none";
-      document.body.classList.remove("modal-open");
+      document.body.classList.remove("modal-open")
     },
     createUser() {
       // Validate the form fields (add additional validation as needed)
