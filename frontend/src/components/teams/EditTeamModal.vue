@@ -50,7 +50,7 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
           <button type="button" class="btn btn-primary" @click="saveChanges">Save changes</button>
         </div>
       </div>
@@ -76,8 +76,12 @@ export default {
   mounted() {
     // Populate modal fields when component is mounted
     this.modal = new Modal(this.$refs.addModalRef);
-    this.teamName = this.team.name;
-    this.selectedWarehouse = this.team.warehouseId;
+    this.$refs.addModalRef.addEventListener('hidden.bs.modal', this.closeModal);
+    if(this.team != null){
+      this.teamName = this.team.name;
+      this.selectedWarehouse = this.team.warehouseId;
+    }
+    this.modal.show();
   },
 
   methods: {

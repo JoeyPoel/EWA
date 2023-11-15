@@ -18,7 +18,7 @@
           <td>{{ team.name }}</td>
           <td>{{ team.warehouseId }}</td>
           <td>
-            <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">
+            <button type="button" class="btn btn-dark mx-1" @click="showEditModal(team)">
               Edit
             </button>
             <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
@@ -28,17 +28,18 @@
       </table>
     </div>
 
-    <router-view
+    <editTeamModal
         v-if="shouldShowModal"
         :team="selectedTeam"
         :warehouses="warehouses"
         @closeModal="closeModal"
         @saveChanges="addTeam"
-    ></router-view>
+    ></editTeamModal>
   </div>
 </template>
 
 <script>
+import editTeamModal from "@/components/teams/EditTeamModal";
 export default {
   inject: ['teamsService', 'warehousesService'],
   name: 'teamComponent',
@@ -51,10 +52,11 @@ export default {
       searchTerm: "",
       selectedTeam: null,
       team: null,
-      showModal: true, // Flag to control modal visibility
+      showModal: false, // Flag to control modal visibility
     };
   },
   components: {
+    editTeamModal,
   },
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
@@ -69,7 +71,7 @@ export default {
       });
     },
     shouldShowModal() {
-      return this.selectedProduct !== null || this.$route.name === 'ProductAdd';
+      return this.$route.name === 'AddTeamModal' || this.showModal === true;
     }
   },
   methods: {
@@ -90,7 +92,7 @@ export default {
       await this.teamsService.asyncSave(this.team);
       this.resetForm();
     },
-    editTeam(team) {
+    showEditModal(team) {
       this.selectedTeam = team;
       this.teamName = team.name;
       this.selectedWarehouse = this.warehouses.find(warehouse => warehouse.id === team.warehouseId);
@@ -111,6 +113,7 @@ export default {
     },
     closeModal() {
       this.resetForm();
+      this.$router.push({name: 'Teams'});
       this.showModal = false;
     },
   },
