@@ -13,6 +13,7 @@ import TeamComponent from "@/components/teams/teamComponent";
 import LoginComponent from "@/components/LoginComponent.vue";
 import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseDetailModalComponent.vue";
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
+import EditTeamModal from "@/components/teams/EditTeamModal";
 
 const routes = [
     {
@@ -90,7 +91,21 @@ const routes = [
     {
         path: '/teams',
         name: 'Teams',
-        component: TeamComponent
+        component: TeamComponent,
+        children: [
+            {
+                path: ':id',
+                name: 'EditTeamModal',
+                component: EditTeamModal,
+                props: true
+            },
+            {
+                path: '/teams/add',
+                name: 'AddTeamModal',
+                component: EditTeamModal,
+                props: true
+            }
+        ]
     },
     {
         path: '/log-in',
