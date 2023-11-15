@@ -90,6 +90,7 @@ export default {
       await this.teamsService.asyncDeleteById(team.id)
     },
     showAddModal() {
+      this.$router.push({name: 'AddTeamModal'});
       this.showModal = true;
     },
     closeModal() {
