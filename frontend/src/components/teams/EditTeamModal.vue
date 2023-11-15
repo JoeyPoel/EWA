@@ -52,6 +52,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
           <button type="button" class="btn btn-primary" @click="saveChanges">Save changes</button>
+          <button type="button" class="btn btn-danger" @click="deleteTeam">Delete</button>
         </div>
       </div>
     </div>
@@ -85,18 +86,34 @@ export default {
   },
 
   methods: {
-    saveChanges() {
+    async saveChanges() {
       // Emit an event with updated team data
-      this.$emit('save', {
-        id: this.team.id,
-        name: this.teamName,
-        warehouseId: this.selectedWarehouse,
-      });
+      if(this.team != null){
+        console.log("Entering Edit Emit")
+        await this.$emit('save', {
+          id: parseInt(this.$route.params.id),
+          name: this.teamName,
+          warehouseId: this.selectedWarehouse,
+        });
+      }else {
+        console.log("Entering Add Emit")
+        await this.$emit('save', {
+          id: Math.floor(Math.random() * 100000),
+          name: this.teamName,
+          warehouseId: this.selectedWarehouse,
+        });
+      }
       this.closeModal();
     },
     closeModal() {
       this.$emit('closeModal');
     },
+    deleteTeam(){
+      this.$emit('delete', {
+        id: parseInt(this.$route.params.id),
+      });
+      this.closeModal();
+    }
   },
 };
 </script>

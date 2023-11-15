@@ -21,7 +21,6 @@
             <button type="button" class="btn btn-dark mx-1" @click="showEditModal(team)">
               Edit
             </button>
-            <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
           </td>
         </tr>
         </tbody>
@@ -34,6 +33,7 @@
         :warehouses="warehouses"
         @closeModal="closeModal"
         @saveChanges="addTeam"
+        @delete="deleteTeam"
     ></editTeamModal>
   </div>
 </template>
@@ -76,21 +76,8 @@ export default {
   },
   methods: {
     async addTeam() {
-      if(this.selectedTeam){
-        this.team = {
-          id: parseInt(this.$route.params.id),
-          name: this.teamName,
-          warehouseId: this.selectedWarehouse,
-        }
-      }else {
-          this.team = {
-            id: Math.floor(Math.random() * 100000),
-            name: this.teamName,
-            warehouseId: this.selectedWarehouse,
-          };
-      }
+      console.log("Entered method AddTeam")
       await this.teamsService.asyncSave(this.team);
-      this.resetForm();
     },
     showEditModal(team) {
       this.selectedTeam = team;
@@ -102,17 +89,10 @@ export default {
     async deleteTeam(team) {
       await this.teamsService.asyncDeleteById(team.id)
     },
-
-    resetForm() {
-    this.selectedTeam = null;
-    this.teamName = '';
-    this.selectedWarehouse = null;
-    },
     showAddModal() {
       this.showModal = true;
     },
     closeModal() {
-      this.resetForm();
       this.$router.push({name: 'Teams'});
       this.showModal = false;
     },
