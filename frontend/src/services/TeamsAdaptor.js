@@ -52,17 +52,14 @@ export default class TeamsAdaptor extends Adaptor {
         console.log(team)
 
         let response = await this.fetchJson(this.resourceUrl + "/add", options);
-
         if (response.status === 409) {
             options.method = "PUT";
             response = await this.fetchJson(this.resourceUrl + "/" + team.id, options);
         }
 
         if (response.ok) {
-            console.log("ok")
             return Object.assign(new Team(), await response.json());
         } else {
-            console.log("not ok")
             console.log(response, !response.bodyUsed ? response.text : "");
             return null;
         }

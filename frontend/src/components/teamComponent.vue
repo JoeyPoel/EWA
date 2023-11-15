@@ -11,7 +11,7 @@
       </option>
     </select>
 
-    <button class="btn btn-primary mt-3" @click="editingTeam ? updateTeam() : addTeam()">
+    <button class="btn btn-primary mt-3" @click="addTeam()">
       {{ editingTeam ? 'Update' : 'Save' }}
     </button>
   </div>
@@ -31,17 +31,24 @@
           <td>{{ team.name }}</td>
           <td>{{ team.warehouseId }}</td>
           <td>
-            <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">Edit</button>
+            <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">
+              Edit
+            </button>
             <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- EditTeamModal component -->
+    <EditTeamModal v-if="showModal" :team="editingTeam" :warehouses="warehouses" @save="saveEditedTeam" @close="closeEditModal" />
   </div>
 </template>
 
 <script>
+import EditTeamModal from './EditTeamModal.vue'; // Import the modal component
+
 export default {
   inject: ['teamsService', 'warehousesService'],
   name: 'teamComponent',
@@ -51,8 +58,13 @@ export default {
       warehouses: [],
       selectedWarehouse: null,
       teamName: '',
-      editingTeam: null,
+      editingTeam: false,
+      team: null,
+      showModal: false, // Flag to control modal visibility
     };
+  },
+  components: {
+    EditTeamModal, // Register EditTeamModal component
   },
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
@@ -62,47 +74,37 @@ export default {
   },
   methods: {
     async addTeam() {
-      const team = {
-        id: Math.floor(Math.random() * 100000),
-        name: this.teamName,
-        warehouseId: this.selectedWarehouse,
-      };
-      const savedTeam = await this.teamsService.asyncSave(team);
-      console.log(savedTeam)
-      if (savedTeam) {
-        this.teams.add(savedTeam)
-        this.resetForm();
+      if(this.editingTeam){
+        this.team = {
+          id: parseInt(this.$route.params.id),
+          name: this.teamName,
+          warehouseId: this.selectedWarehouse,
+        }
+      }else {
+          this.team = {
+            id: Math.floor(Math.random() * 100000),
+            name: this.teamName,
+            warehouseId: this.selectedWarehouse,
+          };
       }
+      await this.teamsService.asyncSave(this.team);
+      this.resetForm();
     },
     async editTeam(team) {
       this.editingTeam = team;
       this.teamName = team.name;
       this.selectedWarehouse = await this.warehousesService.asyncFindById(team.warehouseId);
-    },
-    async updateTeam() {
-      if (!this.editingTeam) return;
-
-      const team = {
-        id: this.editingTeam.id,
-        name: this.teamName,
-        warehouseId: this.selectedWarehouse,
-      };
-      const updatedTeam = await this.teamsService.asyncSave(team);
-      if(updatedTeam){
-        let index = this.teams.findIndex(t => t.id === updatedTeam.id);
-        if (index !== -1) {
-          this.teams[index] = updatedTeam;
-        }
-      }
-      this.resetForm();
+      // this.$router.push("/teams/" + team.id)
+      this.editingTeam = team;
+      this.showModal = true;
     },
     async deleteTeam(team) {
-      this.teamsService.asyncDeleteById(team.id)
+      await this.teamsService.asyncDeleteById(team.id)
     },
-      resetForm() {
-      this.editingTeam = null;
-      this.teamName = '';
-      this.selectedWarehouse = null;
+    resetForm() {
+    this.editingTeam = null;
+    this.teamName = '';
+    this.selectedWarehouse = null;
     },
   },
 };

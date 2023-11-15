@@ -10,7 +10,7 @@ import {Warehouse} from "@/models/Warehouse.js";
  */
 export default class WarehousesAdaptor extends Adaptor {
     constructor() {
-        super("http://localhost:8086/api/warehouses");
+        super("http://localhost:8087/api/warehouses");
     }
 
     /**
@@ -84,6 +84,4 @@ export default class WarehousesAdaptor extends Adaptor {
             return null;
         }
     }
-
-
 }
