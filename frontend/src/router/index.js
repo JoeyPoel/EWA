@@ -9,7 +9,7 @@ import productComponent from "@/components/products/ProductComponent.vue";
 import projectComponent from "@/components/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";
 import ProductAdd from "@/components/products/ProductAdd.vue";
-import TeamComponent from "@/components/teamComponent";
+import TeamComponent from "@/components/teams/teamComponent";
 import LoginComponent from "@/components/LoginComponent.vue";
 import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseDetailModalComponent.vue";
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";

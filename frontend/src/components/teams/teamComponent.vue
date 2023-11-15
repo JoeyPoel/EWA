@@ -1,22 +1,9 @@
 <template>
-  <div class="bg-light p-3">
-    <label for="name">Name</label>
-    <input type="text" v-model="teamName" class="form-control">
-
-    <label for="chooseWarehouse">Warehouse</label>
-
-    <select v-model="selectedWarehouse" class="form-control">
-      <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
-        {{ warehouse.name }}
-      </option>
-    </select>
-
-    <button class="btn btn-primary mt-3" @click="addTeam()">
-      {{ editingTeam ? 'Update' : 'Save' }}
-    </button>
-  </div>
-
   <div class="container mt-3">
+    <div class="d-flex justify-content-between mb-3">
+      <input v-model="searchTerm" type="text" class="form-control w-25" placeholder="Search for name...">
+      <button @click="showAddModal" class="btn btn-success">Add Team</button>
+    </div>
     <div class="table-wrapper">
       <table class="table">
         <thead class="thead-dark">
@@ -27,7 +14,7 @@
         </tr>
         </thead>
         <tbody class="bg-light team-list">
-        <tr v-for="team in teams" :key="team.id" class="border-bottom">
+        <tr v-for="team in filteredTeams" :key="team.id" class="border-bottom">
           <td>{{ team.name }}</td>
           <td>{{ team.warehouseId }}</td>
           <td>
@@ -41,14 +28,17 @@
       </table>
     </div>
 
-    <!-- EditTeamModal component -->
-    <EditTeamModal v-if="showModal" :team="editingTeam" :warehouses="warehouses" @save="saveEditedTeam" @close="closeEditModal" />
+    <router-view
+        v-if="shouldShowModal"
+        :team="selectedTeam"
+        :warehouses="warehouses"
+        @closeModal="closeModal"
+        @saveChanges="addTeam"
+    ></router-view>
   </div>
 </template>
 
 <script>
-import EditTeamModal from './EditTeamModal.vue'; // Import the modal component
-
 export default {
   inject: ['teamsService', 'warehousesService'],
   name: 'teamComponent',
@@ -58,23 +48,33 @@ export default {
       warehouses: [],
       selectedWarehouse: null,
       teamName: '',
-      editingTeam: false,
+      searchTerm: "",
+      selectedTeam: null,
       team: null,
-      showModal: false, // Flag to control modal visibility
+      showModal: true, // Flag to control modal visibility
     };
   },
   components: {
-    EditTeamModal, // Register EditTeamModal component
   },
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
   },
   computed: {
+    filteredTeams() {
+      if (!this.searchTerm) return this.teams;
+
+      return this.teams.filter(team => {
+        return team.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+    },
+    shouldShowModal() {
+      return this.selectedProduct !== null || this.$route.name === 'ProductAdd';
+    }
   },
   methods: {
     async addTeam() {
-      if(this.editingTeam){
+      if(this.selectedTeam){
         this.team = {
           id: parseInt(this.$route.params.id),
           name: this.teamName,
@@ -90,21 +90,28 @@ export default {
       await this.teamsService.asyncSave(this.team);
       this.resetForm();
     },
-    async editTeam(team) {
-      this.editingTeam = team;
+    editTeam(team) {
+      this.selectedTeam = team;
       this.teamName = team.name;
-      this.selectedWarehouse = await this.warehousesService.asyncFindById(team.warehouseId);
-      // this.$router.push("/teams/" + team.id)
-      this.editingTeam = team;
+      this.selectedWarehouse = this.warehouses.find(warehouse => warehouse.id === team.warehouseId);
+      this.$router.push({name: 'EditTeamModal', params: {id: team.id}});
       this.showModal = true;
     },
     async deleteTeam(team) {
       await this.teamsService.asyncDeleteById(team.id)
     },
+
     resetForm() {
-    this.editingTeam = null;
+    this.selectedTeam = null;
     this.teamName = '';
     this.selectedWarehouse = null;
+    },
+    showAddModal() {
+      this.showModal = true;
+    },
+    closeModal() {
+      this.resetForm();
+      this.showModal = false;
     },
   },
 };
@@ -115,4 +122,16 @@ export default {
   max-height: 450px;
   overflow-y: auto;
 }
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
 </style>
+
