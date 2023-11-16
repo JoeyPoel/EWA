@@ -26,7 +26,7 @@
               class="form-control mb-3"
           />
           <label for="chooseUsers">Choose Users</label>
-          <div class="chooseUsers" style="max-height: 100px; overflow-y: auto;">
+          <div class="chooseUsers">
             <div v-for="user in filteredUsers" :key="user.id">
               <input
                   type="checkbox"
@@ -90,31 +90,28 @@ export default {
   },
   methods: {
     saveChanges() {
-      // Emit an event with updated team data
-      if(this.team != null){
-        console.log("Entering Edit Emit")
-        this.$emit('save', {
-          id: parseInt(this.$route.params.id),
-          name: this.teamName,
-          warehouseId: this.selectedWarehouse,
-        });
-      }else {
-        console.log("Entering Add Emit")
-        this.$emit('save', {
-          id: Math.floor(Math.random() * 100000),
-          name: this.teamName,
-          warehouseId: this.selectedWarehouse,
-        });
-      }
+      // Create a team object
+      const team = {
+        id: this.team ? parseInt(this.$route.params.id) : Math.floor(Math.random() * 100000),
+        name: this.teamName,
+        warehouseId: this.selectedWarehouse,
+      };
+
+      // Emit the team object
+      this.$emit('save', team);
+
+      // Close the modal
       this.closeModal();
     },
     closeModal() {
       this.$emit('closeModal');
     },
     deleteTeam(){
-      this.$emit('delete', {
+      const id = {
         id: parseInt(this.$route.params.id),
-      });
+      };
+      this.$emit('delete', id);
+
       this.closeModal();
     }
   },
@@ -122,5 +119,9 @@ export default {
 </script>
 
 <style scoped>
-
+.chooseUsers{
+  max-height: 100px;
+  min-height: 100px;
+  overflow-y: auto;
+}
 </style>

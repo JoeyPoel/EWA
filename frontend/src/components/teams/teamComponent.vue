@@ -33,7 +33,7 @@
         :warehouses="warehouses"
         :users="users"
         @closeModal="closeModal"
-        @saveChanges="addTeam"
+        @save="addOrEditTeam"
         @delete="deleteTeam"
     ></editTeamModal>
   </div>
@@ -78,9 +78,10 @@ export default {
     }
   },
   methods: {
-    async addTeam() {
+    async addOrEditTeam(team) {
       console.log("Entered method AddTeam")
-      await this.teamsService.asyncSave(this.team);
+      console.log(team)
+      await this.teamsService.asyncSave(team);
     },
     showEditModal(team) {
       this.selectedTeam = team;
@@ -112,7 +113,7 @@ export default {
 
 <style scoped>
 .table-wrapper {
-  max-height: 450px;
+  max-height: 640px;
   overflow-y: auto;
 }
 .modal-mask {
