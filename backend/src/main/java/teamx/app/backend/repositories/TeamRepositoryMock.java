@@ -12,9 +12,10 @@ public class TeamRepositoryMock implements ModelRepository<Team> {
     private List<Team> teams = new ArrayList<>();
 
     public TeamRepositoryMock(){
-        for (int i = 0; i < 4; i++) {
-            teams.add(new Team(i, "teamName",i));
-        }
+        teams.add(new Team(1, "team 1",1));
+        teams.add(new Team(2, "team 2",2));
+        teams.add(new Team(3, "team 3",3));
+        teams.add(new Team(4, "team 4",4));
     }
 
 

@@ -108,10 +108,6 @@ export default {
         // Emit the team object
         this.$emit('save', team);
       }
-
-
-
-
       // Close the modal
       this.closeModal();
     },
