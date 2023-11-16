@@ -33,7 +33,8 @@
         :warehouses="warehouses"
         :users="users"
         @closeModal="closeModal"
-        @save="addOrEditTeam"
+        @save="addTeam"
+        @update="editTeam"
         @delete="deleteTeam"
     ></editTeamModal>
   </div>
@@ -78,10 +79,15 @@ export default {
     }
   },
   methods: {
-    async addOrEditTeam(team) {
+    async addTeam(team) {
       console.log("Entered method AddTeam")
       console.log(team)
       await this.teamsService.asyncSave(team);
+    },
+    async editTeam(team) {
+      console.log("Entered method EditTeam")
+      console.log(team)
+      await this.teamsService.asyncUpdate(team);
     },
     showEditModal(team) {
       this.selectedTeam = team;

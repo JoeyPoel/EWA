@@ -52,10 +52,32 @@ export default class TeamsAdaptor extends Adaptor {
         console.log(team)
 
         let response = await this.fetchJson(this.resourceUrl + "/add", options);
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + "/" + team.id, options);
+
+        if (response.ok) {
+            return Object.assign(new Team(), await response.json());
+        } else {
+            console.log(response, !response.bodyUsed ? response.text : "");
+            return null;
         }
+    }
+
+    /**
+     * Updates a team to the REST API.
+     *
+     * @async
+     * @param {Team} team - The team to save.
+     * @returns {Promise<*>} The saved team.
+     */
+    async asyncUpdate(team) {
+        const options = {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(team)
+        }
+
+        console.log(team)
+
+        let response = await this.fetchJson(this.resourceUrl + "/" + team.id, options);
 
         if (response.ok) {
             return Object.assign(new Team(), await response.json());
@@ -81,7 +103,8 @@ export default class TeamsAdaptor extends Adaptor {
         if (response.ok) {
             return Object.assign(new Team(), await response.json());
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
+            // TODO FIX THIS
+            // console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;
         }
     }

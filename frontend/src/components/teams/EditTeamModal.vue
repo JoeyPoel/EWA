@@ -91,14 +91,26 @@ export default {
   methods: {
     saveChanges() {
       // Create a team object
-      const team = {
-        id: this.team ? parseInt(this.$route.params.id) : Math.floor(Math.random() * 100000),
-        name: this.teamName,
-        warehouseId: this.selectedWarehouse,
-      };
+      if(this.team){
+        const team = {
+          id: parseInt(this.$route.params.id),
+          name: this.teamName,
+          warehouseId: this.selectedWarehouse,
+        }
+        // Emit the team object
+        this.$emit('update', team);
+      } else{
+        const team = {
+          id: Math.floor(Math.random() * 100000),
+          name: this.teamName,
+          warehouseId: this.selectedWarehouse,
+        };
+        // Emit the team object
+        this.$emit('save', team);
+      }
 
-      // Emit the team object
-      this.$emit('save', team);
+
+
 
       // Close the modal
       this.closeModal();

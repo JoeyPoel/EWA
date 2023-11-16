@@ -60,7 +60,7 @@ public class TeamsController implements Controller<Team> {
         if (teamRepository.findById(team.getId()) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
         }
-        Team savedTeam = teamRepository.save(team);
+        Team savedTeam = teamRepository.put(id,team);
         return ResponseEntity.status(HttpStatus.OK).body(savedTeam);
     }
 

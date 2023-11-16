@@ -31,19 +31,16 @@ public class TeamRepositoryMock implements ModelRepository<Team> {
     }
 
 
-    public void put(int id, String name, int warehouseId) {
+    public Team put(int id, Team team) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
-                Team newTeam = new Team(id, name, warehouseId);
+                Team newTeam = new Team(id, team.getName(), team.getWarehouseId());
                 teams.set(i, newTeam);
+                return newTeam;
             }
         }
+        return null;
     }
-
-//    @Override
-//    public Team delete(int index) {
-//        teams.remove(index);
-//    }
 
     @Override
     public Team findById(int id) {
