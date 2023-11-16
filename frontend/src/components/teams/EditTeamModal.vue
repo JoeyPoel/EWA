@@ -1,34 +1,4 @@
-<!-- EditTeamModal.vue -->
 
-<!--<template>-->
-<!--  <div class="modal" tabindex="-1" role="dialog" style="display: block;">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--      <div class="modal-content">-->
-<!--        <div class="modal-header">-->
-<!--          <h5 class="modal-title">Edit Team</h5>-->
-<!--          <button type="button" class="close" @click="closeModal">-->
-<!--            <span aria-hidden="true">&times;</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="modal-body">-->
-<!--          <label for="name">Name</label>-->
-<!--          <input type="text" v-model="teamName" class="form-control">-->
-
-<!--          <label for="chooseWarehouse">Warehouse</label>-->
-<!--          <select v-model="selectedWarehouse" class="form-control">-->
-<!--            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">-->
-<!--              {{ warehouse.name }}-->
-<!--            </option>-->
-<!--          </select>-->
-<!--        </div>-->
-<!--        <div class="modal-footer">-->
-<!--          <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>-->
-<!--          <button type="button" class="btn btn-primary" @click="saveChanges">Save changes</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
 <template>
   <div class="modal fade" ref="addModalRef" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -48,6 +18,25 @@
               {{ warehouse.name }}
             </option>
           </select>
+          <label>Search users</label>
+          <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="Search users..."
+              class="form-control mb-3"
+          />
+          <label for="chooseUsers">Choose Users</label>
+          <div class="chooseUsers" style="max-height: 100px; overflow-y: auto;">
+            <div v-for="user in filteredUsers" :key="user.id">
+              <input
+                  type="checkbox"
+                  :id="'user_' + user.id"
+                  :value="user"
+                  v-model="selectedUsers"
+              />
+              <label :for="'user_' + user.id">{{ user.name }}</label>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
@@ -67,11 +56,14 @@ export default {
   props: {
     team: Object, // Team object to edit
     warehouses: Array, // Array of warehouses
+    users: Array, // Array of users
   },
   data() {
     return {
       teamName: '',
       selectedWarehouse: null,
+      selectedUsers: [],
+      searchQuery: "",
     };
   },
   mounted() {
@@ -84,20 +76,31 @@ export default {
     }
     this.modal.show();
   },
-
+  computed: {
+    filteredUsers() {
+      // Filter users based on search text
+      if (!this.searchQuery) {
+        return this.users;
+      }
+      const searchTerm = this.searchQuery .toLowerCase();
+      return this.users.filter(user =>
+          user.name.toLowerCase().includes(searchTerm)
+      );
+    },
+  },
   methods: {
-    async saveChanges() {
+    saveChanges() {
       // Emit an event with updated team data
       if(this.team != null){
         console.log("Entering Edit Emit")
-        await this.$emit('save', {
+        this.$emit('save', {
           id: parseInt(this.$route.params.id),
           name: this.teamName,
           warehouseId: this.selectedWarehouse,
         });
       }else {
         console.log("Entering Add Emit")
-        await this.$emit('save', {
+        this.$emit('save', {
           id: Math.floor(Math.random() * 100000),
           name: this.teamName,
           warehouseId: this.selectedWarehouse,

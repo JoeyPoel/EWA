@@ -31,6 +31,7 @@
         v-if="shouldShowModal"
         :team="selectedTeam"
         :warehouses="warehouses"
+        :users="users"
         @closeModal="closeModal"
         @saveChanges="addTeam"
         @delete="deleteTeam"
@@ -47,6 +48,7 @@ export default {
     return {
       teams: [],
       warehouses: [],
+      users: [],
       selectedWarehouse: null,
       teamName: '',
       searchTerm: "",
@@ -61,6 +63,7 @@ export default {
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
+    this.users = await this.warehousesService.asyncFindAll()
   },
   computed: {
     filteredTeams() {
@@ -95,8 +98,14 @@ export default {
     },
     closeModal() {
       this.$router.push({name: 'Teams'});
+      this.resetForm()
       this.showModal = false;
     },
+    resetForm(){
+      this.selectedTeam = null
+      this.selectedWarehouse = null
+      this.teamName = ''
+    }
   },
 };
 </script>
