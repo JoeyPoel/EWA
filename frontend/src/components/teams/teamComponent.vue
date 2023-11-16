@@ -32,6 +32,7 @@
         :team="selectedTeam"
         :warehouses="warehouses"
         :users="users"
+        :editingTeam="editingTeam"
         @closeModal="closeModal"
         @save="addTeam"
         @update="editTeam"
@@ -56,6 +57,7 @@ export default {
       selectedTeam: null,
       team: null,
       showModal: false, // Flag to control modal visibility
+      editingTeam: false,
     };
   },
   components: {
@@ -99,6 +101,7 @@ export default {
       this.teamName = team.name;
       this.selectedWarehouse = this.warehouses.find(warehouse => warehouse.id === team.warehouseId);
       this.$router.push({name: 'EditTeamModal', params: {id: team.id}});
+      this.editingTeam = true;
       this.showModal = true;
     },
     async deleteTeam(deletedTeam) {
@@ -107,6 +110,7 @@ export default {
     },
     showAddModal() {
       this.$router.push({name: 'AddTeamModal'});
+      this.editingTeam = false;
       this.showModal = true;
     },
     closeModal() {

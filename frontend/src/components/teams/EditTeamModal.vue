@@ -40,8 +40,10 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
-          <button type="button" class="btn btn-primary" @click="saveChanges">Save changes</button>
-          <button type="button" class="btn btn-danger" @click="deleteTeam">Delete</button>
+          <button v-if="!editingTeam" type="button" class="btn btn-primary" @click="saveChanges">Save</button>
+          <button v-else type="button" class="btn btn-primary" @click="saveChanges">Save changes</button>
+          <button v-if="editingTeam" type="button" class="btn btn-danger" @click="deleteTeam">Delete</button>
+          <button v-else type="button" class="btn btn-danger" disabled>Delete</button>
         </div>
       </div>
     </div>
@@ -57,6 +59,7 @@ export default {
     team: Object, // Team object to edit
     warehouses: Array, // Array of warehouses
     users: Array, // Array of users
+    editingTeam: Boolean // Indication on if team is being added or edited
   },
   data() {
     return {
@@ -91,7 +94,7 @@ export default {
   methods: {
     saveChanges() {
       // Create a team object
-      if(this.team){
+      if (this.team) {
         const team = {
           id: parseInt(this.$route.params.id),
           name: this.teamName,
@@ -99,7 +102,7 @@ export default {
         }
         // Emit the team object
         this.$emit('update', team);
-      } else{
+      } else {
         const team = {
           id: Math.floor(Math.random() * 100000),
           name: this.teamName,
@@ -115,7 +118,7 @@ export default {
       this.modal.hide(); // Close the Bootstrap modal
       this.$emit('closeModal');
     },
-    deleteTeam(){
+    deleteTeam() {
       const id = {
         id: parseInt(this.$route.params.id),
       };
