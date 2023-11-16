@@ -79,15 +79,20 @@ export default {
     }
   },
   methods: {
-    async addTeam(team) {
+    async addTeam(addedTeam) {
       console.log("Entered method AddTeam")
-      console.log(team)
-      await this.teamsService.asyncSave(team);
+      console.log(addedTeam)
+      await this.teamsService.asyncSave(addedTeam);
+      this.teams.push(addedTeam); // Add the new team to the local list
     },
-    async editTeam(team) {
+    async editTeam(editedTeam) {
       console.log("Entered method EditTeam")
-      console.log(team)
-      await this.teamsService.asyncUpdate(team);
+      console.log(editedTeam)
+      await this.teamsService.asyncUpdate(editedTeam);
+      const index = this.teams.findIndex(team => team.id === editedTeam.id);
+      if (index !== -1) {
+        this.teams.splice(index, 1, editedTeam); // Remove 1 element at index and replace with editedTeam
+      }
     },
     showEditModal(team) {
       this.selectedTeam = team;
@@ -96,8 +101,9 @@ export default {
       this.$router.push({name: 'EditTeamModal', params: {id: team.id}});
       this.showModal = true;
     },
-    async deleteTeam(team) {
-      await this.teamsService.asyncDeleteById(team.id)
+    async deleteTeam(deletedTeam) {
+      await this.teamsService.asyncDeleteById(deletedTeam.id)
+      this.teams = this.teams.filter(item => item.id !== deletedTeam.id); // Remove the team from the local list
     },
     showAddModal() {
       this.$router.push({name: 'AddTeamModal'});

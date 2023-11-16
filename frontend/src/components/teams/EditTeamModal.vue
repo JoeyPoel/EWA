@@ -116,6 +116,7 @@ export default {
       this.closeModal();
     },
     closeModal() {
+      this.modal.hide(); // Close the Bootstrap modal
       this.$emit('closeModal');
     },
     deleteTeam(){
