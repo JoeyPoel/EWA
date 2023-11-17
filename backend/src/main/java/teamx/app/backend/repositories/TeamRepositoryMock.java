@@ -12,10 +12,10 @@ public class TeamRepositoryMock implements ModelRepository<Team> {
     private List<Team> teams = new ArrayList<>();
 
     public TeamRepositoryMock(){
-        teams.add(new Team(1, "Team 1",1));
-        teams.add(new Team(2, "Team 2",2));
-        teams.add(new Team(3, "Team 3",3));
-        teams.add(new Team(4, "Team 4",4));
+//        teams.add(new Team(1, "Team 1",1));
+//        teams.add(new Team(2, "Team 2",2));
+//        teams.add(new Team(3, "Team 3",3));
+//        teams.add(new Team(4, "Team 4",4));
     }
 
 
@@ -35,7 +35,7 @@ public class TeamRepositoryMock implements ModelRepository<Team> {
     public Team put(int id, Team team) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
-                Team newTeam = new Team(id, team.getName(), team.getWarehouseId());
+                Team newTeam = new Team(id, team.getName(), team.getWarehouseId(), team.getUsers());
                 teams.set(i, newTeam);
                 return newTeam;
             }

@@ -32,6 +32,7 @@
         :team="selectedTeam"
         :warehouses="warehouses"
         :users="users"
+        :teamMembers="teamMembers"
         :editingTeam="editingTeam"
         @closeModal="closeModal"
         @save="addTeam"
@@ -51,6 +52,7 @@ export default {
       teams: [],
       warehouses: [],
       users: [],
+      teamMembers: [],
       selectedWarehouse: null,
       teamName: '',
       searchTerm: "",
@@ -82,14 +84,10 @@ export default {
   },
   methods: {
     async addTeam(addedTeam) {
-      console.log("Entered method AddTeam")
-      console.log(addedTeam)
       await this.teamsService.asyncSave(addedTeam);
       this.teams.push(addedTeam); // Add the new team to the local list
     },
     async editTeam(editedTeam) {
-      console.log("Entered method EditTeam")
-      console.log(editedTeam)
       await this.teamsService.asyncUpdate(editedTeam);
       const index = this.teams.findIndex(team => team.id === editedTeam.id);
       if (index !== -1) {
@@ -99,6 +97,9 @@ export default {
     showEditModal(team) {
       this.selectedTeam = team;
       this.teamName = team.name;
+      this.teamMembers = team.users;
+      console.log("All users: " + this.users)
+      console.log("Team members: " + team.users)
       this.selectedWarehouse = this.warehouses.find(warehouse => warehouse.id === team.warehouseId);
       this.$router.push({name: 'EditTeamModal', params: {id: team.id}});
       this.editingTeam = true;
@@ -119,9 +120,10 @@ export default {
       this.showModal = false;
     },
     resetForm(){
-      this.selectedTeam = null
-      this.selectedWarehouse = null
-      this.teamName = ''
+      this.selectedTeam = null;
+      this.selectedWarehouse = null;
+      this.teamMembers = null;
+      this.teamName = '';
     }
   },
 };

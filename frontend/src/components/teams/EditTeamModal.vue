@@ -25,6 +25,7 @@
               placeholder="Search users..."
               class="form-control mb-3"
           />
+
           <label for="chooseUsers">Choose Users</label>
           <div class="chooseUsers">
             <div v-for="user in filteredUsers" :key="user.id">
@@ -58,7 +59,8 @@ export default {
   props: {
     team: Object, // Team object to edit
     warehouses: Array, // Array of warehouses
-    users: Array, // Array of users
+    users: Array, // Array of all users
+    teamMembers: Array, // Array of team members (selected users)
     editingTeam: Boolean // Indication on if team is being added or edited
   },
   data() {
@@ -76,6 +78,10 @@ export default {
     if(this.team != null){
       this.teamName = this.team.name;
       this.selectedWarehouse = this.team.warehouseId;
+    }
+    if (this.teamMembers) {
+      // Pre-select team members when editing
+      this.selectedUsers = this.teamMembers;
     }
     this.modal.show();
   },
@@ -99,6 +105,7 @@ export default {
           id: parseInt(this.$route.params.id),
           name: this.teamName,
           warehouseId: this.selectedWarehouse,
+          users: this.selectedUsers
         }
         // Emit the team object
         this.$emit('update', team);
@@ -107,6 +114,7 @@ export default {
           id: Math.floor(Math.random() * 100000),
           name: this.teamName,
           warehouseId: this.selectedWarehouse,
+          users: this.selectedUsers
         };
         // Emit the team object
         this.$emit('save', team);
