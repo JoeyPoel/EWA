@@ -22,7 +22,7 @@ public class Team {
     @Id
     private int id;
     private String name;
-    private int warehouseId;
+    private Warehouse warehouse;
     private ArrayList users;
 }
 

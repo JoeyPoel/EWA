@@ -35,7 +35,7 @@ public class TeamRepositoryMock implements ModelRepository<Team> {
     public Team put(int id, Team team) {
         for (int i = 0; i < teams.size(); i++) {
             if(teams.get(i).getId() == id){
-                Team newTeam = new Team(id, team.getName(), team.getWarehouseId(), team.getUsers());
+                Team newTeam = new Team(id, team.getName(), team.getWarehouse(), team.getUsers());
                 teams.set(i, newTeam);
                 return newTeam;
             }

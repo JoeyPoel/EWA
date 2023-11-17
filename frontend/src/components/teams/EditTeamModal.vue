@@ -17,7 +17,7 @@
 
           <label for="chooseWarehouse">Warehouse</label>
           <select v-model="selectedWarehouse" class="form-control" :class="{ 'is-invalid': !isSelectedWarehouseValid }">
-            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
+            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse">
               {{ warehouse.name }}
             </option>
           </select>
@@ -104,7 +104,7 @@ export default {
     this.$refs.addModalRef.addEventListener('hidden.bs.modal', this.closeModal);
     if(this.team != null){
       this.teamName = this.team.name;
-      this.selectedWarehouse = this.team.warehouseId;
+      this.selectedWarehouse = this.team.warehouse;
     }
     if (this.teamMembers) {
       // Pre-select team members when editing
@@ -132,7 +132,7 @@ export default {
           const team = {
             id: parseInt(this.$route.params.id),
             name: this.teamName,
-            warehouseId: this.selectedWarehouse,
+            warehouse: this.selectedWarehouse,
             users: this.selectedUsers
           }
           // Emit the team object
@@ -141,7 +141,7 @@ export default {
           const team = {
             id: Math.floor(Math.random() * 100000),
             name: this.teamName,
-            warehouseId: this.selectedWarehouse,
+            warehouse: this.selectedWarehouse,
             users: this.selectedUsers
           };
           // Emit the team object

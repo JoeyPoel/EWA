@@ -9,14 +9,14 @@
         <thead class="thead-dark">
         <tr>
           <th scope="col">Name:</th>
-          <th scope="col">Warehouse ID:</th>
+          <th scope="col">Warehouse:</th>
           <th scope="col">Actions:</th>
         </tr>
         </thead>
         <tbody class="bg-light team-list">
         <tr v-for="team in filteredTeams" :key="team.id" class="border-bottom">
           <td>{{ team.name }}</td>
-          <td>{{ team.warehouseId }}</td>
+          <td>{{ team.warehouse.name }}</td>
           <td>
             <button type="button" class="btn btn-dark mx-1" @click="showEditModal(team)">
               Edit
@@ -98,9 +98,7 @@ export default {
       this.selectedTeam = team;
       this.teamName = team.name;
       this.teamMembers = team.users;
-      console.log("All users: " + this.users)
-      console.log("Team members: " + team.users)
-      this.selectedWarehouse = this.warehouses.find(warehouse => warehouse.id === team.warehouseId);
+      this.selectedWarehouse = team.warehouse;
       this.$router.push({name: 'EditTeamModal', params: {id: team.id}});
       this.editingTeam = true;
       this.showModal = true;
