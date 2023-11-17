@@ -1,11 +1,7 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +12,16 @@ import java.util.List;
  * @author Junior Javier Brito Perez
  */
 @Entity
+@Table(name = "Warehouses")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String location;
     private String address;
@@ -32,11 +31,11 @@ public class Warehouse {
     private String contactEmail;
     private String contactPhone;
 
-    static public ArrayList<Warehouse> generateRandomWarehouses(int amount){
+    static public ArrayList<Warehouse> generateRandomWarehouses(int amount) {
         ArrayList<Warehouse> warehouses = new ArrayList<>();
-        for (int i = 0; i < amount; i++){
+        for (int i = 0; i < amount; i++) {
             Warehouse warehouse = new Warehouse();
-            warehouse.setId(i);
+            warehouse.setId((long) i);
             warehouse.setName(mockWarehouseNames().get(i));
             warehouse.setAddress(mockWarehouseAddresses().get(i));
             warehouse.setLocation(locations().get(i));
@@ -50,26 +49,24 @@ public class Warehouse {
         return warehouses;
     }
 
-    private static List<String> mockWarehouseNames(){
+    private static List<String> mockWarehouseNames() {
 
-        return List.of("Solar warehouse", "Wind warehouse", "Water warehouse", "Nuclear warehouse", "Coal warehouse",
-                "Gas warehouse", "Oil warehouse", "Biomass warehouse", "Hydrogen warehouse");
+        return List.of("Solar warehouse", "Wind warehouse", "Water warehouse", "Nuclear warehouse", "Coal warehouse", "Gas warehouse", "Oil warehouse", "Biomass warehouse", "Hydrogen warehouse");
     }
 
-    private static List<String> locations(){
+    private static List<String> locations() {
         return List.of("Amsterdam", "Rotterdam", "Den Haag", "Utrecht", "Eindhoven", "Tilburg", "Groningen", "Almere");
     }
 
-    private static List<String> mockWarehouseAddresses(){
-        return List.of("Amsterdamseweg 1", "Rotterdamseweg 2", "Den Haagseweg 3", "Utrechtseweg 4", "Eindhovenseweg 5",
-                "Tilburgseweg 6", "Groningseweg 7", "Almereweg 8");
+    private static List<String> mockWarehouseAddresses() {
+        return List.of("Amsterdamseweg 1", "Rotterdamseweg 2", "Den Haagseweg 3", "Utrechtseweg 4", "Eindhovenseweg 5", "Tilburgseweg 6", "Groningseweg 7", "Almereweg 8");
     }
 
-    private static List<String> mockWarehousePostcodes(){
+    private static List<String> mockWarehousePostcodes() {
         return List.of("1111AA", "2222BB", "3333CC", "4444DD", "5555EE", "6666FF", "7777GG", "8888HH");
     }
 
-    private static List<String> mockWarehouseContactNames(){
+    private static List<String> mockWarehouseContactNames() {
         return List.of("John Doe", "Jane Doe", "John Smith", "Jane Smith", "John Johnson", "Jane Johnson", "John Williams", "Jane Williams");
     }
 

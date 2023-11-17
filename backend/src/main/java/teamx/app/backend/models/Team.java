@@ -14,13 +14,11 @@ import java.util.ArrayList;
  *
  * @author Joey van der Poel
  */
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
-    @Id
     private int id;
     private String name;
     private int warehouseId;

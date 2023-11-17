@@ -12,11 +12,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
-    @Id
     private int id;
     private int productId;
     private int amount;

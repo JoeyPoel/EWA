@@ -1,7 +1,9 @@
 package teamx.app.backend.repositories;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import teamx.app.backend.models.Warehouse;
 
-public interface WarehouseRepository<Warehouse> {
-    List<Warehouse> findAll();
+@Repository
+public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 }

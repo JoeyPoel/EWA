@@ -16,14 +16,12 @@ import java.util.List;
  * @author Jayden Gunhan
  */
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
 
-    @Id
     private int id;
     private int warehouseId;
     private String description;
