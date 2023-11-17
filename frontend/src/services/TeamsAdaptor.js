@@ -103,7 +103,7 @@ export default class TeamsAdaptor extends Adaptor {
         if (response.ok) {
             return Object.assign(new Team(), await response.json());
         } else {
-            // TODO FIX THIS
+            // TODO Response.text is not a function
             // console.log(response, !response.bodyUsed ? await response.text() : "");
             return null;
         }
