@@ -10,14 +10,20 @@
         </div>
         <div class="modal-body">
           <label for="name">Name</label>
-          <input type="text" v-model="teamName" class="form-control">
+          <input type="text" v-model="teamName" class="form-control" :class="{ 'is-invalid': !isTeamNameValid }" id="teamName">
+          <div v-if="!isTeamNameValid" class="invalid-feedback">
+            Please enter a team name.
+          </div>
 
           <label for="chooseWarehouse">Warehouse</label>
-          <select v-model="selectedWarehouse" class="form-control">
+          <select v-model="selectedWarehouse" class="form-control" :class="{ 'is-invalid': !isSelectedWarehouseValid }">
             <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
               {{ warehouse.name }}
             </option>
           </select>
+          <div v-if="!isSelectedWarehouseValid" class="invalid-feedback">
+            Please select a warehouse.
+          </div>
           <label>Search users</label>
           <input
               type="text"
@@ -69,6 +75,8 @@ export default {
       selectedWarehouse: null,
       selectedUsers: [],
       searchQuery: "",
+      isTeamNameValid: true,
+      isSelectedWarehouseValid: true,
     };
   },
   mounted() {
@@ -100,27 +108,29 @@ export default {
   methods: {
     saveChanges() {
       // Create a team object
-      if (this.team) {
-        const team = {
-          id: parseInt(this.$route.params.id),
-          name: this.teamName,
-          warehouseId: this.selectedWarehouse,
-          users: this.selectedUsers
+      if(this.validateForm()) {
+        if (this.team) {
+          const team = {
+            id: parseInt(this.$route.params.id),
+            name: this.teamName,
+            warehouseId: this.selectedWarehouse,
+            users: this.selectedUsers
+          }
+          // Emit the team object
+          this.$emit('update', team);
+        } else {
+          const team = {
+            id: Math.floor(Math.random() * 100000),
+            name: this.teamName,
+            warehouseId: this.selectedWarehouse,
+            users: this.selectedUsers
+          };
+          // Emit the team object
+          this.$emit('save', team);
         }
-        // Emit the team object
-        this.$emit('update', team);
-      } else {
-        const team = {
-          id: Math.floor(Math.random() * 100000),
-          name: this.teamName,
-          warehouseId: this.selectedWarehouse,
-          users: this.selectedUsers
-        };
-        // Emit the team object
-        this.$emit('save', team);
+        // Close the modal
+        this.closeModal();
       }
-      // Close the modal
-      this.closeModal();
     },
     closeModal() {
       this.modal.hide(); // Close the Bootstrap modal
@@ -133,7 +143,21 @@ export default {
       this.$emit('delete', id);
 
       this.closeModal();
-    }
+    },
+    validateForm() {
+      // Check if the teamName and selectedWarehouse are not empty
+      if (this.teamName.trim() !== '' && this.selectedWarehouse !== null) {
+        // Reset validation flags when the fields are correct
+        this.isTeamNameValid = true;
+        this.isSelectedWarehouseValid = true;
+        return true;
+      } else {
+        // Set validation flags and return false when fields are empty
+        this.isTeamNameValid = this.teamName.trim() !== '';
+        this.isSelectedWarehouseValid = this.selectedWarehouse !== null;
+        return false;
+      }
+    },
   },
 };
 </script>
@@ -143,5 +167,8 @@ export default {
   max-height: 100px;
   min-height: 100px;
   overflow-y: auto;
+}
+.is-invalid {
+  border: 1px solid red;
 }
 </style>
