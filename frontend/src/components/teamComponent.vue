@@ -9,15 +9,6 @@
       <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
         {{ warehouse.name }}
       </option>
-      <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
-        {{ warehouse.name }}
-      </option>
-    </select>
-
-    <select v-model="this.selectedWarehouse">
-      <option v-for="w in warehouses" :key="w">
-        {{w.name}}
-      </option>
     </select>
 
     <button class="btn btn-primary mt-3" @click="editingTeam ? updateTeam() : addTeam()">
@@ -26,26 +17,27 @@
   </div>
 
   <div class="container mt-3">
-    <table class="table">
-      <thead class="thead-dark">
-      <h2>Teams:</h2>
-      <tr>
-        <th scope="col">Name:</th>
-        <th scope="col">Warehouse ID:</th>
-        <th scope="col">Actions:</th>
-      </tr>
-      </thead>
-      <tbody class="bg-light">
-      <tr v-for="team in teams" :key="team" class="border-bottom">
-        <td>{{ team.name }}</td>
-        <td>{{ team.warehouseId }}</td>
-        <td>
-          <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">Edit</button>
-          <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">Name:</th>
+          <th scope="col">Warehouse ID:</th>
+          <th scope="col">Actions:</th>
+        </tr>
+        </thead>
+        <tbody class="bg-light team-list">
+        <tr v-for="team in teams" :key="team.id" class="border-bottom">
+          <td>{{ team.name }}</td>
+          <td>{{ team.warehouseId }}</td>
+          <td>
+            <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">Edit</button>
+            <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -76,6 +68,7 @@ export default {
         warehouseId: this.selectedWarehouse,
       };
       const savedTeam = await this.teamsService.asyncSave(team);
+      console.log(savedTeam)
       if (savedTeam) {
         this.teams.add(savedTeam)
         this.resetForm();
@@ -116,4 +109,8 @@ export default {
 </script>
 
 <style scoped>
+.table-wrapper {
+  max-height: 450px;
+  overflow-y: auto;
+}
 </style>
