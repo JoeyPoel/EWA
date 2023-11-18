@@ -6,72 +6,121 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Warehouse;
-import teamx.app.backend.repositories.WarehouseRepositoryMock;
+import teamx.app.backend.repositories.WarehouseRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Warehouse controller.
  * This class is a REST controller for the Warehouse model.
  *
  * @author Junior Javier Brito Perez
+ * @see Warehouse
+ * @see WarehouseRepository
  */
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/warehouses")
-public class WarehouseController implements Controller<Warehouse> {
-    private final WarehouseRepositoryMock warehouseRepository;
+public class WarehouseController {
+    private final WarehouseRepository warehouseRepository;
 
     @Autowired
-    public WarehouseController(WarehouseRepositoryMock warehouseRepository) {
+    public WarehouseController(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
 
+    private static Warehouse updateWarehouseData(Warehouse newWarehouseData, Optional<Warehouse> originalWarehouseData) {
+        Warehouse updatedWarehouseData = originalWarehouseData.get();
+        updatedWarehouseData.setName(newWarehouseData.getName());
+        updatedWarehouseData.setLocation(newWarehouseData.getLocation());
+        updatedWarehouseData.setAddress(newWarehouseData.getAddress());
+        updatedWarehouseData.setPostcode(newWarehouseData.getPostcode());
+        updatedWarehouseData.setCountry(newWarehouseData.getCountry());
+        updatedWarehouseData.setContactName(newWarehouseData.getContactName());
+        updatedWarehouseData.setContactEmail(newWarehouseData.getContactEmail());
+        updatedWarehouseData.setContactPhone(newWarehouseData.getContactPhone());
+        return updatedWarehouseData;
+    }
+
     @GetMapping("/test")
-    public ResponseEntity<?> getTestWarehouses() {
+    public ResponseEntity<List<Warehouse>> getTestWarehouses() {
         return ResponseEntity.ok(warehouseRepository.findAll());
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(warehouseRepository.findAll());
+    @GetMapping("/getAllWarehouses")
+    public ResponseEntity<List<Warehouse>> getAllWarehouses() {
+        try {
+            List<Warehouse> warehouses = new ArrayList<>(warehouseRepository.findAll());
+            if (warehouses.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No warehouses found");
+            }
+            return new ResponseEntity<>(warehouses, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouses");
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable int id) {
-        Warehouse warehouse = warehouseRepository.findById(id);
-        if (warehouse == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+    @GetMapping("/getWarehouseById/{id}")
+    public ResponseEntity<Warehouse> getWarehouseById(@PathVariable Long id) {
+        try {
+            Optional<Warehouse> warehouse = warehouseRepository.findById(id);
+
+            if (warehouse.isPresent()) {
+                return new ResponseEntity<>(warehouse.get(), HttpStatus.OK);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(warehouse);
     }
 
-    @PostMapping()
-    public ResponseEntity<?> add(Warehouse warehouse) {
-        if (warehouseRepository.findById(warehouse.getId()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Warehouse already exists");
+    @PostMapping("/addWarehouse")
+    public ResponseEntity<Warehouse> addWarehouse(@RequestBody Warehouse warehouse) {
+        try {
+            Warehouse savedWarehouse = warehouseRepository.save(warehouse);
+            return new ResponseEntity<>(savedWarehouse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating warehouse");
         }
-        Warehouse savedWarehouse = warehouseRepository.save(warehouse);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedWarehouse);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(int id, Warehouse warehouse) {
-        if (id != warehouse.getId()) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Warehouse id mismatch");
+    @PutMapping("/updateWarehouseById/{id}")
+    public ResponseEntity<Warehouse> updateWarehouseById(@PathVariable Long id, @RequestBody Warehouse newWarehouseData) {
+        try {
+            Optional<Warehouse> originalWarehouseData = warehouseRepository.findById(id);
+
+            if (originalWarehouseData.isPresent()) {
+                Warehouse updatedWarehouseData = updateWarehouseData(newWarehouseData, originalWarehouseData);
+
+                Warehouse warehouse = warehouseRepository.save(updatedWarehouseData);
+                return new ResponseEntity<>(warehouse, HttpStatus.OK);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse");
         }
-        if (warehouseRepository.findById(warehouse.getId()) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
-        }
-        Warehouse savedWarehouse = warehouseRepository.save(warehouse);
-        return ResponseEntity.status(HttpStatus.OK).body(savedWarehouse);
     }
 
-    @DeleteMapping( "/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        Warehouse warehouse = warehouseRepository.deleteById(id);
-        if (warehouse == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+    @DeleteMapping("/deleteWarehouseById/{id}")
+    public ResponseEntity<Warehouse> deleteWarehouseById(@PathVariable Long id) {
+        try {
+            Optional<Warehouse> warehouse = warehouseRepository.findById(id);
+
+            if (warehouse.isPresent()) {
+                warehouseRepository.deleteById(id);
+                return new ResponseEntity<>(warehouse.get(), HttpStatus.OK);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting warehouse");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(warehouse);
     }
+
+
 }
 
