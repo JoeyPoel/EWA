@@ -17,6 +17,8 @@ import java.util.Optional;
  * This class is a REST controller for the Warehouse model.
  *
  * @author Junior Javier Brito Perez
+ * @see Warehouse
+ * @see WarehouseRepository
  */
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
