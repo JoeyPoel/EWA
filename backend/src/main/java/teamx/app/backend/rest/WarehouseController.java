@@ -20,7 +20,7 @@ import java.util.Optional;
  * @see Warehouse
  * @see WarehouseRepository
  */
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/warehouses")
 public class WarehouseController {

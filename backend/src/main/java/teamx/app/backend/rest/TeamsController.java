@@ -20,7 +20,7 @@ import java.util.Optional;
  * @see Team
  * @see TeamRepository
  */
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/teams")
 public class TeamsController {
@@ -93,7 +93,6 @@ public class TeamsController {
         Team updatedTeam = originalTeam.get();
         updatedTeam.setWarehouse(team.getWarehouse());
         updatedTeam.setName(team.getName());
-//        updatedTeam.setMembers(team.getMembers());
         return updatedTeam;
     }
 

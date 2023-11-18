@@ -19,7 +19,7 @@ import java.util.Optional;
  * @see User
  * @see UserRepository
  */
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {

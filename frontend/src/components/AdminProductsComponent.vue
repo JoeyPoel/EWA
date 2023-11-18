@@ -10,7 +10,7 @@
         <input type="checkbox" :value="warehouse.id" v-model="selectedWarehouses">
         {{ warehouse.name }}
       </label>
-      <br />
+      <br/>
       <label for="quantity" v-if="selectedWarehouses.includes(warehouse.id)">Quantity</label>
       <input
           type="number"
@@ -56,12 +56,12 @@ export default {
     };
   },
   async created() {
-    this.products = await this.productsService.asyncFindAllTypes()
+    this.products = null;
     this.warehouses = await this.warehousesService.asyncFindAll();
   },
   methods: {
     addProduct() {
-      if(this.selectedWarehouses.length === 0){
+      if (this.selectedWarehouses.length === 0) {
         console.log("Please select at least 1 warehouse.")
       }
 
@@ -79,7 +79,7 @@ export default {
       console.log(productRequests)
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(productRequests),
       };
 
