@@ -25,7 +25,7 @@ public class Transaction {
     private int amount;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn
     private Product product;
 
     @Column
@@ -33,14 +33,14 @@ public class Transaction {
     private LocalDateTime transactionDate;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
+    @JoinColumn
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_from_id")
+    @JoinColumn
     private Warehouse warehouseFrom;
 }

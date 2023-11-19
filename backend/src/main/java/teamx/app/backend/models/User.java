@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * User entity
  * Represents a user
@@ -33,4 +35,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
+
+    @OneToMany
+    @JoinColumn
+    @JsonBackReference
+    private List<Order> orders;
 }

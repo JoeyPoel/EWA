@@ -1,43 +1,30 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-/**
- * Team entity
- * Represents a team
- *
- * @author Joey van der Poel
- * @author Junior Javier Brito Perez
- * @see User
- */
 @Data
 @Entity
-@Table(name = "Teams")
+@Table(name = "WarehouseProductCategoryCapacity")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team {
+public class WarehouseProductCategoryCapacity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private int capacity;
 
     @ManyToOne
+    @JoinColumn
     @JsonManagedReference
     private Warehouse warehouse;
 
-    @OneToMany
+    @ManyToOne
+    @JoinColumn
     @JsonManagedReference
-    private List<User> members;
-
-    @OneToMany
-    @JsonManagedReference
-    private List<Project> projects;
+    private ProductCategory productCategory;
 }
-

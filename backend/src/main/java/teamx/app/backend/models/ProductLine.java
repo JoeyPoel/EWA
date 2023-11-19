@@ -1,5 +1,6 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,26 +14,29 @@ import lombok.*;
  * @see Project
  */
 @Data
+@Table
 @Entity
-@Table(name = "ProductLines")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn
+    @JsonBackReference
+    private Product product;
+
+
+    @ManyToOne
+    @JoinColumn
+    @JsonBackReference
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn
+    @JsonBackReference
     private Order order;
 }

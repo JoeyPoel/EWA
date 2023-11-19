@@ -1,8 +1,10 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,8 +16,8 @@ import java.util.List;
  * @author Junior Javier Brito Perez
  */
 @Data
+@Table
 @Entity
-@Table(name = "Warehouses")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
@@ -31,8 +33,20 @@ public class Warehouse {
     private String contactEmail;
     private String contactPhone;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    @OneToMany
+    @JsonBackReference
     private List<Team> teams;
+
+    @OneToMany
+    @JsonBackReference
+    private List<Order> orders;
+
+    @OneToMany
+    @JsonBackReference
+    private List<WarehouseProductCategoryCapacity> warehouseProductCategoryCapacities;
+
+    @OneToMany
+    @JsonBackReference
+    private List<Transaction> transactions;
 }
 

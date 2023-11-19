@@ -24,7 +24,7 @@
                       aria-current="false"
                      data-bs-target="#inventory-content"
                      data-bs-toggle="tab">
-                    Inventory
+                    Storage Capacity
                   </a>
                 </li>
               </ul>

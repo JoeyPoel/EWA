@@ -1,7 +1,11 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * Product entity
@@ -12,16 +16,25 @@ import lombok.*;
  */
 @Data
 @Entity
-@Table(name = "Products")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
+
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JsonManagedReference
     private ProductCategory category;
+
+    @OneToMany
+    @JsonBackReference
+    private List<ProductLine> productLines;
+
+    @OneToMany
+    @JsonBackReference
+    private List<Transaction> transactions;
 }

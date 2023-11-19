@@ -1,5 +1,7 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +16,8 @@ import java.util.List;
  * @see Team
  */
 @Data
+@Table
 @Entity
-@Table(name = "Projects")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
@@ -24,9 +26,15 @@ public class Project {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn
+    @JsonBackReference
     private Team team;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany
+    @JsonManagedReference
     private List<ProductLine> productLines;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<Task> tasks;
 }

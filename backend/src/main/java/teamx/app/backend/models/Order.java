@@ -1,5 +1,6 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -33,13 +34,16 @@ public class Order {
     private LocalDateTime orderDate;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
+    @JoinColumn
+    @JsonManagedReference
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn
+    @JsonManagedReference
     private User orderedBy;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany
+    @JsonManagedReference
     private List<ProductLine> orderLines;
 }
