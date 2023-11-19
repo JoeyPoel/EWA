@@ -23,6 +23,6 @@ public class Team {
     private int id;
     private String name;
     private Warehouse warehouse;
-    private ArrayList users;
-}
+        private ArrayList users;
+    }
 
