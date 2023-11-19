@@ -1,66 +1,82 @@
 <template>
-  <div class="Top">
-    <div class="TopLeft">
-      <div>
+  <div class="container">
+    <div class="top">
+      <div class="top-left">
+        <h2>Top Left Content</h2>
+        <p>This is the content for the Top Left section.</p>
+      </div>
+      <div class="top-right">
+        <div class="top-right-top">
+          <h2>Top Right Top Content</h2>
+          <p>This is the content for the Top Right Top section.</p>
+        </div>
+        <div class="top-right-bottom">
+          <div class="message-board">
+            <h2>Message Board</h2>
+            <p>This is the message board content.</p>
+          </div>
 
+        </div>
       </div>
     </div>
-    <div class="TopRight">
-      <div>
-
+    <div class="bottom">
+      <div class="bottom-left">
+        <h2>Products sorted on stock</h2>
+        <div class="inventory">
+          <div class="selectWarehouse">
+            <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
+              <option :value="null">All warehouses</option>
+              <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
+            </select>
+          </div>
+          <div class="inventoryTable">
+            <table class="Table w-100">
+              <thead>
+              <tr>
+                <th scope="col">Warehouse:</th>
+                <th scope="col">Name:</th>
+                <th scope="col">Stock level:</th>
+              </tr>
+              </thead>
+              <tbody class="bg-light">
+              <tr v-for="product in filteredProducts" :key="product.id" class="border-bottom">
+                <td class="align-self-center">{{ product.warehouseId }}</td>
+                <td class="align-self-center">{{ product.name }}</td>
+                <td class="align-self-center">{{ product.quantity}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <div class="MessageBoard">
-
-      </div>
-    </div>
-  </div>
-  <div class="Bottom">
-    <div class="Inventory">
-      <div class="SelectWarehouse">
-        <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
-          <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
-        </select>
-      </div>
-      <div class="InventoryTable">
-        <table class="Table">
-          <thead class="thead-dark">
-          <tr>
-            <th scope="col">Name:</th>
-            <th scope="col">Stock level:</th>
-          </tr>
-          </thead>
-          <tbody class="bg-light">
-          <tr v-for="product in filteredProducts" :key="product.id" class="border-bottom">
-            <td>{{ product.name }}</td>
-            <td class="align-self-center">{{ product.quantity}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="Projects">
-      <div class="SelectedTeam">
-        <select id="team-select" class="form-control form-control-sm" v-model="selectedTeam">
-          <option v-for="team in teams" :value="team.id" :key="team.id">{{ team.name }}</option>
-        </select>
-      </div>
-      <div class="InventoryTable">
-        <table class="Table">
-          <thead class="thead-dark">
-          <tr>
-            <th scope="col">Team:</th>
-            <th scope="col">Status:</th>
-            <th scope="col">Date:</th>
-          </tr>
-          </thead>
-          <tbody class="bg-light">
-          <tr v-for="project in filteredProjects" :key="project.id" class="border-bottom">
-            <td class="align-self-center">{{ project.team }}</td>
-            <td class="align-self-center">{{ project.status}}</td>
-            <td class="align-self-center">{{ project.date}}</td>
-          </tr>
-          </tbody>
-        </table>
+      <div class="bottom-right">
+        <h2>Projects sorted on date</h2>
+        <div class="projects">
+          <div class="selectedTeam">
+            <select id="team-select" class="form-control form-control-sm" v-model="selectedTeam">
+              <option :value="null">All teams</option>
+              <option v-for="team in teams" :value="team.id" :key="team.id">{{ team.name }}</option>
+            </select>
+          </div>
+          <div class="projectsTable">
+            <table class="Table w-100">
+              <thead>
+              <tr>
+                <th scope="col">Team:</th>
+                <th scope="col">Status:</th>
+                <th scope="col">Date:</th>
+              </tr>
+              </thead>
+              <tbody class="bg-light">
+              <tr v-for="project in filteredProjects" :key="project.id" class="border-bottom">
+                <td class="align-self-center">{{ project.team }}</td>
+                <td class="align-self-center">{{ project.status}}</td>
+                <td class="align-self-center">{{ project.date}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +84,7 @@
 
 <script>
 export default {
-  inject: ['productsService', 'warehousesService, teamsService, projectsService'],
+  inject: ['productsService', 'warehousesService', 'teamsService', 'projectsService'],
   name: "DashboardComponent",
   data() {
     return {
@@ -94,8 +110,19 @@ export default {
   },
   watch: {
     selectedWarehouse: function () {
-      this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
-      },
+      if (this.selectedWarehouse === null || this.selectedWarehouse === '') {
+        this.filteredProducts = this.products; // Display all products when selectedWarehouse is null or empty string
+      } else {
+        this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+      }
+    },
+    selectedTeam: function () {
+      if (this.selectedTeam === null || this.selectedTeam === '') {
+        this.filteredProjects = this.projects; // Display all projects when selectedTeam is null or empty string
+      } else {
+        this.filteredProjects = this.projects.filter(project => project.team === this.team);
+      }
+    },
   },
   methods: {
     sortInventoryByStockLevel(){
@@ -111,5 +138,45 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
+.top {
+  display: flex;
+  flex: 1;
+}
+
+.bottom {
+  display: flex;
+  flex: 1;
+}
+
+.top-left {
+  flex: 1;
+}
+
+.top-right {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.top-right-top,
+.top-right-bottom{
+  flex: 1;
+}
+
+.bottom-left,
+.bottom-right {
+  flex: 1;
+}
+
+.projectsTable,
+.inventoryTable{
+  max-height: 40vh;
+  overflow-y: auto;
+}
 </style>
