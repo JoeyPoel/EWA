@@ -1,15 +1,13 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table(name = "WarehouseProductCategoryCapacity")
+@Entity(name = "WarehouseProductCategoryCapacities")
 @NoArgsConstructor
 @AllArgsConstructor
 public class WarehouseProductCategoryCapacity {
@@ -19,12 +17,10 @@ public class WarehouseProductCategoryCapacity {
     private int capacity;
 
     @ManyToOne
-    @JoinColumn
     @JsonManagedReference
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn
     @JsonManagedReference
     private ProductCategory productCategory;
 }

@@ -2,10 +2,11 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -13,11 +14,9 @@ import java.util.List;
  * Represents an order of products
  *
  * @author Junior Javier Brito Perez
- * @see ProductLine
  */
 @Data
-@Entity
-@Table(name = "Orders")
+@Entity(name = "Orders")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -25,25 +24,19 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-
-    @ColumnDefault("false")
-    private boolean isDelivered;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime orderDate;
+    private boolean isDelivered = false;
+    private Date orderDate;
+    private Date deliveryDate;
 
     @ManyToOne
-    @JoinColumn
     @JsonManagedReference
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn
     @JsonManagedReference
     private User orderedBy;
 
     @OneToMany
     @JsonManagedReference
-    private List<ProductLine> orderLines;
+    private List<Transaction> transactions;
 }

@@ -3,7 +3,9 @@ package teamx.app.backend.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,12 +14,10 @@ import java.util.List;
  * Represents a project
  *
  * @author Junior Javier Brito Perez
- * @see ProductLine
  * @see Team
  */
 @Data
-@Table
-@Entity
+@Entity(name = "Projects")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
@@ -26,15 +26,14 @@ public class Project {
     private Long id;
 
     @ManyToOne
-    @JoinColumn
-    @JsonBackReference
+    @JsonManagedReference
     private Team team;
 
     @OneToMany
-    @JsonManagedReference
-    private List<ProductLine> productLines;
+    @JsonBackReference
+    private List<Task> tasks;
 
     @OneToMany
-    @JsonManagedReference
-    private List<Task> tasks;
+    @JsonBackReference
+    private List<Transaction> materials;
 }

@@ -18,26 +18,28 @@ import java.util.List;
  * @see Team
  */
 @Data
-@Entity
-@Table(name = "Users")
+@Entity(name = "Users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String email;
     @JsonIgnore
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    enum Role {
+        ADMIN,
+        USER
+    }
 
-    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @JsonBackReference
     private Team team;
 
     @OneToMany
-    @JoinColumn
     @JsonBackReference
-    private List<Order> orders;
+    private List<Order> ordersMade;
 }

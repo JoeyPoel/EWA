@@ -1,9 +1,13 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 /**
  * Transaction entity
@@ -14,33 +18,34 @@ import java.time.LocalDateTime;
  * @see Warehouse
  */
 @Data
-@Entity
-@Table(name = "Transactions")
+@Entity(name = "Transactions")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int amount;
+    private int quantity;
 
     @ManyToOne
-    @JoinColumn
+    @JsonManagedReference
     private Product product;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime transactionDate;
+    private Date transactionDate;
 
     @ManyToOne
-    @JoinColumn
+    @JsonManagedReference
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn
+    @JsonBackReference
     private Project project;
 
     @ManyToOne
-    @JoinColumn
-    private Warehouse warehouseFrom;
+    @JsonManagedReference
+    private Warehouse transferFrom;
+
+    @ManyToOne
+    @JsonBackReference
+    private Order order;
 }

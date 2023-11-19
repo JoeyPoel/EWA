@@ -1,6 +1,6 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,8 +18,7 @@ import java.util.List;
  * @see User
  */
 @Data
-@Entity
-@Table(name = "Teams")
+@Entity(name = "Teams")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
@@ -37,7 +36,7 @@ public class Team {
     private List<User> members;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonBackReference
     private List<Project> projects;
 }
 

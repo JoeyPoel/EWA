@@ -6,39 +6,36 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Data
-@Entity
+@Entity(name = "Tasks")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Task")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JsonBackReference
+    private Project project;
+
     private String name;
     private String description;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime deadline;
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private Date deadline;
 
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
-    @ManyToOne
-    @JoinColumn
-    @JsonBackReference
-    private Project project;
-
-    enum Status {
-        TODO, IN_PROGRESS, DONE
-    }
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     enum Priority {
         LOW, MEDIUM, HIGH
+    }
+
+    enum Status {
+        TODO, IN_PROGRESS, DONE
     }
 }

@@ -82,7 +82,7 @@ VALUES ('Solar Warriors', 1),
 
 -- Generate users
 INSERT INTO users (email, password, role, team_id)
-VALUES ('admin@admin.com', 'admin', 'Admin', 1),
+VALUES ('admin@admin.com', 'admin', 'admin', 1),
        ('user1@user.com', 'user', 'User', 1),
        ('user2@user.com', 'password1', 'User', 1),
        ('user3@user.com', 'password2', 'User', 1),
@@ -127,7 +127,7 @@ VALUES ('admin@admin.com', 'admin', 'Admin', 1),
        ('user42@user.com', 'password41', 'User', 14),
        ('user43@user.com', 'password42', 'User', 14),
        ('user44@user.com', 'password43', 'User', 15),
-       ('user45@user.com', 'password44', 'User', 15),
+       ('user45@user.com', 'password44', 'USER', 15),
        ('user46@user.com', 'password45', 'User', 15),
        ('user47@user.com', 'password46', 'User', 16),
        ('user48@user.com', 'password47', 'User', 16),

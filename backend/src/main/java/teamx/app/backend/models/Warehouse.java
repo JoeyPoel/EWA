@@ -16,8 +16,7 @@ import java.util.List;
  * @author Junior Javier Brito Perez
  */
 @Data
-@Table
-@Entity
+@Entity(name = "Warehouses")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
@@ -36,10 +35,6 @@ public class Warehouse {
     @OneToMany
     @JsonBackReference
     private List<Team> teams;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Order> orders;
 
     @OneToMany
     @JsonBackReference

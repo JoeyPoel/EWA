@@ -3,7 +3,9 @@ package teamx.app.backend.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -15,10 +17,9 @@ import java.util.List;
  * @author Junior Javier Brito Perez
  */
 @Data
-@Entity
+@Entity(name = "Products")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +31,6 @@ public class Product {
     @JsonManagedReference
     private ProductCategory category;
 
-    @OneToMany
-    @JsonBackReference
-    private List<ProductLine> productLines;
 
     @OneToMany
     @JsonBackReference

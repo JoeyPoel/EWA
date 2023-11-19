@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,6 +30,15 @@ public class UserController {
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getAll() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        }
     }
 
     @PostMapping("/login")
