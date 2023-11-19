@@ -4,24 +4,21 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * Product entity
- * Represents a product
+ * ProductCategory entity
+ * Represents a category of products
  *
- * @author Jayden Gunhan
  * @author Junior Javier Brito Perez
+ * @see Product
  */
 @Data
 @Entity
-@Table(name = "Products")
+@Table(name = "ProductCategories")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private ProductCategory category;
 }

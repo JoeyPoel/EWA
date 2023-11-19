@@ -59,8 +59,10 @@ export default class TeamsAdaptor extends Adaptor {
         }
 
         if (response.ok) {
+            console.log("ok")
             return Object.assign(new Team(), await response.json());
         } else {
+            console.log("not ok")
             console.log(response, !response.bodyUsed ? response.text : "");
             return null;
         }
@@ -78,7 +80,7 @@ export default class TeamsAdaptor extends Adaptor {
             method: "DELETE",
             headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
         if (response.ok) {
             return Object.assign(new Team(), await response.json());
         } else {

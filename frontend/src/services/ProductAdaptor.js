@@ -9,8 +9,8 @@ import {Product} from "@/models/product_MERGE_ME";
  * @Author Joey van der Poel
  */
 export default class ProductAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/products");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
@@ -20,19 +20,14 @@ export default class ProductAdaptor extends Adaptor {
      * @returns {Promise<*>} The products.
      */
     async asyncFindAll() {
-        return (await this.fetchJson(this.resourceUrl + "/all"))
-            .map(product => Object.assign(new Product(), product));
-    }
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
 
-    /**
-     * Fetches all product names from the REST API.
-     *
-     * @async
-     * @returns {Promise<*>} The products.
-     */
-    async asyncFindAllTypes() {
-        return (await this.fetchJson(this.resourceUrl + "/allTypes"))
-            .map(product => Object.assign(new Product(), product));
+        const response = await this.fetchJson(this.resourceUrl + "/getAllProducts", options);
+        if (response) {
+            return response.map(product => Object.assign(new Product(), product));
+        }
     }
 
     /**
@@ -43,36 +38,40 @@ export default class ProductAdaptor extends Adaptor {
      * @returns {Promise<*>} The product.
      */
     async asyncFindById(id) {
-        return Object.assign(new Product(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Product(), await this.fetchJson(this.resourceUrl + "/getProductById/" + id));
     }
 
     /**
      * Saves a product to the REST API.
      *
      * @async
-     * @param {Team} team - The product to save.
+     * @param {Product} product - The product to save.
      * @returns {Promise<*>} The saved product.
      */
-    async asyncSave(product) {
+    async asyncAdd(product) {
         const options = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(product)
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(product)
         }
 
-        let response = await this.fetchJson(this.resourceUrl, options);
+        let response = await this.fetchJson(this.resourceUrl + "/addProduct", options);
 
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + product.id, options);
+        if (response) {
+            return Object.assign(new Product(), response);
+        }
+        return null;
+    }
+
+    async asyncUpdate(id, product) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(product)
         }
 
-        if (response.ok) {
-            return Object.assign(new Product(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
+        let response = await this.fetchJson(this.resourceUrl + "/updateProduct/" + id, options);
+
+        if (response) {
+            return Object.assign(new Product(), response);
         }
+        return null;
     }
 
     /**
@@ -84,15 +83,13 @@ export default class ProductAdaptor extends Adaptor {
      */
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + id, options);
-        if (response.ok) {
-            return Object.assign(new Product(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
+        const response = await this.fetchJson(this.resourceUrl + "/deleteProduct/" + id, options);
+
+        if (response) {
+            return Object.assign(new Product(), response);
         }
+        return null;
     }
 }

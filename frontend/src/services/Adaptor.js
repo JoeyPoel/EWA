@@ -65,7 +65,19 @@ export class Adaptor {
      * @param object - The resource to save.
      * @throws {Error} When not implemented in a subclass.
      */
-    async asyncSave(object) {
+    async asyncAdd(object) {
+        throw new Error("Not implemented" + object);
+    }
+
+    /**
+     * Abstract method to update a resource.
+     *
+     * @async
+     * @abstract
+     * @param object - The resource to update.
+     * @throws {Error} When not implemented in a subclass.
+     */
+    async asyncUpdate(id, object) {
         throw new Error("Not implemented" + object);
     }
 

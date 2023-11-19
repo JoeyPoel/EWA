@@ -8,7 +8,18 @@ import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:8080")
+import java.util.Optional;
+
+/**
+ * User Controller
+ * This class is a REST controller for the user model.
+ *
+ * @author Johnny Magielse
+ * @author Junior Javier Brito Perez
+ * @see User
+ * @see UserRepository
+ */
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,15 +32,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        User foundUser = userRepository.findByEmail(user.getEmail());
-        if (foundUser == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+    public ResponseEntity<User> login(@RequestBody User user) {
+        try {
+            Optional<User> foundUser = userRepository.findByEmail(user.getEmail());
+            if (foundUser.isPresent()) {
+                if (!foundUser.get().getPassword().equals(user.getPassword())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Wrong password");
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(foundUser.get());
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
         }
-        if (!foundUser.getPassword().equals(user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Wrong password");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(foundUser);
     }
 }

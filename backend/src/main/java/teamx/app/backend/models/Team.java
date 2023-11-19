@@ -1,40 +1,37 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Team Class
+ * Team entity
+ * Represents a team
  *
  * @author Joey van der Poel
+ * @author Junior Javier Brito Perez
+ * @see User
  */
+@Data
 @Entity
-@Getter
-@Setter
+@Table(name = "Teams")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
-    private int warehouseId;
 
-    static public ArrayList<Team> generateRandomTeam(int amount){
-        ArrayList<Team> warehouses = new ArrayList<>();
-        for (int i = 0; i < amount; i++){
-            Team team = new Team();
-            team.setId(i);
-            team.setName("teamName");
-            team.setWarehouseId(i);
-            warehouses.add(team);
-        }
-        return warehouses;
-    }
+    @ManyToOne
+    private Warehouse warehouse;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<User> members;
 }
 

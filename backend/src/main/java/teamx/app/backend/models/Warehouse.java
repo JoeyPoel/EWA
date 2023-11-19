@@ -1,29 +1,29 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- * This class is a model for the Warehouse.
+ * Warehouse entity
+ * Represents a warehouse
  *
  * @author Junior Javier Brito Perez
  */
+@Data
 @Entity
-@Getter
-@Setter
+@Table(name = "Warehouses")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
-    private String Location;
+    private String location;
     private String address;
     private String postcode;
     private String country;
@@ -31,22 +31,8 @@ public class Warehouse {
     private String contactEmail;
     private String contactPhone;
 
-    static public ArrayList<Warehouse> generateRandomWarehouses(int amount){
-        ArrayList<Warehouse> warehouses = new ArrayList<>();
-        for (int i = 0; i < amount; i++){
-            Warehouse warehouse = new Warehouse();
-            warehouse.setId(i);
-            warehouse.setName("warehouse" + i + " name");
-            warehouse.setLocation("warehouse" + i + " location");
-            warehouse.setAddress("warehouse" + i + " Address");
-            warehouse.setCountry("warehouse" + i + " Country");
-            warehouse.setPostcode("warehouse" + i + " Postcode");
-            warehouse.setContactName("warehouse" + i + " ContactName");
-            warehouse.setContactEmail("warehouse" + i + " ContactEmail");
-            warehouse.setContactPhone("warehouse" + i + " ContactPhone");
-            warehouses.add(warehouse);
-        }
-        return warehouses;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    private List<Team> teams;
 }
 
