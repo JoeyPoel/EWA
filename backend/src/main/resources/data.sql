@@ -246,3 +246,49 @@ VALUES ('Project 1', 'Description for Project 1', 'Location 1', 'Client 1', 'cli
        ('Project 30', 'Description for Project 30', 'Location 30', 'Client 30', 'client30@email.com', '300-300-3000',
         '2025-06-01', '2025-12-31', 'CANCELED', 12);
 
+-- Generate Project transactions
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id)
+SELECT 10, 1, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 2, 5, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 5, 10, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 5, 13, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 10, 14, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 15, 15, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 12, 16, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
+
+-- Generate Order transactions
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, order_id, project_id, transfer_from_id)
+SELECT 12, 1, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 3, 5, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 6, 10, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 7, 13, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 13, 14, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 16, 15, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data;
+

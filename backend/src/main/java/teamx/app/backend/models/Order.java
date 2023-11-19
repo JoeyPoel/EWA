@@ -1,5 +1,6 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,11 @@ public class Order {
     private Long id;
     private String description;
     private boolean isDelivered = false;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date orderDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date deliveryDate;
 
     @ManyToOne
@@ -36,7 +41,7 @@ public class Order {
     @JsonManagedReference
     private User orderedBy;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order")
     @JsonManagedReference
     private List<Transaction> transactions;
 }
