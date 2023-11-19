@@ -32,6 +32,7 @@ public class Team {
     private Warehouse warehouse;
 
     @OneToMany
+    @JoinColumn(name = "team_id")
     @JsonManagedReference
     private List<User> members;
 
