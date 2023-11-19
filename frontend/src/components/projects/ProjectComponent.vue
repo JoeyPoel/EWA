@@ -57,6 +57,7 @@
 <script>
 import { Project } from "@/models/project.js";
 
+
 export default {
   name: "ProjectComponent",
   data() {
@@ -90,6 +91,8 @@ export default {
         return 0;
       });
     },
+
+    // Methods for the modal
   },
   computed: {
     filteredProjects() {
