@@ -29,7 +29,8 @@
 
     <div class="pt-3">
       <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#projectModal"
-                 @click="addNewProject">New Project</button>
+              @click="this.isAddingNewProject = true">
+        New Project</button>
     </div>
 
     <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
@@ -114,11 +115,35 @@ export default {
     },
 
     saveProject() {
+      if (!this.validateProject()) return;
       if (this.isAddingNewProject) {
         this.addNewProject();
       } else {
         this.editExistingProject();
       }
+    },
+
+    validateProject() {
+      if (!this.editedProject.name) {
+        alert("Project name is required");
+        return false;
+      }
+
+      if (!this.editedProject.status) {
+        alert("Project status is required");
+        return false;
+      }
+
+      if (!this.editedProject.team) {
+        alert("Project team is required");
+        return false;
+      }
+
+      if (!this.editedProject.description) {
+        alert("Project description is required");
+        return false;
+      }
+      return true;
     },
 
     editExistingProject() {
@@ -132,16 +157,9 @@ export default {
     },
 
     addNewProject() {
-      const newProject = {
-        id: this.projects.length + 1,
-        status: "",
-        team: "",
-        description: "",
-        name: "",
-      };
-
+      const newProject = { ...this.editedProject };
       this.projects.push(newProject);
-      this.editedProject = newProject;
+      this.isAddingNewProject = false;
     },
   },
 
