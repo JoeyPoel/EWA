@@ -63,7 +63,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="deselectProject">Close</button>
-            <button type="button" class="btn btn-primary" @click="saveChanges(editedProject)">Save</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="saveProject">Save</button>
           </div>
         </div>
       </div>
@@ -72,7 +72,6 @@
 </template>
 
 <script>
-// import ProjectDetailComponent from "@/components/projects/ProjectDetailComponent.vue";
 import { Project } from "@/models/project.js";
 
 export default {
@@ -85,6 +84,7 @@ export default {
       originalProject: {},
       searchTerm: "",
       sortBy: "status",
+      isAddingNewProject: false,
     };
   },
   methods: {
@@ -93,20 +93,9 @@ export default {
       this.editedProject = { ...project };
       this.selectedProject = { ...project };
     },
+
     deselectProject() {
       this.editedProject = {};
-    },
-
-    saveChanges(editedProject) {
-      // Update the original project with the changes
-      const index = this.projects.findIndex(p => p === this.originalProject);
-      if (index !== -1) {
-        this.projects.splice(index, 1, editedProject);
-      }
-      console.log("Saved changes to project", editedProject);
-
-      // Save editedProject to originalProject
-      this.originalProject = this.editedProject;
     },
 
     sortProjectsByStatus() {
@@ -124,6 +113,24 @@ export default {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
+    saveProject() {
+      if (this.isAddingNewProject) {
+        this.addNewProject();
+      } else {
+        this.editExistingProject();
+      }
+    },
+
+    editExistingProject() {
+      const index = this.projects.findIndex(p => p === this.originalProject);
+      if (index !== -1) {
+        this.projects.splice(index, 1, this.editedProject);
+      }
+      console.log("Saved changes to project", this.editedProject);
+
+      this.originalProject = this.editedProject;
+    },
+
     addNewProject() {
       const newProject = {
         id: this.projects.length + 1,
@@ -133,15 +140,9 @@ export default {
         name: "",
       };
 
-      this.saveNewProject(newProject);
-    },
-
-    saveNewProject(newProject) {
       this.projects.push(newProject);
-      this.selectedProject = newProject;
       this.editedProject = newProject;
-      this.originalProject = {};
-    }
+    },
   },
 
   computed: {
