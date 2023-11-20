@@ -19,7 +19,12 @@
               <h6 class="fw-bold">{{ project.name }}</h6>
             </div>
             <div class="col text-end">
-              <span class="badge bg-info">{{ project.status }}</span>
+              <div class="badge-column">
+                <span class="badge badge-fixed-position position-md-static bg-info">{{
+                    getStatusDisplayName(project.status)
+                  }}</span>
+<!--              <span class="badge badge-fixed-position position-md-static bg-info">{{ project.status }}</span>-->
+            </div>
             </div>
           </div>
           <p>{{ project.team }}</p>
@@ -37,7 +42,7 @@
           <div class="modal-body">
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
-              {{ selectedProject.status }}
+              {{ getStatusDisplayName(selectedProject.status)}}
             </div>
             <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
@@ -57,39 +62,49 @@
 <script>
 import { Project } from "@/models/project.js";
 
+
 export default {
   name: "ProjectComponent",
   data() {
     return {
-      projects: [],
+      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
       selectedProject: {},
       searchTerm: "",
       sortBy: "status",
     };
   },
-  created() {
-    this.projects = [
-      new Project("In Progress", "Solar Panel Installation Team A", "Residential Solar Panel Installation", "Project A"),
-      new Project("Completed", "Solar Panel Installation Team B", "Commercial Solar Panel Installation", "Project B"),
-      new Project("In Progress", "Solar Panel Installation Team C", "Solar Panel Retrofit for Industrial Facility", "Project C"),
-      new Project("Completed", "Solar Panel Installation Team D", "Solar Panel Maintenance and Inspection", "Project D"),
-      new Project("In Progress", "Solar Panel Installation Team E", "Community Solar Farm Setup", "Project E"),
-    ];
-  },
   methods: {
     selectProject(project) {
       this.selectedProject = project;
     },
+
     deselectProject() {
       this.selectedProject = {};
     },
+
+    // TODO Remove double code -  available in ProjectListComponent.vue
+
     sortProjectsByStatus() {
+      const statusOrder = [
+        "in_progress",
+        "completed",
+        "on_hold",
+        "cancelled"
+      ];
+
       this.projects.sort((a, b) => {
-        if (a.status < b.status) return -1;
-        if (a.status > b.status) return 1;
-        return 0;
+        const indexA = statusOrder.indexOf(a.status);
+        const indexB = statusOrder.indexOf(b.status);
+
+        return indexA - indexB;
       });
     },
+
+    getStatusDisplayName(status) {
+      return Project.statusList.find(s => s.value === status)?.displayName;
+    },
+
+    // Methods for the modal
   },
   computed: {
     filteredProjects() {
@@ -121,5 +136,11 @@ export default {
 .project-list {
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.badge-column {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
 }
 </style>

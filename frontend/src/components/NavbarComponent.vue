@@ -72,11 +72,14 @@ export default {
           Admin
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
-          <li><router-link class="dropdown-item" :to="{ name: 'User' }">
+          <li><router-link class="dropdown-item" to="/user">
             User page
           </router-link></li>
-          <li><router-link class="dropdown-item" :to="{ name: 'AdminProducts' }">
+          <li><router-link class="dropdown-item" to="/admin/products">
             Products page
+          </router-link></li>
+          <li><router-link class="dropdown-item" to="/admin/project">
+            Projects
           </router-link></li>
           <li><a class="dropdown-item" href="#">
             Administration
