@@ -15,6 +15,7 @@ import {CONFIG} from "../app-config";
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
 import UserAdaptor from "@/services/UserAdaptor";
+import {ProjectAdaptor} from "@/services/ProjectAdaptor";
 
 export default {
   name: 'App',
@@ -28,6 +29,7 @@ export default {
       teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
       usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/user"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products"),
+      projectService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
 
     }
   }

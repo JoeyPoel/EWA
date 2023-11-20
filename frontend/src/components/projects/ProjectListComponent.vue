@@ -88,9 +88,14 @@ import {Project} from "@/models/project.js";
 
 export default {
   name: "ProjectListComponent",
+  inject: ['projectService'],
+  async created() {
+    this.projects = await this.projectService.asyncFindAll();
+  },
   data() {
     return {
-      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
+      //projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
+      projects: [],
       selectedProject: {},
       editedProject: {},
       originalProject: {},
@@ -100,6 +105,11 @@ export default {
     };
   },
   methods: {
+
+    async fetchProjects() {
+      this.projects = await this.projectService.asyncFindAll();
+    },
+
     selectProject(project) {
       this.originalProject = project;
       this.editedProject = {...project};
@@ -129,7 +139,7 @@ export default {
     },
 
 
-    deleteProject() {
+    /*deleteProject() {
       const confirmDelete = window.confirm("Are you sure you want to delete this project?");
       if (confirmDelete) {
         const index = this.projects.findIndex(p => p === this.originalProject);
@@ -139,7 +149,16 @@ export default {
         this.deselectProject()
       }
     },
+*/
 
+    async deleteProject() {
+      const confirmDelete = window.confirm("Are you sure you want to delete this project?");
+      if (confirmDelete) {
+        await this.projectService.asyncDeleteById(this.originalProject.id);
+        await this.fetchProjects();
+        this.deselectProject();
+      }
+    },
 
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
@@ -177,22 +196,25 @@ export default {
       return true;
     },
 
-    editExistingProject() {
-      const index = this.projects.findIndex(p => p === this.originalProject);
+    async editExistingProject() {
+      /*const index = this.projects.findIndex(p => p === this.originalProject);
       if (index !== -1) {
         this.projects.splice(index, 1, this.editedProject);
       }
-      console.log("Saved changes to project", this.editedProject);
-
-      this.originalProject = this.editedProject;
+      this.originalProject = this.editedProject;*/
+      await this.projectService.asyncAdd(this.editedProject);
       this.deselectProject()
+      await this.fetchProjects();
+      console.log("Saved changes to project", this.editedProject);
     },
 
-    addNewProject() {
+    async addNewProject() {
+      await this.projectService.asyncAdd(this.editedProject);
       this.deselectProject()
-      const newProject = {...this.editedProject};
-      this.projects.push(newProject);
-      console.log("Added new project", newProject);
+      await this.fetchProjects();
+      //const newProject = {...this.editedProject};
+      //this.projects.push(newProject);
+      console.log("Added new project", this.editedProject);
     },
 
   },

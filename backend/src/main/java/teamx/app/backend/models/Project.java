@@ -10,6 +10,7 @@ import java.util.List;
  * Represents a project
  *
  * @author Junior Javier Brito Perez
+ * @author Nizar Amine
  * @see ProductLine
  * @see Team
  */
@@ -22,6 +23,9 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String status;
+    private String name;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
