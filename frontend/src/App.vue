@@ -15,7 +15,7 @@ import {CONFIG} from "../app-config";
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
 import UserAdaptor from "@/services/UserAdaptor";
-import {ProjectAdaptor} from "@/services/ProjectAdaptor";
+import ProjectAdaptor from "@/services/ProjectAdaptor";
 
 export default {
   name: 'App',

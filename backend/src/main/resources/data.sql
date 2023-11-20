@@ -132,3 +132,23 @@ VALUES ('admin@admin.com', 'admin', 'Admin', 1),
        ('user47@user.com', 'password46', 'User', 16),
        ('user48@user.com', 'password47', 'User', 16),
        ('user49@user.com', 'password48', 'User', 16);
+
+
+INSERT INTO projects (name, status, team_id, description)
+VALUES
+    ('Project A', 'in_progress', (SELECT id FROM teams WHERE name = 'Solar Warriors'), 'This is the description of Project A.'),
+    ('Project B', 'completed', (SELECT id FROM teams WHERE name = 'Solar Legends'), 'This is the description of Project B.'),
+    ('Project C', 'on_hold', (SELECT id FROM teams WHERE name = 'Solar Heroes'), 'This is the description of Project C.'),
+    ('Project D', 'cancelled', (SELECT id FROM teams WHERE name = 'Solar Champions'), 'This is the description of Project D.'),
+    ('Project E', 'in_progress', (SELECT id FROM teams WHERE name = 'Lunar Amazonians'), 'This is the description of Project E.'),
+    ('Project F', 'completed', (SELECT id FROM teams WHERE name = 'Lunar Spartans'), 'This is the description of Project F.'),
+    ('Project G', 'on_hold', (SELECT id FROM teams WHERE name = 'Lunar Titans'), 'This is the description of Project G.'),
+    ('Project H', 'cancelled', (SELECT id FROM teams WHERE name = 'Lunar Gods'), 'This is the description of Project H.'),
+    ('Project I', 'in_progress', (SELECT id FROM teams WHERE name = 'Star Jupiter'), 'This is the description of Project I.'),
+    ('Project J', 'completed', (SELECT id FROM teams WHERE name = 'Star Saturn'), 'This is the description of Project J.'),
+    ('Project K', 'on_hold', (SELECT id FROM teams WHERE name = 'Star Mars'), 'This is the description of Project K.'),
+    ('Project L', 'cancelled', (SELECT id FROM teams WHERE name = 'Star Venus'), 'This is the description of Project L.'),
+    ('Project M', 'in_progress', (SELECT id FROM teams WHERE name = 'Galaxy Andromeda'), 'This is the description of Project M.'),
+    ('Project N', 'completed', (SELECT id FROM teams WHERE name = 'Galaxy Milky Way'), 'This is the description of Project N.'),
+    ('Project O', 'on_hold', (SELECT id FROM teams WHERE name = 'Galaxy Black Hole'), 'This is the description of Project O.'),
+    ('Project P', 'cancelled', (SELECT id FROM teams WHERE name = 'Galaxy Big Bang'), 'This is the description of Project P.');

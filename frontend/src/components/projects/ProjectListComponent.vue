@@ -90,7 +90,14 @@ export default {
   name: "ProjectListComponent",
   inject: ['projectService'],
   async created() {
-    this.projects = await this.projectService.asyncFindAll();
+    const projectsData = await this.projectService.asyncFindAll();
+    this.projects = projectsData.map(project => new Project(
+        project.id,
+        project.status,
+        project.team.name,
+        project.description,
+        project.name
+    ));
   },
   data() {
     return {
