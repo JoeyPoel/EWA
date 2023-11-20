@@ -1,4 +1,4 @@
-package teamx.app.backend.rest;
+package teamx.app.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

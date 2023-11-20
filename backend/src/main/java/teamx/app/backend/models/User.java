@@ -46,5 +46,13 @@ public class User {
 
     @OneToMany
     @JsonBackReference
+    private List<Task> personalTodoList;
+
+    @OneToMany
+    @JsonBackReference
+    private List<Notification> notifications;
+
+    @OneToMany
+    @JsonBackReference
     private List<Order> ordersMade;
 }

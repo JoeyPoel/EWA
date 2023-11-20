@@ -29,6 +29,12 @@ public class Transaction {
     private Long id;
     private int quantity;
 
+    @Enumerated(EnumType.STRING)
+    private Type transactionType;
+    enum Type {
+        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+    }
+
     @ManyToOne
     @JsonManagedReference
     private Product product;

@@ -20,10 +20,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JsonBackReference
-    private Project project;
-
     private String name;
     private String description;
 
@@ -36,9 +32,17 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ManyToOne
+    @JsonBackReference
+    private Project project;
+
     @OneToMany
     @JsonManagedReference
     private List<User> assignedTo;
+
+    @ManyToOne
+    @JsonBackReference
+    private User personalTodoListOwner;
 
     enum Priority {
         LOW, MEDIUM, HIGH

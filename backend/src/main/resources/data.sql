@@ -27,39 +27,39 @@ VALUES ('Solar panel',
        ('Solar connector', 'A solar connector is an electrical connector designed to connect solar panels.');
 
 -- Generate products
-INSERT INTO Products (name, description, category_id)
+INSERT INTO Products (name, description, category_id , price)
 VALUES ('Solar Panel 100W', '100W Solar Panel for generating electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar panel')),
+        (SELECT id FROM product_categories WHERE name = 'Solar panel'), 100.00),
        ('Solar Panel 200W', '200W Solar Panel for generating electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar panel')),
+        (SELECT id FROM product_categories WHERE name = 'Solar panel'), 200.00),
        ('Solar Panel 300W', '300W Solar Panel for generating electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar panel')),
+        (SELECT id FROM product_categories WHERE name = 'Solar panel'), 300.00),
        ('Solar Panel 400W', '400W Solar Panel for generating electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar panel')),
+        (SELECT id FROM product_categories WHERE name = 'Solar panel'), 400.00),
        ('Solar Inverter 500W', '500W Solar Inverter for converting DC to AC',
-        (SELECT id FROM product_categories WHERE name = 'Solar inverter')),
+        (SELECT id FROM product_categories WHERE name = 'Solar inverter'), 500.00),
        ('Solar Inverter 600W', '600W Solar Inverter for converting DC to AC',
-        (SELECT id FROM product_categories WHERE name = 'Solar inverter')),
+        (SELECT id FROM product_categories WHERE name = 'Solar inverter'), 600.00),
        ('Solar Inverter 700W', '700W Solar Inverter for converting DC to AC',
-        (SELECT id FROM product_categories WHERE name = 'Solar inverter')),
+        (SELECT id FROM product_categories WHERE name = 'Solar inverter'), 700.00),
        ('Solar Inverter 800W', '800W Solar Inverter for converting DC to AC',
-        (SELECT id FROM product_categories WHERE name = 'Solar inverter')),
+        (SELECT id FROM product_categories WHERE name = 'Solar inverter'), 800.00),
        ('Solar Battery 200Ah', '200Ah Solar Battery for storing electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar battery')),
+        (SELECT id FROM product_categories WHERE name = 'Solar battery'), 200.00),
        ('Solar Battery 300Ah', '300Ah Solar Battery for storing electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar battery')),
+        (SELECT id FROM product_categories WHERE name = 'Solar battery'), 300.00),
        ('Solar Battery 400Ah', '400Ah Solar Battery for storing electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar battery')),
+        (SELECT id FROM product_categories WHERE name = 'Solar battery'), 400.00),
        ('Solar Battery 500Ah', '500Ah Solar Battery for storing electricity',
-        (SELECT id FROM product_categories WHERE name = 'Solar battery')),
+        (SELECT id FROM product_categories WHERE name = 'Solar battery'), 500.00),
        ('Solar Charge Controller 20A', '20A Solar Charge Controller for controlling charge',
-        (SELECT id FROM product_categories WHERE name = 'Solar charge controller')),
+        (SELECT id FROM product_categories WHERE name = 'Solar charge controller'), 20.00),
        ('Solar Mounting System', 'Solar Mounting System for mounting solar panels',
-        (SELECT id FROM product_categories WHERE name = 'Solar mounting system')),
+        (SELECT id FROM product_categories WHERE name = 'Solar mounting system'), 150.00),
        ('Solar Cable 10m', '10m Solar Cable for connecting solar components',
-        (SELECT id FROM product_categories WHERE name = 'Solar cable')),
+        (SELECT id FROM product_categories WHERE name = 'Solar cable'), 10.00),
        ('Solar Connector', 'Solar Connector for connecting solar panels',
-        (SELECT id FROM product_categories WHERE name = 'Solar connector'));
+        (SELECT id FROM product_categories WHERE name = 'Solar connector'), 5.00);
 
 -- Generate teams
 INSERT INTO teams (name, warehouse_id)
@@ -249,49 +249,49 @@ VALUES ('Project 1', 'Description for Project 1', 'Location 1', 'Client 1', 'cli
         '2025-06-01', '2025-12-31', 'CANCELED', 12);
 
 -- Generate Project transactions
-INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id)
-SELECT 10, 1, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id, type)
+SELECT 10, 1, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 2, 5, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 2, 5, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 5, 10, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 5, 10, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 5, 13, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 5, 13, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 10, 14, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 10, 14, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 15, 15, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 15, 15, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
-SELECT 12, 16, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL
+SELECT 12, 16, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
 
 -- Generate Order transactions
-INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, order_id, project_id, transfer_from_id)
-SELECT 12, 1, order_date, warehouse_id, order_id, NULL, NULL
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, order_id, project_id, transfer_from_id, type)
+SELECT 12, 1, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 3, 5, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 3, 5, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 6, 10, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 6, 10, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 7, 13, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 7, 13, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 13, 14, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 13, 14, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 16, 15, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 16, 15, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
-SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL
+SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data;
 
 -- Generate Tasks
@@ -304,4 +304,6 @@ FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 3
 UNION ALL
 SELECT 'Task 3', 'Description for Task 3', start_date, 'LOW', 'DONE', project_id
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
+
+
 
