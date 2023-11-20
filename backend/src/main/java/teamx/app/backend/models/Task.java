@@ -2,12 +2,14 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Entity(name = "Tasks")
@@ -33,6 +35,10 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<User> assignedTo;
 
     enum Priority {
         LOW, MEDIUM, HIGH

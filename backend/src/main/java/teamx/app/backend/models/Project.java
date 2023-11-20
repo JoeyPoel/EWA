@@ -53,11 +53,11 @@ public class Project {
     @JsonManagedReference
     private Team team;
 
-    @OneToMany
-    @JsonBackReference
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
     private List<Task> tasks;
 
-    @OneToMany
-    @JsonBackReference
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
     private List<Transaction> materials;
 }

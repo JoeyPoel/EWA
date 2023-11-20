@@ -2,6 +2,7 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,11 +33,12 @@ public class Transaction {
     @JsonManagedReference
     private Product product;
 
+    @JsonIgnore
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date transactionDate;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     private Warehouse warehouse;
 
     @ManyToOne
@@ -45,6 +47,7 @@ public class Transaction {
 
     @ManyToOne
     @JsonManagedReference
+    @JsonBackReference
     private Warehouse transferFrom;
 
     @ManyToOne

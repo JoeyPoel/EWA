@@ -25,6 +25,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String email;
     @JsonIgnore
     private String password;
@@ -38,6 +39,10 @@ public class User {
     @ManyToOne
     @JsonBackReference
     private Team team;
+
+    @OneToMany
+    @JsonBackReference
+    private List<Task> tasksAssigned;
 
     @OneToMany
     @JsonBackReference

@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { Project } from "@/models/project.js";
+import { Project } from "@/models/Project.js";
 
 export default {
   name: "ProjectComponent",

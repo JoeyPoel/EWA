@@ -133,6 +133,8 @@ VALUES ('admin@admin.com', 'admin', 'ADMIN', 1),
        ('user48@user.com', 'password47', 'USER', 16),
        ('user49@user.com', 'password48', 'USER', 16);
 
+UPDATE users SET name = 'User' WHERE id BETWEEN 2 AND 49;
+
 INSERT INTO warehouse_product_category_capacities (capacity, warehouse_id, product_category_id)
 VALUES (100, 1, 1),
        (200, 1, 2),
@@ -291,4 +293,15 @@ FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWE
 UNION ALL
 SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data;
+
+-- Generate Tasks
+INSERT INTO Tasks (name, description, deadline, priority, status, project_id)
+SELECT 'Task 1', 'Description for Task 1', start_date, 'HIGH', 'TODO', project_id
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 'Task 2', 'Description for Task 2', start_date, 'MEDIUM', 'IN_PROGRESS', project_id
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
+UNION ALL
+SELECT 'Task 3', 'Description for Task 3', start_date, 'LOW', 'DONE', project_id
+FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
 
