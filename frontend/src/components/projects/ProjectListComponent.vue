@@ -19,7 +19,11 @@
               <h6 class="fw-bold">{{ project.name }}</h6>
             </div>
             <div class="col text-end">
-              <span class="badge bg-info">{{ getStatusDisplayName(project.status) }}</span>
+              <div class="badge-column">
+                <span class="badge badge-fixed-position position-md-static bg-info">{{
+                    getStatusDisplayName(project.status)
+                  }}</span>
+              </div>
             </div>
           </div>
           <p>{{ project.team }}</p>
@@ -28,17 +32,20 @@
     </ul>
 
     <div class="pt-3">
-      <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#projectModal"
+      <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#projectModal "
               @click="this.isAddingNewProject = true">
-        New Project</button>
+        New Project
+      </button>
     </div>
 
     <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header bg-success text-white">
-            <h5 class="modal-title">{{ originalProject && originalProject.name ? originalProject.name : 'Untitled Project' }}</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @click="deselectProject"></button>
+            <h5 class="modal-title">
+              {{ originalProject && originalProject.name ? originalProject.name : 'Untitled Project' }}</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    @click="deselectProject"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
@@ -48,7 +55,8 @@
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
               <select id="editStatus" v-model="editedProject.status" class="form-select">
-                <option v-for="statusOption in Project.statusList" :key="statusOption.value" :value="statusOption.value">
+                <option v-for="statusOption in Project.statusList" :key="statusOption.value"
+                        :value="statusOption.value">
                   {{ statusOption.displayName }}
                 </option>
               </select>
@@ -62,9 +70,12 @@
               <textarea id="editDescription" v-model="editedProject.description" class="form-control"></textarea>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="deselectProject">Close</button>
+          <div class="modal-footer d-flex justify-content-start">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="saveProject">Save</button>
+            <button type="button" class="btn btn-danger" aria-label="Delete" data-bs-dismiss="modal"
+                    @click="deleteProject">Delete
+            </button>
+            <!--            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="deselectProject">Close</button>-->
           </div>
         </div>
       </div>
@@ -73,13 +84,13 @@
 </template>
 
 <script>
-import { Project } from "@/models/project.js";
+import {Project} from "@/models/project.js";
 
 export default {
   name: "ProjectListComponent",
   data() {
     return {
-      projects: Array.from({ length: 5 }, (_, i) => Project.createDummyProject(i + 1)),
+      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
       selectedProject: {},
       editedProject: {},
       originalProject: {},
@@ -91,24 +102,44 @@ export default {
   methods: {
     selectProject(project) {
       this.originalProject = project;
-      this.editedProject = { ...project };
-      this.selectedProject = { ...project };
+      this.editedProject = {...project};
+      this.selectedProject = {...project};
     },
 
     deselectProject() {
       this.editedProject = {};
+      this.originalProject = {};
+      this.isAddingNewProject = false;
     },
 
     sortProjectsByStatus() {
-      this.projects.sort((a, b) => a.status.localeCompare(b.status));
+      const statusOrder = [
+        "in_progress",
+        "completed",
+        "on_hold",
+        "cancelled"
+      ];
+
+      this.projects.sort((a, b) => {
+        const indexA = statusOrder.indexOf(a.status);
+        const indexB = statusOrder.indexOf(b.status);
+
+        return indexA - indexB;
+      });
     },
 
-    deleteProject(project) {
-      const index = this.projects.findIndex(p => p === project);
-      if (index !== -1) {
-        this.projects.splice(index, 1);
+
+    deleteProject() {
+      const confirmDelete = window.confirm("Are you sure you want to delete this project?");
+      if (confirmDelete) {
+        const index = this.projects.findIndex(p => p === this.originalProject);
+        if (index !== -1) {
+          this.projects.splice(index, 1);
+        }
+        this.deselectProject()
       }
     },
+
 
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
@@ -154,14 +185,18 @@ export default {
       console.log("Saved changes to project", this.editedProject);
 
       this.originalProject = this.editedProject;
+      this.deselectProject()
     },
 
     addNewProject() {
-      const newProject = { ...this.editedProject };
+      this.deselectProject()
+      const newProject = {...this.editedProject};
       this.projects.push(newProject);
-      this.isAddingNewProject = false;
+      console.log("Added new project", newProject);
     },
+
   },
+
 
   computed: {
     Project() {
@@ -176,6 +211,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style scoped>
@@ -196,4 +232,11 @@ export default {
   max-height: 90vh;
   overflow-y: auto;
 }
+
+.badge-column {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+}
+
 </style>
