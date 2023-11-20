@@ -41,7 +41,6 @@ public class TransactionService {
         List<Integer> projectsProductsQuantitiesInFlow = transactionRepository
                 .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionFlowAndTransactionDateBefore(
                 warehouseId, productId, Transaction.Flow.IN, new Date(System.currentTimeMillis()));
-        System.out.println(projectsProductsQuantitiesInFlow);
 
         List<Integer> transferInflow = transactionRepository
                 .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionTypeAndTransactionDateBefore(
@@ -51,12 +50,10 @@ public class TransactionService {
         List<Integer> projectsProductsQuantitiesOutFlow = transactionRepository
                 .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionFlowAndTransactionDateBefore(
                 warehouseId, productId, Transaction.Flow.OUT, new Date(System.currentTimeMillis()));
-        System.out.println(projectsProductsQuantitiesOutFlow);
 
         List<Integer> transferOutflowQuantity = transactionRepository
                 .findTransactionQuantitiesByTransferFromIdAndWarehouseIdAndTransactionDateBefore(
                 warehouseId, productId, new Date(System.currentTimeMillis()));
-        System.out.println(transferOutflowQuantity);
 
 
         Integer totalInflow = projectsProductsQuantitiesInFlow.stream().mapToInt(Integer::intValue).sum() +
