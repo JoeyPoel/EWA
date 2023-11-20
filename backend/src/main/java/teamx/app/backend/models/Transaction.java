@@ -31,8 +31,19 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private Type transactionType;
-    enum Type {
+    public enum Type {
         ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Flow transactionFlow =
+            (this.transactionType == Type.ORDER ||
+                    (this.transactionType == Type.ADJUSTMENT ||
+                            this.transactionType == Type.RETURN ||
+                            this.transactionType == Type.OTHER) && this.quantity > 0)
+            ? Flow.IN : Flow.OUT;
+    public enum Flow {
+        IN, OUT
     }
 
     @ManyToOne

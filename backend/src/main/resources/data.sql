@@ -249,7 +249,7 @@ VALUES ('Project 1', 'Description for Project 1', 'Location 1', 'Client 1', 'cli
         '2025-06-01', '2025-12-31', 'CANCELED', 12);
 
 -- Generate Project transactions
-INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id, type)
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id, transaction_type)
 SELECT 10, 1, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
 UNION ALL
@@ -272,7 +272,7 @@ SELECT 12, 16, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id
 FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
 
 -- Generate Order transactions
-INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, order_id, project_id, transfer_from_id, type)
+INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, order_id, project_id, transfer_from_id, transaction_type)
 SELECT 12, 1, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
