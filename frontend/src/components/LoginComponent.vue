@@ -25,13 +25,15 @@
 
 <script>
 
+import {User} from "@/models/User";
+
 export default {
   name: "LoginComponent",
   inject: ["usersService"],
   data() {
     return {
-      email: "x@x.com",
-      password: "xxx",
+      email: "admin@admin.com",
+      password: "admin",
       user: null,
       formIsValid: true
     }
@@ -44,15 +46,15 @@ export default {
         return;
       }
 
-      let userDummy = {id: 1, email: "x@x.com", password: "xxx", role: "admin"};
-      this.user = await this.usersService.asyncFindUser(userDummy);
+      let givenUser = new User(this.email, this.password);
+      this.user = await this.usersService.asyncFindUser(givenUser);
 
       if (this.user.email) {
         sessionStorage.setItem("email", this.user.email);
         this.$router.push("/dashboard");
+      } else {
+        this.formIsValid = false;
       }
-
-      console.log(sessionStorage.getItem('email'));
     },
   }
 }
