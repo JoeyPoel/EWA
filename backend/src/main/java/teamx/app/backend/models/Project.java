@@ -1,5 +1,6 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,13 +28,14 @@ public class Project {
     private String name;
     private String description;
 
-    private int team_id;
-    private String team_name;
+    /*private int team_id;
+    private String team_name;*/
 
-   /* @ManyToOne
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProductLine> productLines;*/
+    private List<ProductLine> productLines;
 }
