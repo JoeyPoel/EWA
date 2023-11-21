@@ -1,10 +1,13 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -12,31 +15,48 @@ import java.util.List;
  * Represents a project
  *
  * @author Junior Javier Brito Perez
- * @author Nizar Amine
- * @see ProductLine
  * @see Team
  */
 @Data
-@Entity
-@Table(name = "Projects")
+@Entity(name = "Projects")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
     private String name;
     private String description;
+    private String location;
+    private String clientName;
+    private String clientEmail;
+    private String clientPhone;
 
-    /*private int team_id;
-    private String team_name;*/
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date startDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id", nullable = false)
-    //@JsonManagedReference
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date endDate;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    enum Status {
+        PENDING,
+        CONFIRMED,
+        IN_PROGRESS,
+        FINISHED,
+        CANCELED
+    }
+
+    @ManyToOne
+//    @JsonIgnore
     private Team team;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProductLine> productLines;
+    @OneToMany(mappedBy = "project")
+    @JsonIgnore
+    private List<Task> tasks;
+
+    @OneToMany(mappedBy = "project")
+    @JsonIgnore
+    private List<Transaction> materials;
 }

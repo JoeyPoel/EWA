@@ -20,7 +20,7 @@ export default class TeamsAdaptor extends Adaptor {
      * @returns {Promise<*>} The teams.
      */
     async asyncFindAll() {
-        return (await this.fetchJson(this.resourceUrl + "/all"))
+        return (await this.fetchJson(this.resourceUrl + "/getAllTeams"))
             .map(team => Object.assign(new Team(), team));
     }
 
@@ -32,40 +32,31 @@ export default class TeamsAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + "/" + id));
+        return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + "/getTeamById/" + id));
     }
 
-    /**
-     * Saves a team to the REST API.
-     *
-     * @async
-     * @param {Team} team - The team to save.
-     * @returns {Promise<*>} The saved team.
-     */
-    async asyncSave(team) {
+    async asyncAddTeam(team) {
         const options = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(team)
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(team)
         }
-
-        console.log(team)
-
-        let response = await this.fetchJson(this.resourceUrl + "/add", options);
-
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + "/" + team.id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/addTeam", options);
+        if (response) {
+            return Object.assign(new Team(), response);
         }
+        return null;
 
-        if (response.ok) {
-            console.log("ok")
-            return Object.assign(new Team(), await response.json());
-        } else {
-            console.log("not ok")
-            console.log(response, !response.bodyUsed ? response.text : "");
-            return null;
+    }
+
+    async asyncUpdateTeam(id, team) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(team)
         }
+        console.log(options);
+        const response = await this.fetchJson(this.resourceUrl + "/updateTeamById/" + id, options);
+        if (response) {
+            return Object.assign(new Team(), response);
+        }
+        return null;
     }
 
     /**
@@ -77,15 +68,12 @@ export default class TeamsAdaptor extends Adaptor {
      */
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
-        if (response.ok) {
-            return Object.assign(new Team(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
+        const response = await this.fetchJson(this.resourceUrl + "/deleteTeamById/" + id, options);
+        if (response) {
+            return Object.assign(new Team(), response);
         }
+        return null;
     }
 }

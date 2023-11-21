@@ -1,7 +1,13 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * ProductCategory entity
@@ -11,8 +17,7 @@ import lombok.*;
  * @see Product
  */
 @Data
-@Entity
-@Table(name = "ProductCategories")
+@Entity(name = "ProductCategories")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCategory {

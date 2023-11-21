@@ -92,68 +92,27 @@
 </template>
 
 <script>
-import {Project} from "@/models/project.js";
+import {Project} from "@/models/Project.js";
 
 export default {
   name: "ProjectListComponent",
-  inject: ['projectService'],
-  async created() {
-    const projectsData = await this.projectService.asyncFindAll();
-    this.projects = projectsData.map(project => new Project(
-        project.id,
-        project.status,
-        project.team ? project.team.name : "",
-        project.team ? project.team.id : null,
-        project.description,
-        project.name
-    ));
-
-    console.log("Projects before:", this.projects);
-
-    const uniqueTeams = Array.from(new Set(this.projects.map(project => ({ name: project.team, id: project.teamId }))));
-    this.teams = uniqueTeams;
-    console.log("Teams:", this.teams);
-
-    this.teamNames = uniqueTeams.map(team => team.name);
-    console.log("Team names:", this.teamNames);
-
-    this.editedProject = {
-      id: 0,
-      status: Project.statusList[0].value,
-      team: this.teamNames[0] || "",
-      description: "",
-      name: ""
-    };
-
-
-  },
+  inject: ['projectsService'],
   data() {
     return {
-      //projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
       projects: [],
       selectedProject: {},
       editedProject: {},
       originalProject: {},
-      teamNames: [],
       searchTerm: "",
       sortBy: "status",
       isAddingNewProject: false,
     };
   },
+  async created() {
+    this.projects = await this.projectsService.getAll();
+    this.sortProjectsByStatus();
+  },
   methods: {
-
-    async fetchProjects() {
-      const projectsData = await this.projectService.asyncFindAll();
-      this.projects = projectsData.map(project => new Project(
-          project.id,
-          project.status,
-          project.team.name,
-          project.team.id,
-          project.description,
-          project.name
-      ));
-    },
-
     selectProject(project) {
       this.originalProject = project;
       this.editedProject = {...project};

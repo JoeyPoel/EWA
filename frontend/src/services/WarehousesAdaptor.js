@@ -1,5 +1,7 @@
 import {Adaptor} from "./Adaptor.js";
 import {Warehouse} from "@/models/Warehouse.js";
+import {ProductCategory} from "@/models/ProductCategory";
+import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
 
 /**
  * Adaptor for the warehouses REST API.
@@ -9,8 +11,8 @@ import {Warehouse} from "@/models/Warehouse.js";
  * @Author Junior Javier Brito Perez
  */
 export default class WarehousesAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/warehouses");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
@@ -20,7 +22,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouses.
      */
     async asyncFindAll() {
-       const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
+        const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
         if (response) {
             return response.map(warehouse => Object.assign(new Warehouse(), warehouse));
         }
@@ -75,12 +77,41 @@ export default class WarehousesAdaptor extends Adaptor {
         const options = {
             method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" +id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" + id, options);
         if (response) {
             return Object.assign(new Warehouse(), await response.json());
         }
         return null;
     }
 
+    async asyncGetMissingWarehouseCapacityCategories(id) {
+        const response = await this.fetchJson(this.resourceUrl + "/getMissingWarehouseCapacityCategories/"
+            + id);
+        if (response) {
+            return response.map(category => Object.assign(new ProductCategory(), category));
+        }
+        return null;
+    }
 
+    async asyncGetWarehouseCapacityCategories(id) {
+        const response = await this.fetchJson(this.resourceUrl + "/getWarehouseCapacityCategories/" + id);
+        if (response) {
+            return response.map(category => Object.assign(new WarehouseProductCategoryCapacity(), category));
+        }
+        return null;
+    }
+
+    async asyncAddWarehouseCapacityByWarehouseId(id, warehouseProductCategoryCapacity) {
+        const options = {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouseProductCategoryCapacity)
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" +
+            id, options);
+
+        if (response) {
+            return Object.assign(new WarehouseProductCategoryCapacity(), await response.json());
+        }
+        return null;
+    }
 }

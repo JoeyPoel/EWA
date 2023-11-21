@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * User entity
  * Represents a user
@@ -16,21 +18,25 @@ import lombok.NoArgsConstructor;
  * @see Team
  */
 @Data
-@Entity
-@Table(name = "Users")
+@Entity(name = "Users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    private String name;
     private String email;
-    @JsonIgnore
     private String password;
-    private String role;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    enum Role {
+        ADMIN,
+        USER
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "team_id")
     private Team team;
 }

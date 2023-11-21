@@ -23,30 +23,31 @@
                 <span class="badge badge-fixed-position position-md-static bg-info">{{
                     getStatusDisplayName(project.status)
                   }}</span>
-<!--              <span class="badge badge-fixed-position position-md-static bg-info">{{ project.status }}</span>-->
-            </div>
+                <!--              <span class="badge badge-fixed-position position-md-static bg-info">{{ project.status }}</span>-->
+              </div>
             </div>
           </div>
-          <p>{{ project.team }}</p>
+          <p>{{ project.team.name }}</p>
         </div>
       </li>
     </ul>
 
     <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
+        <div v-if="selectedProject !== null" class="modal-content">
           <div class="modal-header bg-success text-white">
             <h5 class="modal-title">{{ selectedProject.name }} </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @click="deselectProject"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    @click="deselectProject"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
-              {{ getStatusDisplayName(selectedProject.status)}}
+              {{ getStatusDisplayName(selectedProject.status) }}
             </div>
             <div class="mb-3">
-              <h6 class="text-success">Assigned Teams:</h6>
-              {{ selectedProject.team }}
+              <h6 class="text-success">Assigned Team:</h6>
+              {{ selectedProject.team.name }}
             </div>
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
@@ -60,36 +61,39 @@
 </template>
 
 <script>
-import { Project } from "@/models/project.js";
-
-
 export default {
   name: "ProjectComponent",
+  inject: ["projectsService"],
   data() {
     return {
-      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
-      selectedProject: {},
+      projects: [],
+      selectedProject: null,
       searchTerm: "",
       sortBy: "status",
     };
   },
+  async created() {
+    this.projects = await this.projectsService.asyncFindAll();
+    this.sortProjectsByStatus();
+  },
   methods: {
-    selectProject(project) {
+    async selectProject(project) {
       this.selectedProject = project;
     },
 
     deselectProject() {
-      this.selectedProject = {};
+      this.selectedProject = null;
     },
 
     // TODO Remove double code -  available in ProjectListComponent.vue
 
     sortProjectsByStatus() {
       const statusOrder = [
-        "in_progress",
-        "completed",
-        "on_hold",
-        "cancelled"
+        "PENDING",
+        "CONFIRMED",
+        "IN_PROGRESS",
+        "FINISHED",
+        "CANCELED"
       ];
 
       this.projects.sort((a, b) => {
@@ -101,7 +105,14 @@ export default {
     },
 
     getStatusDisplayName(status) {
-      return Project.statusList.find(s => s.value === status)?.displayName;
+      const statusDisplayNames = {
+        PENDING: "Pending",
+        CONFIRMED: "Confirmed",
+        IN_PROGRESS: "In Progress",
+        FINISHED: "Finished",
+        CANCELED: "Canceled",
+      }
+      return statusDisplayNames[status];
     },
 
     // Methods for the modal
