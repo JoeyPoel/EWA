@@ -55,8 +55,8 @@
               <div class="popper-content">
                 <p>Are you sure you want to delete this team?</p>
                 <div class="button-group">
-                  <button @click="confirmAction" class="btn btn-confirm">Yes</button>
-                  <button @click="cancelAction" class="btn btn-cancel">No</button>
+                  <button @click="confirmAction" class="btn-space btn btn-success">Yes</button>
+                  <button @click="cancelAction" class="btn btn-danger">No</button>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@ export default {
       if (!this.searchQuery) {
         return this.users;
       }
-      const searchTerm = this.searchQuery .toLowerCase();
+      const searchTerm = this.searchQuery.toLowerCase();
       return this.users.filter(user =>
           user.name.toLowerCase().includes(searchTerm)
       );
@@ -243,35 +243,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.button-group {
-  display: flex;
-  justify-content: center;
-}
-
-.btn {
-  padding: 8px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn-confirm {
-  background-color: #28a745;
-  color: #fff;
-  border: none;
+.btn-space {
   margin-right: 10px;
 }
 
-.btn-cancel {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-}
-
-.btn-confirm:focus,
-.btn-cancel:focus,
-.btn-confirm:hover,
-.btn-cancel:hover {
-  opacity: 0.9;
-}
 </style>

@@ -45,7 +45,7 @@
 <script>
 import editTeamModal from "@/components/teams/EditTeamModal";
 export default {
-  inject: ['teamsService', 'warehousesService'],
+  inject: ['teamsService', 'warehousesService', 'usersService'],
   name: 'teamComponent',
   data() {
     return {
@@ -68,7 +68,9 @@ export default {
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
-    this.users = await this.warehousesService.asyncFindAll()
+    this.users = await this.usersService.asyncFindAll()
+    console.log(this.users)
+    this.users = this.hideAdmins()
   },
   computed: {
     filteredTeams() {
@@ -84,11 +86,11 @@ export default {
   },
   methods: {
     async addTeam(addedTeam) {
-      await this.teamsService.asyncSave(addedTeam);
+      await this.teamsService.asyncAddTeam(addedTeam);
       this.teams.push(addedTeam); // Add the new team to the local list
     },
     async editTeam(editedTeam) {
-      await this.teamsService.asyncUpdate(editedTeam);
+      await this.teamsService.asyncUpdateTeam(editedTeam.id, editedTeam);
       const index = this.teams.findIndex(team => team.id === editedTeam.id);
       if (index !== -1) {
         this.teams.splice(index, 1, editedTeam); // Remove 1 element at index and replace with editedTeam
@@ -122,6 +124,11 @@ export default {
       this.selectedWarehouse = null;
       this.teamMembers = null;
       this.teamName = '';
+    },
+    hideAdmins(){
+      return this.users.filter(user =>
+          user.role !== 'ADMIN'
+      );
     }
   },
 };
