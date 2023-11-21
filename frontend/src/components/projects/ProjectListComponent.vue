@@ -1,9 +1,19 @@
 <template>
   <div class="container mt-3">
     <div class="d-flex justify-content-between mb-3">
-      <input v-model="searchTerm" class="form-control w-25" placeholder="Search for project..." type="text">
-      <button class="btn btn-success" @click="sortProjectsByStatus">Sort by Status</button>
+      <div class="col-md-4">
+        <input v-model="searchTerm" class="form-control" placeholder="Search for project..." type="text">
+      </div>
+      <div class="col-md-auto justify-content-end">
+        <button class="btn btn-success m-2" @click="sortProjectsByStatus">Sort by Status</button>
+        <button class="btn btn-primary m-2" data-bs-target="#projectModal" data-bs-toggle="modal" type="button"
+                @click="this.isAddingNewProject = true">
+          New Project
+        </button>
+      </div>
     </div>
+
+
 
     <ul class="list-group project-list">
       <li
@@ -12,27 +22,32 @@
           class="list-group-item d-flex justify-content-between align-items-start"
           data-bs-target="#projectModal"
           data-bs-toggle="modal"
-          @click="selectProject(project)">
+          @click="selectProject(project)"
+      >
         <div class="ms-2 me-auto">
           <div class="row">
             <div class="col">
               <h6 class="fw-bold">{{ project.name }}</h6>
             </div>
+            <div class="row">
+              <p>Team: {{ project.team.name }}</p>
+            </div>
             <div class="col text-end">
               <div class="badge-column">
-                <span class="badge badge-fixed-position position-md-static bg-info">{{
-                    getStatusDisplayName(project.status)
-                  }}</span>
+                        <span class="badge badge-fixed-position position-md-static bg-info">{{
+                            getStatusDisplayName(project.status)
+                          }}</span>
               </div>
             </div>
           </div>
-          <p>{{ project.team.name }}</p>
         </div>
       </li>
     </ul>
 
-    <div class="pt-3">
-      <button class="btn btn-primary mb-3" data-bs-target="#projectModal " data-bs-toggle="modal" type="button"
+
+
+    <div class="pt-3 fixed-bottom">
+      <button class="btn  btn-primary mb-3" data-bs-target="#projectModal " data-bs-toggle="modal" type="button"
               @click="this.isAddingNewProject = true">
         New Project
       </button>
@@ -41,21 +56,21 @@
     <div id="projectModal" aria-hidden="true" aria-labelledby="projectModalLabel" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h5 class="modal-title">
+          <div class="modal-header bg-white text-white">
+            <h5 class="modal-title text-dark">
               {{ originalProject && originalProject.name ? originalProject.name : 'Untitled Project' }}</h5>
-            <button aria-label="Close" class="btn-close btn-close-white" data-bs-dismiss="modal" type="button"
+            <button aria-label="Close" class="btn-close btn-close-dark" data-bs-dismiss="modal" type="button"
                     @click="deselectProject"></button>
           </div>
+
           <div class="modal-body">
             <div class="mb-3">
-              <h6 class="text-success">Name:</h6>
+              <h6 class="text">Name:</h6>
               <input id="editName" v-model="editedProject.name" class="form-control" type="text">
               <div v-if="!isValidProjectName" class="text-danger mt-1">Project name is required</div>
             </div>
             <div class="mb-3">
-              <h6 class="text-success">Status:</h6>
-
+              <h6 class="text">Status:</h6>
               <select id="editStatus" v-model="editedProject.status" class="form-select">
                 <option v-for="statusOption in Project.statusList" :key="statusOption.value"
                         :value="statusOption.value">
@@ -65,7 +80,7 @@
               <div v-if="!isValidProjectStatus" class="text-danger mt-1">Project status is required</div>
             </div>
             <div class="mb-3">
-              <h6 class="text-success">Assigned Teams:</h6>
+              <h6 class="text">Assigned Teams:</h6>
               <select id="editTeams" v-model="editedProject.team" class="form-select">
                 <option v-for="team in teams" :key="team" :value="team">
                   {{ team.name }}
@@ -74,11 +89,12 @@
               <div v-if="!isValidProjectTeam" class="text-danger mt-1">Project team is required</div>
             </div>
             <div class="mb-3">
-              <h6 class="text-success">Description:</h6>
+              <h6 class="text">Description:</h6>
               <textarea id="editDescription" v-model="editedProject.description" class="form-control"></textarea>
             </div>
             <div v-if="!isValidProjectDescription" class="text-danger mt-1">Project description is required</div>
           </div>
+
           <div class="modal-footer d-flex justify-content-start">
             <button :disabled="!isValidProject()" class="btn btn-primary" data-bs-dismiss="modal" type="button"
                     @click="saveProject">Save
@@ -182,22 +198,18 @@ export default {
     },
 
     isValidProjectName() {
-      // Implement your project name validation logic here
       return !!this.editedProject.name;
     },
 
     isValidProjectStatus() {
-      // Implement your project status validation logic here
       return !!this.editedProject.status;
     },
 
     isValidProjectTeam() {
-      // Implement your project team validation logic here
       return !!this.editedProject.team;
     },
 
     isValidProjectDescription() {
-      // Implement your project description validation logic here
       return !!this.editedProject.description;
     },
 
@@ -247,7 +259,8 @@ export default {
 }
 
 .modal-header {
-  outline: none;
+  background-color: #28a745;
+  color: white;
 }
 
 .list-group-item:hover {
