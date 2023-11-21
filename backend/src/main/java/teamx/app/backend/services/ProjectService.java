@@ -57,4 +57,13 @@ public class ProjectService {
         }
         return project.getTeam();
     }
+
+    public Project deleteProject(Long id) {
+        Project project = projectRepository.findById(id).orElse(null);
+        if (project == null) {
+            return null;
+        }
+        projectRepository.deleteById(id);
+        return project;
+    }
 }

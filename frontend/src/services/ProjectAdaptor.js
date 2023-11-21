@@ -26,7 +26,7 @@ export default class ProjectAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/addProject", options);
 
         if (response) {
-            return Object.assign(new Project(), await response.json());
+            return Object.assign(new Project(),  response);
         }
         return null;
     }
@@ -39,7 +39,20 @@ export default class ProjectAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/updateProjectById/" + id, options);
 
         if (response) {
-            return Object.assign(new Project(), await response.json());
+            return Object.assign(new Project(),response);
+        }
+        return null;
+    }
+
+    async asyncDeleteProjectById(id) {
+        const options = {
+            method: "DELETE", headers: {"Content-Type": "application/json"}
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/deleteProjectById/" + id, options);
+
+        if (response) {
+            return Object.assign(new Project(),  response);
         }
         return null;
     }
