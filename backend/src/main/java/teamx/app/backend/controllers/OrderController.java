@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Order;
-import teamx.app.backend.repositories.OrderRepository;
+import teamx.app.backend.services.OrderService;
 
 import java.util.List;
 
@@ -17,23 +17,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
     @Autowired
-    public OrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @GetMapping("/getAllOrders")
     public ResponseEntity<List<Order>> getAllOrders() {
         try {
-            List<Order> orders = orderRepository.findAll();
-            if (orders.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No orders found");
+            List<Order> orders = orderService.getAllOrders();
+            if (orders == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving orders");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting orders", e);
         }
     }
 }
