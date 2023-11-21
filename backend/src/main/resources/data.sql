@@ -133,7 +133,8 @@ VALUES ('admin@admin.com', 'admin', 'ADMIN', 1),
        ('user48@user.com', 'password47', 'USER', 16),
        ('user49@user.com', 'password48', 'USER', 16);
 
-UPDATE users SET name = 'User' WHERE id BETWEEN 2 AND 49;
+UPDATE users SET name = 'User' WHERE id BETWEEN 2 AND 50;
+UPDATE users SET name = 'Admin' WHERE id = 1;
 
 INSERT INTO warehouse_product_category_capacities (capacity, minimum_stock_level, warehouse_id, product_category_id)
 VALUES
