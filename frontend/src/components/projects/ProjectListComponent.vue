@@ -44,15 +44,6 @@
       </li>
     </ul>
 
-
-
-    <div class="pt-3 fixed-bottom">
-      <button class="btn  btn-primary mb-3" data-bs-target="#projectModal " data-bs-toggle="modal" type="button"
-              @click="this.isAddingNewProject = true">
-        New Project
-      </button>
-    </div>
-
     <div id="projectModal" aria-hidden="true" aria-labelledby="projectModalLabel" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
