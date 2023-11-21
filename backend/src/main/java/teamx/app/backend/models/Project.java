@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Project entity
  * Represents a project
- *
+ * @author Nizar Amine
  * @author Junior Javier Brito Perez
  * @see Team
  */

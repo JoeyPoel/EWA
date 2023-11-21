@@ -41,6 +41,7 @@ public class ProjectService {
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
         existingProject.setLocation(project.getLocation());
+        existingProject.setTeam(project.getTeam());
         existingProject.setClientName(project.getClientName());
         existingProject.setClientEmail(project.getClientEmail());
         existingProject.setClientPhone(project.getClientPhone());
