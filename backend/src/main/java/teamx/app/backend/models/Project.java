@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Project entity
  * Represents a project
- *
+ * @author Nizar Amine
  * @author Junior Javier Brito Perez
  * @see Team
  */
@@ -52,11 +52,12 @@ public class Project {
 //    @JsonIgnore
     private Team team;
 
-    @OneToMany(mappedBy = "project")
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project",  cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Transaction> materials;
 }

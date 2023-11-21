@@ -14,10 +14,10 @@ export class Project {
     }
 
     static statusList = [
-        "PENDING",
-        "CONFIRMED",
-        "IN_PROGRESS",
-        "FINISHED",
-        "CANCELED"
+        { value: "PENDING", displayName: "Pending" },
+        { value: "CONFIRMED", displayName: "Confirmed" },
+        { value: "IN_PROGRESS", displayName: "In Progress" },
+        { value: "FINISHED", displayName: "Finished" },
+        { value: "CANCELED", displayName: "Canceled" }
     ];
 }

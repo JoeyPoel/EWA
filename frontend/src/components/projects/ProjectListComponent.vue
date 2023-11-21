@@ -1,17 +1,17 @@
 <template>
   <div class="container mt-3">
     <div class="d-flex justify-content-between mb-3">
-      <input v-model="searchTerm" type="text" class="form-control w-25" placeholder="Search for project...">
-      <button @click="sortProjectsByStatus" class="btn btn-success">Sort by Status</button>
+      <input v-model="searchTerm" class="form-control w-25" placeholder="Search for project..." type="text">
+      <button class="btn btn-success" @click="sortProjectsByStatus">Sort by Status</button>
     </div>
 
     <ul class="list-group project-list">
       <li
-          class="list-group-item d-flex justify-content-between align-items-start"
-          data-bs-toggle="modal"
-          data-bs-target="#projectModal"
           v-for="(project, index) in filteredProjects"
           :key="index"
+          class="list-group-item d-flex justify-content-between align-items-start"
+          data-bs-target="#projectModal"
+          data-bs-toggle="modal"
           @click="selectProject(project)">
         <div class="ms-2 me-auto">
           <div class="row">
@@ -26,53 +26,64 @@
               </div>
             </div>
           </div>
-          <p>{{ project.team }}</p>
+          <p>{{ project.team.name }}</p>
         </div>
       </li>
     </ul>
 
     <div class="pt-3">
-      <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#projectModal "
+      <button class="btn btn-primary mb-3" data-bs-target="#projectModal " data-bs-toggle="modal" type="button"
               @click="this.isAddingNewProject = true">
         New Project
       </button>
     </div>
 
-    <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div id="projectModal" aria-hidden="true" aria-labelledby="projectModalLabel" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header bg-success text-white">
             <h5 class="modal-title">
               {{ originalProject && originalProject.name ? originalProject.name : 'Untitled Project' }}</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+            <button aria-label="Close" class="btn-close btn-close-white" data-bs-dismiss="modal" type="button"
                     @click="deselectProject"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <h6 class="text-success">Name:</h6>
-              <input type="text" id="editName" v-model="editedProject.name" class="form-control">
+              <input id="editName" v-model="editedProject.name" class="form-control" type="text">
+              <div v-if="!isValidProjectName" class="text-danger mt-1">Project name is required</div>
             </div>
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
+
               <select id="editStatus" v-model="editedProject.status" class="form-select">
                 <option v-for="statusOption in Project.statusList" :key="statusOption.value"
                         :value="statusOption.value">
                   {{ statusOption.displayName }}
                 </option>
               </select>
+              <div v-if="!isValidProjectStatus" class="text-danger mt-1">Project status is required</div>
             </div>
             <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
-              <input type="text" id="editTeams" v-model="editedProject.team" class="form-control">
+              <select id="editTeams" v-model="editedProject.team" class="form-select">
+                <option v-for="team in teams" :key="team" :value="team">
+                  {{ team.name }}
+                </option>
+              </select>
+              <div v-if="!isValidProjectTeam" class="text-danger mt-1">Project team is required</div>
             </div>
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
               <textarea id="editDescription" v-model="editedProject.description" class="form-control"></textarea>
             </div>
+            <div v-if="!isValidProjectDescription" class="text-danger mt-1">Project description is required</div>
           </div>
           <div class="modal-footer d-flex justify-content-start">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="saveProject">Save</button>
-            <button type="button" class="btn btn-danger" aria-label="Delete" data-bs-dismiss="modal"
+            <button :disabled="!isValidProject()" class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                    @click="saveProject">Save
+            </button>
+            <button aria-label="Delete" class="btn btn-danger" data-bs-dismiss="modal" type="button"
                     @click="deleteProject">Delete
             </button>
             <!--            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="deselectProject">Close</button>-->
@@ -88,10 +99,11 @@ import {Project} from "@/models/Project.js";
 
 export default {
   name: "ProjectListComponent",
-  inject: ['projectsService'],
+  inject: ['projectsService', 'teamsService'],
   data() {
     return {
       projects: [],
+      teams: [],
       selectedProject: {},
       editedProject: {},
       originalProject: {},
@@ -100,8 +112,9 @@ export default {
       isAddingNewProject: false,
     };
   },
-  async created() {
-    this.projects = await this.projectsService.getAll();
+  async mounted() {
+    await this.fetchProjects();
+    this.teams = await this.teamsService.asyncFindAll();
     this.sortProjectsByStatus();
   },
   methods: {
@@ -110,7 +123,9 @@ export default {
       this.editedProject = {...project};
       this.selectedProject = {...project};
     },
-
+    async fetchProjects() {
+      this.projects = await this.projectsService.asyncFindAll();
+    },
     deselectProject() {
       this.editedProject = {};
       this.originalProject = {};
@@ -133,25 +148,23 @@ export default {
       });
     },
 
-
-    deleteProject() {
+    async deleteProject() {
       const confirmDelete = window.confirm("Are you sure you want to delete this project?");
       if (confirmDelete) {
-        const index = this.projects.findIndex(p => p === this.originalProject);
-        if (index !== -1) {
-          this.projects.splice(index, 1);
+        const deletedProject = await this.projectsService.asyncDeleteProjectById(this.originalProject.id);
+        if (deletedProject) {
+          this.deselectProject();
+          await this.fetchProjects();
         }
-        this.deselectProject()
       }
     },
-
 
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
     saveProject() {
-      if (!this.validateProject()) return;
+      if (!this.isValidProject()) return;
       if (this.isAddingNewProject) {
         this.addNewProject();
       } else {
@@ -159,50 +172,59 @@ export default {
       }
     },
 
-    validateProject() {
-      if (!this.editedProject.name) {
-        alert("Project name is required");
-        return false;
-      }
-
-      if (!this.editedProject.status) {
-        alert("Project status is required");
-        return false;
-      }
-
-      if (!this.editedProject.team) {
-        alert("Project team is required");
-        return false;
-      }
-
-      if (!this.editedProject.description) {
-        alert("Project description is required");
-        return false;
-      }
-      return true;
+    isValidProject() {
+      return (
+          this.isValidProjectName() &&
+          this.isValidProjectStatus() &&
+          // this.isValidProjectTeam() &&
+          this.isValidProjectDescription()
+      );
     },
 
-    editExistingProject() {
-      const index = this.projects.findIndex(p => p === this.originalProject);
-      if (index !== -1) {
-        this.projects.splice(index, 1, this.editedProject);
-      }
+    isValidProjectName() {
+      // Implement your project name validation logic here
+      return !!this.editedProject.name;
+    },
+
+    isValidProjectStatus() {
+      // Implement your project status validation logic here
+      return !!this.editedProject.status;
+    },
+
+    isValidProjectTeam() {
+      // Implement your project team validation logic here
+      return !!this.editedProject.team;
+    },
+
+    isValidProjectDescription() {
+      // Implement your project description validation logic here
+      return !!this.editedProject.description;
+    },
+
+    async editExistingProject() {
+      await this.projectsService.asyncUpdateProject(this.editedProject.id, this.editedProject);
+      this.deselectProject()
+      await this.fetchProjects();
       console.log("Saved changes to project", this.editedProject);
-
-      this.originalProject = this.editedProject;
-      this.deselectProject()
     },
 
-    addNewProject() {
-      this.deselectProject()
-      const newProject = {...this.editedProject};
-      this.projects.push(newProject);
-      console.log("Added new project", newProject);
+    async addNewProject() {
+      if (!this.isValidProject()) {
+        return;
+      }
+      await this.projectsService.asyncAddProject(this.editedProject);
+
+      this.deselectProject();
+      await this.fetchProjects();
+
+      console.log("Added new project", this.editedProject);
     },
 
+    findTeamIdByName(teamName) {
+      const team = this.teams.find(t => t.name === teamName);
+      return team ? team.id : null;
+    }
   },
-
-
   computed: {
     Project() {
       return Project

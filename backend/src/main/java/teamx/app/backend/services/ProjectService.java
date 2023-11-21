@@ -41,6 +41,7 @@ public class ProjectService {
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
         existingProject.setLocation(project.getLocation());
+        existingProject.setTeam(project.getTeam());
         existingProject.setClientName(project.getClientName());
         existingProject.setClientEmail(project.getClientEmail());
         existingProject.setClientPhone(project.getClientPhone());
@@ -56,5 +57,14 @@ public class ProjectService {
             return null;
         }
         return project.getTeam();
+    }
+
+    public Project deleteProject(Long id) {
+        Project project = projectRepository.findById(id).orElse(null);
+        if (project == null) {
+            return null;
+        }
+        projectRepository.deleteById(id);
+        return project;
     }
 }

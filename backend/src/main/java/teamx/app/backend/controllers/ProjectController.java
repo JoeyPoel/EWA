@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Project;
-import teamx.app.backend.models.Team;
 import teamx.app.backend.services.ProjectService;
 
 import java.util.List;
@@ -27,11 +26,11 @@ public class ProjectController {
         try {
             List<Project> projects = projectService.getAllProjects();
             if (projects == null) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No projects found");
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return ResponseEntity.ok(projects);
+            return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving projects : " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting projects", e);
         }
     }
 
@@ -40,47 +39,52 @@ public class ProjectController {
         try {
             Project project = projectService.getProjectById(id);
             if (project == null) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Project not found");
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return ResponseEntity.ok(project);
+            return new ResponseEntity<>(project, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving project : " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting project", e);
         }
     }
 
-    @GetMapping("/getProjectTeamByProjectId/{id}")
-    public ResponseEntity<Team> getProjectTeamByProjectId(@PathVariable Long id) {
-        try {
-            Team team = projectService.getProjectTeamByProjectId(id);
-            if (team == null) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Team not found");
-            }
-            return ResponseEntity.ok(team);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team : " + e.getMessage());
-        }
-    }
-
-    // TODO: Add validation and authentication
     @PostMapping("/addProject")
     public ResponseEntity<Project> addProject(@RequestBody Project project) {
         try {
-            return ResponseEntity.ok(projectService.addProject(project));
+            Project newProject = projectService.addProject(project);
+            if (newProject == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(newProject, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while adding project", e);
         }
     }
 
     @PutMapping("/updateProjectById/{id}")
-    public ResponseEntity<Project> updateProject(@RequestBody Project project, @PathVariable Long id) {
+    public ResponseEntity<Project> updateProjectById(@PathVariable Long id, @RequestBody Project project) {
         try {
             Project updatedProject = projectService.updateProject(project, id);
             if (updatedProject == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return ResponseEntity.ok(updatedProject);
+            return new ResponseEntity<>(updatedProject, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while updating project", e);
+        }
+    }
+
+    @DeleteMapping("/deleteProjectById/{id}")
+    public ResponseEntity<Project> deleteProjectById(@PathVariable Long id) {
+        try {
+            Project project = projectService.getProjectById(id);
+            if (project == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            Project deletedProject = projectService.deleteProject(id);
+            return new ResponseEntity<>(deletedProject, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while deleting project", e);
         }
     }
 }
