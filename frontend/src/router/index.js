@@ -139,6 +139,9 @@ const routes = [
     {
         path: '/log-in',
         name: 'Login',
+        meta: {
+            hideNavbar: true
+        },
         component: LoginComponent
     },
     {

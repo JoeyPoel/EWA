@@ -15,7 +15,6 @@ export default {
       if (sessionStorage.getItem("email") != null) {
         sessionStorage.clear();
         this.$router.push("/log-in");
-        this.session = false
       }
     }
   },
@@ -23,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div v-if="!$route.meta.hideNavbar">
     <div class="d-flex flex-column flex-shrink-0 p-3 text-black bg-custom vh-100 w-auto sticky-top">
       <!-- Home Link with Icon -->
       <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none" to="/dashboard">
@@ -90,7 +89,7 @@ export default {
         </ul>
       </li>
 
-        <li class="nav-item" v-if="session" @click="logout">
+        <li class="nav-item" @click="logout">
         <a class="nav-link text-black">
           Log out
         </a>
