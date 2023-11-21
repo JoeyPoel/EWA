@@ -16,6 +16,7 @@ public class WarehouseProductCategoryCapacity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int capacity;
+    private int minimumStockLevel;
 
     @ManyToOne
     @JsonIgnore

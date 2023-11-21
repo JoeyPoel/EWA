@@ -106,40 +106,36 @@
 
 <script>
 
-import {Warehouse} from "@/models/Warehouse.js";
 export default {
   name: "DashboardComponent",
-
+  inject: ["warehousesService", "teamsService", "projectsService"],
   data() {
     return {
       warehouses: [],
       warehouseCount: 0,
       panelCount: 60,
-
-      teams: [
-        {name: "Team 1"},
-        {name: "Team 2"},
-        {name: "Team 3"},
-        {name: "Team 4"}
-      ],
-      teamCount: 4,
-
-      projects: [
-        {name: "Project 1"},
-        {name: "Project 2"},
-        {name: "Project 3"},
-        {name: "Project 4"}
-      ],
-      projectCount: 4,
+      teams: [],
+      teamCount: 0,
+      projects: [],
+      projectCount: 0,
     }
   },
-  created() {
-    // warehouses
-    for (let i = 0; i < 5; i++) {
-      this.warehouses.push(Warehouse.createDummyWarehouse(i + 1))
-      this.warehouseCount++;
-    }
+  async created() {
+    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouseCount = this.warehouses.length;
+    this.teams = await this.teamsService.asyncFindAll();
+    this.teamCount = this.teams.length;
+    this.projects = await this.projectsService.asyncFindAll();
+    this.projectCount = this.projects.length;
   },
+  async mounted() {
+    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouseCount = this.warehouses.length;
+    this.teams = await this.teamsService.asyncFindAll();
+    this.teamCount = this.teams.length;
+    this.projects = await this.projectsService.asyncFindAll();
+    this.projectCount = this.projects.length;
+  }
 }
 </script>
 

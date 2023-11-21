@@ -1,7 +1,7 @@
 import {Adaptor} from "@/services/Adaptor";
 import {Project} from "@/models/Project";
 
-export class ProjectAdaptor extends Adaptor {
+export default class ProjectAdaptor extends Adaptor {
     constructor(URL) {
         super(URL);
     }

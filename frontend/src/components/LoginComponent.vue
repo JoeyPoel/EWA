@@ -54,7 +54,7 @@ export default {
         return;
       }
 
-      let givenUser = new User(this.email, this.password);
+      let givenUser = User.loginUser(this.email, this.password);
       this.user = await this.usersService.asyncFindUser(givenUser);
 
       if (this.user.email) {

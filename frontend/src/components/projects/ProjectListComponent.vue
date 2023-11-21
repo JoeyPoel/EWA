@@ -84,13 +84,14 @@
 </template>
 
 <script>
-import {Project} from "@/models/project.js";
+import {Project} from "@/models/Project.js";
 
 export default {
   name: "ProjectListComponent",
+  inject: ['projectsService'],
   data() {
     return {
-      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
+      projects: [],
       selectedProject: {},
       editedProject: {},
       originalProject: {},
@@ -98,6 +99,10 @@ export default {
       sortBy: "status",
       isAddingNewProject: false,
     };
+  },
+  async created() {
+    this.projects = await this.projectsService.getAll();
+    this.sortProjectsByStatus();
   },
   methods: {
     selectProject(project) {

@@ -65,13 +65,18 @@ import { Project } from "@/models/Project.js";
 
 export default {
   name: "ProjectComponent",
+  inject: ["projectsService"],
   data() {
     return {
-      projects: Array.from({length: 5}, (_, i) => Project.createDummyProject(i + 1)),
+      projects: [],
       selectedProject: {},
       searchTerm: "",
       sortBy: "status",
     };
+  },
+  async created() {
+    this.projects = await this.projectsService.getAll();
+    this.sortProjectsByStatus();
   },
   methods: {
     selectProject(project) {

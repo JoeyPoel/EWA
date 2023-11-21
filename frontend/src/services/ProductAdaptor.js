@@ -1,5 +1,5 @@
 import {Adaptor} from "./Adaptor.js";
-import {Product} from "@/models/product_MERGE_ME";
+import {Product} from "@/models/Product";
 
 /**
  * Adaptor for the product REST API.

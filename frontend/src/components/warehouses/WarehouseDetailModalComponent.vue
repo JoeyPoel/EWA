@@ -53,7 +53,7 @@
 import {Modal} from 'bootstrap';
 import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
 import {Warehouse} from "@/models/Warehouse";
-import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseDetailInventoryComponent.vue";
+import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 export default {
   name: "WarehouseDetailModalComponent",
   inject: ['warehousesService'],

@@ -39,11 +39,6 @@
 
 <script>
 import {Warehouse} from '@/models/Warehouse.js';
-// import {ProductTransaction} from "@/models/productTransaction";
-import {WarehouseProduct} from "@/models/WarehouseProduct";
-// import {ProductTransaction} from "@/models/productTransaction";
-// import {WarehouseProduct} from "@/models/WarehouseProduct";
-// import {Vendor} from "@/models/Vendor";
 
 export default {
   name: "WarehouseOverviewComponent",
@@ -52,8 +47,6 @@ export default {
   data() {
     return {
       warehouses: [],
-      products: [],
-      inventories: [],
       transactions: [],
       lastId: 10000,
       isActive: true,
@@ -62,8 +55,6 @@ export default {
   },
   async created() {
     this.warehouses = await this.warehousesService.asyncFindAll()
-    this.products = await this.productsService.asyncFindAll()
-    await this.createDummyData()
   },
   computed: {
     shouldShowModal() {
@@ -129,22 +120,6 @@ export default {
     findSelectedWarehouseFromRoute() {
       const id = parseInt(this.$route.params.id)
       return this.warehouses.find(c => c.id === id)
-    },
-    async createDummyData(){
-      if (this.warehouses.length < 0) return
-      if (this.products.length < 0) return
-      for (let i = 0; i < this.warehouses.length; i++){
-        for (let j = 0; j < this.products.length; j++){
-          this.inventories.push(
-              WarehouseProduct.createDummyWarehouseProduct(this.warehouses[i].id, this.products[j].id)
-          )
-          // for (let k = 0; k < 5; k++) {
-          //   this.transactions.push(
-          //       ProductTransaction.createDummyProductTransaction(this.products[j].id, this.warehouses[i].id)
-          //   )
-          // }
-        }
-      }
     },
   }
 }
