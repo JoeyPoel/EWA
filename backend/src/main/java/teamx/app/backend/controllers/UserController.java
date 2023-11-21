@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
+import teamx.app.backend.services.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * User Controller
@@ -24,37 +24,39 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAll() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
+            List<User> users = userService.getAll();
+            if (users.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No users found");
+            }
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving users");
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         try {
-            Optional<User> foundUser = userRepository.findByEmail(user.getEmail());
-            if (foundUser.isPresent()) {
-                if (!foundUser.get().getPassword().equals(user.getPassword())) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Wrong password");
-                }
-                return ResponseEntity.status(HttpStatus.OK).body(foundUser.get());
-            } else {
+            User userFound = userService.getUserByEmail(user.getEmail());
+            if (userFound == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
             }
+            if (!userFound.getPassword().equals(user.getPassword())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+            }
+            return new ResponseEntity<>(userFound, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving user");
         }
     }
 }
