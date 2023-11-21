@@ -105,8 +105,9 @@ export default {
     this.sortInventoryByStockLevel()
     this.teams = await this.teamsService.asyncFindAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
-    // this.projects = await this.projectsService.asyncFindAll();
-    this.sortProjectsByDate()
+    this.projects = await this.projectsService.asyncFindAll();
+    //this.filteredProjects = this.projects;
+    //this.sortProjectsByDate()
   },
   watch: {
     selectedWarehouse: function () {
