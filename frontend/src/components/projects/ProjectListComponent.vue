@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <p>{{ project.team }}</p>
+          <p>{{ project.team.name }}</p>
         </div>
       </li>
     </ul>
@@ -55,6 +55,7 @@
             </div>
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
+
               <select id="editStatus" v-model="editedProject.status" class="form-select">
                 <option v-for="statusOption in Project.statusList" :key="statusOption.value"
                         :value="statusOption.value">
@@ -66,8 +67,8 @@
            <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
               <select id="editTeams" v-model="editedProject.team" class="form-select">
-                <option v-for="team in teamNames" :key="team" :value="team">
-                  {{ team }}
+                <option v-for="team in teams" :key="team" :value="team">
+                  {{ team.name }}
                 </option>
               </select>
               <div v-if="!isValidProjectTeam" class="text-danger mt-1">Project team is required</div>
@@ -96,10 +97,11 @@ import {Project} from "@/models/Project.js";
 
 export default {
   name: "ProjectListComponent",
-  inject: ['projectsService'],
+  inject: ['projectsService', 'teamsService'],
   data() {
     return {
       projects: [],
+      teams: [],
       selectedProject: {},
       editedProject: {},
       originalProject: {},
@@ -108,8 +110,9 @@ export default {
       isAddingNewProject: false,
     };
   },
-  async created() {
-    this.projects = await this.projectsService.getAll();
+  async mounted() {
+    this.projects = await this.projectsService.asyncFindAll();
+    this.teams = await this.teamsService.asyncFindAll();
     this.sortProjectsByStatus();
   },
   methods: {
