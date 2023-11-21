@@ -231,12 +231,15 @@ export default {
     },
 
     async editExistingProject() {
-      /*const index = this.projects.findIndex(p => p === this.originalProject);
-      if (index !== -1) {
-        this.projects.splice(index, 1, this.editedProject);
-      }
-      this.originalProject = this.editedProject;*/
-      await this.projectService.asyncAdd(this.editedProject);
+      const editedProjectCopy = {
+        ...this.editedProject,
+        team: {
+          name: this.editedProject.team
+        }
+      };
+      console.log(JSON.stringify(editedProjectCopy));
+
+      await this.projectService.asyncAdd(editedProjectCopy);
       this.deselectProject()
       await this.fetchProjects();
       console.log("Saved changes to project", this.editedProject);
@@ -248,7 +251,13 @@ export default {
           return;
         }
 
-        const editedProjectCopy = { ...this.editedProject };
+        const editedProjectCopy = {
+          ...this.editedProject,
+          team: {
+            name: this.editedProject.team // Assuming team is a string representing the team name
+          }
+        };
+        console.log(JSON.stringify(editedProjectCopy));
 
         await this.projectService.asyncAdd(editedProjectCopy);
 

@@ -81,9 +81,12 @@ public class ProjectController {
             Project savedProject = projectRepository.save(project);
             return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating project");
+            // Log the exception details
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating project", e);
         }
     }
+
 
     @PutMapping("/updateProjectById/{id}")
     public ResponseEntity<Project> updateProjectById(@PathVariable Long id, @RequestBody Project newProjectData) {
