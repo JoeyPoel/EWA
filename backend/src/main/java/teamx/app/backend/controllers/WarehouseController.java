@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.repositories.WarehouseRepository;
+import teamx.app.backend.services.WarehouseService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Warehouse controller.
@@ -24,37 +23,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/warehouses")
 public class WarehouseController {
-    private final WarehouseRepository warehouseRepository;
+    private final WarehouseService warehouseService;
 
     @Autowired
-    public WarehouseController(WarehouseRepository warehouseRepository) {
-        this.warehouseRepository = warehouseRepository;
-    }
-
-    private static Warehouse updateWarehouseData(Warehouse newWarehouseData, Optional<Warehouse> originalWarehouseData) {
-        Warehouse updatedWarehouseData = originalWarehouseData.get();
-        updatedWarehouseData.setName(newWarehouseData.getName());
-        updatedWarehouseData.setLocation(newWarehouseData.getLocation());
-        updatedWarehouseData.setAddress(newWarehouseData.getAddress());
-        updatedWarehouseData.setPostcode(newWarehouseData.getPostcode());
-        updatedWarehouseData.setCountry(newWarehouseData.getCountry());
-        updatedWarehouseData.setContactName(newWarehouseData.getContactName());
-        updatedWarehouseData.setContactEmail(newWarehouseData.getContactEmail());
-        updatedWarehouseData.setContactPhone(newWarehouseData.getContactPhone());
-        return updatedWarehouseData;
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<List<Warehouse>> getTestWarehouses() {
-        return ResponseEntity.ok(warehouseRepository.findAll());
+    public WarehouseController(WarehouseService warehouseService) {
+        this.warehouseService = warehouseService;
     }
 
     @GetMapping("/getAllWarehouses")
     public ResponseEntity<List<Warehouse>> getAllWarehouses() {
         try {
-            List<Warehouse> warehouses = new ArrayList<>(warehouseRepository.findAll());
-            if (warehouses.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No warehouses found");
+            List<Warehouse> warehouses = warehouseService.getAllWarehouses();
+            if (warehouses == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouses not found");
             }
             return new ResponseEntity<>(warehouses, HttpStatus.OK);
         } catch (Exception e) {
@@ -65,13 +46,11 @@ public class WarehouseController {
     @GetMapping("/getWarehouseById/{id}")
     public ResponseEntity<Warehouse> getWarehouseById(@PathVariable Long id) {
         try {
-            Optional<Warehouse> warehouse = warehouseRepository.findById(id);
-
-            if (warehouse.isPresent()) {
-                return new ResponseEntity<>(warehouse.get(), HttpStatus.OK);
-            } else {
+            Warehouse warehouse = warehouseService.getWarehouseById(id);
+            if (warehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
+            return new ResponseEntity<>(warehouse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse");
         }
@@ -80,26 +59,21 @@ public class WarehouseController {
     @PostMapping("/addWarehouse")
     public ResponseEntity<Warehouse> addWarehouse(@RequestBody Warehouse warehouse) {
         try {
-            Warehouse savedWarehouse = warehouseRepository.save(warehouse);
-            return new ResponseEntity<>(savedWarehouse, HttpStatus.CREATED);
+            Warehouse newWarehouse = warehouseService.addWarehouse(warehouse);
+            return new ResponseEntity<>(newWarehouse, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating warehouse");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding warehouse");
         }
     }
 
     @PutMapping("/updateWarehouseById/{id}")
     public ResponseEntity<Warehouse> updateWarehouseById(@PathVariable Long id, @RequestBody Warehouse newWarehouseData) {
         try {
-            Optional<Warehouse> originalWarehouseData = warehouseRepository.findById(id);
-
-            if (originalWarehouseData.isPresent()) {
-                Warehouse updatedWarehouseData = updateWarehouseData(newWarehouseData, originalWarehouseData);
-
-                Warehouse warehouse = warehouseRepository.save(updatedWarehouseData);
-                return new ResponseEntity<>(warehouse, HttpStatus.OK);
-            } else {
+            Warehouse updatedWarehouse = warehouseService.updateWarehouseById(id, newWarehouseData);
+            if (updatedWarehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
+            return new ResponseEntity<>(updatedWarehouse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse");
         }
@@ -108,19 +82,14 @@ public class WarehouseController {
     @DeleteMapping("/deleteWarehouseById/{id}")
     public ResponseEntity<Warehouse> deleteWarehouseById(@PathVariable Long id) {
         try {
-            Optional<Warehouse> warehouse = warehouseRepository.findById(id);
-
-            if (warehouse.isPresent()) {
-                warehouseRepository.deleteById(id);
-                return new ResponseEntity<>(warehouse.get(), HttpStatus.OK);
-            } else {
+            Warehouse deletedWarehouse = warehouseService.deleteWarehouseById(id);
+            if (deletedWarehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
+            return new ResponseEntity<>(deletedWarehouse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting warehouse");
         }
     }
-
-
 }
 
