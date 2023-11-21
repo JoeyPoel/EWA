@@ -9,8 +9,8 @@ import {Warehouse} from "@/models/Warehouse.js";
  * @Author Junior Javier Brito Perez
  */
 export default class WarehousesAdaptor extends Adaptor {
-    constructor() {
-        super("http://localhost:8086/api/warehouses");
+    constructor(URL) {
+        super(URL);
     }
 
     /**
@@ -20,7 +20,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouses.
      */
     async asyncFindAll() {
-       const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
+        const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
         if (response) {
             return response.map(warehouse => Object.assign(new Warehouse(), warehouse));
         }
@@ -75,7 +75,7 @@ export default class WarehousesAdaptor extends Adaptor {
         const options = {
             method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" +id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" + id, options);
         if (response) {
             return Object.assign(new Warehouse(), await response.json());
         }

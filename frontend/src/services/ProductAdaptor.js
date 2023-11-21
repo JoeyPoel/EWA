@@ -78,7 +78,7 @@ export default class ProductAdaptor extends Adaptor {
      * Deletes a product by its ID from the REST API.
      *
      * @async
-     * @param {string} id - The ID of the product.
+     * @param {number} id - The ID of the product.
      * @returns {Promise<*>} The deleted product.
      */
     async asyncDeleteById(id) {

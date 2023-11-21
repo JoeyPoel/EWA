@@ -1,13 +1,11 @@
 export class Task {
-    constructor(id, project, name, description, deadline, priority, status, assignedTo) {
+    constructor(id, name, description, deadline, priority, status) {
         this.id = id;
-        this.project = project;
         this.name = name;
         this.description = description;
         this.deadline = deadline;
         this.priority = priority;
         this.status = status;
-        this.assignedTo = assignedTo;
     }
 
     static priorityList = [

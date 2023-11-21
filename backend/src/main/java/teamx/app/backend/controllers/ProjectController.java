@@ -34,6 +34,19 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/getProjectById/{id}")
+    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
+        try {
+            Project project = projectService.getProjectById(id);
+            if (project == null) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Project not found");
+            }
+            return ResponseEntity.ok(project);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving project : " + e.getMessage());
+        }
+    }
+
     // TODO: Add validation and authentication
     @PostMapping("/addProject")
     public ResponseEntity<Project> addProject(@RequestBody Project project) {
@@ -44,7 +57,7 @@ public class ProjectController {
         }
     }
 
-    @PutMapping("/updateProject/{id}")
+    @PutMapping("/updateProjectById/{id}")
     public ResponseEntity<Project> updateProject(@RequestBody Project project, @PathVariable Long id) {
         try {
             Project updatedProject = projectService.updateProject(project, id);

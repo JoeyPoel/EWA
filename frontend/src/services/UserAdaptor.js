@@ -14,24 +14,6 @@ export default class UserAdaptor extends Adaptor {
         return Object.assign(new User(), await this.fetchJson(this.resourceUrl + "/login", options));
     }
 
-    async asyncFindAll() {
-        const response = await this.fetchJson(this.resourceUrl + "/getAllUsers");
-        if (response) {
-            return response.map(user => Object.assign(new User(), user));
-        }
-        return null;
-    }
-
-    async asyncDeleteById(id) {
-        console.log(id);
-        return null;
-    }
-
-    async asyncFindById(id) {
-        console.log(id);
-        return null;
-    }
-
     async asyncSave(object) {
         console.log(object);
         return null;
