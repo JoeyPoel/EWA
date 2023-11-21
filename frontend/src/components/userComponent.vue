@@ -17,7 +17,7 @@
           </div>
           <div class="card-body">
             <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-            <p class="card-text"><strong>Team:</strong> {{ user.team }}</p>
+            <p class="card-text"><strong>Team:</strong> {{ user.team.name }}</p>
             <p class="card-text"><strong>Role:</strong> {{ user.role }}</p>
           </div>
         </div>

@@ -102,7 +102,7 @@
 
 <script>
 import {Warehouse} from "@/models/Warehouse";
-// import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseDetailInventoryComponent.vue";
+// import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 
 export default {
   name: "WarehouseDetailComponent",

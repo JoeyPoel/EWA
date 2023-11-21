@@ -1,4 +1,5 @@
-package teamx.app.backend.rest;
+package teamx.app.backend.controllers;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.repositories.TeamRepository;
+import teamx.app.backend.services.TeamService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Teams controller.
@@ -24,49 +25,48 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/teams")
 public class TeamsController {
-    private final TeamRepository teamRepository;
+    private final TeamService teamService;
 
     @Autowired
-    public TeamsController(TeamRepository teamRepository) {
-        this.teamRepository = teamRepository;
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getTestWarehouses() {
-        return ResponseEntity.ok(teamRepository.findAll());
+    public TeamsController(TeamService teamService) {
+        this.teamService = teamService;
     }
 
     @GetMapping("/getAllTeams")
     public ResponseEntity<List<Team>> getAllTeams() {
         try {
-            List<Team> teams = new ArrayList<>(teamRepository.findAll());
-            if (teams.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No teams found");
+            List<Team> teams = teamService.getAll();
+            if (teams == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<>());
             }
-            return ResponseEntity.ok(teamRepository.findAll());
+            return ResponseEntity.status(HttpStatus.OK).body(teams);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams");
         }
+
     }
 
     @GetMapping("/getTeamById/{id}")
     public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
         try {
-           Optional<Team> team = teamRepository.findById(id);
-            if (team.isPresent()) {
-                return ResponseEntity.ok(team.get());
-            } else {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No team found");
+            Team team = teamService.getTeamById(id);
+            if (team == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
+            return ResponseEntity.status(HttpStatus.OK).body(team);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team");
         }
     }
 
+    //TODO: add validation
     @PostMapping("/addTeam")
     public ResponseEntity<Team> addTeam(@RequestBody Team team) {
         try {
-            Team newTeam = teamRepository.save(team);
+            Team newTeam = teamService.addTeam(team);
+            if (newTeam == null) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(newTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding team");
@@ -76,36 +76,24 @@ public class TeamsController {
     @PutMapping("/updateTeamById/{id}")
     public ResponseEntity<Team> updateTeamById(@PathVariable Long id, @RequestBody Team team) {
         try {
-            Optional<Team> originalTeam = teamRepository.findById(id);
-            if (originalTeam.isPresent()) {
-                Team updatedTeam = updateTeamData(team, originalTeam);
-                teamRepository.save(updatedTeam);
-                return ResponseEntity.ok(updatedTeam);
-            } else {
+            Team updatedTeam = teamService.updateTeam(team, id);
+            if (updatedTeam == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
             }
+            return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating team");
         }
     }
 
-    private Team updateTeamData(Team team, Optional<Team> originalTeam) {
-        Team updatedTeam = originalTeam.get();
-        updatedTeam.setWarehouse(team.getWarehouse());
-        updatedTeam.setName(team.getName());
-        return updatedTeam;
-    }
-
-    @DeleteMapping( "/deleteTeamById/{id}")
+    @DeleteMapping("/deleteTeamById/{id}")
     public ResponseEntity<Team> deleteTeamById(@PathVariable Long id) {
         try {
-            Optional<Team> team = teamRepository.findById(id);
-            if (team.isPresent()) {
-                teamRepository.deleteById(id);
-                return new ResponseEntity<>(team.get(), HttpStatus.OK);
-            } else {
+            Team deletedTeam = teamService.deleteTeam(id);
+            if (deletedTeam == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
             }
+            return ResponseEntity.status(HttpStatus.OK).body(deletedTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting team");
         }

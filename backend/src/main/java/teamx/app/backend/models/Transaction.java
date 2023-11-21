@@ -1,9 +1,15 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 /**
  * Transaction entity
@@ -14,33 +20,53 @@ import java.time.LocalDateTime;
  * @see Warehouse
  */
 @Data
-@Entity
-@Table(name = "Transactions")
+@Entity(name = "Transactions")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int amount;
+    private int quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Type transactionType;
+    public enum Type {
+        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Flow transactionFlow =
+            (this.transactionType == Type.ORDER ||
+                    (this.transactionType == Type.ADJUSTMENT ||
+                            this.transactionType == Type.RETURN ||
+                            this.transactionType == Type.OTHER) && this.quantity > 0)
+            ? Flow.IN : Flow.OUT;
+    public enum Flow {
+        IN, OUT
+    }
+
+    @ManyToOne()
+    @JsonIgnore
     private Product product;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime transactionDate;
+    @JsonIgnore
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date transactionDate;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
+    @JsonIgnore
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JsonIgnore
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_from_id")
-    private Warehouse warehouseFrom;
+    @JsonIgnore
+    private Warehouse transferFrom;
+
+    @ManyToOne
+    @JsonIgnore
+    private Order order;
 }

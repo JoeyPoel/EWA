@@ -15,6 +15,7 @@ import {CONFIG} from "../app-config";
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
 import UserAdaptor from "@/services/UserAdaptor";
+import ProjectAdaptor from "@/services/ProjectAdaptor";
 
 export default {
   name: 'App',
@@ -28,7 +29,7 @@ export default {
       teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
       usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/users"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products"),
-
+      projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
     }
   }
 
@@ -47,5 +48,26 @@ export default {
   --gradient-color-end: rgba(255, 255, 255, 1);
 
   --button-color: rgba(232, 241, 82, .5);
+}
+
+.btn-primary, .btn-success {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid rgba(108, 117, 125, 0.45) !important;
+  border-radius: 0.375rem !important;
+  box-shadow: 0 0 4px rgba(108, 117, 125, 0.35) !important;
+}
+
+.btn-primary:hover, .btn-success:hover {
+  background-color: var(--button-color) !important;
+  box-shadow: 0 0 2px #6c757d !important;
+}
+
+.btn-primary:active, .btn-success:active {
+  box-shadow: 0 0 4px #6c757d inset !important;
+}
+
+.btn-primary:focus, .btn-success:focus {
+  box-shadow: 0 0 0 0.25rem rgba(232, 241, 82, 0.5) !important;
 }
 </style>

@@ -1,10 +1,14 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -12,11 +16,9 @@ import java.util.List;
  * Represents an order of products
  *
  * @author Junior Javier Brito Perez
- * @see ProductLine
  */
 @Data
-@Entity
-@Table(name = "Orders")
+@Entity(name = "Orders")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -24,22 +26,23 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
+    private boolean isDelivered = false;
 
-    @ColumnDefault("false")
-    private boolean isDelivered;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date orderDate;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime orderDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date deliveryDate;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
+    @JsonIgnore
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User orderedBy;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<ProductLine> orderLines;
+    @OneToMany(mappedBy = "order")
+    @JsonIgnore
+    private List<Transaction> transactions;
 }
