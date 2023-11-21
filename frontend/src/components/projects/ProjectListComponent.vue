@@ -63,7 +63,11 @@
             </div>
             <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
-              <input type="text" id="editTeams" v-model="editedProject.team" class="form-control">
+              <select id="editTeams" v-model="editedProject.team" class="form-select">
+                <option v-for="team in teamNames" :key="team" :value="team">
+                  {{ team }}
+                </option>
+              </select>
             </div>
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
@@ -98,6 +102,21 @@ export default {
         project.description,
         project.name
     ));
+
+    console.log("Projects before:", this.projects);
+    const uniqueTeamNames = Array.from(new Set(this.projects.map(project => project.team)));
+    this.teamNames = uniqueTeamNames;
+    console.log("Team names:", this.teamNames);
+
+
+    this.editedProject = {
+      id: 0,
+      status: Project.statusList[0].value,
+      team: this.teamNames[0],
+      description: "",
+      name: ""
+    };
+
   },
   data() {
     return {
@@ -106,6 +125,7 @@ export default {
       selectedProject: {},
       editedProject: {},
       originalProject: {},
+      teamNames: [],
       searchTerm: "",
       sortBy: "status",
       isAddingNewProject: false,
@@ -114,7 +134,14 @@ export default {
   methods: {
 
     async fetchProjects() {
-      this.projects = await this.projectService.asyncFindAll();
+      const projectsData = await this.projectService.asyncFindAll();
+      this.projects = projectsData.map(project => new Project(
+          project.id,
+          project.status,
+          project.team.name,
+          project.description,
+          project.name
+      ));
     },
 
     selectProject(project) {
@@ -216,12 +243,23 @@ export default {
     },
 
     async addNewProject() {
-      await this.projectService.asyncAdd(this.editedProject);
-      this.deselectProject()
-      await this.fetchProjects();
-      //const newProject = {...this.editedProject};
-      //this.projects.push(newProject);
-      console.log("Added new project", this.editedProject);
+      try {
+        if (!this.validateProject()) {
+          return;
+        }
+
+        const editedProjectCopy = { ...this.editedProject };
+
+        await this.projectService.asyncAdd(editedProjectCopy);
+
+        this.deselectProject();
+        await this.fetchProjects();
+
+        console.log("Added new project", editedProjectCopy);
+      } catch (error) {
+        console.error("Error adding new project", error);
+        // Handle errors as needed
+      }
     },
 
   },
