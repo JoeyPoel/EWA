@@ -1,6 +1,5 @@
 import {Adaptor} from "@/services/Adaptor";
 import {User} from "@/models/User";
-
 export default class UserAdaptor extends Adaptor {
     constructor(URL) {
         super(URL);
@@ -15,12 +14,16 @@ export default class UserAdaptor extends Adaptor {
         return Object.assign(new User(), await this.fetchJson(this.resourceUrl + "/login", options));
     }
 
-    async asyncDeleteById(id) {
-        console.log(id);
+    async asyncFindAll() {
+        const response = await this.fetchJson(this.resourceUrl + "/getAllUsers");
+        if (response) {
+            return response.map(user => Object.assign(new User(), user));
+        }
         return null;
     }
 
-    async asyncFindAll() {
+    async asyncDeleteById(id) {
+        console.log(id);
         return null;
     }
 

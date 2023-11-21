@@ -1,5 +1,5 @@
 <script>
-import { User } from "@/models/User";
+// import { User } from "@/models/User";
 
 export default {
   name: "UserComponent",
@@ -12,7 +12,7 @@ export default {
 
     for (let i = 0; i < 6; i++) {
       this.users.push(
-          User.createDummyUser(i)
+          //User.createDummyUser(i)
       );
     }
   },
