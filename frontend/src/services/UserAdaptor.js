@@ -5,14 +5,6 @@ export default class UserAdaptor extends Adaptor {
         super(URL);
     }
 
-    async asyncAdd(object) {
-        return await super.asyncAdd(object);
-    }
-
-    async asyncUpdate(id, object) {
-        return await super.asyncUpdate(id, object);
-    }
-
     async asyncFindUser(user) {
         const options = {
             method: "POST",

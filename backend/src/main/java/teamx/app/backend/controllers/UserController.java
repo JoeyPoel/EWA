@@ -9,7 +9,7 @@ import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 import teamx.app.backend.services.UserService;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * User Controller
@@ -24,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
     @Autowired
@@ -31,32 +32,63 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<User>> getAll() {
-        try {
-            List<User> users = userService.getAll();
-            if (users.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No users found");
-            }
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving users");
-        }
-    }
-
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         try {
-            User userFound = userService.getUserByEmail(user.getEmail());
-            if (userFound == null) {
+            Optional<User> foundUser = userService.findByEmail(user.getEmail());
+            if (foundUser.isPresent()) {
+                if (!foundUser.get().getPassword().equals(user.getPassword())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Wrong password");
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(foundUser.get());
+            } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
             }
-            if (!userFound.getPassword().equals(user.getPassword())) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
-            }
-            return new ResponseEntity<>(userFound, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving user");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user.get());
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> add(@RequestBody User user) {
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        }
+        User savedUser = userService.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody User user) {
+        Optional<User> existingUser = userService.findById(id);
+        if (existingUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        User updatedUser = userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Optional<User> existingUser = userService.findById(id);
+        if (existingUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -58,8 +58,8 @@
               <div class="mb-3">
                 <label for="newUserRole" class="form-label">Role</label>
                 <select class="form-control" id="newUserRole" v-model="newUser.role" required>
-                  <option>User</option>
-                  <option>Admin</option>
+                  <option>USER</option>
+                  <option>ADMIN</option>
                 </select>
               </div>
 
@@ -89,9 +89,10 @@ export default {
     return {
       users: [],
       newUser: {
-        name: "",
         email: "",
-        team: "",
+        name: "",
+        password: "",
+        team: "0",
         role: "",
       },
       isCreateUserModalOpen: false,
@@ -107,10 +108,11 @@ export default {
   methods: {
     async openCreateUserModal() {
       this.newUser = {
-        name: "",
         email: "",
-        team: "",
+        name: "",
+        password: "",
         role: "",
+        team_id: "",
       };
       this.isCreateUserModalOpen = true;
     },
@@ -126,7 +128,7 @@ export default {
 
       // Create a new object with all properties of newUser except team
       const userToSave = { ...this.newUser };
-      userToSave.team = 0;
+      userToSave.team.id = { id: 0 };
 
       console.log(userToSave)
       const savedUser = await this.usersService.asyncSave(userToSave);
