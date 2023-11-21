@@ -57,7 +57,10 @@
 
               <div class="mb-3">
                 <label for="newUserRole" class="form-label">Role</label>
-                <input type="text" class="form-control" id="newUserRole" v-model="newUser.role" required>
+                <select class="form-control" id="newUserRole" v-model="newUser.role" required>
+                  <option>User</option>
+                  <option>Admin</option>
+                </select>
               </div>
 
               <div class="mb-3">
@@ -97,6 +100,9 @@ export default {
   async created() {
     console.log("test")
     this.users = await this.usersService.asyncFindAll();
+    console.log(this.users)
+
+
   },
   methods: {
     async openCreateUserModal() {
@@ -107,8 +113,6 @@ export default {
         role: "",
       };
       this.isCreateUserModalOpen = true;
-      let tester12 = await this.usersService.asyncFindById(1);
-      console.log(tester12);
     },
     closeCreateUserModal() {
       this.isCreateUserModalOpen = false;
@@ -120,8 +124,12 @@ export default {
         return;
       }
 
-      const savedUser = await this.usersService.asyncSave(this.newUser);
-      console.log(savedUser)
+      // Create a new object with all properties of newUser except team
+      const userToSave = { ...this.newUser };
+      userToSave.team = 0;
+
+      console.log(userToSave)
+      const savedUser = await this.usersService.asyncSave(userToSave);
       if (savedUser) {
         this.users.push(savedUser);
         this.closeCreateUserModal();

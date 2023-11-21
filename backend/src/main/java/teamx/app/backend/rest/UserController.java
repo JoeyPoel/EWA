@@ -57,15 +57,15 @@ public class UserController {
     public ResponseEntity<?> getById(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserDetail not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
     @PostMapping()
     public ResponseEntity<?> add(User user) {
-        if (userRepository.findById((long) user.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "UserDetail already exists");
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
         User savedUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
