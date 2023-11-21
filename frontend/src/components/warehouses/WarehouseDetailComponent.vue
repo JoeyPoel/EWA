@@ -3,7 +3,6 @@
     <div class="row">
       <form class="col">
         <h3>{{ selectedWarehouse.name }}</h3>
-        <p class="text-muted">Details</p>
         <div class="mt-1 mb-1 row">
           <div class="col col-4 align-self-center text-end">
             <label class="form-label" for="name">Name</label>
@@ -87,18 +86,17 @@
       </div>
     </div>
   </div>
-  <!--    <div class="col col-8">-->
-  <!--      <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"-->
-  <!--                                         :products="products" :vendors="vendors" :transactions="transactions"-->
-  <!--                                         :inventory="inventories" @save-product="saveProduct"-->
-  <!--      @remove-product="removeProduct" @add-product="addProduct"/>-->
-  <!--    </div>-->
-  <!--  </div>-->
+<!--      <div class="col col-8">-->
+<!--        <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"-->
+<!--                                           :products="products" :vendors="vendors" :transactions="transactions"-->
+<!--                                           :inventory="inventories" @save-product="saveProduct"-->
+<!--        @remove-product="removeProduct" @add-product="addProduct"/>-->
+<!--      </div>-->
+<!--    </div>-->
 </template>
 
 <script>
 import {Warehouse} from "@/models/Warehouse";
-// import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 
 export default {
   name: "WarehouseDetailComponent",
@@ -116,7 +114,7 @@ export default {
     }
   },
   async mounted() {
-    this.selectedWarehouse = await this.findSelectedWarehouseFromRoute();
+    this.selectedWarehouse = await this.warehousesService.asyncGetWarehouseFromRoute(this.$route.params.id);
     this.copyOfWarehouse = Warehouse.copy(this.selectedWarehouse);
   },
   methods: {
@@ -143,18 +141,11 @@ export default {
     },
     onDelete() {
       this.$emit('delete', this.copyOfWarehouse)
-    },
-    async findSelectedWarehouseFromRoute() {
-      const id = this.$route.params.id;
-      if (!id) {
-        return null;
-      }
-      return await this.warehousesService.asyncFindById(id);
-    },
+    }
   },
   watch: {
     '$route': async function () {
-      this.selectedWarehouse = await this.findSelectedWarehouseFromRoute();
+      this.selectedWarehouse = await this.warehousesService.asyncGetWarehouseFromRoute(this.$route.params.id);
       this.copyOfWarehouse = this.selectedWarehouse ? Warehouse.copy(this.selectedWarehouse) : null;
     },
   }

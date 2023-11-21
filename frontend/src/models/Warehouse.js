@@ -1,5 +1,8 @@
-export class Warehouse {
+import {Model} from "@/models/Model";
+
+export class Warehouse extends Model {
     constructor(id, name, location, address, postcode, country, contactName, contactEmail, contactPhone) {
+        super();
         this.id = id;
         this.name = name;
         this.location = location;
@@ -9,24 +12,5 @@ export class Warehouse {
         this.contactName = contactName;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
-    }
-
-    static equals(a, b) {
-        if (a instanceof Warehouse && b instanceof Warehouse) {
-            for (const key of Object.keys(a)) {
-                if (a[key] !== b[key]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    static copy(a) {
-        return Object.assign(new Warehouse(), a);
-    }
-
-    static fromJson(json) {
-        return Object.assign(new Warehouse(), json);
     }
 }

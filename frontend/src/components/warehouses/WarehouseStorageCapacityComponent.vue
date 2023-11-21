@@ -7,50 +7,51 @@
       <div class="col m-0 align-self-center">
         <div class="row m-0 justify-content-center">
           <div class="scrollPanel">
-            <table>
+            <table class="table table-hover">
               <thead>
               <tr>
                 <th class="fw-light">Category Name</th>
                 <th class="fw-light">Minimum stock level</th>
                 <th class="fw-light">Capacity</th>
+                <th class="fw-light">Actions</th>
               </tr>
               </thead>
               <tbody>
-              <tr class="border border-light-subtle border-1" v-for="category in warehouseProductCategoryCapacities"
-                  :key="category.id">
-                <td>
-                  <div v-if="!isEditing">
-                    {{ category.name }}
-                  </div>
-                  <div v-else>
-                    <input class="form-control" id="quantity" type="text"
-                           v-model="category.name"/>
-                  </div>
-                </td>
-                <td>
-                  <div v-if="!isEditing">
-                    {{ category.minimumStockLevel }}
-                  </div>
-                  <div v-else>
-                    <input class="form-control" id="quantity" type="number"
-                           v-model="category.minimumStockLevel"/>
-                  </div>
-                </td>
-                <td>{{ category.capacity }}</td>
-                <td>
-                  <div class="row p-1">
-                    <a class="link-info" @click="!isEditing">
-                      Edit
-                    </a>
-                    <a class="link-success " @click="saveCategoryCapacity(category)">
-                      Save
-                    </a>
-                    <a class="link-danger" @click="removeCategoryCapacity(category)">
-                      Remove
-                    </a>
-                  </div>
-                </td>
-              </tr>
+<!--              <tr v-for="category in warehouseProductCategoryCapacities" :key="category.id"-->
+<!--                  class="border border-light-subtle border-1">-->
+<!--                <td>-->
+<!--                  <div v-if="!isEditing">-->
+<!--                    {{ category.productCategory.name }}-->
+<!--                  </div>-->
+<!--                  <div v-else>-->
+<!--                    <input id="quantity" v-model="category.name" class="form-control"-->
+<!--                           type="text"/>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <div v-if="!isEditing">-->
+<!--                    {{ category.minimumStockLevel }}-->
+<!--                  </div>-->
+<!--                  <div v-else>-->
+<!--                    <input id="quantity" v-model="category.minimumStockLevel" class="form-control"-->
+<!--                           type="number"/>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--                <td>{{ category.capacity }}</td>-->
+<!--                <td>-->
+<!--                  <div class="row">-->
+<!--                    <b-icon-pen/>-->
+<!--                    <b-icon-save/>-->
+<!--                    <b-icon-arrow-counterclockwise/>-->
+<!--                    <b-icon-trash/>-->
+<!--                  </div>-->
+<!--                </td>-->
+<!--              </tr>-->
+              <warehouse-capacity-row-component v-for="category in warehouseProductCategoryCapacities"
+                                                :key="category.id"
+                                                :category="category"
+                                                @save-category-capacity="saveCategoryCapacity"
+                                                @remove-category-capacity="removeCategoryCapacity"/>
               </tbody>
             </table>
           </div>
@@ -63,27 +64,26 @@
 <script>
 import WarehouseNewProductCategoryStorageCapacityComponent
   from "@/components/warehouses/WarehouseNewProductCategoryStorageCapacityComponent.vue";
+import WarehouseCapacityRowComponent from "@/components/warehouses/WarehouseCapacityRowComponent.vue";
 
 export default {
   name: "WarehouseDetailInventoryComponent",
-  components: {WarehouseNewProductCategoryStorageCapacityComponent},
+  components: {
+    WarehouseNewProductCategoryStorageCapacityComponent,
+    WarehouseCapacityRowComponent
+  },
   inject: ['productsService', 'warehousesService'],
   props: {},
   data() {
     return {
       lastId: 1000,
-      isActive: true,
+      isActive: false,
       warehouseProductCategoryCapacities: [],
       isEditing: false,
     }
   },
-  async created() {
-    this.warehouseProductCategoryCapacities = await this.warehousesService
-        .asyncGetWarehouseCapacityCategories(this.findWarehouseIdFromRoute());
-  },
   async mounted() {
-    this.warehouseProductCategoryCapacities = await this.warehousesService
-        .asyncGetWarehouseCapacityCategories(this.findWarehouseIdFromRoute());
+    await this.getCapacities()
   },
   computed: {},
   methods: {
@@ -96,8 +96,12 @@ export default {
     saveCategoryCapacity(category) {
       this.$emit('save-category-capacity', category)
     },
-    findWarehouseIdFromRoute() {
-      return this.$route.params.id
+    async getCapacities() {
+      this.warehouseProductCategoryCapacities = this.$route.params.id ?
+          await this.warehousesService.asyncGetWarehouseCapacityCategories(this.$route.params.id) : null;
+    },
+    mouseOver() {
+      this.isActivated = true;
     },
   },
 }

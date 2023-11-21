@@ -11,7 +11,7 @@ import ProductDetail from "@/components/products/ProductDetail.vue";
 import ProductAdd from "@/components/products/ProductAdd.vue";
 import TeamComponent from "@/components/teamComponent";
 import LoginComponent from "@/components/LoginComponent.vue";
-import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseDetailModalComponent.vue";
+import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseModalComponent.vue";
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
 import ProjectComponent from "@/components/projects/ProjectComponent.vue";
 import ProjectListComponent from "@/components/projects/ProjectListComponent.vue";

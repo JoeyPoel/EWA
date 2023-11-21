@@ -36,11 +36,11 @@
                 <warehouseDetailComponent/>
               </div>
             </div>
-<!--            <div class="tab-pane fade" id="inventory-content">-->
-<!--              <div>-->
-<!--                <warehouse-storage-capacity-component/>-->
-<!--              </div>-->
-<!--            </div>-->
+            <div class="tab-pane fade" id="inventory-content">
+              <div>
+                <warehouse-storage-capacity-component/>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -51,19 +51,17 @@
 <script>
 import {Modal} from 'bootstrap';
 import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
-import {Warehouse} from "@/models/Warehouse";
-// import WarehouseStorageCapacityComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
+import WarehouseStorageCapacityComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 export default {
   name: "WarehouseDetailModalComponent",
   inject: ['warehousesService'],
   components: {
     warehouseDetailComponent: WarehouseDetailComponent,
-    // warehouseStorageCapacityComponent: WarehouseStorageCapacityComponent
+    warehouseStorageCapacityComponent: WarehouseStorageCapacityComponent
   },
   data() {
     return {
       modal: null,
-      Warehouse: Warehouse,
     };
   },
   created() {
@@ -75,7 +73,6 @@ export default {
     }
     this.$refs.modalRef.addEventListener('hidden.bs.modal', this.closeModal);
   },
-
   beforeUnmount() {
     if (this.$refs.modalRef) {
       this.$refs.modalRef.removeEventListener('hidden.bs.modal', this.closeModal);
@@ -86,10 +83,6 @@ export default {
       this.modal.hide();
       this.$emit('close-modal');
     },
-
-    // getInventory() {
-    //   return this.inventories.filter(inventory => inventory.warehouseId === this.selectedWarehouse.id)
-    // }
   },
 };
 </script>
@@ -97,6 +90,13 @@ export default {
 <style scoped>
 .modal {
   --bs-modal-header-border-color: transparent;
+}
+
+.modal-content {
+}
+
+.modal-dialog {
+  min-width: 600px;
 }
 
 .modal-header {

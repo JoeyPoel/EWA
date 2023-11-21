@@ -114,4 +114,12 @@ export default class WarehousesAdaptor extends Adaptor {
         }
         return null;
     }
+
+    async asyncGetWarehouseFromRoute(routeId) {
+            if (!routeId) {
+                return null;
+            }
+            return await this.asyncFindById(routeId);
+
+    }
 }

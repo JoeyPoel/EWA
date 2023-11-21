@@ -25,11 +25,7 @@
     </table>
     <router-view
         v-if="shouldShowModal"
-        :selectedWarehouse="findSelectedWarehouseFromRoute()"
         @close-modal="deselectWarehouse()"
-        @add-warehouse="onNewWarehouse()"
-        @updated-warehouse="onSave"
-        @warehouse-added="handleAddedWarehouse"
     ></router-view>
   </div>
 </template>
@@ -53,8 +49,7 @@ export default {
   },
   computed: {
     shouldShowModal() {
-      return this.warehouses !== null && this.products !== null &&
-          (this.findSelectedWarehouseFromRoute() !== null || this.$route.name === "add")
+      return this.$route.params.id !== null || this.$route.name === "add";
     },
   },
   methods: {
@@ -68,11 +63,7 @@ export default {
     },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
-    },
-    findSelectedWarehouseFromRoute() {
-      const id = parseInt(this.$route.params.id);
-      return this.warehouses.find(c => c.id === id);
-    },
+    }
   }
 }
 </script>
