@@ -1,23 +1,22 @@
 <template>
   <div class="container mt-3">
     <div class="d-flex justify-content-between mb-3">
-      <input type="text" class="form-control w-25" placeholder="Search for name...">
-      <button @click="this.onNewWarehouse" class="btn btn-success">Add warehouse</button>
+      <input class="form-control w-25" placeholder="Search for name..." type="text">
+      <button class="btn btn-success" @click="this.onNewWarehouse">Add warehouse</button>
     </div>
-
     <table class="table table-hover">
       <thead>
       <tr>
-<!--        <th scope="col" class="fw-light">ID</th>-->
+        <th class="fw-light" scope="col">ID</th>
         <th scope="col">Name</th>
         <th scope="col">Location</th>
         <th scope="col">Address</th>
       </tr>
       </thead>
       <tbody>
-      <tr class="border border-1 border-light-subtle" v-for="warehouse in warehouses" :key="warehouse.id"
+      <tr v-for="warehouse in warehouses" :key="warehouse.id" class="border border-1 border-light-subtle"
           @click="selectWarehouse(warehouse)">
-<!--        <th scope="row" class="fw-light" >{{ warehouse.id }}</th>-->
+        <th class="fw-light" scope="row">{{ warehouse.id }}</th>
         <td>{{ warehouse.name }}</td>
         <td>{{ warehouse.location }}</td>
         <td>{{ warehouse.address }}</td>
@@ -26,17 +25,13 @@
     </table>
     <router-view
         v-if="shouldShowModal"
-        :warehouses="warehouses"
-        :products="products"
-        :transactions="transactions"
-        :inventories="inventories"
         :selectedWarehouse="findSelectedWarehouseFromRoute()"
         @close-modal="deselectWarehouse()"
         @add-warehouse="onNewWarehouse()"
+        @warehouse-added="handleAddedWarehouse"
     ></router-view>
   </div>
 </template>
-
 <script>
 import {Warehouse} from '@/models/Warehouse.js';
 
@@ -63,14 +58,13 @@ export default {
     },
   },
   methods: {
-    onNewWarehouse(warehouse) {
-      // this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      // this.warehousesService.asyncSave(warehouse)
-      // this.warehouses.push(
-      //     warehouse
-      // )
-      console.log(warehouse)
+    onNewWarehouse() {
       this.$router.push("/warehouse/overview/add")
+    },
+    handleAddedWarehouse(warehouse) {
+      console.log(warehouse)
+      this.warehouses.push(warehouse)
+      this.$router.push("/warehouse/overview/" + warehouse.id)
     },
     onDelete(warehouse) {
       for (let i = 0; i < this.warehouses.length; i++) {
@@ -93,27 +87,6 @@ export default {
       this.$router.push("/warehouse/overview")
       this.selectedWarehouse = null
     },
-    // onSaveProduct(savedProduct) {
-    //   for (let i = 0; i < this.inventories.length; i++) {
-    //     if (this.inventories[i].productId === savedProduct.productId) {
-    //       this.inventories[i] = savedProduct
-    //       return;
-    //     }
-    //   }
-    // },
-    // onRemoveProduct(product) {
-    //   console.log(product)
-    //   for (let i = 0; i < this.inventories.length; i++) {
-    //     if (this.inventories[i].productId === product.productId) {
-    //       this.inventories.splice(i, 1)
-    //       return;
-    //     }
-    //   }
-    // },
-    // onAddProduct(product) {
-    //   console.log(product)
-    //   this.inventories.push(product)
-    // },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
     },

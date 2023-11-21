@@ -48,7 +48,7 @@ export default class WarehousesAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/addWarehouse", options);
 
         if (response) {
-            return Object.assign(new Warehouse(), await response.json());
+            return Object.assign(new Warehouse(), response);
         }
         return null;
     }
