@@ -1,59 +1,34 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Product class
+ * Product entity
+ * Represents a product
  *
  * @author Jayden Gunhan
+ * @author Junior Javier Brito Perez
  */
-
-@Entity
-@Getter
-@Setter
+@Data
+@Entity(name = "Products")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-
     @Id
-    private int id;
-    private int warehouseId;
-    private String description;
-    private int quantity;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+    private String description;
+    private Double price;
 
-
-    public Product(int id) {
-        this.id = id;
-    }
-
-    private static String[] productList = {
-            "Solar panels",
-            "Solar Cables",
-            "Main Connectors (AC)",
-            "Inverter",
-            "Storage Unit",
-            "Montage Material",
-            "Battery Pack",
-            "LED Light",
-            "Solar Inverter",
-            "Electric Motor",
-            "Charging Station"
-    };
-
-    public static List<Product> generateRandomProducts(){
-        List<Product> products = new ArrayList<>();
-            for (int j = 0; j < productList.length; j++) {
-                products.add(new Product(j, j, "Dummy Description", (int) Math.floor(Math.random() * 100), productList[j]));
-            }
-        return products;
-    }
+    @ManyToOne
+    private ProductCategory category;
 }

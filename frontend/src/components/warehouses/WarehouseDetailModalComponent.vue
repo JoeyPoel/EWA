@@ -21,9 +21,10 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link"
+                      aria-current="false"
                      data-bs-target="#inventory-content"
                      data-bs-toggle="tab">
-                    Inventory
+                    Storage Capacity
                   </a>
                 </li>
               </ul>
@@ -52,7 +53,7 @@
 import {Modal} from 'bootstrap';
 import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
 import {Warehouse} from "@/models/Warehouse";
-import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseDetailInventoryComponent.vue";
+import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 export default {
   name: "WarehouseDetailModalComponent",
   inject: ['warehousesService'],

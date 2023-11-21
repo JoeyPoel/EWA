@@ -1,21 +1,13 @@
 package teamx.app.backend.repositories;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import teamx.app.backend.models.Product;
+
 /**
  * Interface of repository of product
  *
- * @author Joey van der Poel
+ * @author Junior Javier Brito Perez
+ * @see Product
  */
-public interface ProductRepository<Product> {
-    List<Product> findAll();
-
-    List<String> findAllTypes();
-
-    void AddProduct(int id, String name, String description, int quantity, int warehouseId);
-
-    void editProduct(int id, String name, String description, int quantity, int warehouseId);
-
-    void removeProduct(int id, String name, String description, int quantity, int warehouseId);
-
-    void AddProductToProductList(String name);
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

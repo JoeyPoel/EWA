@@ -19,29 +19,35 @@
               <h6 class="fw-bold">{{ project.name }}</h6>
             </div>
             <div class="col text-end">
-              <span class="badge bg-info">{{ project.status }}</span>
+              <div class="badge-column">
+                <span class="badge badge-fixed-position position-md-static bg-info">{{
+                    getStatusDisplayName(project.status)
+                  }}</span>
+                <!--              <span class="badge badge-fixed-position position-md-static bg-info">{{ project.status }}</span>-->
+              </div>
             </div>
           </div>
-          <p>{{ project.team }}</p>
+          <p>{{ project.team.name }}</p>
         </div>
       </li>
     </ul>
 
     <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
+        <div v-if="selectedProject !== null" class="modal-content">
           <div class="modal-header bg-success text-white">
             <h5 class="modal-title">{{ selectedProject.name }} </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @click="deselectProject"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    @click="deselectProject"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
-              {{ selectedProject.status }}
+              {{ getStatusDisplayName(selectedProject.status) }}
             </div>
             <div class="mb-3">
-              <h6 class="text-success">Assigned Teams:</h6>
-              {{ selectedProject.team }}
+              <h6 class="text-success">Assigned Team:</h6>
+              {{ selectedProject.team.name }}
             </div>
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
@@ -55,41 +61,61 @@
 </template>
 
 <script>
-import { Project } from "@/models/project.js";
-
 export default {
   name: "ProjectComponent",
+  inject: ["projectsService"],
   data() {
     return {
       projects: [],
-      selectedProject: {},
+      selectedProject: null,
       searchTerm: "",
       sortBy: "status",
     };
   },
-  created() {
-    this.projects = [
-      new Project("In Progress", "Solar Panel Installation Team A", "Residential Solar Panel Installation", "Project A"),
-      new Project("Completed", "Solar Panel Installation Team B", "Commercial Solar Panel Installation", "Project B"),
-      new Project("In Progress", "Solar Panel Installation Team C", "Solar Panel Retrofit for Industrial Facility", "Project C"),
-      new Project("Completed", "Solar Panel Installation Team D", "Solar Panel Maintenance and Inspection", "Project D"),
-      new Project("In Progress", "Solar Panel Installation Team E", "Community Solar Farm Setup", "Project E"),
-    ];
+  async created() {
+    this.projects = await this.projectsService.asyncFindAll();
+    this.sortProjectsByStatus();
   },
   methods: {
-    selectProject(project) {
+    async selectProject(project) {
       this.selectedProject = project;
     },
+
     deselectProject() {
-      this.selectedProject = {};
+      this.selectedProject = null;
     },
+
+    // TODO Remove double code -  available in ProjectListComponent.vue
+
     sortProjectsByStatus() {
+      const statusOrder = [
+        "PENDING",
+        "CONFIRMED",
+        "IN_PROGRESS",
+        "FINISHED",
+        "CANCELED"
+      ];
+
       this.projects.sort((a, b) => {
-        if (a.status < b.status) return -1;
-        if (a.status > b.status) return 1;
-        return 0;
+        const indexA = statusOrder.indexOf(a.status);
+        const indexB = statusOrder.indexOf(b.status);
+
+        return indexA - indexB;
       });
     },
+
+    getStatusDisplayName(status) {
+      const statusDisplayNames = {
+        PENDING: "Pending",
+        CONFIRMED: "Confirmed",
+        IN_PROGRESS: "In Progress",
+        FINISHED: "Finished",
+        CANCELED: "Canceled",
+      }
+      return statusDisplayNames[status];
+    },
+
+    // Methods for the modal
   },
   computed: {
     filteredProjects() {
@@ -121,5 +147,11 @@ export default {
 .project-list {
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.badge-column {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
 }
 </style>

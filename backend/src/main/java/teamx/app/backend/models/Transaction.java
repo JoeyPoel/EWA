@@ -1,47 +1,72 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.sql.Date;
 
-@Getter
-@Setter
-@Entity
+/**
+ * Transaction entity
+ * Represents a transaction
+ *
+ * @author Junior Javier Brito Perez
+ * @see Product
+ * @see Warehouse
+ */
+@Data
+@Entity(name = "Transactions")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
     @Id
-    private int id;
-    private int productId;
-    private int amount;
-    private LocalDateTime transactionDate;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int quantity;
 
-    private enum type {ORDER, RETURN, TRANSFER, ADJUSTMENT}
-
-    public class Order extends Transaction {
-        private int orderId;
-        private Warehouse warehouse;
+    @Enumerated(EnumType.STRING)
+    private Type transactionType;
+    public enum Type {
+        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
     }
 
-    public class Return extends Transaction {
-        private int orderId;
-        private Warehouse warehouse;
+    @Enumerated(EnumType.STRING)
+    private Flow transactionFlow =
+            (this.transactionType == Type.ORDER ||
+                    (this.transactionType == Type.ADJUSTMENT ||
+                            this.transactionType == Type.RETURN ||
+                            this.transactionType == Type.OTHER) && this.quantity > 0)
+            ? Flow.IN : Flow.OUT;
+    public enum Flow {
+        IN, OUT
     }
 
-    public class Transfer extends Transaction {
-        private int orderId;
-        private Warehouse warehouseFrom;
-        private Warehouse warehouseTo;
-    }
+    @ManyToOne()
+    @JsonIgnore
+    private Product product;
 
-    public class Adjustment extends Transaction {
-        private int orderId;
-        private Warehouse warehouse;
-    }
+    @JsonIgnore
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date transactionDate;
+
+    @ManyToOne
+    @JsonIgnore
+    private Warehouse warehouse;
+
+    @ManyToOne
+    @JsonIgnore
+    private Project project;
+
+    @ManyToOne
+    @JsonIgnore
+    private Warehouse transferFrom;
+
+    @ManyToOne
+    @JsonIgnore
+    private Order order;
 }

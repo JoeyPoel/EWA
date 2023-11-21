@@ -1,23 +1,42 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+/**
+ * User entity
+ * Represents a user
+ *
+ * @author Junior Javier Brito Perez
+ * @see Team
+ */
+@Data
+@Entity(name = "Users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
     private String email;
-//    @JsonIgnore
     private String password;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    enum Role {
+        ADMIN,
+        USER
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "team_id")
+    private Team team;
 }

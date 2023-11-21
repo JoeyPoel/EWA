@@ -1,28 +1,31 @@
 package teamx.app.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
 
 /**
- * Team Class
+ * Team entity
+ * Represents a team
  *
  * @author Joey van der Poel
+ * @author Junior Javier Brito Perez
+ * @see User
  */
-@Getter
-@Setter
+@Data
+@Entity(name = "Teams")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+
+    @ManyToOne
+//    @JsonIgnore
     private Warehouse warehouse;
-        private ArrayList users;
-    }
+}
 

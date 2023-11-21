@@ -1,5 +1,5 @@
 import {Adaptor} from "./Adaptor.js";
-import {Product} from "@/models/product_MERGE_ME";
+import {Product} from "@/models/Product";
 
 /**
  * Adaptor for the product REST API.
@@ -20,19 +20,14 @@ export default class ProductAdaptor extends Adaptor {
      * @returns {Promise<*>} The products.
      */
     async asyncFindAll() {
-        return (await this.fetchJson(this.resourceUrl + "/all"))
-            .map(product => Object.assign(new Product(), product));
-    }
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
 
-    /**
-     * Fetches all product names from the REST API.
-     *
-     * @async
-     * @returns {Promise<*>} The products.
-     */
-    async asyncFindAllTypes() {
-        return (await this.fetchJson(this.resourceUrl + "/allTypes"))
-            .map(product => Object.assign(new Product(), product));
+        const response = await this.fetchJson(this.resourceUrl + "/getAllProducts", options);
+        if (response) {
+            return response.map(product => Object.assign(new Product(), product));
+        }
     }
 
     /**
@@ -43,7 +38,7 @@ export default class ProductAdaptor extends Adaptor {
      * @returns {Promise<*>} The product.
      */
     async asyncFindById(id) {
-        return Object.assign(new Product(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Product(), await this.fetchJson(this.resourceUrl + "/getProductById/" + id));
     }
 
     /**
@@ -53,46 +48,48 @@ export default class ProductAdaptor extends Adaptor {
      * @param {Product} product - The product to save.
      * @returns {Promise<*>} The saved product.
      */
-    async asyncSave(product) {
+    async asyncAdd(product) {
         const options = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(product)
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(product)
         }
 
-        let response = await this.fetchJson(this.resourceUrl + "/add", options);
+        let response = await this.fetchJson(this.resourceUrl + "/addProduct", options);
 
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + product.id, options);
+        if (response) {
+            return Object.assign(new Product(), response);
+        }
+        return null;
+    }
+
+    async asyncUpdate(id, product) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(product)
         }
 
-        if (response.ok) {
-            return Object.assign(new Product(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? response.te : "");
-            return null;
+        let response = await this.fetchJson(this.resourceUrl + "/updateProduct/" + id, options);
+
+        if (response) {
+            return Object.assign(new Product(), response);
         }
+        return null;
     }
 
     /**
      * Deletes a product by its ID from the REST API.
      *
      * @async
-     * @param {string} id - The ID of the product.
+     * @param {number} id - The ID of the product.
      * @returns {Promise<*>} The deleted product.
      */
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + id, options);
-        if (response.ok) {
-            return Object.assign(new Product(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
+        const response = await this.fetchJson(this.resourceUrl + "/deleteProduct/" + id, options);
+
+        if (response) {
+            return Object.assign(new Product(), response);
         }
+        return null;
     }
 }
