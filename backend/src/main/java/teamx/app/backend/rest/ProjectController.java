@@ -37,7 +37,8 @@ public class ProjectController {
         Project updatedProjectData = originalProjectData.get();
         updatedProjectData.setName(newProjectData.getName());
         updatedProjectData.setStatus(newProjectData.getStatus());
-        updatedProjectData.setTeam(newProjectData.getTeam());
+        updatedProjectData.setTeam_name(newProjectData.getTeam_name());
+        updatedProjectData.setTeam_id(newProjectData.getTeam_id());
         updatedProjectData.setDescription(newProjectData.getDescription());
         return updatedProjectData;
     }
