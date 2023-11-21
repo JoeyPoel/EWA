@@ -6,13 +6,15 @@ import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
 import dashboardComponent from "@/components/DashboardComponent.vue";
 import userComponent from "@/components/userComponent.vue";
 import productComponent from "@/components/products/ProductComponent.vue";
-import projectComponent from "@/components/ProjectComponent.vue";
+// import projectComponent from "@/components/projects/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";
 import ProductAdd from "@/components/products/ProductAdd.vue";
 import TeamComponent from "@/components/teamComponent";
 import LoginComponent from "@/components/LoginComponent.vue";
 import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseDetailModalComponent.vue";
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
+import ProjectComponent from "@/components/projects/ProjectComponent.vue";
+import ProjectListComponent from "@/components/projects/ProjectListComponent.vue";
 
 const routes = [
     {
@@ -79,7 +81,7 @@ const routes = [
         meta: {
             requiresAuth: true
         },
-        component: projectComponent
+        component: ProjectComponent
     },
     {
         path: '/user',
@@ -97,13 +99,34 @@ const routes = [
         },
         component: dashboardComponent
     },
-    {
+    /*{
         path: '/admin/products',
         name: 'AdminProducts',
         meta: {
             requiresAuth: true
         },
         component: AdminProductsComponent
+    },*/
+    /* {
+        path: '/admin/project',
+        name: 'AdminProject',
+        component: ProjectListComponent
+    },*/
+    {
+        path: '/admin',
+        name: 'Admin',
+        children: [
+            {
+                path: 'project',
+                name: 'AdminProject',
+                component: ProjectListComponent,
+            },
+            {
+                path: 'products',
+                name: 'AdminProducts',
+                component: AdminProductsComponent
+            }
+        ]
     },
     {
         path: '/teams',

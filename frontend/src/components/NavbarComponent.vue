@@ -70,22 +70,25 @@ export default {
           </router-link>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Admin
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
-            <li><router-link class="dropdown-item" :to="{ name: 'User' }">
-              User page
-            </router-link></li>
-            <li><router-link class="dropdown-item" :to="{ name: 'AdminProducts' }">
-              Products page
-            </router-link></li>
-            <li><a class="dropdown-item" href="#">
-              Administration
-            </a></li>
-          </ul>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Admin
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
+          <li><router-link class="dropdown-item" to="/user">
+            User page
+          </router-link></li>
+          <li><router-link class="dropdown-item" to="/admin/products">
+            Products page
+          </router-link></li>
+          <li><router-link class="dropdown-item" to="/admin/project">
+            Projects
+          </router-link></li>
+          <li><a class="dropdown-item" href="#">
+            Administration
+          </a></li>
+        </ul>
+      </li>
 
         <li class="nav-item" v-if="session" @click="logout">
         <a class="nav-link text-black">
