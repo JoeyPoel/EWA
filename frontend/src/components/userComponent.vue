@@ -94,6 +94,10 @@ export default {
       isCreateUserModalOpen: false,
     };
   },
+  async created() {
+    console.log("test")
+    this.users = await this.usersService.asyncFindAll();
+  },
   methods: {
     async openCreateUserModal() {
       this.newUser = {
@@ -125,15 +129,7 @@ export default {
         alert("Failed to create user. Please try again.");
       }
     },
-  },
-  async created() {
-    console.log("test")
-    this.users = await this.usersService.asyncFindAll();
-  },
-  async created() {
-
-    this.users = await this.userDetailService.asyncFindAll();
-  },
+  }
 };
 </script>
 

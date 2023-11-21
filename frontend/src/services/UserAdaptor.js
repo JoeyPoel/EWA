@@ -38,7 +38,7 @@ export default class UserAdaptor extends Adaptor {
     }
 
     async asyncFindAll() {
-        return (await this.fetchJson(this.resourceUrl))
+        return (await this.fetchJson(this.resourceUrl + "/all"))
             .map(user => Object.assign(new User(), user));
     }
 
