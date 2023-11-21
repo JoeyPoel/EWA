@@ -51,6 +51,7 @@ export default class TeamsAdaptor extends Adaptor {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(team)
         }
+        console.log(options);
         const response = await this.fetchJson(this.resourceUrl + "/updateTeamById/" + id, options);
         if (response) {
             return Object.assign(new Team(), response);

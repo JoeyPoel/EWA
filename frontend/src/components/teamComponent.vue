@@ -6,7 +6,7 @@
     <label for="chooseWarehouse">Warehouse</label>
 
     <select v-model="selectedWarehouse" class="form-control">
-      <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
+      <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse">
         {{ warehouse.name }}
       </option>
     </select>
@@ -32,6 +32,7 @@
           <td>{{ team.warehouseId }}</td>
           <td>
             <button type="button" class="btn btn-dark mx-1" @click="editTeam(team)">Edit</button>
+<!--            TODO: TEAMS CAN'T BE DELETED WHEN THEY ARE STILL CONNECTED TO A PROJECT-->
             <button type="button" class="btn btn-danger" @click="deleteTeam(team)">Delete</button>
           </td>
         </tr>
@@ -77,7 +78,7 @@ export default {
     async editTeam(team) {
       this.editingTeam = team;
       this.teamName = team.name;
-      this.selectedWarehouse = await this.warehousesService.asyncFindById(team.warehouseId);
+      this.selectedWarehouse = await this.warehousesService.asyncFindById(team.warehouse.id);
     },
     async updateTeam() {
       if (!this.editingTeam) return;
@@ -85,9 +86,9 @@ export default {
       const team = {
         id: this.editingTeam.id,
         name: this.teamName,
-        warehouseId: this.selectedWarehouse,
+        warehouse: this.selectedWarehouse,
       };
-      const updatedTeam = await this.teamsService.asyncSave(team);
+      const updatedTeam = await this.teamsService.asyncUpdateTeam(this.editingTeam.id, team);
       if(updatedTeam){
         let index = this.teams.findIndex(t => t.id === updatedTeam.id);
         if (index !== -1) {
@@ -97,7 +98,7 @@ export default {
       this.resetForm();
     },
     async deleteTeam(team) {
-      this.teamsService.asyncDeleteById(team.id)
+      await this.teamsService.asyncDeleteById(team.id)
     },
       resetForm() {
       this.editingTeam = null;

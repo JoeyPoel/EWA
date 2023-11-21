@@ -25,7 +25,7 @@ public class Team {
     private String name;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     private Warehouse warehouse;
 }
 
