@@ -37,7 +37,6 @@ public class User {
     }
 
     @ManyToOne()
-    @JsonIgnore
     @JoinColumn(name = "team_id")
     private Team team;
 }

@@ -65,7 +65,9 @@
 
               <div class="mb-3">
                 <label for="newUserTeam" class="form-label">Team</label>
-                <input type="text" class="form-control" id="newUserTeam" v-model="newUser.team" required>
+                <select id="editTeams" v-model="newUser.team" class="form-select">
+                  <option v-for="team in teams" :key="team.id" :value="team">{{ team.name }}</option>
+                </select>
               </div>
 
               <button type="submit" class="btn btn-dark" data-bs-toggle="modal"
@@ -84,19 +86,19 @@
 
 export default {
   name: "UserComponent",
-  inject: ['usersService'],
+  inject: ['usersService', 'teamsService'],
   data() {
     return {
+      teams: [],
       users: [],
       newUser: {
-        email: "",
-        name: "",
-        password: "a",
-        role: "",
-        team: 0,
+
       },
       isCreateUserModalOpen: false,
     };
+  },
+  async mounted() {
+    this.teams = await this.teamsService.asyncFindAll();
   },
   async created() {
     console.log("test")
@@ -108,11 +110,7 @@ export default {
   methods: {
     async openCreateUserModal() {
       this.newUser = {
-        email: "",
-        name: "",
-        password: "",
-        role: "",
-        team: 0,
+
       };
       this.isCreateUserModalOpen = true;
     },
@@ -128,7 +126,6 @@ export default {
 
       // Create a new object with all properties of newUser except team
       const userToSave = { ...this.newUser };
-      userToSave.password = "a";
 
       console.log(userToSave)
       const savedUser = await this.usersService.asyncSave(userToSave);
