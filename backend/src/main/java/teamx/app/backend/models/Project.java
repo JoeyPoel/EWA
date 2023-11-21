@@ -27,10 +27,13 @@ public class Project {
     private String name;
     private String description;
 
-    @ManyToOne
+    private int team_id;
+    private String team_name;
+
+   /* @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProductLine> productLines;
+    private List<ProductLine> productLines;*/
 }
