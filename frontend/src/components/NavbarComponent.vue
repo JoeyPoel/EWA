@@ -70,19 +70,26 @@ export default {
         </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown"
+           aria-expanded="false">
           Admin
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
-          <li><router-link class="dropdown-item" to="/user">
-            User page
-          </router-link></li>
-          <li><router-link class="dropdown-item" to="/admin/products">
-            Products page
-          </router-link></li>
-          <li><router-link class="dropdown-item" to="/admin/project">
-            Projects
-          </router-link></li>
+          <li>
+            <router-link class="dropdown-item" to="/user">
+              User page
+            </router-link>
+          </li>
+          <li>
+            <router-link class="dropdown-item" to="/admin/products">
+              Products page
+            </router-link>
+          </li>
+          <li>
+            <router-link class="dropdown-item" to="/admin/project">
+              Projects
+            </router-link>
+          </li>
           <li><a class="dropdown-item" href="#">
             Administration
           </a></li>
@@ -97,6 +104,7 @@ export default {
       </ul>
     </div>
   </div>
+
 </template>
 
 <style scoped>
@@ -114,14 +122,14 @@ export default {
   color: #000;
   background-color: #fff;
   border: 1px solid rgba(108, 117, 125, 0.45);
-  border-radius: 0.2rem;
+  border-radius: 0.375rem;
   box-shadow: 0 0 4px rgba(108, 117, 125, 0.35);
 }
 
 .nav-link.router-link-exact-active::after {
   background-color: var(--button-color);
   border: 1px solid #6c757d;
-  border-radius: 0.2rem;
+  border-radius: 0.375rem;
   box-shadow: 0 0 2px #6c757d;
   outline: black 1em;
 }
@@ -131,7 +139,8 @@ export default {
 }
 
 .bg-custom {
-  background: linear-gradient(
+  background:
+      linear-gradient(
       25deg,
       var(--gradient-color-start) 0%,
       var(--gradient-color-middle) 30%,
