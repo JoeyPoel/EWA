@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.WarehouseProductCategoryCapacity;
 import teamx.app.backend.repositories.WarehouseRepository;
@@ -58,19 +57,6 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/getMissingWarehouseCapacityCategories/{id}")
-    public ResponseEntity<List<ProductCategory>> getMissingWarehouseCapacityCategories(@PathVariable Long id) {
-        try {
-            List<ProductCategory> missingCategories = warehouseService.getMissingWarehouseCapacityCategories(id);
-            if (missingCategories == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No missing categories found");
-            }
-            return new ResponseEntity<>(missingCategories, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse");
-        }
-    }
-
     @GetMapping("/getWarehouseCapacityCategories/{id}")
     public ResponseEntity<List<WarehouseProductCategoryCapacity>> getWarehouseCapacityCategories(@PathVariable Long id) {
         try {
@@ -80,7 +66,8 @@ public class WarehouseController {
             }
             return new ResponseEntity<>(warehouseCapacityCategories, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse");
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse" + e.getMessage());
         }
     }
 

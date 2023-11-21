@@ -96,7 +96,7 @@ export default {
 }
 
 .modal-dialog {
-  min-width: 600px;
+  min-width: 700px;
 }
 
 .modal-header {

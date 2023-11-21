@@ -20,9 +20,7 @@ public class WarehouseService {
     private final ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    public WarehouseService(WarehouseRepository warehouseRepository,
-                            WarehouseProductCategoryCapacityRepository warehouseProductCategoryCapacityRepository,
-                            ProductCategoryRepository productCategoryRepository) {
+    public WarehouseService(WarehouseRepository warehouseRepository, WarehouseProductCategoryCapacityRepository warehouseProductCategoryCapacityRepository, ProductCategoryRepository productCategoryRepository) {
         this.warehouseRepository = warehouseRepository;
         this.warehouseProductCategoryCapacityRepository = warehouseProductCategoryCapacityRepository;
         this.productCategoryRepository = productCategoryRepository;
@@ -72,34 +70,32 @@ public class WarehouseService {
     public List<WarehouseProductCategoryCapacity> getWarehouseCapacity(Long id) {
         List<WarehouseProductCategoryCapacity> warehouseCapacity =
                 warehouseProductCategoryCapacityRepository.findAllByWarehouseId(id);
-        if (warehouseCapacity.isEmpty()) {
-            return null;
-        }
+        warehouseCapacity.addAll(getMissingWarehouseCapacityCategories(id));
         return warehouseCapacity;
     }
 
-    public List<ProductCategory> getMissingWarehouseCapacityCategories(Long id) {
+    public List<WarehouseProductCategoryCapacity> getMissingWarehouseCapacityCategories(Long id) {
         List<ProductCategory> productCategories = productCategoryRepository.findAll();
-        List<WarehouseProductCategoryCapacity> warehouseCapacity =
-                warehouseProductCategoryCapacityRepository.findAllByWarehouseId(id);
-        if (warehouseCapacity.isEmpty()) {
-            return productCategories;
-        }
-        List<ProductCategory> missingCategories = new ArrayList<>();
-        for (ProductCategory productCategory : productCategories) {
-            boolean found = false;
-            for (WarehouseProductCategoryCapacity capacity : warehouseCapacity) {
-                if (Objects.equals(capacity.getProductCategory().getId(), productCategory.getId())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                missingCategories.add(productCategory);
-            }
+        List<WarehouseProductCategoryCapacity> warehouseCapacity = warehouseProductCategoryCapacityRepository
+                .findAllByWarehouseId(id);
+
+        for (WarehouseProductCategoryCapacity capacity : warehouseCapacity) {
+            productCategories.removeIf(productCategory -> Objects.equals(productCategory.getId(),
+                    capacity.getProductCategory().getId()));
         }
 
-        return missingCategories;
+        List<WarehouseProductCategoryCapacity> missingWarehouseCapacity = new ArrayList<>();
+
+        for (ProductCategory productCategory : productCategories) {
+            WarehouseProductCategoryCapacity capacity = new WarehouseProductCategoryCapacity();
+            capacity.setProductCategory(productCategory);
+            capacity.setCapacity(0);
+            capacity.setMinimumStockLevel(0);
+            capacity.setWarehouse(warehouseRepository.findById(id).orElse(null));
+            missingWarehouseCapacity.add(capacity);
+        }
+
+        return missingWarehouseCapacity;
     }
 
     public WarehouseProductCategoryCapacity addWarehouseCapacity(Long id, WarehouseProductCategoryCapacity capacity) {

@@ -21,28 +21,29 @@
         <input id="capacity" v-model="categoryCopy.capacity" class="form-control" type="number"/>
       </div>
     </td>
-    <td class="row action-row">
-      <div v-if="mouseOver || hasChanged" class="row">
-        <b-icon-pen @click="edit"/>
-        <b-icon-save v-if="hasChanged" @click="save"/>
-        <b-icon-arrow-counterclockwise v-if="hasChanged" @click="reset"/>
-        <b-icon-trash v-if="!hasChanged" @click="remove"/>
+    <td class="col col-3">
+      <div v-show="mouseOver || hasChanged" class="row row-cols-4 align-self-center justify-content-center">
+        <b-icon-pen data-bs-placement="top" data-bs-toggle="tooltip" title="Edit capacity" @click="edit"/>
+        <b-icon-save v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Save capacity"
+                     @click="save"/>
+        <b-icon-arrow-counterclockwise v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip"
+                                       title="Reset capacity" @click="reset"/>
       </div>
     </td>
   </tr>
 </template>
 
 <script>
-import {BIconArrowCounterclockwise, BIconPen, BIconSave, BIconTrash} from "bootstrap-icons-vue";
+import {BIconArrowCounterclockwise, BIconPen, BIconSave} from "bootstrap-icons-vue";
 import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
+import {Tooltip} from "bootstrap";
 
 export default {
   name: "WarehouseCapacityRowComponent",
   components: {
     BIconPen,
     BIconSave,
-    BIconArrowCounterclockwise,
-    BIconTrash
+    BIconArrowCounterclockwise
   },
   props: {
     category: {
@@ -61,6 +62,12 @@ export default {
       isEditing: false,
       mouseOver: false
     }
+  },
+  mounted() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new Tooltip(tooltipTriggerEl)
+    })
   },
   methods: {
     edit() {
@@ -88,7 +95,8 @@ export default {
 </script>
 
 <style scoped>
-.action-row {
-  border: none;
+tr {
+  min-height: 55px;
 }
+
 </style>
