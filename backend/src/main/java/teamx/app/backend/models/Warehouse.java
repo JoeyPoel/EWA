@@ -1,6 +1,7 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,17 +32,5 @@ public class Warehouse {
     private String contactName;
     private String contactEmail;
     private String contactPhone;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Team> teams;
-
-    @OneToMany
-    @JsonBackReference
-    private List<WarehouseProductCategoryCapacity> warehouseProductCategoryCapacities;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Transaction> transactions;
 }
 

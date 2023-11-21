@@ -1,6 +1,7 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,6 @@ public class Notification {
     private Date date;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private User user;
 }

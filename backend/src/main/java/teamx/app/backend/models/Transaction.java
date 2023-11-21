@@ -46,8 +46,8 @@ public class Transaction {
         IN, OUT
     }
 
-    @ManyToOne
-    @JsonManagedReference
+    @ManyToOne()
+    @JsonIgnore
     private Product product;
 
     @JsonIgnore
@@ -55,19 +55,18 @@ public class Transaction {
     private Date transactionDate;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private Warehouse warehouse;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private Project project;
 
     @ManyToOne
-    @JsonManagedReference
-    @JsonBackReference
+    @JsonIgnore
     private Warehouse transferFrom;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private Order order;
 }

@@ -2,6 +2,7 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,14 +51,14 @@ public class Project {
     }
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private Team team;
 
     @OneToMany(mappedBy = "project")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "project")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Transaction> materials;
 }

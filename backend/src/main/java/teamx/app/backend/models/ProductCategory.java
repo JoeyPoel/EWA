@@ -1,6 +1,7 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,12 +26,4 @@ public class ProductCategory {
     private Long id;
     private String name;
     private String description;
-
-    @OneToMany
-    @JsonBackReference
-    private List<WarehouseProductCategoryCapacity> warehouseProductCategoryCapacities;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Product> products;
 }

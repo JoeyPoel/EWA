@@ -1,6 +1,7 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,11 +30,5 @@ public class Product {
     private Double price;
 
     @ManyToOne
-    @JsonManagedReference
     private ProductCategory category;
-
-
-    @OneToMany
-    @JsonBackReference
-    private List<Transaction> transactions;
 }

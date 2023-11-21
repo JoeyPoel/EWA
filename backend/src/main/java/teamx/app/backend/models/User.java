@@ -27,8 +27,8 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    @JsonIgnore
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
     enum Role {
@@ -36,23 +36,7 @@ public class User {
         USER
     }
 
-    @ManyToOne
-    @JsonBackReference
+    @ManyToOne()
+    @JoinColumn(name = "team_id")
     private Team team;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Task> tasksAssigned;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Task> personalTodoList;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Notification> notifications;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Order> ordersMade;
 }

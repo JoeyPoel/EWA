@@ -2,6 +2,7 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,15 +34,15 @@ public class Task {
     private Status status;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private Project project;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private List<User> assignedTo;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private User personalTodoListOwner;
 
     enum Priority {

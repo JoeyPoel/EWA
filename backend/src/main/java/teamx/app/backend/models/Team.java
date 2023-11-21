@@ -1,13 +1,9 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * Team entity
@@ -28,16 +24,6 @@ public class Team {
     private String name;
 
     @ManyToOne
-    @JsonManagedReference
     private Warehouse warehouse;
-
-    @OneToMany
-    @JoinColumn(name = "team_id")
-    @JsonManagedReference
-    private List<User> members;
-
-    @OneToMany
-    @JsonBackReference
-    private List<Project> projects;
 }
 

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.repositories.ProductRepository;
+import teamx.app.backend.services.ProductService;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Product Controller
@@ -24,24 +24,18 @@ import java.util.Optional;
 @RestController
 @RequestMapping("products")
 public class ProductController {
-
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getTestOffers() {
-        return new ResponseEntity<>(productRepository.findAll(), HttpStatus.OK);
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping("/getAllProducts")
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
-            List<Product> products = productRepository.findAll();
-            if (products.isEmpty()) {
+            List<Product> products = productService.getAllProducts();
+            if (products == null) {
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No products found");
             }
             return new ResponseEntity<>(products, HttpStatus.OK);
@@ -53,17 +47,21 @@ public class ProductController {
     @GetMapping("/getProductById/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         try {
-            Product product = productRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No product found"));
+            Product product = productService.getProductById(id);
+            if (product == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+            }
             return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product");
         }
     }
 
+    // TODO: Add validation and authentication
     @PostMapping("/addProduct")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         try {
-            Product newProduct = productRepository.save(product);
+            Product newProduct = productService.addProduct(product);
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding product");
@@ -73,42 +71,26 @@ public class ProductController {
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product newProductData) {
         try {
-            Optional<Product> originalProductData = productRepository.findById(id);
-
-            if (originalProductData.isPresent()) {
-                Product updatedProductData = updateProductData(newProductData, originalProductData);
-
-                Product updatedProduct = productRepository.save(updatedProductData);
-                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
+            Product product = productService.updateProduct(newProductData, id);
+            if (product == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
             }
+            return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating product");
         }
     }
 
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable Long id) {
         try {
-            Optional<Product> product = productRepository.findById(id);
-
-            if (product.isPresent()) {
-                productRepository.deleteById(id);
-                return new ResponseEntity<>(product.get(), HttpStatus.OK);
-            } else {
+            Product product = productService.deleteProduct(id);
+            if (product == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
             }
+            return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting product");
         }
-    }
-
-    private Product updateProductData(Product newProductData, Optional<Product> originalProductData) {
-        Product updatedProductData = originalProductData.get();
-        updatedProductData.setName(newProductData.getName());
-        updatedProductData.setDescription(newProductData.getDescription());
-        updatedProductData.setCategory(newProductData.getCategory());
-        return updatedProductData;
     }
 }
