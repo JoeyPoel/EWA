@@ -20,6 +20,9 @@ const routes = [
     {
         path: '/warehouse',
         name: 'Warehouse',
+        meta: {
+            requiresAuth: true
+        },
         children: [
             {
                 path: 'inventory',
@@ -54,6 +57,9 @@ const routes = [
     {
         path: '/product',
         name: 'Product',
+        meta: {
+            requiresAuth: true
+        },
         component: productComponent,
         children: [
             {
@@ -72,21 +78,33 @@ const routes = [
     {
         path: '/project',
         name: 'Project',
+        meta: {
+            requiresAuth: true
+        },
         component: ProjectComponent
     },
     {
         path: '/user',
         name: 'User',
+        meta: {
+            requiresAuth: true
+        },
         component: userComponent
     },
     {
         path: '/dashboard',
         name: 'Dashboard',
+        meta: {
+            requiresAuth: true
+        },
         component: dashboardComponent
     },
     /*{
         path: '/admin/products',
         name: 'AdminProducts',
+        meta: {
+            requiresAuth: true
+        },
         component: AdminProductsComponent
     },*/
     /* {
@@ -113,6 +131,9 @@ const routes = [
     {
         path: '/teams',
         name: 'Teams',
+        meta: {
+            requiresAuth: true
+        },
         component: TeamComponent
     },
     {
@@ -120,9 +141,31 @@ const routes = [
         name: 'Login',
         component: LoginComponent
     },
+    {
+        path: '/',
+        redirect: '/log-in',
+    },
 ];
 
 export const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        if (!sessionStorage.getItem("email")) {
+            next({ name: 'Login' })
+        } else {
+            next()
+        }
+    } else {
+        if (!sessionStorage.getItem("email")) {
+            next()
+        } else {
+            next({ name: 'Dashboard' })
+        }
+    }
 })
