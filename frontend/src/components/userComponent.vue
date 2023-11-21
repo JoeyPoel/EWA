@@ -130,6 +130,10 @@ export default {
     console.log("test")
     this.users = await this.usersService.asyncFindAll();
   },
+  async created() {
+
+    this.users = await this.userDetailService.asyncFindAll();
+  },
 };
 </script>
 
