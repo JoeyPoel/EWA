@@ -54,7 +54,7 @@ export default {
   },
   async created() {
     this.products = await this.productsService.asyncFindAll()
-    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
   },
   watch: {
     selectedWarehouse: function () {

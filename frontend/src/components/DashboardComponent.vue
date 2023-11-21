@@ -121,7 +121,7 @@ export default {
     }
   },
   async created() {
-    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
     this.warehouseCount = this.warehouses.length;
     this.teams = await this.teamsService.asyncFindAll();
     this.teamCount = this.teams.length;
@@ -129,7 +129,7 @@ export default {
     this.projectCount = this.projects.length;
   },
   async mounted() {
-    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
     this.warehouseCount = this.warehouses.length;
     this.teams = await this.teamsService.asyncFindAll();
     this.teamCount = this.teams.length;

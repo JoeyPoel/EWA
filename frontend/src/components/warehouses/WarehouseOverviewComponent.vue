@@ -43,14 +43,13 @@ export default {
   data() {
     return {
       warehouses: [],
-      transactions: [],
       lastId: 10000,
       isActive: true,
       Warehouse: Warehouse
     }
   },
-  async created() {
-    this.warehouses = await this.warehousesService.asyncFindAll()
+  async mounted() {
+    this.warehouses = await this.warehousesService.asyncGetAllWarehouses()
   },
   computed: {
     shouldShowModal() {
@@ -62,38 +61,17 @@ export default {
     onNewWarehouse() {
       this.$router.push("/warehouse/overview/add")
     },
-    handleAddedWarehouse(warehouse) {
-      console.log(warehouse)
-      this.warehouses.push(warehouse)
-      this.$router.push("/warehouse/overview/" + warehouse.id)
-    },
-    onDelete(warehouse) {
-      for (let i = 0; i < this.warehouses.length; i++) {
-        if (this.warehouses[i].id === warehouse.id) {
-          this.warehouses.splice(i, 1)
-          return;
-        }
-      }
-      this.$router.push("/warehouse/overview")
-    },
-    onSave(warehouse) {
-      for (let i = 0; i < this.warehouses.length; i++) {
-        if (this.warehouses[i].id === warehouse.id) {
-          this.warehouses[i] = warehouse
-          return;
-        }
-      }
-    },
-    deselectWarehouse() {
-      this.$router.push("/warehouse/overview")
-      this.selectedWarehouse = null
+    async deselectWarehouse() {
+      this.$router.push("/warehouse/overview");
+      this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
+      this.selectedWarehouse = null;
     },
     selectWarehouse(warehouse) {
       this.$router.push("/warehouse/overview/" + warehouse.id)
     },
     findSelectedWarehouseFromRoute() {
-      const id = parseInt(this.$route.params.id)
-      return this.warehouses.find(c => c.id === id)
+      const id = parseInt(this.$route.params.id);
+      return this.warehouses.find(c => c.id === id);
     },
   }
 }

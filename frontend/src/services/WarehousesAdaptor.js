@@ -21,7 +21,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @async
      * @returns {Promise<*>} The warehouses.
      */
-    async asyncFindAll() {
+    async asyncGetAllWarehouses() {
         const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
         if (response) {
             return response.map(warehouse => Object.assign(new Warehouse(), warehouse));
@@ -37,7 +37,6 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        console.log("Warehouse asyncFindById: " + id);
         return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + "/getWarehouseById/" + id));
     }
 
@@ -62,7 +61,7 @@ export default class WarehousesAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/updateWarehouseById/" + id, options);
 
         if (response) {
-            return Object.assign(new Warehouse(), await response.json());
+            return Object.assign(new Warehouse(), response);
         }
         return null;
     }

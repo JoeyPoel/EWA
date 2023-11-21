@@ -2,7 +2,7 @@
   <div v-if="selectedWarehouse && copyOfWarehouse" class="row detail justify-content-center">
     <div class="row">
       <form class="col">
-        <h3>Warehouse {{ selectedWarehouse.id }}</h3>
+        <h3>{{ selectedWarehouse.name }}</h3>
         <p class="text-muted">Details</p>
         <div class="mt-1 mb-1 row">
           <div class="col col-4 align-self-center text-end">
@@ -81,7 +81,7 @@
           Delete
         </button>
         <button :class="hasChanged ? 'btn-success' : 'btn-secondary'" :disabled="!hasChanged" class="btn col col-5 btn "
-                @click="onSave()">
+                @click="onUpdate()">
           Save
         </button>
       </div>
@@ -115,8 +115,6 @@ export default {
       copyOfWarehouse: null,
     }
   },
-  created() {
-  },
   async mounted() {
     this.selectedWarehouse = await this.findSelectedWarehouseFromRoute();
     this.copyOfWarehouse = Warehouse.copy(this.selectedWarehouse);
@@ -132,7 +130,7 @@ export default {
       this.onReset();
       this.$router.push("/warehouse/overview");
     },
-    async onSave() {
+    async onUpdate() {
       const savedWarehouse = await this.warehousesService.asyncUpdateWarehouse(this.selectedWarehouse.id,
           this.copyOfWarehouse);
       if (savedWarehouse) {
@@ -147,7 +145,11 @@ export default {
       this.$emit('delete', this.copyOfWarehouse)
     },
     async findSelectedWarehouseFromRoute() {
-      return await this.warehousesService.asyncFindById(this.$route.params.id)
+      const id = this.$route.params.id;
+      if (!id) {
+        return null;
+      }
+      return await this.warehousesService.asyncFindById(id);
     },
   },
   watch: {

@@ -57,7 +57,7 @@ export default {
   },
   async created() {
     this.teams = await this.teamsService.asyncFindAll();
-    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
   },
   computed: {
   },
