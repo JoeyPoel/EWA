@@ -1,5 +1,6 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Team {
     private String name;
 
     @ManyToOne
+    @JsonIgnore
     private Warehouse warehouse;
 }
 

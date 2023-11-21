@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.services.ProjectService;
 
 import java.util.List;
@@ -44,6 +45,19 @@ public class ProjectController {
             return ResponseEntity.ok(project);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving project : " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getProjectTeamByProjectId/{id}")
+    public ResponseEntity<Team> getProjectTeamByProjectId(@PathVariable Long id) {
+        try {
+            Team team = projectService.getProjectTeamByProjectId(id);
+            if (team == null) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Team not found");
+            }
+            return ResponseEntity.ok(team);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team : " + e.getMessage());
         }
     }
 

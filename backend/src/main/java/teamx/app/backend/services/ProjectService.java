@@ -3,6 +3,7 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.repositories.ProjectRepository;
 
 import java.util.List;
@@ -47,5 +48,13 @@ public class ProjectService {
         existingProject.setEndDate(project.getEndDate());
         existingProject.setStatus(project.getStatus());
         return projectRepository.save(existingProject);
+    }
+
+    public Team getProjectTeamByProjectId(Long id) {
+        Project project = projectRepository.findById(id).orElse(null);
+        if (project == null) {
+            return null;
+        }
+        return project.getTeam();
     }
 }
