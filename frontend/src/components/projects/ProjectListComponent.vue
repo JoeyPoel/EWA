@@ -51,6 +51,7 @@
             <div class="mb-3">
               <h6 class="text-success">Name:</h6>
               <input type="text" id="editName" v-model="editedProject.name" class="form-control">
+              <div v-if="!isValidProjectName" class="text-danger mt-1">Project name is required</div>
             </div>
             <div class="mb-3">
               <h6 class="text-success">Status:</h6>
@@ -60,22 +61,25 @@
                   {{ statusOption.displayName }}
                 </option>
               </select>
+              <div v-if="!isValidProjectStatus" class="text-danger mt-1">Project status is required</div>
             </div>
-            <div class="mb-3">
+<!--            <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
               <select id="editTeams" v-model="editedProject.team" class="form-select">
                 <option v-for="team in teamNames" :key="team" :value="team">
                   {{ team }}
                 </option>
               </select>
-            </div>
+              <div v-if="!isValidProjectTeam" class="text-danger mt-1">Project team is required</div>
+            </div>-->
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
               <textarea id="editDescription" v-model="editedProject.description" class="form-control"></textarea>
             </div>
+            <div v-if="!isValidProjectDescription" class="text-danger mt-1">Project description is required</div>
           </div>
           <div class="modal-footer d-flex justify-content-start">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="saveProject">Save</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="saveProject" :disabled="!isValidProject()">Save</button>
             <button type="button" class="btn btn-danger" aria-label="Delete" data-bs-dismiss="modal"
                     @click="deleteProject">Delete
             </button>
@@ -98,7 +102,8 @@ export default {
     this.projects = projectsData.map(project => new Project(
         project.id,
         project.status,
-        project.team.name,
+    //    project.team.name
+    project.team ? project.team.name : '',
         project.description,
         project.name
     ));
@@ -199,7 +204,7 @@ export default {
     },
 
     saveProject() {
-      if (!this.validateProject()) return;
+      if (!this.isValidProject()) return;
       if (this.isAddingNewProject) {
         this.addNewProject();
       } else {
@@ -207,27 +212,35 @@ export default {
       }
     },
 
-    validateProject() {
-      if (!this.editedProject.name) {
-        alert("Project name is required");
-        return false;
-      }
+    isValidProject() {
+      console.log("Checking if project is valid...");
+      return (
+          this.isValidProjectName() &&
+          this.isValidProjectStatus() &&
+          // this.isValidProjectTeam() &&
+          this.isValidProjectDescription()
+      );
+    },
 
-      if (!this.editedProject.status) {
-        alert("Project status is required");
-        return false;
-      }
+    isValidProjectName() {
+      console.log("Checking project name validity...");
+      // Implement your project name validation logic here
+      return !!this.editedProject.name;
+    },
 
-      if (!this.editedProject.team) {
-        alert("Project team is required");
-        return false;
-      }
+    isValidProjectStatus() {
+      // Implement your project status validation logic here
+      return !!this.editedProject.status;
+    },
 
-      if (!this.editedProject.description) {
-        alert("Project description is required");
-        return false;
-      }
-      return true;
+    isValidProjectTeam() {
+      // Implement your project team validation logic here
+      return !!this.editedProject.team;
+    },
+
+    isValidProjectDescription() {
+      // Implement your project description validation logic here
+      return !!this.editedProject.description;
     },
 
     async editExistingProject() {
@@ -247,7 +260,7 @@ export default {
 
     async addNewProject() {
       try {
-        if (!this.validateProject()) {
+        if (!this.isValidProject()) {
           return;
         }
 
@@ -275,6 +288,7 @@ export default {
 
 
   computed: {
+
     Project() {
       return Project
     },
