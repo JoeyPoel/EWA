@@ -1,64 +1,26 @@
 export class Project {
-    constructor(id, status, team, description, name) {
-        this.id = id
-        this.status = status
-        this.team = team
-        this.description = description
-        this.name = name
+    constructor(id, name, description, location, clientName, clientEmail, clientPhone, startDate,
+                endDate, status, team, tasks, materials) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.clientName = clientName;
+        this.clientEmail = clientEmail;
+        this.clientPhone = clientPhone;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.team = team;
+        this.tasks = tasks;
+        this.materials = materials;
     }
-
-    /*static statusList = [
-        "In Progress",
-        "Completed",
-        "On Hold",
-        "Cancelled"
-    ]*/
 
     static statusList = [
-        { value: "in_progress", displayName: "In Progress" },
-        { value: "completed", displayName: "Completed" },
-        { value: "on_hold", displayName: "On Hold" },
-        { value: "cancelled", displayName: "Cancelled" }
+        "PENDING",
+        "CONFIRMED",
+        "IN_PROGRESS",
+        "FINISHED",
+        "CANCELED"
     ];
-    static projectList = [
-        "Dijk Project",
-        "Ijburg Project",
-        "OBA School Installatie",
-        "Solar Festival Installatie"
-    ]
-
-    static teamList = [
-        "Team Zuid",
-        "Installatie Ploeg Rotterdam",
-        "Team Noord",
-        "Externe Installatie Ploeg Van Brugge"
-    ]
-
-    static descriptionList = [
-        "Dit is een beschrijving van het project",
-    ]
-
-    static nameList = [
-        "Dijk Project",
-        "Ijburg Project",
-        "OBA School Installatie",
-        "Solar Festival Installatie"
-    ];
-
-    static getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    static createDummyProject(id) {
-        return new Project(
-            id,
-            this.statusList[this.getRandomInt(this.statusList.length)].value,
-            this.teamList[this.getRandomInt(this.teamList.length)],
-            this.descriptionList[this.getRandomInt(this.descriptionList.length)],
-            this.projectList[this.getRandomInt(this.projectList.length)],
-
-        );
-    }
-
-
 }
