@@ -4,7 +4,8 @@
 
     <!-- "Create User" button -->
     <button class="btn btn-dark mb-2" data-bs-toggle="modal"
-            data-bs-target="#createUserModal" @click="openCreateUserModal">Create User</button>
+            data-bs-target="#createUserModal" @click="openCreateUserModal">Create User
+    </button>
 
     <div class="row">
       <div class="col-md-6" v-for="(user, index) in users" :key="index">
@@ -12,7 +13,7 @@
           <!-- Your card component -->
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title">{{ user.name }}</h5>
-            <button class="btn btn-dark"  @click="openUpdateUserModal(user)">Update</button>
+            <button class="btn btn-dark" @click="openCreateUserModal(user)">Update</button>
           </div>
           <div class="card-body">
             <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
@@ -24,7 +25,8 @@
     </div>
 
     <!-- Modal for creating a new user -->
-    <div class="modal fade" id="createUserModal" ref="createUserModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createUserModal" ref="createUserModal" tabindex="-1" aria-labelledby="projectModalLabel"
+         aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 
         <div class="modal-content">
@@ -33,7 +35,8 @@
 
             <h5 class="modal-title">Create User</h5>
 
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @click="closeCreateUserModal"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    @click="closeCreateUserModal"></button>
 
           </div>
 
@@ -63,7 +66,8 @@
               </div>
 
               <button type="submit" class="btn btn-dark" data-bs-toggle="modal"
-                      data-bs-target="#createUserModal">Create</button>
+                      data-bs-target="#createUserModal">Create
+              </button>
 
             </form>
           </div>
@@ -74,64 +78,57 @@
 </template>
 
 <script>
-import { User } from "@/models/user";
 
 export default {
   name: "UserComponent",
+  inject: ['usersService'],
   data() {
     return {
-      users: [], // Initialize an empty array to store user data
+      users: [],
       newUser: {
         name: "",
         email: "",
         team: "",
         role: "",
       },
+      isCreateUserModalOpen: false,
     };
   },
   methods: {
-    openCreateUserModal() {
-      // Clear the form when opening the modal
+    async openCreateUserModal() {
       this.newUser = {
         name: "",
         email: "",
         team: "",
         role: "",
       };
-
-      // Show the modal using the $refs object
-      this.$refs.createUserModal.classList.add("show");
-      this.$refs.createUserModal.style.display = "block";
-      document.body.classList.add("modal-open");
+      this.isCreateUserModalOpen = true;
+      let tester12 = await this.usersService.asyncFindById(1);
+      console.log(tester12);
     },
     closeCreateUserModal() {
-      // Hide the modal using the $refs object
-      this.$refs.createUserModal.classList.remove("show");
-      this.$refs.createUserModal.style.display = "none";
-      document.body.classList.remove("modal-open")
+      this.isCreateUserModalOpen = false;
     },
-    createUser() {
+    async createUser() {
       // Validate the form fields (add additional validation as needed)
       if (!this.newUser.name || !this.newUser.email || !this.newUser.role) {
         alert("Please fill in all fields.");
         return;
       }
 
-      // Add the new user to the users array
-      this.users.push({ ...this.newUser });
-
-      // Close the modal
-      this.closeCreateUserModal();
-    },
-    openUpdateUserModal(user) {
-      // Logic for updating a user (you can implement this based on your requirements)
-      console.log("Update user:", user);
+      const savedUser = await this.usersService.asyncSave(this.newUser);
+      console.log(savedUser)
+      if (savedUser) {
+        this.users.push(savedUser);
+        this.closeCreateUserModal();
+      } else {
+        alert("Failed to create user. Please try again.");
+      }
     },
   },
-  created() {
-    for (let i = 0; i < 6; i++) {
-      this.users.push(User.createDummyUser(i));
-    }
+  async created() {
+    console.log("test")
+    this.users = await this.usersService.asyncFindAll();
   },
 };
 </script>

@@ -6,6 +6,14 @@ export default class UserAdaptor extends Adaptor {
         super(URL);
     }
 
+    async asyncAdd(object) {
+        return await super.asyncAdd(object);
+    }
+
+    async asyncUpdate(id, object) {
+        return await super.asyncUpdate(id, object);
+    }
+
     async asyncFindUser(user) {
         const options = {
             method: "POST",
@@ -16,21 +24,47 @@ export default class UserAdaptor extends Adaptor {
     }
 
     async asyncDeleteById(id) {
-        console.log(id);
-        return null;
+        const options = {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+        }
+        const response = await this.fetchJson(this.resourceUrl + id, options);
+        if (response.ok) {
+            return Object.assign(new User(), await response.json());
+        } else {
+            console.log(response, !response.bodyUsed ? await response.text() : "");
+            return null;
+        }
     }
 
     async asyncFindAll() {
-        return null;
+        return (await this.fetchJson(this.resourceUrl))
+            .map(user => Object.assign(new User(), user));
     }
 
     async asyncFindById(id) {
-        console.log(id);
-        return null;
+        return Object.assign(new User(), await this.fetchJson(this.resourceUrl + "/" + id));
     }
 
-    async asyncSave(object) {
-        console.log(object);
-        return null;
+    async asyncSave(user) {
+        const options = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(user)
+        }
+
+        let response = await this.fetchJson(this.resourceUrl, options);
+
+        if (response.status === 409) {
+            options.method = "PUT";
+            response = await this.fetchJson(this.resourceUrl + user.id, options);
+        }
+
+        if (response.ok) {
+            return Object.assign(new User(), await response.json());
+        } else {
+            console.log(response, !response.bodyUsed ? await response.text() : "");
+            return null;
+        }
     }
 }

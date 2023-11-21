@@ -26,7 +26,7 @@ export default {
       // stateless data services adaptor singletons
       warehousesService: new WarehousesAdaptor(CONFIG.BACKEND_URL + "/warehouses"),
       teamsService: new TeamsAdaptor(CONFIG.BACKEND_URL + "/teams"),
-      usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/user"),
+      usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/users"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products"),
 
     }

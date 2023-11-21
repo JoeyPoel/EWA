@@ -67,6 +67,12 @@ export default {
         </router-link>
       </li>
 
+      <li class="nav-item">
+        <router-link class="nav-link text-black" to="/user">
+          Users
+        </router-link>
+      </li>
+
       <li class="nav-item dropdown">
         <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           Admin
