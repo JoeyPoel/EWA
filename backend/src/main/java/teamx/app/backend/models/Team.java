@@ -1,5 +1,7 @@
 package teamx.app.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 @Table(name = "Teams")
 @NoArgsConstructor
 @AllArgsConstructor
+//@JsonIgnoreProperties({"warehouse"})
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +31,7 @@ public class Team {
     private String name;
 
     @ManyToOne
+    @JsonIgnore
     private Warehouse warehouse;
 
     @JsonManagedReference

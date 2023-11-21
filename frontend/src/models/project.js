@@ -1,8 +1,9 @@
 export class Project {
-    constructor(id, status, team, description, name) {
+    constructor(id, status, team, teamId, description, name) {
         this.id = id
         this.status = status
         this.team = team
+        this.teamId = teamId
         this.description = description
         this.name = name
     }

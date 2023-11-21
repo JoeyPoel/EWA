@@ -63,7 +63,7 @@
               </select>
               <div v-if="!isValidProjectStatus" class="text-danger mt-1">Project status is required</div>
             </div>
-<!--            <div class="mb-3">
+           <div class="mb-3">
               <h6 class="text-success">Assigned Teams:</h6>
               <select id="editTeams" v-model="editedProject.team" class="form-select">
                 <option v-for="team in teamNames" :key="team" :value="team">
@@ -71,7 +71,7 @@
                 </option>
               </select>
               <div v-if="!isValidProjectTeam" class="text-danger mt-1">Project team is required</div>
-            </div>-->
+            </div>
             <div class="mb-3">
               <h6 class="text-success">Description:</h6>
               <textarea id="editDescription" v-model="editedProject.description" class="form-control"></textarea>
@@ -102,25 +102,29 @@ export default {
     this.projects = projectsData.map(project => new Project(
         project.id,
         project.status,
-    //    project.team.name
-    project.team ? project.team.name : '',
+        project.team ? project.team.name : "",
+        project.team ? project.team.id : null,
         project.description,
         project.name
     ));
 
     console.log("Projects before:", this.projects);
-    const uniqueTeamNames = Array.from(new Set(this.projects.map(project => project.team)));
-    this.teamNames = uniqueTeamNames;
-    console.log("Team names:", this.teamNames);
 
+    const uniqueTeams = Array.from(new Set(this.projects.map(project => ({ name: project.team, id: project.teamId }))));
+    this.teams = uniqueTeams;
+    console.log("Teams:", this.teams);
+
+    this.teamNames = uniqueTeams.map(team => team.name);
+    console.log("Team names:", this.teamNames);
 
     this.editedProject = {
       id: 0,
       status: Project.statusList[0].value,
-      team: this.teamNames[0],
+      team: this.teamNames[0] || "",
       description: "",
       name: ""
     };
+
 
   },
   data() {
@@ -144,6 +148,7 @@ export default {
           project.id,
           project.status,
           project.team.name,
+          project.team.id,
           project.description,
           project.name
       ));
@@ -247,7 +252,8 @@ export default {
       const editedProjectCopy = {
         ...this.editedProject,
         team: {
-          name: this.editedProject.team
+          id: this.findTeamIdByName(this.editedProject.team),
+          name: this.editedProject.team,
         }
       };
       console.log(JSON.stringify(editedProjectCopy));
@@ -267,7 +273,8 @@ export default {
         const editedProjectCopy = {
           ...this.editedProject,
           team: {
-            name: this.editedProject.team // Assuming team is a string representing the team name
+            id: this.findTeamIdByName(this.editedProject.team),
+            name: this.editedProject.team,
           }
         };
         console.log(JSON.stringify(editedProjectCopy));
@@ -283,6 +290,12 @@ export default {
         // Handle errors as needed
       }
     },
+
+    findTeamIdByName(teamName) {
+      const team = this.teams.find(t => t.name === teamName);
+      return team ? team.id : null;
+    }
+
 
   },
 
