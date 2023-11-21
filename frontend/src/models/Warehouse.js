@@ -10,4 +10,23 @@ export class Warehouse {
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
     }
+
+    static equals(a, b) {
+        if (a instanceof Warehouse && b instanceof Warehouse) {
+            for (const key of Object.keys(a)) {
+                if (a[key] !== b[key]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    static copy(a) {
+        return Object.assign(new Warehouse(), a);
+    }
+
+    static fromJson(json) {
+        return Object.assign(new Warehouse(), json);
+    }
 }

@@ -96,6 +96,9 @@ export default {
     saveCategoryCapacity(category) {
       this.$emit('save-category-capacity', category)
     },
+    findWarehouseIdFromRoute() {
+      return this.$route.params.id
+    },
   },
 }
 </script>

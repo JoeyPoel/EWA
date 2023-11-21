@@ -1,103 +1,99 @@
 <template>
   <div v-if="selectedWarehouse && copyOfWarehouse" class="row detail justify-content-center">
-      <div class="row">
-        <form class="col">
-          <h3>Warehouse {{ selectedWarehouse.id }}</h3>
-          <p class="text-muted">Details</p>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="name">Name</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="name" type="text" v-model="this.copyOfWarehouse.name"/>
-            </div>
+    <div class="row">
+      <form class="col">
+        <h3>Warehouse {{ selectedWarehouse.id }}</h3>
+        <p class="text-muted">Details</p>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="name">Name</label>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="location">Location</label>
-            </div>
-            <div class="col col-8">
-              <select class="form-control" id="location" v-model="this.copyOfWarehouse.location">
-                <option v-for="location in Warehouse.locationList" :key="location">
-                  {{ location }}
-                </option>
-              </select>
-            </div>
+          <div class="col col-8">
+            <input id="name" v-model="this.copyOfWarehouse.name" class="form-control" type="text"/>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="postcode">Postcode</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="postcode" type="text" v-model="this.copyOfWarehouse.postcode"/>
-            </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="location">Location</label>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="country">Country</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="country" type="text" v-model="this.copyOfWarehouse.country"/>
-            </div>
+          <div class="col col-8">
+            <input id="location" v-model="this.copyOfWarehouse.location" class="form-control" type="text"/>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="contactName">Contact Name</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="contactName" type="text" v-model="this.copyOfWarehouse.contactName"/>
-            </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="postcode">Postcode</label>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="contactEmail">Contact Email</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="contactEmail" type="text" v-model="this.copyOfWarehouse.contactEmail"/>
-            </div>
+          <div class="col col-8">
+            <input id="postcode" v-model="this.copyOfWarehouse.postcode" class="form-control" type="text"/>
           </div>
-          <div class="mt-1 mb-1 row">
-            <div class="col col-4 align-self-center text-end">
-              <label class="form-label" for="contactPhone">Contact Phone</label>
-            </div>
-            <div class="col col-8">
-              <input class="form-control" id="contactPhone" type="text" v-model="this.copyOfWarehouse.contactPhone"/>
-            </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="country">Country</label>
           </div>
-        </form>
+          <div class="col col-8">
+            <input id="country" v-model="this.copyOfWarehouse.country" class="form-control" type="text"/>
+          </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="contactName">Contact Name</label>
+          </div>
+          <div class="col col-8">
+            <input id="contactName" v-model="this.copyOfWarehouse.contactName" class="form-control" type="text"/>
+          </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="contactEmail">Contact Email</label>
+          </div>
+          <div class="col col-8">
+            <input id="contactEmail" v-model="this.copyOfWarehouse.contactEmail" class="form-control" type="text"/>
+          </div>
+        </div>
+        <div class="mt-1 mb-1 row">
+          <div class="col col-4 align-self-center text-end">
+            <label class="form-label" for="contactPhone">Contact Phone</label>
+          </div>
+          <div class="col col-8">
+            <input id="contactPhone" v-model="this.copyOfWarehouse.contactPhone" class="form-control" type="text"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="py-1">
+      <div class="row p-1 justify-content-between">
+        <button :disabled="!hasChanged" class="btn col col-3 align-self-center btn-secondary"
+                @click="onReset()">
+          Reset
+        </button>
+        <button :disabled="!hasChanged" class="btn col col-3 btn btn-secondary" @click="onClear()">
+          Clear
+        </button>
+        <button :disabled="!hasChanged" class="btn col col-3 btn btn-secondary" @click="onCancel()">
+          Cancel
+        </button>
       </div>
-      <div class="py-1">
-        <div class="row p-1 justify-content-between">
-          <button class="btn col col-3 align-self-center btn-secondary" @click="onReset()"
-                  :disabled="!hasChanged">
-            Reset
-          </button>
-          <button class="btn col col-3 btn btn-secondary" @click="onClear()" :disabled="!hasChanged">
-            Clear
-          </button>
-          <button class="btn col col-3 btn btn-secondary" @click="onCancel()" :disabled="!hasChanged">
-            Cancel
-          </button>
-        </div>
-        <div class="row p-1 justify-content-between">
-          <button class="btn col col-5 btn btn-danger" :disabled="hasChanged"
-                  @click="onDelete()">
-            Delete
-          </button>
-          <button class="btn col col-5 btn " @click="onSave()" :class="hasChanged ? 'btn-success' : 'btn-secondary'"
-                  :disabled="!hasChanged">
-            Save
-          </button>
-        </div>
+      <div class="row p-1 justify-content-between">
+        <button :disabled="hasChanged" class="btn col col-5 btn btn-danger"
+                @click="onDelete()">
+          Delete
+        </button>
+        <button :class="hasChanged ? 'btn-success' : 'btn-secondary'" :disabled="!hasChanged" class="btn col col-5 btn "
+                @click="onSave()">
+          Save
+        </button>
       </div>
     </div>
-<!--    <div class="col col-8">-->
-<!--      <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"-->
-<!--                                         :products="products" :vendors="vendors" :transactions="transactions"-->
-<!--                                         :inventory="inventories" @save-product="saveProduct"-->
-<!--      @remove-product="removeProduct" @add-product="addProduct"/>-->
-<!--    </div>-->
-<!--  </div>-->
+  </div>
+  <!--    <div class="col col-8">-->
+  <!--      <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"-->
+  <!--                                         :products="products" :vendors="vendors" :transactions="transactions"-->
+  <!--                                         :inventory="inventories" @save-product="saveProduct"-->
+  <!--      @remove-product="removeProduct" @add-product="addProduct"/>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <script>
@@ -106,88 +102,59 @@ import {Warehouse} from "@/models/Warehouse";
 
 export default {
   name: "WarehouseDetailComponent",
+  inject: ['warehousesService'],
   // components: {WarehouseDetailInventoryComponent},
   computed: {
-    Warehouse() {
-      return Warehouse
-    },
-    selectedWarehouse() {
-      return this.findSelectedWarehouseFromRoute();
-    },
     hasChanged() {
       return !Warehouse.equals(this.selectedWarehouse, this.copyOfWarehouse)
     }
   },
-  props: {
-    warehouses: {
-      type: Array,
-      required: true
-    },
-    selected: {
-      type: Warehouse,
-      required: false
-    },
-
-    // vendors: {
-    //   type: Array,
-    //   required: true
-    // },
-    // products: {
-    //   type: Array,
-    //   required: true
-    // },
-    // transactions: {
-    //   type: Array,
-    //   required: true
-    // },
-    // inventories: {
-    //   type: Array,
-    //   required: true
-    // }
-  },
   data() {
     return {
+      selectedWarehouse: null,
       copyOfWarehouse: null,
     }
   },
   created() {
-    this.copyOfWarehouse = this.selected ? Warehouse.copy(this.selected) : null;
+  },
+  async mounted() {
+    this.selectedWarehouse = await this.findSelectedWarehouseFromRoute();
+    this.copyOfWarehouse = Warehouse.copy(this.selectedWarehouse);
   },
   methods: {
     onClear() {
-      this.copyOfWarehouse = new Warehouse(this.copyOfWarehouse.id)
+      this.copyOfWarehouse = new Warehouse(this.copyOfWarehouse.id);
     },
     onReset() {
-      this.copyOfWarehouse = this.Warehouse.copy(this.selectedWarehouse)
+      this.copyOfWarehouse = Warehouse.copy(this.selectedWarehouse);
     },
     onCancel() {
-      this.onReset()
-      this.$router.push("/warehouse/overview")
+      this.onReset();
+      this.$router.push("/warehouse/overview");
     },
-    onSave() {
-      this.$emit('save', this.copyOfWarehouse)
-      this.copyOfWarehouse = this.Warehouse.copy(this.selectedWarehouse)
+    async onSave() {
+      const savedWarehouse = await this.warehousesService.asyncUpdateWarehouse(this.selectedWarehouse.id,
+          this.copyOfWarehouse);
+      if (savedWarehouse) {
+        this.selectedWarehouse = savedWarehouse;
+        this.copyOfWarehouse = Warehouse.copy(this.selectedWarehouse);
+        this.$emit('warehouse-updated', this.copyOfWarehouse)
+      } else {
+        alert('Error saving warehouse');
+      }
     },
     onDelete() {
       this.$emit('delete', this.copyOfWarehouse)
     },
-    findSelectedWarehouseFromRoute() {
-      return this.warehouses.find(warehouse => warehouse.id === parseInt(this.$route.params.id))
+    async findSelectedWarehouseFromRoute() {
+      return await this.warehousesService.asyncFindById(this.$route.params.id)
     },
-    saveProduct(product) {
-      this.$emit('save-product', product)
-    },
-    removeProduct(product) {
-      this.$emit('remove-product', product)
-    },
-    addProduct(product) {
-      this.$emit('add-product', product)
-    }
   },
   watch: {
-    "$route.params.id"() {
-      this.copyOfWarehouse = this.selectedWarehouse ? this.Warehouse.copy(this.selectedWarehouse) : null
-    }
+    '$route': async function () {
+      this.selectedWarehouse = await this.findSelectedWarehouseFromRoute();
+      this.copyOfWarehouse = this.selectedWarehouse ? Warehouse.copy(this.selectedWarehouse) : null;
+    },
   }
 }
 

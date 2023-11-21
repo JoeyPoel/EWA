@@ -28,6 +28,7 @@
         :selectedWarehouse="findSelectedWarehouseFromRoute()"
         @close-modal="deselectWarehouse()"
         @add-warehouse="onNewWarehouse()"
+        @updated-warehouse="onSave"
         @warehouse-added="handleAddedWarehouse"
     ></router-view>
   </div>
@@ -37,7 +38,7 @@ import {Warehouse} from '@/models/Warehouse.js';
 
 export default {
   name: "WarehouseOverviewComponent",
-  inject: ['warehousesService', 'productsService'],
+  inject: ['warehousesService'],
   components: {},
   data() {
     return {

@@ -33,15 +33,14 @@
           <div class="card-body tab-content">
             <div class="tab-pane fade show active" id="details-content">
               <div>
-                <warehouseDetailComponent :warehouses="warehouses" :selected="selectedWarehouse"/>
+                <warehouseDetailComponent/>
               </div>
             </div>
-            <div class="tab-pane fade" id="inventory-content">
-              <div>
-                <warehouseDetailInventoryComponent :warehouses="warehouses" :selected="selectedWarehouse"
-                                                   :products="products" :inventory="getInventory()"/>
-              </div>
-            </div>
+<!--            <div class="tab-pane fade" id="inventory-content">-->
+<!--              <div>-->
+<!--                <warehouse-storage-capacity-component/>-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
         </div>
       </div>
@@ -53,31 +52,13 @@
 import {Modal} from 'bootstrap';
 import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
 import {Warehouse} from "@/models/Warehouse";
-import WarehouseDetailInventoryComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
+// import WarehouseStorageCapacityComponent from "@/components/warehouses/WarehouseStorageCapacityComponent.vue";
 export default {
   name: "WarehouseDetailModalComponent",
   inject: ['warehousesService'],
   components: {
     warehouseDetailComponent: WarehouseDetailComponent,
-    warehouseDetailInventoryComponent: WarehouseDetailInventoryComponent
-  },
-  props: {
-    warehouses: {
-      type: Array,
-      required: true
-    },
-    selectedWarehouse: {
-      type: Object,
-      required: false
-    },
-    products: {
-      type: Array,
-      required: true
-    },
-    inventories: {
-      type: Array,
-      required: true
-    },
+    // warehouseStorageCapacityComponent: WarehouseStorageCapacityComponent
   },
   data() {
     return {
@@ -86,9 +67,7 @@ export default {
     };
   },
   created() {
-    console.log(this.inventories)
   },
-
   mounted() {
     this.modal = new Modal(this.$refs.modalRef);
     if (this.$route.params.id || this.$route.name === "add") {
@@ -107,9 +86,10 @@ export default {
       this.modal.hide();
       this.$emit('close-modal');
     },
-    getInventory() {
-      return this.inventories.filter(inventory => inventory.warehouseId === this.selectedWarehouse.id)
-    }
+
+    // getInventory() {
+    //   return this.inventories.filter(inventory => inventory.warehouseId === this.selectedWarehouse.id)
+    // }
   },
 };
 </script>
