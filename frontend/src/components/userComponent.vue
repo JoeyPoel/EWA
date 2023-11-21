@@ -91,9 +91,9 @@ export default {
       newUser: {
         email: "",
         name: "",
-        password: "",
-        team: "0",
+        password: "a",
         role: "",
+        team: 0,
       },
       isCreateUserModalOpen: false,
     };
@@ -112,7 +112,7 @@ export default {
         name: "",
         password: "",
         role: "",
-        team_id: "",
+        team: 0,
       };
       this.isCreateUserModalOpen = true;
     },
@@ -128,7 +128,7 @@ export default {
 
       // Create a new object with all properties of newUser except team
       const userToSave = { ...this.newUser };
-      userToSave.team.id = { id: 0 };
+      userToSave.password = "a";
 
       console.log(userToSave)
       const savedUser = await this.usersService.asyncSave(userToSave);

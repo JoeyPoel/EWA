@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.models.Product;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 import teamx.app.backend.services.UserService;
@@ -63,14 +64,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
-    @PostMapping()
-    public ResponseEntity<?> add(@RequestBody User user) {
-        if (userService.findByEmail(user.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+    @PostMapping("/add")
+    public ResponseEntity<User> add(@RequestBody User user) {
+        try {
+            User newUser = userService.save(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding User");
         }
-        User savedUser = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+
+
+//    @PostMapping("/add")
+//    public ResponseEntity<?> add(@RequestBody User user) {
+//        if (userService.findByEmail(user.getEmail()).isPresent()) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+//        }
+//        User savedUser = userService.save(user);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody User user) {
