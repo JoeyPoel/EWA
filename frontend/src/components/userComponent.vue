@@ -1,20 +1,15 @@
 <script>
-// import { User } from "@/models/User";
 
 export default {
   name: "UserComponent",
+  inject: ["usersService"],
   data() {
     return {
-      users: [], // Initialize an empty array to store user data
+      users: [],
     };
   },
-  created() {
-
-    for (let i = 0; i < 6; i++) {
-      this.users.push(
-          //User.createDummyUser(i)
-      );
-    }
+  async created() {
+    this.users = await this.usersService.asyncFindAll();
   },
 };
 </script>
@@ -31,7 +26,7 @@ export default {
           </div>
           <div class="card-body">
             <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-            <p class="card-text"><strong>Team:</strong> {{ user.team }}</p>
+            <p class="card-text"><strong>Team:</strong> {{ user.team.name }}</p>
             <p class="card-text"><strong>Role:</strong> {{ user.role }}</p>
           </div>
         </div>

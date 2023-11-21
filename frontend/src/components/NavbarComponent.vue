@@ -25,81 +25,74 @@ export default {
   <div v-if="!$route.meta.hideNavbar">
     <div class="d-flex flex-column flex-shrink-0 p-3 text-black bg-custom vh-100 w-auto sticky-top">
       <!-- Home Link with Icon -->
-      <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none" to="/dashboard">
+      <router-link class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none"
+                   to="/dashboard">
         <img :src="logo" alt="Your Company Logo" class="me-2 nav-height">
       </router-link>
-
       <hr>
-
       <ul class="nav nav-pills flex-column mb-auto">
-
         <li class="nav-item">
           <router-link class="nav-link text-black" to="/dashboard">
             Dashboard
           </router-link>
         </li>
-
         <li class="nav-item">
           <router-link class="nav-link text-black" to="/warehouse/inventory">
             Inventory
           </router-link>
         </li>
-
         <li class="nav-item ">
           <router-link class="nav-link text-black " to="/warehouse/overview">
             Warehouses
           </router-link>
         </li>
-
         <li class="nav-item">
           <router-link class="nav-link text-black" to="/product">
             Products
           </router-link>
         </li>
-
         <li class="nav-item">
           <router-link class="nav-link text-black" to="/project">
             Projects
           </router-link>
         </li>
-
         <li class="nav-item">
           <router-link class="nav-link text-black" to="/teams">
             Teams
           </router-link>
         </li>
+        <li>
+          <router-link class="nav-link text-black" to="/user">
+            Users
+          </router-link>
+        </li>
+<!--        <li>-->
+<!--          <router-link class="nav-link text-black" to="/admin/products">-->
+<!--            Products page-->
+<!--          </router-link>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--          <router-link class="nav-link text-black" to="/admin/project">-->
+<!--            Projects-->
+<!--          </router-link>-->
+<!--        </li>-->
 
-      <li class="nav-item dropdown">
-        <a class="nav-link text-black dropdown-toggle" href="#" id="adminDropdown" data-bs-toggle="dropdown"
-           aria-expanded="false">
-          Admin
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="adminDropdown">
-          <li>
-            <router-link class="dropdown-item" to="/user">
-              User page
-            </router-link>
-          </li>
-          <li>
-            <router-link class="dropdown-item" to="/admin/products">
-              Products page
-            </router-link>
-          </li>
-          <li>
-            <router-link class="dropdown-item" to="/admin/project">
-              Projects
-            </router-link>
-          </li>
-          <li><a class="dropdown-item" href="#">
-            Administration
-          </a></li>
-        </ul>
-      </li>
-
+<!--        <li class="nav-item dropdown">-->
+<!--          <a id="adminDropdown" aria-expanded="false" class="nav-link text-black dropdown-toggle"-->
+<!--             data-bs-toggle="dropdown"-->
+<!--             href="#">-->
+<!--            Admin-->
+<!--          </a>-->
+<!--          <ul aria-labelledby="adminDropdown" class="dropdown-menu dropdown-menu-dark text-small shadow">-->
+<!--            <li><a class="dropdown-item" href="#">-->
+<!--              Administration-->
+<!--            </a></li>-->
+<!--          </ul>-->
+<!--        </li>-->
         <li class="nav-item" @click="logout">
-        <a class="nav-link text-black">
-          Log out
-        </a>
+          <a class="nav-link text-black">
+            Log out
+          </a>
         </li>
       </ul>
     </div>
@@ -139,8 +132,7 @@ export default {
 }
 
 .bg-custom {
-  background:
-      linear-gradient(
+  background: linear-gradient(
       25deg,
       var(--gradient-color-start) 0%,
       var(--gradient-color-middle) 30%,

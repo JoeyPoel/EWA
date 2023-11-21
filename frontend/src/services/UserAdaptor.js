@@ -14,6 +14,11 @@ export default class UserAdaptor extends Adaptor {
         return Object.assign(new User(), await this.fetchJson(this.resourceUrl + "/login", options));
     }
 
+    async asyncFindAll() {
+        return (await this.fetchJson(this.resourceUrl + "/getAll"))
+            .map(user => Object.assign(new User(), user));
+    }
+
     async asyncSave(object) {
         console.log(object);
         return null;
