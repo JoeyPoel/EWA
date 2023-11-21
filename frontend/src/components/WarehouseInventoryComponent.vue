@@ -1,41 +1,45 @@
 <template>
-  <div class="container-fluid bg-dark text-light mb-4 pt-4">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4 mb-4">
-        <label for="selectWarehouse"><h4>Choose a warehouse:</h4></label>
-        <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
-          <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
-        </select>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4">
-        <label for="searchBar"><h4>Search for an item:</h4></label>
-        <input type="text" id="searchBar" class="form-control form-control-sm" v-model="searchQuery" @input="handleSearch">
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4">
-        <label for="selectSorting"><h4>Choose a sorting system:</h4></label>
-        <select id="selectSorting" v-model="selectedSorting" class="form-control form-control-sm">
-          <option value="id">Sort on ID</option>
-          <option value="reverse id">Reverse sort on ID</option>
-          <option value="name">Sort on name</option>
-          <option value="reverse name">Reverse sort on name</option>
-          <option value="stock">Sort on Stock level</option>
-          <option value="reverse stock">Reverse sort on Stock level</option>
-        </select>
+  <div class="container border border-1 rounded-2 border-light-subtle">
+    <div class="container-fluid text-light mb-4 pt-4 text-dark">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4 mb-4">
+          <label class="form-label" for="selectWarehouse">Choose a warehouse:</label>
+          <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
+            <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <label class="form-label" for="searchBar">Search for an item:</label>
+          <input type="text" id="searchBar" class="form-control form-control-sm" v-model="searchQuery" @input="handleSearch">
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <label class="form-label" for="selectSorting">Choose a sorting system:</label>
+          <select id="selectSorting" v-model="selectedSorting" class="form-control form-control-sm">
+            <option value="id">Sort on ID</option>
+            <option value="reverse id">Reverse sort on ID</option>
+            <option value="name">Sort on name</option>
+            <option value="reverse name">Reverse sort on name</option>
+            <option value="stock">Sort on Stock level</option>
+            <option value="reverse stock">Reverse sort on Stock level</option>
+          </select>
+        </div>
       </div>
     </div>
+    <div class="container" v-if="selectedWarehouse === null">
+      <p class="text-danger">Please select a warehouse.</p>
+    </div>
+    <warehouse-inventory-table v-else :products="filteredProducts"></warehouse-inventory-table>
   </div>
-  <div class="container" v-if="selectedWarehouse === null">
-    <p class="text-danger">Please select a warehouse.</p>
-  </div>
-  <warehouse-inventory-table v-else :products="filteredProducts"></warehouse-inventory-table>
+
 </template>
 
 <script>
-// import {product} from '@/models/product.js';
+// import {product} from '@/models/Product.js';
 // import {Warehouse} from '@/models/Warehouse.js';
 import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
 
 export default {
+  inject: ['productsService', 'warehousesService'],
   name: "WarehouseComponent",
   components: {WarehouseInventoryTable},
   data() {
@@ -48,38 +52,9 @@ export default {
       searchQuery: "",
     }
   },
-  created() {
-    fetch('http://localhost:8090/products/getAll')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          this.products = data;
-        })
-        .catch(error => {
-          console.error('Error fetching data', error);
-        });
-
-    fetch('http://localhost:8090/warehouses/getAll')
-        .then(response => response.json())
-        .then(data => {
-          this.warehouses = data;
-        })
-        .catch(error => {
-          console.error('Error fetching data', error);
-        });
-
-    // for (let i = 0; i < 5; i++) {
-    //   this.warehouses.push(
-    //       // Warehouse.createDummyWarehouse(i + 1)
-    //   );
-    //
-    //   for (let j = 0; j < 5; j++) {
-    //     // this.products.push(product.createDummyProduct(j + 1, i + 1))
-    //     this.products.push(
-    //
-    //     )
-    //   }
-    // }
+  async created() {
+    this.products = await this.productsService.asyncFindAll()
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
   watch: {
     selectedWarehouse: function () {

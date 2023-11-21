@@ -10,7 +10,7 @@
         <input type="checkbox" :value="warehouse.id" v-model="selectedWarehouses">
         {{ warehouse.name }}
       </label>
-      <br />
+      <br/>
       <label for="quantity" v-if="selectedWarehouses.includes(warehouse.id)">Quantity</label>
       <input
           type="number"
@@ -43,6 +43,7 @@
 
 <script>
 export default {
+  inject: ['productsService', 'warehousesService'],
   name: "AdminProducts",
   data() {
     return {
@@ -54,28 +55,13 @@ export default {
       quantityPerWarehouse: [],
     };
   },
-  created() {
-    fetch("http://localhost:8090/products/getAllTypes")
-        .then((response) => response.json())
-        .then((data) => {
-          this.products = data;
-        })
-        .catch((error) => {
-          console.error("Error fetching data", error);
-        });
-
-    fetch("http://localhost:8090/warehouses/getAll")
-        .then((response) => response.json())
-        .then((data) => {
-          this.warehouses = data;
-        })
-        .catch((error) => {
-          console.error("Error fetching data", error);
-        });
+  async created() {
+    this.products = null;
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
   methods: {
     addProduct() {
-      if(this.selectedWarehouses.length === 0){
+      if (this.selectedWarehouses.length === 0) {
         console.log("Please select at least 1 warehouse.")
       }
 
@@ -93,7 +79,7 @@ export default {
       console.log(productRequests)
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(productRequests),
       };
 

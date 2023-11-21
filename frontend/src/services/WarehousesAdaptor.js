@@ -10,7 +10,7 @@ import {Warehouse} from "@/models/Warehouse.js";
  */
 export default class WarehousesAdaptor extends Adaptor {
     constructor() {
-        super("http://localhost:8086/api/warehouses/");
+        super("http://localhost:8086/api/warehouses");
     }
 
     /**
@@ -20,8 +20,11 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouses.
      */
     async asyncFindAll() {
-        return (await this.fetchJson(this.resourceUrl + "/all"))
-            .map(warehouse => Object.assign(new Warehouse(), warehouse));
+       const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
+        if (response) {
+            return response.map(warehouse => Object.assign(new Warehouse(), warehouse));
+        }
+        return null;
     }
 
     /**
@@ -32,36 +35,33 @@ export default class WarehousesAdaptor extends Adaptor {
      * @returns {Promise<*>} The warehouse.
      */
     async asyncFindById(id) {
-        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + id));
+        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + "/getWarehouseById/" + id));
     }
 
-    /**
-     * Saves a warehouse to the REST API.
-     *
-     * @async
-     * @param {Warehouse} warehouse - The warehouse to save.
-     * @returns {Promise<*>} The saved warehouse.
-     */
-    async asyncSave(warehouse) {
+    async asyncAddWarehouse(warehouse) {
         const options = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(warehouse)
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouse)
         }
 
-        let response = await this.fetchJson(this.resourceUrl, options);
+        const response = await this.fetchJson(this.resourceUrl + "/addWarehouse", options);
 
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + warehouse.id, options);
-        }
-
-        if (response.ok) {
+        if (response) {
             return Object.assign(new Warehouse(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
         }
+        return null;
+    }
+
+    async asyncUpdateWarehouse(id, warehouse) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouse)
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/updateWarehouseById/" + id, options);
+
+        if (response) {
+            return Object.assign(new Warehouse(), await response.json());
+        }
+        return null;
     }
 
     /**
@@ -73,15 +73,14 @@ export default class WarehousesAdaptor extends Adaptor {
      */
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + id, options);
-        if (response.ok) {
+        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" +id, options);
+        if (response) {
             return Object.assign(new Warehouse(), await response.json());
-        } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
         }
+        return null;
     }
+
+
 }

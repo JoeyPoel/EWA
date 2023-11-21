@@ -1,4 +1,4 @@
-export class product{
+export class Product {
     constructor(id, name, description, quantity, warehouseId) {
         this.id = id;
         this.name = name;
@@ -22,11 +22,11 @@ export class product{
     ];
 
     static createDummyProduct(id, warehouseId){
-        return new product(id, this.productList[id],"Dummy Description" ,Math.floor(Math.random() * 100), warehouseId)
+        return new Product(id, this.productList[id],"Dummy Description" ,Math.floor(Math.random() * 100), warehouseId)
     }
 
     static createRandomDummyProduct(id) {
-        return new product(id,
+        return new Product(id,
             this.productList[this.getRandomProductNumber()],
             "Dummy Description",
             Math.floor(Math.random() * 100),

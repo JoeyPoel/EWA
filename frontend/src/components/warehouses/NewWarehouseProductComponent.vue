@@ -1,10 +1,8 @@
 <template>
   <div class="row">
-    <div class="col col-9 align-self-center ">
-      <div class="row">
-        <div class="col col-6">
+    <div class="col align-self-center ">
           <div class="row">
-            <div class="col col-3 align-self-center text-end">
+            <div class="col col-3 align-self-center text-start">
               <label class="form-label" for="product">Product</label>
             </div>
             <div class="col col-9">
@@ -15,18 +13,14 @@
               </select>
             </div>
           </div>
-        </div>
-        <div class="col col-6">
-          <div class="row">
-            <div class="col col-7 align-self-center text-end">
+          <div class="row mt-1">
+            <div class="col col-7 align-self-center text-start">
               <label class="form-label" for="quantity">Minimum stock level</label>
             </div>
             <div class="col col-5">
               <input class="form-control" id="quantity" type="number" v-model="warehouseProduct.minimumQuantity"/>
             </div>
           </div>
-        </div>
-      </div>
     </div>
     <div class="col col-3">
       <div class="row ">
