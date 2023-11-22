@@ -1,6 +1,5 @@
 import {Adaptor} from "./Adaptor.js";
 import {Warehouse} from "@/models/Warehouse.js";
-import {ProductCategory} from "@/models/ProductCategory";
 import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
 
 /**
@@ -84,15 +83,6 @@ export default class WarehousesAdaptor extends Adaptor {
         return null;
     }
 
-    async asyncGetMissingWarehouseCapacityCategories(id) {
-        const response = await this.fetchJson(this.resourceUrl + "/getMissingWarehouseCapacityCategories/"
-            + id);
-        if (response) {
-            return response.map(category => Object.assign(new ProductCategory(), category));
-        }
-        return null;
-    }
-
     async asyncGetWarehouseCapacityCategories(id) {
         const response = await this.fetchJson(this.resourceUrl + "/getWarehouseCapacityCategories/" + id);
         if (response) {
@@ -103,14 +93,30 @@ export default class WarehousesAdaptor extends Adaptor {
 
     async asyncAddWarehouseCapacityByWarehouseId(id, warehouseProductCategoryCapacity) {
         const options = {
-            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouseProductCategoryCapacity)
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(warehouseProductCategoryCapacity)
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" +
-            id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" + id,
+            options);
 
         if (response) {
-            return Object.assign(new WarehouseProductCategoryCapacity(), await response.json());
+            return Object.assign(new WarehouseProductCategoryCapacity(), response);
+        }
+        return null;
+    }
+
+    async asyncUpdateWarehouseCapacityById(id, warehouseProductCategoryCapacity) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(warehouseProductCategoryCapacity)
+        }
+
+        const response = await this.fetchJson(
+            this.resourceUrl + "/updateWarehouseCapacityById/" + id, options);
+
+        if (response) {
+            return Object.assign(new WarehouseProductCategoryCapacity(), response);
         }
         return null;
     }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.WarehouseProductCategoryCapacity;
+import teamx.app.backend.models.dto.WarehouseProductCategoryCapacityDTO;
 import teamx.app.backend.repositories.WarehouseRepository;
 import teamx.app.backend.services.WarehouseService;
 
@@ -58,9 +59,10 @@ public class WarehouseController {
     }
 
     @GetMapping("/getWarehouseCapacityCategories/{id}")
-    public ResponseEntity<List<WarehouseProductCategoryCapacity>> getWarehouseCapacityCategories(@PathVariable Long id) {
+    public ResponseEntity<List<WarehouseProductCategoryCapacityDTO>> getWarehouseCapacityCategories(@PathVariable Long id) {
         try {
-            List<WarehouseProductCategoryCapacity> warehouseCapacityCategories = warehouseService.getWarehouseCapacity(id);
+            List<WarehouseProductCategoryCapacityDTO> warehouseCapacityCategories =
+                    warehouseService.getWarehouseCapacity(id);
             if (warehouseCapacityCategories == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No warehouse capacity categories found");
             }
@@ -108,9 +110,12 @@ public class WarehouseController {
     }
 
     @PostMapping("/addWarehouseCapacityByWarehouseId/{id}")
-    public ResponseEntity<WarehouseProductCategoryCapacity> addWarehouseCapacityByWarehouseId(@PathVariable Long id, @RequestBody WarehouseProductCategoryCapacity warehouseProductCategoryCapacity) {
+    public ResponseEntity<WarehouseProductCategoryCapacityDTO>
+    addWarehouseCapacityByWarehouseId(@PathVariable Long id,
+                                      @RequestBody WarehouseProductCategoryCapacityDTO warehouseProductCategoryCapacity) {
         try {
-            WarehouseProductCategoryCapacity newWarehouseProductCategoryCapacity = warehouseService.addWarehouseCapacity(id, warehouseProductCategoryCapacity);
+            WarehouseProductCategoryCapacityDTO newWarehouseProductCategoryCapacity =
+                    warehouseService.addWarehouseCapacity(id, warehouseProductCategoryCapacity);
             if (newWarehouseProductCategoryCapacity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
@@ -119,5 +124,20 @@ public class WarehouseController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding warehouse capacity");
         }
     }
-}
 
+    @PutMapping("/updateWarehouseCapacityById/{id}")
+    public ResponseEntity<WarehouseProductCategoryCapacityDTO>
+    updateWarehouseCapacityById(@PathVariable Long id,
+                                @RequestBody WarehouseProductCategoryCapacityDTO warehouseProductCategoryCapacity) {
+        try {
+            WarehouseProductCategoryCapacityDTO updatedWarehouseProductCategoryCapacity =
+                    warehouseService.updateWarehouseCapacityById(id, warehouseProductCategoryCapacity);
+            if (updatedWarehouseProductCategoryCapacity == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse capacity not found");
+            }
+            return new ResponseEntity<>(updatedWarehouseProductCategoryCapacity, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse capacity" + e.getMessage());
+        }
+    }
+}

@@ -49,14 +49,8 @@ export default {
   },
   computed: {},
   methods: {
-    addCategoryCapacity(category) {
-      this.$emit('add-category', category)
-    },
-    removeCategoryCapacity(category) {
-      this.$emit('remove-category-capacity', category)
-    },
-    saveCategoryCapacity(category) {
-      this.$emit('save-category-capacity', category)
+    async saveCategoryCapacity() {
+      await this.getCapacities();
     },
     async getCapacities() {
       this.warehouseProductCategoryCapacities = this.$route.params.id ?

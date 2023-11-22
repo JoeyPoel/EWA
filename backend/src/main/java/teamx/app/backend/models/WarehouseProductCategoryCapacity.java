@@ -23,6 +23,6 @@ public class WarehouseProductCategoryCapacity {
     private Warehouse warehouse;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private ProductCategory productCategory;
 }

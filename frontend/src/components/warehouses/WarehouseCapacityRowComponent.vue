@@ -2,7 +2,7 @@
   <tr class="border border-light-subtle border-1" @mouseleave="mouseOver = false" @mouseover="mouseOver = true">
     <td>
       <div>
-        {{ category.productCategory.name }}
+        {{ category.categoryName }}
       </div>
     </td>
     <td>
@@ -40,6 +40,7 @@ import {Tooltip} from "bootstrap";
 
 export default {
   name: "WarehouseCapacityRowComponent",
+  inject: ['warehousesService'],
   components: {
     BIconPen,
     BIconSave,
@@ -73,16 +74,25 @@ export default {
     edit() {
       this.isEditing = !this.isEditing;
     },
-    save() {
+    async save() {
       this.isEditing = false;
+
+      const savedCategory = this.category.id ?
+          await this.warehousesService.asyncUpdateWarehouseCapacityById(
+              this.category.id, this.categoryCopy) :
+          await this.warehousesService.asyncAddWarehouseCapacityByWarehouseId(
+              this.$route.params.id, this.categoryCopy);
+
+      if (savedCategory) {
+        this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), savedCategory);
+      }
+
       this.$emit('save-category-capacity', this.category);
     },
     reset() {
+      this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), this.category);
       this.isEditing = false;
     },
-    remove() {
-      this.$emit('remove-category-capacity', this.category);
-    }
   },
   watch: {
     mouseOver: function (val) {

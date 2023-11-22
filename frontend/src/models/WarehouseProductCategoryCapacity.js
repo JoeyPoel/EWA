@@ -1,12 +1,13 @@
 import {Model} from "@/models/Model";
 
 export class WarehouseProductCategoryCapacity extends Model {
-    constructor(id, capacity, warehouse, productCategory, minimumStockLevel) {
+    constructor(id, capacity, warehouseId, categoryId, minimumStockLevel, categoryName) {
         super();
         this.id = id;
         this.capacity = capacity;
-        this.warehouse = warehouse;
-        this.productCategory = productCategory;
+        this.warehouseId = warehouseId;
+        this.categoryName = categoryName;
+        this.categoryId = categoryId;
         this.minimumStockLevel = minimumStockLevel;
     }
 }

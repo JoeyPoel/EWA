@@ -26,4 +26,8 @@ public class ProductCategory {
     private Long id;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "productCategory")
+    @JsonIgnore
+    private List<WarehouseProductCategoryCapacity> warehouseProductCategoryCapacities;
 }

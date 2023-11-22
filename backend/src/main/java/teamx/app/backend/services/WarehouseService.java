@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.WarehouseProductCategoryCapacity;
+import teamx.app.backend.models.dto.WarehouseProductCategoryCapacityDTO;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.WarehouseProductCategoryCapacityRepository;
 import teamx.app.backend.repositories.WarehouseRepository;
@@ -67,21 +68,22 @@ public class WarehouseService {
         return existingWarehouse;
     }
 
-    public List<WarehouseProductCategoryCapacity> getWarehouseCapacity(Long id) {
-        List<WarehouseProductCategoryCapacity> warehouseCapacity =
-                warehouseProductCategoryCapacityRepository.findAllByWarehouseId(id);
+    public List<WarehouseProductCategoryCapacityDTO> getWarehouseCapacity(Long id) {
+        List<WarehouseProductCategoryCapacity> warehouseCapacity = warehouseProductCategoryCapacityRepository.findAllByWarehouseId(id);
         warehouseCapacity.addAll(getMissingWarehouseCapacityCategories(id));
-        return warehouseCapacity;
+        List<WarehouseProductCategoryCapacityDTO> warehouseCapacityDTO = new ArrayList<>();
+        for (WarehouseProductCategoryCapacity capacity : warehouseCapacity) {
+            warehouseCapacityDTO.add(convertToDto(capacity));
+        }
+        return warehouseCapacityDTO;
     }
 
     public List<WarehouseProductCategoryCapacity> getMissingWarehouseCapacityCategories(Long id) {
         List<ProductCategory> productCategories = productCategoryRepository.findAll();
-        List<WarehouseProductCategoryCapacity> warehouseCapacity = warehouseProductCategoryCapacityRepository
-                .findAllByWarehouseId(id);
+        List<WarehouseProductCategoryCapacity> warehouseCapacity = warehouseProductCategoryCapacityRepository.findAllByWarehouseId(id);
 
         for (WarehouseProductCategoryCapacity capacity : warehouseCapacity) {
-            productCategories.removeIf(productCategory -> Objects.equals(productCategory.getId(),
-                    capacity.getProductCategory().getId()));
+            productCategories.removeIf(productCategory -> Objects.equals(productCategory.getId(), capacity.getProductCategory().getId()));
         }
 
         List<WarehouseProductCategoryCapacity> missingWarehouseCapacity = new ArrayList<>();
@@ -98,12 +100,43 @@ public class WarehouseService {
         return missingWarehouseCapacity;
     }
 
-    public WarehouseProductCategoryCapacity addWarehouseCapacity(Long id, WarehouseProductCategoryCapacity capacity) {
+    public WarehouseProductCategoryCapacityDTO addWarehouseCapacity(Long id, WarehouseProductCategoryCapacityDTO capacity) {
         Warehouse warehouse = warehouseRepository.findById(id).orElse(null);
         if (warehouse == null) {
             return null;
         }
-        capacity.setWarehouse(warehouse);
-        return warehouseProductCategoryCapacityRepository.save(capacity);
+        WarehouseProductCategoryCapacity newCapacity = convertToEntity(capacity);
+        return convertToDto(warehouseProductCategoryCapacityRepository.save(newCapacity));
+    }
+
+    public WarehouseProductCategoryCapacityDTO updateWarehouseCapacityById(Long id, WarehouseProductCategoryCapacityDTO capacity) {
+        WarehouseProductCategoryCapacity existingCapacity = warehouseProductCategoryCapacityRepository.findById(id).orElse(null);
+        if (existingCapacity == null || capacity == null || !Objects.equals(capacity.getId(), id)) {
+            return null;
+        }
+        existingCapacity.setCapacity(capacity.getCapacity());
+        existingCapacity.setMinimumStockLevel(capacity.getMinimumStockLevel());
+        return convertToDto(warehouseProductCategoryCapacityRepository.save(existingCapacity));
+    }
+
+    private WarehouseProductCategoryCapacityDTO convertToDto(WarehouseProductCategoryCapacity capacity) {
+        WarehouseProductCategoryCapacityDTO dto = new WarehouseProductCategoryCapacityDTO();
+        dto.setId(capacity.getId());
+        dto.setWarehouseId(capacity.getWarehouse().getId());
+        dto.setCategoryName(capacity.getProductCategory().getName());
+        dto.setCategoryId(capacity.getProductCategory().getId());
+        dto.setCapacity(capacity.getCapacity());
+        dto.setMinimumStockLevel(capacity.getMinimumStockLevel());
+        return dto;
+    }
+
+    private WarehouseProductCategoryCapacity convertToEntity(WarehouseProductCategoryCapacityDTO dto) {
+        WarehouseProductCategoryCapacity capacity = new WarehouseProductCategoryCapacity();
+        capacity.setId(dto.getId());
+        capacity.setWarehouse(warehouseRepository.findById(dto.getWarehouseId()).orElse(null));
+        capacity.setProductCategory(productCategoryRepository.findById(dto.getCategoryId()).orElse(null));
+        capacity.setCapacity(dto.getCapacity());
+        capacity.setMinimumStockLevel(dto.getMinimumStockLevel());
+        return capacity;
     }
 }
