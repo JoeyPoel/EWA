@@ -7,18 +7,18 @@
     </div>
 
     <!-- Product List -->
-<!--    <ul class="list-group product-list">-->
-<!--      <li-->
-<!--          class="list-group-item d-flex justify-content-between align-items-start"-->
-<!--          v-for="(product, index) in filteredProducts"-->
-<!--          :key="index"-->
-<!--          @click="selectProduct(product)">-->
-<!--        <div class="ms-2 me-auto">-->
-<!--          <div class="fw-bold">{{ product.name }}</div>-->
-<!--          {{ product.description }}-->
-<!--        </div>-->
-<!--      </li>-->
-<!--    </ul>-->
+    <!--    <ul class="list-group product-list">-->
+    <!--      <li-->
+    <!--          class="list-group-item d-flex justify-content-between align-items-start"-->
+    <!--          v-for="(product, index) in filteredProducts"-->
+    <!--          :key="index"-->
+    <!--          @click="selectProduct(product)">-->
+    <!--        <div class="ms-2 me-auto">-->
+    <!--          <div class="fw-bold">{{ product.name }}</div>-->
+    <!--          {{ product.description }}-->
+    <!--        </div>-->
+    <!--      </li>-->
+    <!--    </ul>-->
     <table class="table">
       <thead>
       <tr>
@@ -51,6 +51,7 @@
 <script>
 
 import {Product} from '@/models/Product'
+import {ProductCategory} from "@/models/ProductCategory";
 
 export default {
   name: "ProductComponent",
@@ -72,13 +73,13 @@ export default {
   methods: {
     async handleNewProduct(newProduct) {
       this.searchTerm = ""
-      const product = Product.createRandomDummyProduct(Math.floor(Math.random() * 2000) + 100);
-      product.name = newProduct.name;
-      product.description = newProduct.description;
+      const product = new Product(0, newProduct.name, newProduct.description, 0,
+          new ProductCategory(0, "test", "test"));
 
-      await this.productsService.asyncSave(product);
-        this.products.push(product);
-        this.deselectProduct();
+
+      await this.productsService.asyncAdd(product);
+      this.products.push(product);
+      this.deselectProduct();
     },
 
     selectProduct(product) {
@@ -92,7 +93,7 @@ export default {
     },
 
     showAddModal() {
-      this.$router.push({ name: 'ProductAdd'});
+      this.$router.push({name: 'ProductAdd'});
     }
   },
 
