@@ -46,7 +46,7 @@ public class Transaction {
         IN, OUT
     }
 
-    @ManyToOne()
+    @ManyToOne
     @JsonIgnore
     private Product product;
 

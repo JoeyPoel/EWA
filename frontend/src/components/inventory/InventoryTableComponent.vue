@@ -22,11 +22,16 @@
 <script>
 export default {
   name: "WarehouseInventoryTable",
-  props: {
-    products: {
-      type: Array,
-    },
-  }
+  inject: ['inventoryService'],
+  data() {
+    return {
+      products: [],
+    }
+  },
+  async mounted() {
+    console.log(this.$route.params.id)
+    this.products = await this.inventoryService.asyncGetProductsByWarehouseId(this.$route.params.id)
+  },
 }
 </script>
 

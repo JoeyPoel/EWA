@@ -4,13 +4,17 @@
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4 mb-4">
           <label class="form-label" for="selectWarehouse">Choose a warehouse:</label>
-          <select id="warehouse-select" class="form-control form-control-sm" v-model="selectedWarehouse">
-            <option v-for="warehouse in warehouses" :value="warehouse.id" :key="warehouse.id">{{ warehouse.name }}</option>
+          <select id="warehouse-select" v-model="selectedWarehouseId" class="form-control form-control-sm">
+            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">{{
+                warehouse.name
+              }}
+            </option>
           </select>
         </div>
         <div class="col-md-6 col-lg-4 mb-4">
           <label class="form-label" for="searchBar">Search for an item:</label>
-          <input type="text" id="searchBar" class="form-control form-control-sm" v-model="searchQuery" @input="handleSearch">
+          <input id="searchBar" v-model="searchQuery" class="form-control form-control-sm" type="text"
+                 @input="handleSearch">
         </div>
         <div class="col-md-6 col-lg-4 mb-4">
           <label class="form-label" for="selectSorting">Choose a sorting system:</label>
@@ -25,39 +29,31 @@
         </div>
       </div>
     </div>
-    <div class="container" v-if="selectedWarehouse === null">
-      <p class="text-danger">Please select a warehouse.</p>
-    </div>
-    <warehouse-inventory-table v-else :products="filteredProducts"></warehouse-inventory-table>
+    <RouterView/>
   </div>
 
 </template>
 
 <script>
-import WarehouseInventoryTable from "@/components/InventoryTableComponent.vue";
-
 export default {
-  inject: ['productsService', 'warehousesService'],
+  inject: ['warehousesService', 'inventoryService'],
   name: "WarehouseComponent",
-  components: {WarehouseInventoryTable},
   data() {
     return {
       products: [],
       warehouses: [],
       filteredProducts: [],
-      selectedWarehouse: null,
+      selectedWarehouseId: null,
       selectedSorting: "id",
       searchQuery: "",
     }
   },
   async created() {
-    this.products = await this.productsService.asyncFindAll()
     this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
-    console.log(this.products)
   },
   watch: {
-    selectedWarehouse: function () {
-      this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
+    selectedWarehouseId: function () {
+      this.$router.push({name: 'WarehouseInventory', params: {id: this.selectedWarehouseId}});
       this.searchQuery = "";
       this.selectedSorting = "id"
     },
@@ -89,10 +85,10 @@ export default {
     handleSearch() {
       const searchQuery = this.searchQuery.toLowerCase().trim();
       if (searchQuery !== "") { // If searchQuery is not null
-        const products = this.products.filter(product => product.warehouseId === this.selectedWarehouse); // Only from this warehouse
+        const products = this.products.filter(product => product.warehouseId === this.selectedWarehouseId); // Only from this warehouse
         this.filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchQuery)); // Filter it on includes searchQuery
       } else {
-        this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse); // Else return the normal product list of this warehouse
+        this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouseId); // Else return the normal product list of this warehouse
       }
     },
     idSorting() {

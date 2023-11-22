@@ -32,5 +32,6 @@ public class Warehouse {
     private String contactName;
     private String contactEmail;
     private String contactPhone;
+
 }
 

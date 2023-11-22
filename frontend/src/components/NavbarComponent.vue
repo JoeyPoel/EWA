@@ -37,12 +37,12 @@ export default {
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-black" to="/warehouse/inventory">
+          <router-link class="nav-link text-black" to="/inventory">
             Inventory
           </router-link>
         </li>
         <li class="nav-item ">
-          <router-link class="nav-link text-black " to="/warehouse/overview">
+          <router-link class="nav-link text-black " to="/warehouse">
             Warehouses
           </router-link>
         </li>

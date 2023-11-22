@@ -1,6 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
-import warehouseInventoryComponent from "@/components/InventoryComponent.vue";
-// import WarehouseDetailComponent from "@/components/warehouses/WarehouseDetailComponent.vue";
+import InventoryComponent from "@/components/inventory/InventoryComponent.vue";
 import warehouseOverviewComponent from "@/components/warehouses/WarehouseOverviewComponent.vue";
 import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
 import dashboardComponent from "@/components/DashboardComponent.vue";
@@ -15,26 +14,22 @@ import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseModa
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
 import ProjectListComponent from "@/components/projects/ProjectListComponent.vue";
 import EditTeamModal from "@/components/teams/EditTeamModal";
+import InventoryTableComponent from "@/components/inventory/InventoryTableComponent.vue";
 
 const routes = [{
-    path: '/warehouse', name: 'Warehouse', meta: {
+    path: '/inventory', name: 'Inventory', component: InventoryComponent,
+    meta: {
         requiresAuth: true
     }, children: [{
-        path: 'inventory',
-        name: 'WarehouseComponent',
-        component: warehouseInventoryComponent, // TODO: add navigation by id
-    }, {
-        path: 'overview', name: 'WarehouseOverviewComponent', component: warehouseOverviewComponent, children: [// {
-            //     path: ':id',
-            //     name: 'WarehouseDetailComponent',
-            //     component: WarehouseDetailComponent
-            // },
-            {
-                path: ':id', name: 'WarehouseDetailModalComponent', component: WarehouseDetailModalComponent
-            }, {
-                path: 'add', name: 'WarehouseAddComponent', component: WarehouseAddModalComponent
-            }]
+        path: ':id', name: 'WarehouseInventory', component: InventoryTableComponent
     }]
+}, {
+    path: '/warehouse', name: 'WarehouseOverviewComponent', component: warehouseOverviewComponent, children: [// {
+        {
+            path: ':id', name: 'WarehouseDetailModalComponent', component: WarehouseDetailModalComponent
+        }, {
+            path: 'add', name: 'WarehouseAddComponent', component: WarehouseAddModalComponent
+        }]
 }, {
     path: '/product', name: 'Product', meta: {
         requiresAuth: true
@@ -55,7 +50,8 @@ const routes = [{
     path: '/dashboard', name: 'Dashboard', meta: {
         requiresAuth: true
     }, component: dashboardComponent
-}, /*{
+},
+    /*{
         path: '/admin/products',
         name: 'AdminProducts',
         meta: {

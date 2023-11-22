@@ -3,6 +3,7 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.ProductCategory;
+import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.WarehouseProductCategoryCapacity;
 import teamx.app.backend.models.dto.WarehouseProductCategoryCapacityDTO;
@@ -73,7 +74,7 @@ public class WarehouseService {
         warehouseCapacity.addAll(getMissingWarehouseCapacityCategories(id));
         List<WarehouseProductCategoryCapacityDTO> warehouseCapacityDTO = new ArrayList<>();
         for (WarehouseProductCategoryCapacity capacity : warehouseCapacity) {
-            warehouseCapacityDTO.add(convertToDto(capacity));
+            warehouseCapacityDTO.add(convertToWarehouseProductCategoryCapacityDTO(capacity));
         }
         return warehouseCapacityDTO;
     }
@@ -105,8 +106,8 @@ public class WarehouseService {
         if (warehouse == null) {
             return null;
         }
-        WarehouseProductCategoryCapacity newCapacity = convertToEntity(capacity);
-        return convertToDto(warehouseProductCategoryCapacityRepository.save(newCapacity));
+        WarehouseProductCategoryCapacity newCapacity = convertToWarehouse(capacity);
+        return convertToWarehouseProductCategoryCapacityDTO(warehouseProductCategoryCapacityRepository.save(newCapacity));
     }
 
     public WarehouseProductCategoryCapacityDTO updateWarehouseCapacityById(Long id, WarehouseProductCategoryCapacityDTO capacity) {
@@ -116,10 +117,11 @@ public class WarehouseService {
         }
         existingCapacity.setCapacity(capacity.getCapacity());
         existingCapacity.setMinimumStockLevel(capacity.getMinimumStockLevel());
-        return convertToDto(warehouseProductCategoryCapacityRepository.save(existingCapacity));
+        return convertToWarehouseProductCategoryCapacityDTO(warehouseProductCategoryCapacityRepository.save(existingCapacity));
     }
 
-    private WarehouseProductCategoryCapacityDTO convertToDto(WarehouseProductCategoryCapacity capacity) {
+    private WarehouseProductCategoryCapacityDTO convertToWarehouseProductCategoryCapacityDTO
+            (WarehouseProductCategoryCapacity capacity) {
         WarehouseProductCategoryCapacityDTO dto = new WarehouseProductCategoryCapacityDTO();
         dto.setId(capacity.getId());
         dto.setWarehouseId(capacity.getWarehouse().getId());
@@ -130,7 +132,7 @@ public class WarehouseService {
         return dto;
     }
 
-    private WarehouseProductCategoryCapacity convertToEntity(WarehouseProductCategoryCapacityDTO dto) {
+    private WarehouseProductCategoryCapacity convertToWarehouse(WarehouseProductCategoryCapacityDTO dto) {
         WarehouseProductCategoryCapacity capacity = new WarehouseProductCategoryCapacity();
         capacity.setId(dto.getId());
         capacity.setWarehouse(warehouseRepository.findById(dto.getWarehouseId()).orElse(null));

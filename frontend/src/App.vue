@@ -16,6 +16,7 @@ import TeamsAdaptor from "@/services/TeamsAdaptor";
 import ProductAdaptor from "@/services/ProductAdaptor";
 import UserAdaptor from "@/services/UserAdaptor";
 import ProjectAdaptor from "@/services/ProjectAdaptor";
+import {InventoryAdaptor} from "@/services/InventoryAdaptor";
 
 export default {
   name: 'App',
@@ -30,10 +31,13 @@ export default {
       usersService: new UserAdaptor(CONFIG.BACKEND_URL + "/users"),
       productsService: new ProductAdaptor(CONFIG.BACKEND_URL + "/products"),
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
+      inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
     }
-  }
-
-  }
+  },
+  compatConfig: {
+    MODE: 3
+  },
+}
 </script>
 
 <style>
