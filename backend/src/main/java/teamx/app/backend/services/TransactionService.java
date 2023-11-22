@@ -25,30 +25,29 @@ public class TransactionService {
 
     public int getProductCurrentStock(Long warehouseId, Long productId) {
         Warehouse warehouse = warehouseId != null ? warehouseService.getWarehouseById(warehouseId) : null;
-
-        int incomingStock = transactionRepository
-                .getAllByWarehouseAndProductAndTransactionFlowAndTransactionDateBefore(
+        List<Transaction> productTransactions = transactionRepository
+                .getAllByWarehouseAndProductAndAndTransactionDateBefore(
                         warehouse,
                         productService.getProductById(productId),
-                        Transaction.Flow.IN,
                         new Date(System.currentTimeMillis())
-                )
-                .stream()
-                .mapToInt(Transaction::getQuantity)
-                .sum();
+                );
+        return getCurrentStock(productTransactions);
+    }
 
+    private static int getCurrentStock(List<Transaction> productTransactions) {
+        int currentStock = 0;
+        for (Transaction transaction : productTransactions) {
 
-        int outgoingStock = transactionRepository
-                .getAllByWarehouseAndProductAndTransactionFlowAndTransactionDateBefore(
-                        warehouse,
-                        productService.getProductById(productId),
-                        Transaction.Flow.OUT,
-                        new Date(System.currentTimeMillis())
-                )
-                .stream()
-                .mapToInt(Transaction::getQuantity)
-                .sum();
-
-        return incomingStock - outgoingStock;
+            if (transaction.getTransactionType() == Transaction.Type.ORDER ||
+                    (transaction.getTransactionType() == Transaction.Type.ADJUSTMENT ||
+                            transaction.getTransactionType() == Transaction.Type.RETURN ||
+                            transaction.getTransactionType() == Transaction.Type.OTHER) &&
+                            transaction.getQuantity() > 0) {
+                currentStock += transaction.getQuantity();
+            } else {
+                currentStock -= transaction.getQuantity();
+            }
+        }
+        return currentStock;
     }
 }

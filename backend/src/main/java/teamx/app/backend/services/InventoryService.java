@@ -33,6 +33,7 @@ public class InventoryService {
     }
 
     public InventoryProductDTO convertToInventoryProductDTO(Long warehouseId, Product product) {
+        System.out.println("warehouseId: " + warehouseId);
         InventoryProductDTO inventoryProductDTO = new InventoryProductDTO();
         inventoryProductDTO.setProductId(product.getId());
         inventoryProductDTO.setWarehouseId(warehouseId);
@@ -46,7 +47,6 @@ public class InventoryService {
     public List<InventoryProductDTO> convertToInventoryProductDTO(Long warehouseId, List<Product> products) {
         List<InventoryProductDTO> inventoryProductDTOs = new ArrayList<>();
         for (Product product : products) {
-            System.out.println(product.getName());
             inventoryProductDTOs.add(convertToInventoryProductDTO(warehouseId, product));
         }
         return inventoryProductDTOs;

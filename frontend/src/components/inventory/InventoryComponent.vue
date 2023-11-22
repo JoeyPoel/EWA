@@ -52,6 +52,9 @@ export default {
     this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
   },
   watch: {
+    async $route() {
+      this.selectedWarehouseId = this.$route.params.id;
+    },
     selectedWarehouseId: function () {
       this.$router.push({name: 'WarehouseInventory', params: {id: this.selectedWarehouseId}});
       this.searchQuery = "";

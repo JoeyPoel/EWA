@@ -31,7 +31,14 @@ export default {
   async mounted() {
     console.log(this.$route.params.id)
     this.products = await this.inventoryService.asyncGetProductsByWarehouseId(this.$route.params.id)
+    console.log(this.products)
   },
+  watch: {
+    async $route() {
+      !this.$route.params.id ? this.products = [] :
+      this.products = await this.inventoryService.asyncGetProductsByWarehouseId(this.$route.params.id)
+    }
+  }
 }
 </script>
 
