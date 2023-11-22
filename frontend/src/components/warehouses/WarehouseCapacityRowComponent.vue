@@ -23,7 +23,7 @@
     </td>
     <td class="col col-3">
       <div v-show="mouseOver || hasChanged" class="row row-cols-4 align-self-center justify-content-center">
-        <b-icon-pen data-bs-placement="top" data-bs-toggle="tooltip" title="Edit capacity" @click="edit"/>
+        <b-icon-pen v-show="!hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit capacity" @click="edit"/>
         <b-icon-save v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Save capacity"
                      @click="save"/>
         <b-icon-arrow-counterclockwise v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip"
@@ -76,7 +76,6 @@ export default {
     },
     async save() {
       this.isEditing = false;
-
       const savedCategory = this.category.id ?
           await this.warehousesService.asyncUpdateWarehouseCapacityById(
               this.category.id, this.categoryCopy) :
@@ -86,12 +85,11 @@ export default {
       if (savedCategory) {
         this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), savedCategory);
       }
-
       this.$emit('save-category-capacity', this.category);
     },
     reset() {
-      this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), this.category);
       this.isEditing = false;
+      this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), this.category);
     },
   },
   watch: {
