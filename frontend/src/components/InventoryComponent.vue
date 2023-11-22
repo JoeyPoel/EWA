@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import WarehouseInventoryTable from "@/components/WarehouseInventoryTable.vue";
+import WarehouseInventoryTable from "@/components/InventoryTableComponent.vue";
 
 export default {
   inject: ['productsService', 'warehousesService'],
@@ -42,9 +42,9 @@ export default {
   components: {WarehouseInventoryTable},
   data() {
     return {
-      products: [], // Normal product list
+      products: [],
       warehouses: [],
-      filteredProducts: [], // List of products filtered on name by searchQuery
+      filteredProducts: [],
       selectedWarehouse: null,
       selectedSorting: "id",
       searchQuery: "",
@@ -53,10 +53,10 @@ export default {
   async created() {
     this.products = await this.productsService.asyncFindAll()
     this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
+    console.log(this.products)
   },
   watch: {
     selectedWarehouse: function () {
-      // Whenever selectedWarehouse changes, set filteredProducts to this.products
       this.filteredProducts = this.products.filter(product => product.warehouseId === this.selectedWarehouse);
       this.searchQuery = "";
       this.selectedSorting = "id"

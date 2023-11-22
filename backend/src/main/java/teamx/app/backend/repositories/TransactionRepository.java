@@ -16,15 +16,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Integer> findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionFlowAndTransactionDateBefore(
             Long warehouseId, Long productId, Transaction.Flow flow, Date transactionDateBefore);
-    
-    List<Integer> findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionTypeAndTransactionDateBefore(
-            Long warehouseId, Long productId, Transaction.Type transactionType, Date transactionDateBefore);
-    
-    List<Integer> findTransactionQuantitiesByTransferFromIdAndWarehouseIdAndTransactionDateBefore(
-            Long transferFromId, Long warehouseId, Date transactionDateBefore);
 
-    List<Integer> findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionTypeAndTransactionDateBetween(
-            Long warehouseId, Long productId, Transaction.Type transactionType, Date startDate, Date endDate);
+    List<Integer> getAllByWarehouseIdAndTransactionFlowAndTransactionDateBefore(
+            Long warehouseId, Transaction.Flow flow, Date transactionDateBefore);
 
     List<Transaction> findByProjectId(Long id);
 
