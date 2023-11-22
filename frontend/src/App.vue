@@ -32,6 +32,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
     }
   }
+
   }
 </script>
 
