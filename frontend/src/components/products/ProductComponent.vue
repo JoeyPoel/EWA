@@ -24,6 +24,7 @@
       <tr>
         <th>Name</th>
         <th>Description</th>
+        <th>Price</th>
       </tr>
       </thead>
       <tbody>
@@ -33,6 +34,7 @@
           @click="selectProduct(product)">
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
       </tr>
       </tbody>
     </table>
@@ -49,10 +51,6 @@
 </template>
 
 <script>
-
-import {Product} from '@/models/Product'
-import {ProductCategory} from "@/models/ProductCategory";
-
 export default {
   name: "ProductComponent",
   inject: ['productsService'],
@@ -71,14 +69,9 @@ export default {
   },
 
   methods: {
-    async handleNewProduct(newProduct) {
+    async handleNewProduct() {
       this.searchTerm = ""
-      const product = new Product(0, newProduct.name, newProduct.description, 0,
-          new ProductCategory(0, "test", "test"));
-
-
-      await this.productsService.asyncAdd(product);
-      this.products.push(product);
+      this.products = await this.productsService.asyncFindAll()
       this.deselectProduct();
     },
 

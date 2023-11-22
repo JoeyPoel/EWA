@@ -1,5 +1,6 @@
 import {Adaptor} from "./Adaptor.js";
 import {Product} from "@/models/Product";
+import {ProductCategory} from "@/models/ProductCategory";
 
 /**
  * Adaptor for the product REST API.
@@ -91,5 +92,16 @@ export default class ProductAdaptor extends Adaptor {
             return Object.assign(new Product(), response);
         }
         return null;
+    }
+
+    async asyncGetAllProductCategories() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/getAllProductCategories", options);
+        if (response) {
+            return response.map(productCategory => Object.assign(new ProductCategory(), productCategory));
+        }
     }
 }
