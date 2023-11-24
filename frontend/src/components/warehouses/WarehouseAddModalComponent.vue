@@ -125,7 +125,7 @@ export default {
       } else {
         alert('Error adding warehouse');
       }
-      this.$router.push("/warehouse/overview/" + warehouse.id)
+      this.$router.push("/warehouse/" + warehouse.id)
     }
   },
   beforeUnmount() {

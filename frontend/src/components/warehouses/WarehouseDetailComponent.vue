@@ -126,7 +126,7 @@ export default {
     },
     onCancel() {
       this.onReset();
-      this.$router.push("/warehouse/overview");
+      this.$router.push("/warehouse/" + this.selectedWarehouse.id);
     },
     async onUpdate() {
       const savedWarehouse = await this.warehousesService.asyncUpdateWarehouse(this.selectedWarehouse.id,

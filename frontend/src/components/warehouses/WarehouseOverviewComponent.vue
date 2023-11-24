@@ -54,15 +54,15 @@ export default {
   },
   methods: {
     onNewWarehouse() {
-      this.$router.push("/warehouse/overview/add")
+      this.$router.push("/warehouse/add")
     },
     async deselectWarehouse() {
-      this.$router.push("/warehouse/overview");
+      this.$router.push("/warehouse");
       this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
       this.selectedWarehouse = null;
     },
     selectWarehouse(warehouse) {
-      this.$router.push("/warehouse/overview/" + warehouse.id)
+      this.$router.push("/warehouse/" + warehouse.id)
     }
   }
 }

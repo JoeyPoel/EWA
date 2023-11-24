@@ -23,18 +23,18 @@
     </td>
     <td class="col col-3">
       <div v-show="mouseOver || hasChanged" class="row row-cols-4 align-self-center justify-content-center">
-        <b-icon-pen v-show="!hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit capacity" @click="edit"/>
-        <b-icon-save v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Save capacity"
-                     @click="save"/>
-        <b-icon-arrow-counterclockwise v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip"
-                                       title="Reset capacity" @click="reset"/>
+<!--        <b-icon-pen v-show="!hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit capacity" @click="edit"/>-->
+<!--        <b-icon-save v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip" title="Save capacity"-->
+<!--                     @click="save"/>-->
+<!--        <b-icon-arrow-counterclockwise v-show="hasChanged" data-bs-placement="top" data-bs-toggle="tooltip"-->
+<!--                                       title="Reset capacity" @click="reset"/>-->
       </div>
     </td>
   </tr>
 </template>
 
 <script>
-import {BIconArrowCounterclockwise, BIconPen, BIconSave} from "bootstrap-icons-vue";
+// import {BIconArrowCounterclockwise, BIconPen, BIconSave} from "bootstrap-icons-vue";
 import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
 import {Tooltip} from "bootstrap";
 
@@ -42,9 +42,9 @@ export default {
   name: "WarehouseCapacityRowComponent",
   inject: ['warehousesService'],
   components: {
-    BIconPen,
-    BIconSave,
-    BIconArrowCounterclockwise
+    // BIconPen,
+    // BIconSave,
+    // BIconArrowCounterclockwise
   },
   props: {
     category: {

@@ -34,9 +34,6 @@ export default {
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
     }
   },
-  compatConfig: {
-    MODE: 3
-  },
 }
 </script>
 

@@ -1,10 +1,45 @@
+// Vue
+import {createApp} from 'vue';
 import App from './App.vue';
-import { createApp } from 'vue';
 
-import { router } from "@/router";
-import {IconsPlugin, BootstrapVue} from 'bootstrap-vue'
+// Router
+import {router} from "@/router";
 
+// Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 
-createApp(App).use(router, BootstrapVue, IconsPlugin).mount('#app')
+// Vuetify
+import 'vuetify/styles'
+import {createVuetify} from 'vuetify'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import {mdiCancel, mdiContentSaveOutline, mdiTrashCanOutline , mdiInformationOutline, mdiPencilOutline} from '@mdi/js'
+
+const vuetify = createVuetify({
+    components,
+    directives,
+    theme: {
+        defaultTheme: 'light',
+    },
+    icons: {
+        defaultSet: 'mdi',
+        aliases: {
+            ...aliases,
+            edit: mdiPencilOutline,
+            delete: mdiTrashCanOutline ,
+            save: mdiContentSaveOutline,
+            cancel: mdiCancel,
+            info: mdiInformationOutline,
+        },
+        sets: {
+            mdi,
+        },
+    },
+})
+
+createApp(App)
+    .use(router)
+    .use(vuetify)
+    .mount('#app')
