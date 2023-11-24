@@ -9,7 +9,7 @@
         <slot v-if="$slots.heading" name="heading"/>
         <slot v-else-if="$slots.image" name="image"/>
         <div v-else-if="title && !icon" class="display-1 font-weight-light" v-text="title"/>
-        <v-icon v-else-if="icon" size="32" v-text="icon"/>
+        <v-icon v-else-if="icon" size="32" text="icon"/>
         <div v-if="text" class="headline font-weight-thin" v-text="text"/>
       </v-sheet>
       <div v-if="$slots['after-heading']" class="ml-6">
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: 'Card',
+  name: 'BaseCard',
 
   props: {
     avatar: {

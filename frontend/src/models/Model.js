@@ -18,4 +18,8 @@ export class Model {
     static fromJson(json) {
         return Object.assign(new this, json);
     }
+
+    static getNew() {
+        return Object.assign({}, new this);
+    }
 }
