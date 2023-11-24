@@ -1,5 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
-import InventoryComponent from "@/components/inventory/InventoryComponent.vue";
+import InventoryComponent from "@/views/admin/inventory/InventoryComponent.vue";
 
 import warehouseOverviewComponent from "@/components/warehouses/WarehouseOverviewComponent.vue";
 import AdminProductsComponent from "@/components/AdminProductsComponent.vue";

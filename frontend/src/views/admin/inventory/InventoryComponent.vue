@@ -15,17 +15,17 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template>
-            <v-select
-                v-model="warehouse"
-                :items="warehouses"
-                dense
-                item-text="name"
-                item-value="id"
-                label="Warehouse"
-                outlined
-            ></v-select>
-          </template>
+<!--          <template>-->
+<!--            <v-select-->
+<!--                v-model="warehouse"-->
+<!--                :items="warehouses"-->
+<!--                dense-->
+<!--                item-text="name"-->
+<!--                item-value="id"-->
+<!--                label="Warehouse"-->
+<!--                outlined-->
+<!--            ></v-select>-->
+<!--          </template>-->
           <template #activator="{ props }">
             <v-btn class="mb-2" color="primary" dark v-bind="props">New Item</v-btn>
           </template>
