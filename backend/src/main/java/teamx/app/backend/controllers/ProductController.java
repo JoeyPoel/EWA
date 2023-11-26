@@ -1,10 +1,12 @@
 package teamx.app.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.models.PageSettings;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
@@ -31,6 +33,19 @@ public class ProductController {
     @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<ProductDTO>> getAllProductsPaginated(@RequestParam PageSettings pageSettings) {
+        try {
+            Page<ProductDTO> products = productService.getAllProductsPaginatedDTO(pageSettings);
+            if (products == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Products not found");
+            }
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving products");
+        }
     }
 
     @GetMapping("/getAllProducts")

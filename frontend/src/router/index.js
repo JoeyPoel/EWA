@@ -3,8 +3,8 @@ import InventoryComponent from "@/views/admin/inventory/InventoryComponent.vue";
 
 import warehouseOverviewComponent from "@/components/warehouses/WarehouseOverviewComponent.vue";
 import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
-import dashboardComponent from "@/components/DashboardComponent.vue";
-import userComponent from "@/components/userComponent.vue";
+import dashboardComponent from "@/components/dashboard/DashboardComponent.vue";
+import userComponent from "@/components/user/userComponent.vue";
 import productComponent from "@/components/products/ProductComponent.vue";
 // import projectComponent from "@/components/projects/ProjectComponent.vue";
 import ProductDetail from "@/components/products/ProductDetail.vue";

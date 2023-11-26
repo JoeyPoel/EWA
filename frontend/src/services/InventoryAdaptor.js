@@ -6,6 +6,19 @@ export class InventoryAdaptor extends Adaptor {
         super(URL);
     }
 
+    async asyncFindAllPaginated(pageSettings) {
+        const options = {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(pageSettings)
+        }
+        console.log(options);
+
+        const response = await this.fetchJson(this.resourceUrl + "/getAllPaginated", options);
+        if (response) {
+            console.log(response);
+            return response
+        }
+    }
+
     async asyncFindAllProductsHavingTransactions() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
@@ -14,7 +27,7 @@ export class InventoryAdaptor extends Adaptor {
         const response = await this.fetchJson(
             this.resourceUrl + "/getAllProductsByHavingTransactions", options);
         if (response) {
-            return response.map(warehouseProductDTO => Object.assign(new InventoryProductDTO(), warehouseProductDTO));
+            return response.map(inventoryProductDTO => Object.assign(new InventoryProductDTO(), inventoryProductDTO));
         }
     }
 
@@ -26,7 +39,7 @@ export class InventoryAdaptor extends Adaptor {
         const response = await this.fetchJson(
             this.resourceUrl + "/getProductsByWarehouseId/" + warehouseId, options);
         if (response) {
-            return response.map(warehouseProductDTO => Object.assign(new InventoryProductDTO(), warehouseProductDTO));
+            return response.map(inventoryProductDTO => Object.assign(new InventoryProductDTO(), inventoryProductDTO));
         }
     }
 }

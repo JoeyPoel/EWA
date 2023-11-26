@@ -1,7 +1,13 @@
 package teamx.app.backend.services;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import teamx.app.backend.models.PageSettings;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
@@ -21,6 +27,20 @@ public class ProductService {
     public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
+    }
+
+    public Page<Product> getAllProductsPaginated(@NonNull PageSettings pageSetting) {
+        Sort productSort = pageSetting.buildSort();
+        Pageable productPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementsPerPage(), productSort);
+        return productRepository.findAll(productPage);
+    }
+
+    public Page<ProductDTO> getAllProductsPaginatedDTO(@NonNull PageSettings pageSetting) {
+        Page<Product> products = getAllProductsPaginated(pageSetting);
+        if (products == null) {
+            return null;
+        }
+        return products.map(this::convertToDTO);
     }
 
     public List<Product> getAllProducts() {

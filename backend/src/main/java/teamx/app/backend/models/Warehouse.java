@@ -1,13 +1,9 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 
 /**
@@ -32,6 +28,5 @@ public class Warehouse {
     private String contactName;
     private String contactEmail;
     private String contactPhone;
-
 }
 

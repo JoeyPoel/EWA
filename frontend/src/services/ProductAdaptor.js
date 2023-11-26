@@ -31,6 +31,17 @@ export default class ProductAdaptor extends Adaptor {
         }
     }
 
+    async asyncGetAllPaginated(pageSettings) {
+        const options = {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(pageSettings)
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/getAllPaginated", options);
+        if (response) {
+            return response.map(product => Object.assign(new Product(), product));
+        }
+    }
+
     /**
      * Fetches a product by its ID from the REST API.
      *

@@ -1,9 +1,11 @@
 export class Order {
-    constructor(id, description, isDelivered, orderDate, deliveryDate) {
+    constructor(id, orderLines, orderDate, deliveryDate, warehouseId, projectId, userId) {
         this.id = id;
-        this.description = description;
-        this.isDelivered = isDelivered;
+        this.orderLines = orderLines;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
+        this.warehouseId = warehouseId;
+        this.projectId = projectId;
+        this.userId = userId;
     }
 }

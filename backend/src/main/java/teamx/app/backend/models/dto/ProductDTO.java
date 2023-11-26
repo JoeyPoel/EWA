@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import teamx.app.backend.models.Product;
 
 @Data
 @NoArgsConstructor
