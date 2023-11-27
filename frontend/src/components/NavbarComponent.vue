@@ -11,7 +11,7 @@
         <v-list-item prepend-icon="$dashboard" title="Dashboard"></v-list-item>
       </router-link>
       <router-link class="nav-link text-black" to="/inventory">
-        <v-list-item prepend-icon="$inventory" title="Inventory"></v-list-item>
+        <v-list-item prepend-icon="$inventory" title="Inventories"></v-list-item>
       </router-link>
       <router-link class="nav-link text-black" to="/warehouse">
         <v-list-item prepend-icon="$warehouse" title="Warehouses"></v-list-item>

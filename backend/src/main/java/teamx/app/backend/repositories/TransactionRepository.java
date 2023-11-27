@@ -9,8 +9,10 @@ import java.sql.Date;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    List<Transaction> getAllByWarehouseAndProductAndAndTransactionDateBefore(
+    List<Transaction> getAllByWarehouseAndProductAndTransactionDateBefore(
             Warehouse warehouse, Product product, Date date);
+
+    List<Transaction> getAllByProductAndTransactionDateBefore(Product product, Date date);
 
     List<Transaction> getAllByProduct(Product product);
 }

@@ -50,8 +50,13 @@ public class TransactionService {
 
     public int getProductCurrentStock(Long warehouseId, Long productId) {
         Warehouse warehouse = warehouseId != null ? warehouseService.getWarehouseById(warehouseId) : null;
-        List<Transaction> productTransactions = transactionRepository
-                .getAllByWarehouseAndProductAndAndTransactionDateBefore(
+        List<Transaction> productTransactions = warehouse == null ?
+                transactionRepository.getAllByProductAndTransactionDateBefore(
+                        productService.getProductById(productId),
+                        new Date(System.currentTimeMillis())
+                )
+                :
+                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(
                         warehouse,
                         productService.getProductById(productId),
                         new Date(System.currentTimeMillis())

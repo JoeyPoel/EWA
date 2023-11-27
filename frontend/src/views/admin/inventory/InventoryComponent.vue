@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <base-card class="mt-1" color="secondary" title="Inventory">
+    <base-card class="mt-1" color="secondary" title="Inventories">
       <v-row>
         <v-col>
           <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
@@ -8,7 +8,15 @@
         </v-col>
         <v-col>
           <v-select v-model="selectedWarehouse" :items="warehouses" label="Warehouse" variant="outlined"
-                    @change="loadTableData"></v-select>
+                    @change="loadTableData">
+            <template #prepend-inner>
+              <v-icon color="grey"> $warehouse</v-icon>
+            </template>
+            <template v-slot:prepend-item>
+              <v-list-item title="All warehouses" @click="selectedWarehouse = null; loadTableData()">
+              </v-list-item>
+            </template>
+          </v-select>
         </v-col>
       </v-row>
       <v-data-table
@@ -248,8 +256,8 @@ export default {
 
   methods: {
     async loadTableData() {
-      console.log('Loading table data')
       this.loading = true;
+      console.log(this.selectedWarehouse)
       this.serverItems = this.selectedWarehouse ?
           await this.inventoryService.asyncGetProductsByWarehouseId(this.selectedWarehouse) :
           await this.inventoryService.asyncFindAllProductsHavingTransactions();
@@ -323,28 +331,6 @@ export default {
 
       this.dialogNewTransaction = true
     },
-    // handleFilterChange() {
-    //   //   TODO: Handle filter change
-    //   console.log('Filter changed. Still need to implement this.')
-    //   console.log(this.tableFilter)
-    // },
-    // deleteItem(item) {
-    //   this.formTitle = `Delete ${this.modelName}`;
-    //   this.editedIndex = this.serverItems.indexOf(item)
-    //   this.transaction = {}
-    //   this.dialogDelete = true
-    // },
-    // deleteItemConfirm() {
-    //   this.$emit('delete-item', this.transaction)
-    //   // this.tableItems.splice(this.editedIndex, 1)
-    //   this.closeDelete()
-    // },
-    // closeDelete() {
-    //   this.$nextTick(() => {
-    //     this.transaction = Object.assign({}, this.defaultItem)
-    //     this.editedIndex = -1
-    //   })
-    // },
 
     closeDetails() {
       this.transaction = new Transaction();
