@@ -5,15 +5,14 @@ export default class TransactionsAdaptor extends Adaptor{
         super(URL);
     }
 
-    async asyncFindAllTransactionsByProductIdPaginated(productId, pageSettings) {
+    async asyncFindAllTransactionsByProductId(productId) {
         const options = {
-            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(pageSettings)
+            method: "GET", headers: {"Content-Type": "application/json"},
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/getAllTransactionsByProductIdPaginated/"
-            + productId, options);
+        const response = await this.fetchJson(
+            this.resourceUrl + "/getAllTransactionsByProductId/" + productId, options);
         if (response) {
-            console.log(response);
             return response;
         }
     }

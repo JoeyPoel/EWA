@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDTO {
     Long id;
-    List<OrderLineDTO> orderLineDTOS;
+    List<OrderLineDTO> products;
     String orderDate;
     String deliveryDate;
     Long warehouseId;

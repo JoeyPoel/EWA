@@ -12,7 +12,7 @@ import {
     mdiContentSaveOutline,
     mdiCrowd,
     mdiInformationOutline,
-    mdiLogout,
+    mdiLogout, mdiMagnify,
     mdiNut,
     mdiPencilOutline,
     mdiSolarPowerVariantOutline,
@@ -82,7 +82,8 @@ export default createVuetify({
             project: mdiSolarPowerVariantOutline,
             user: mdiAccountOutline,
             logout: mdiLogout,
-            account: mdiAccountCircleOutline
+            account: mdiAccountCircleOutline,
+            search: mdiMagnify
         },
         sets: {
             mdi

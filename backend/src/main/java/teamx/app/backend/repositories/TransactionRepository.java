@@ -1,7 +1,5 @@
 package teamx.app.backend.repositories;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Transaction;
@@ -14,5 +12,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> getAllByWarehouseAndProductAndAndTransactionDateBefore(
             Warehouse warehouse, Product product, Date date);
 
-    Page<Transaction> findAllByProduct(Product productById, Pageable transactionPage);
+    List<Transaction> getAllByProduct(Product product);
 }

@@ -1,26 +1,38 @@
 package teamx.app.backend.models;
 
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 
-@Data
-@Slf4j
+import java.util.List;
+
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Slf4j
+@Data
 public class PageSettings {
-    private int page;
-    private int elementsPerPage;
-    private String direction;
-    private String key;
+    private int pageNumber;
+    private int pageSize;
+    private List<Order> sorts;
 
     public Sort buildSort() {
-        Sort.Direction sortDirection = Sort.Direction.ASC;
-        if (direction.equals("desc")) {
-            sortDirection = Sort.Direction.DESC;
+        Sort sort = Sort.unsorted();
+        if (sorts == null) {
+            return sort;
         }
-        log.info("Sort direction: " + sortDirection);
-        log.info("Sort key: " + key);
-        return Sort.by(sortDirection, key);
+        for (Order order : sorts) {
+
+            sort = sort.and(Sort.by(Sort.Direction.fromString(order.getKey()), order.getOrder()));
+        }
+        return sort;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    class Order {
+        private String key;
+        private String order;
     }
 }

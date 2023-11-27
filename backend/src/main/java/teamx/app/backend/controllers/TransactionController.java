@@ -1,13 +1,10 @@
 package teamx.app.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.PageSettings;
-import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.dto.TransactionDTO;
 import teamx.app.backend.services.TransactionService;
 
@@ -24,13 +21,10 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/getAllTransactionsByProductIdPaginated/{id}")
-    public ResponseEntity<Page<TransactionDTO>> getTransactionsByProductID(
-            @PathVariable Long id,
-            @RequestBody PageSettings pageSettings){
+    @GetMapping("/getAllTransactionsByProductId/{id}")
+    public ResponseEntity<List<TransactionDTO>> getTransactionsByProductID(@PathVariable Long id) {
         try {
-            Page<TransactionDTO> transactions = transactionService.getAllTransactionsByProductPaginated(
-                    id, pageSettings);
+            List<TransactionDTO> transactions = transactionService.getAllByProduct(id);
             return new ResponseEntity<>(transactions, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

@@ -25,11 +25,11 @@ export class Transaction {
         }
     }
 
-    static get CATEGORIES() {
+    static get getCategories() {
         let categories = [];
-        for (let category in Transaction.CATEGORY) {
-            categories.push({ value: category, text: Transaction.CATEGORY[category]});
-        }
+        Object.keys(this.CATEGORY).forEach(key => {
+            categories.push({title: this.CATEGORY[key], value: key});
+        });
         return categories;
     }
 }

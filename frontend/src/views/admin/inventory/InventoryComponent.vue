@@ -1,16 +1,22 @@
 <template>
   <v-container fluid>
-    <base-card class="mt-1" title="Inventory" color="secondary">
-      <v-data-table-server
+    <base-card class="mt-1" color="secondary" title="Inventory">
+      <v-row>
+        <v-col>
+          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
+          </v-text-field>
+        </v-col>
+        <v-col>
+          <v-select v-model="selectedWarehouse" :items="warehouses" label="Warehouse" variant="outlined"
+                    @change="loadTableData"></v-select>
+        </v-col>
+      </v-row>
+      <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
           :items="serverItems"
-          :items-length="totalItems"
-          :loading="loading"
           :search="search"
-          :server-items-length="totalItems"
-          item-value="name"
-          @update:options="loadTableData">
+          item-value="name">
         <template v-slot:top>
           <v-toolbar flat>
             <v-dialog v-model="dialogNewOrder" max-width="800px">
@@ -26,7 +32,7 @@
                 </v-card-title>
                 <v-card-text>
                   <!--                  Add rules-->
-                  <v-container>-->
+                  <v-container>
                     <v-col>
                       <v-row>
                         <v-select v-model="order.warehouse" :items="warehouses" item-text="name" item-value="id"
@@ -73,19 +79,22 @@
                   <span class="text-h5">Product Transaction</span>
                 </v-card-title>
                 <v-card-text>
-                  <!--                  Add rules-->
                   <v-container>
                     <v-col>
                       <v-row>
-                        <v-col cols="6">
-                          <v-select v-model="transaction.category" :items="Transaction.CATEGORIES" item-text="text"
-                                    item-value="value" label="Product">
+                        <v-col>
+                          <v-select v-model="transaction.transactionType" :items="transActionCategories"
+                                    label="Transaction category">
                           </v-select>
                         </v-col>
-                        <v-col cols="6">
-                          <v-select v-model="transaction.warehouseId" :items="warehouses" item-text="name"
-                                    item-value="id"
-                                    label="Warehouse">
+                        <v-col v-if="transaction.transactionType === 'TRANSFER' ">
+                          <v-select v-model="transaction.transferFromWarehouseId" :items="warehouses"
+                                    label="Transfer from">
+                          </v-select>
+                        </v-col>
+                        <v-col>
+                          <v-select v-model="transaction.warehouseId" :items="warehouses"
+                                    :label="transaction.transactionType === 'TRANSFER' ? 'Transfer to' : 'Warehouse'">
                           </v-select>
                         </v-col>
                       </v-row>
@@ -94,13 +103,13 @@
                           <v-text-field v-model="transaction.quantity" label="Quantity" type="number"></v-text-field>
                         </v-col>
                         <v-col cols="6">
-                          <v-select v-model="transaction.product" :items="products" item-text="name" item-value="id"
+                          <v-select v-model="transaction.productId" :items="products" item-text="name" item-value="id"
                                     label="Product">
                           </v-select>
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-textarea v-model="transaction.description" label="Order description"></v-textarea>
+                        <v-textarea v-model="transaction.description" label="Transaction description"></v-textarea>
                       </v-row>
                     </v-col>
                   </v-container>
@@ -115,16 +124,19 @@
             <v-dialog v-model="dialogDetails" max-width="800px">
               <v-card title="Product Transactions">
                 <template v-slot:text>
-                  <v-data-table-server
+                  <v-data-table
                       v-model:items-per-page="transactionsPerPage"
                       :headers="transactionsHeaders"
                       :items="transactions"
-                      :items-length="totalTransactions"
                       :loading="transactionsLoading"
-                      :search="transactionsSearch"
-                      item-value="id"
-                      @update:options="loadTransactionsData">
-                  </v-data-table-server>
+                      :sort-by="[{key: 'transactionDate', order: 'desc'}]"
+                      item-value="id">
+                    <template v-slot:[`item.transactionCategory`]="{ value }">
+                      <v-chip :color="getColor(value)">
+                        {{ value }}
+                      </v-chip>
+                    </template>
+                  </v-data-table>
                 </template>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -138,25 +150,21 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon class="me-2" size="small" @click="seeDetails(item)"> $info</v-icon>
           <v-icon class="me-2" size="small" @click="addSelectedProductTransaction(item)"> $edit</v-icon>
-          <v-icon size="small" @click="deleteItem(item)"> $delete</v-icon>
+          <!--          <v-icon size="small" @click="deleteItem(item)"> $delete</v-icon>-->
         </template>
         <template v-slot:no-data>
           <v-card>
             <v-card-title class="text-h5">No inventory items found</v-card-title>
           </v-card>
         </template>
-      </v-data-table-server>
+      </v-data-table>
     </base-card>
   </v-container>
 </template>
 
 <script>
-// import BaseTable from "@/components/base/BaseTable.vue";
 import BaseCard from "@/components/base/BaseCard.vue";
-import {PageSettings} from "@/models/PageSettings";
-import {Product} from "@/models/Product";
 import {Transaction} from "@/models/Transaction";
-import {InventoryProductDTO} from "@/models/InventoryProductDTO";
 import {Order} from "@/models/Order";
 
 export default {
@@ -164,9 +172,6 @@ export default {
   computed: {
     Transaction() {
       return Transaction
-    },
-    Product() {
-      return Product
     }
   },
   inject: ['warehousesService', 'inventoryService', 'productsService', 'transactionsService'],
@@ -186,13 +191,12 @@ export default {
       loading: true,
       totalItems: 0,
       formTitle: '',
-      dialogNew: false,
-      dialogDelete: false,
-      dialogDetails: false,
-      dialogOrder: false,
+
       editedIndex: -1,
       transaction: new Transaction(),
       defaultItem: {},
+
+      selectedWarehouse: null,
       selectedDetailProduct: {},
       order: new Order(),
 
@@ -201,104 +205,149 @@ export default {
       transactions: [],
       transactionsPerPage: 10,
       transactionsHeaders: [
-        {title: 'Date', key: 'transactionDate'},
         {title: 'ID', key: 'id'},
+        {title: 'Date', key: 'transactionDate'},
         {title: 'Category', key: 'transactionCategory'},
         {title: 'Quantity', key: 'quantity'},
       ],
       transactionsSearch: '',
       totalTransactions: 0,
       transactionsLoading: true,
+      transActionCategories: [],
+
+      dialogDetails: false,
       dialogNewOrder: false,
-      dialogNewTransaction: false,
+      dialogNewTransaction: false
     }
   },
   components: {
     BaseCard
   },
 
-  async created() {
-    this.products = await this.productsService.asyncFindAll();
-    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
+  async mounted() {
+    await this.loadTableData()
   },
 
-  async mounted() {
-    this.products = await this.productsService.asyncFindAll();
-    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
-  },
   watch: {
-    dialogNew(val) {
+    dialogDetails(val) {
+      val || this.closeDetails()
+    },
+    dialogNewOrder(val) {
       val || this.closeNew()
     },
-    dialogDelete(val) {
-      val || this.closeDelete()
+    dialogNewTransaction(val) {
+      val || this.closeNew()
     },
+    selectedDetailProduct(val) {
+      val && this.loadTransactionsData()
+    },
+    selectedWarehouse(val) {
+      val && this.loadTableData()
+    }
   },
 
   methods: {
-    async loadTableData({page, itemsPerPage, search}) {
+    async loadTableData() {
+      console.log('Loading table data')
       this.loading = true;
-      const serverData = await this.inventoryService
-          .asyncFindAllPaginated(new PageSettings(page, itemsPerPage, search));
-      if (serverData === undefined) return;
-      this.serverItems = serverData.content;
-      this.totalItems = serverData.totalElements;
+      this.serverItems = this.selectedWarehouse ?
+          await this.inventoryService.asyncGetProductsByWarehouseId(this.selectedWarehouse) :
+          await this.inventoryService.asyncFindAllProductsHavingTransactions();
+
+      this.transActionCategories = Transaction.getCategories;
+
+      this.products = await this.productsService.asyncFindAll().then(products => {
+        return products.map(product => {
+          return {
+            title: product.name,
+            value: product.id
+          }
+        })
+      })
+
+      this.warehouses = await this.warehousesService.asyncGetAllWarehouses().then(warehouses => {
+        return warehouses.map(warehouse => {
+          return {
+            title: warehouse.name,
+            value: warehouse.id
+          }
+        })
+      })
+
       this.loading = false;
     },
 
-    async loadTransactionsData({page, itemsPerPage, search}) {
+    async loadTransactionsData(productId) {
       this.transactionsLoading = true;
-      const serverData = await this.transactionsService
-          .asyncFindAllTransactionsByProductIdPaginated(
-              this.selectedDetailProduct.productId, new PageSettings(page, itemsPerPage, search));
-      if (serverData === undefined) return;
-      this.transactions = serverData.content.map(transaction => {
+      const serverData = await this.transactionsService.asyncFindAllTransactionsByProductId(
+          productId)
+
+      // TODO: Make a Model for this and map the data to it.
+      this.transactions = serverData.map(transaction => {
         return {
           id: transaction.id,
-          transactionCategory: transaction.transactionCategory,
+          transactionCategory: Transaction.CATEGORY[transaction.transactionType],
           quantity: transaction.quantity,
           transactionDate: new Date(transaction.transactionDate).toLocaleDateString()
         }
       })
-      this.totalTransactions = serverData.totalElements;
       this.transactionsLoading = false;
     },
 
-    handleFilterChange() {
-      //   TODO: Handle filter change
-      console.log('Filter changed. Still need to implement this.')
-      console.log(this.tableFilter)
+    getColor(category) {
+      if (category === Transaction.CATEGORY.ORDER ||
+          (category === Transaction.CATEGORY.ADJUSTMENT ||
+              category === Transaction.CATEGORY.RETURN ||
+              category === Transaction.CATEGORY.OTHER) && category.quantity > 0) {
+        return 'green'
+      }
+      return 'red'
     },
 
-    seeDetails(item) {
-      this.selectedDetailProduct = Object.assign(new InventoryProductDTO(), item)
+
+    async seeDetails(item) {
+      // this.selectedDetailProduct = Object.assign(new InventoryProductDTO(), item)
       this.editedIndex = this.serverItems.indexOf(item)
       this.dialogDetails = true
+      await this.loadTransactionsData(item.productId)
     },
 
     addSelectedProductTransaction(item) {
-      this.formTitle = `Add product transaction`;
-      this.dialogOrder = true
       this.editedIndex = this.serverItems.indexOf(item)
-      this.transaction = Object.assign({}, item)
-      this.dialogNew = true
-    },
 
-    deleteItem(item) {
-      this.formTitle = `Delete ${this.modelName}`;
-      this.editedIndex = this.serverItems.indexOf(item)
-      this.transaction = {}
-      this.dialogDelete = true
-    },
+      this.transaction = new Transaction();
+      this.transaction.productId = item.productId;
+      if (this.selectedWarehouse !== {}) {
+        this.transaction.warehouseId = this.selectedWarehouse.id;
+      }
 
-    deleteItemConfirm() {
-      this.$emit('delete-item', this.transaction)
-      // this.tableItems.splice(this.editedIndex, 1)
-      this.closeDelete()
+      this.dialogNewTransaction = true
     },
+    // handleFilterChange() {
+    //   //   TODO: Handle filter change
+    //   console.log('Filter changed. Still need to implement this.')
+    //   console.log(this.tableFilter)
+    // },
+    // deleteItem(item) {
+    //   this.formTitle = `Delete ${this.modelName}`;
+    //   this.editedIndex = this.serverItems.indexOf(item)
+    //   this.transaction = {}
+    //   this.dialogDelete = true
+    // },
+    // deleteItemConfirm() {
+    //   this.$emit('delete-item', this.transaction)
+    //   // this.tableItems.splice(this.editedIndex, 1)
+    //   this.closeDelete()
+    // },
+    // closeDelete() {
+    //   this.$nextTick(() => {
+    //     this.transaction = Object.assign({}, this.defaultItem)
+    //     this.editedIndex = -1
+    //   })
+    // },
 
     closeDetails() {
-      this.transaction = {}
+      this.transaction = new Transaction();
       this.dialogDetails = false
     },
 
@@ -308,13 +357,6 @@ export default {
         this.editedIndex = -1
       })
       this.dialogNew = false
-    },
-
-    closeDelete() {
-      this.$nextTick(() => {
-        this.transaction = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
     },
 
     save() {

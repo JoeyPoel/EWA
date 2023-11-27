@@ -1,7 +1,7 @@
 export class Order {
-    constructor(id, orderLines, orderDate, deliveryDate, warehouseId, projectId, userId) {
+    constructor(id, products, orderDate, deliveryDate, warehouseId, projectId, userId) {
         this.id = id;
-        this.orderLines = orderLines;
+        this.products = products;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.warehouseId = warehouseId;

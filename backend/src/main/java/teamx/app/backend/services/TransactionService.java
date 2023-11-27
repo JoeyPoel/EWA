@@ -2,12 +2,7 @@ package teamx.app.backend.services;
 
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import teamx.app.backend.models.PageSettings;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.dto.TransactionDTO;
@@ -46,14 +41,11 @@ public class TransactionService {
         return currentStock;
     }
 
-    public Page<TransactionDTO> getAllTransactionsByProductPaginated(
-            @NonNull Long productId,
-            @NonNull PageSettings pageSetting) {
-        Sort transactionSort = pageSetting.buildSort();
-        Pageable transactionPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementsPerPage(),
-                transactionSort);
-        return transactionRepository.findAllByProduct(productService.getProductById(productId), transactionPage)
-                .map(this::convertToDTO);
+    public List<TransactionDTO> getAllByProduct(@NonNull Long productId) {
+        return transactionRepository.getAllByProduct(productService.getProductById(productId))
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     public int getProductCurrentStock(Long warehouseId, Long productId) {
@@ -74,7 +66,9 @@ public class TransactionService {
         transactionDTO.setQuantity(transaction.getQuantity());
         transactionDTO.setTransactionDate(transaction.getTransactionDate());
         transactionDTO.setTransactionType(transaction.getTransactionType().toString());
-        transactionDTO.setWarehouseId(transaction.getWarehouse().getId());
+
+        Long warehouseId = transaction.getWarehouse() != null ? transaction.getWarehouse().getId() : null;
+        transactionDTO.setWarehouseId(warehouseId);
         transactionDTO.setTransferFromWarehouseId(transaction.getTransferFrom() != null ?
                 transaction.getTransferFrom().getId() : null);
         transactionDTO.setProjectId(transaction.getProject() != null ? transaction.getProject().getId() : null);

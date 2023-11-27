@@ -3,6 +3,7 @@ package teamx.app.backend.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +26,22 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @RequestMapping("/getAllPaginated")
-    public ResponseEntity<Page<InventoryProductDTO>> getAllPaginated(@RequestBody PageSettings pageSettings) {
-        try {
-            Page<InventoryProductDTO> inventoryProductDTOs = inventoryService.getAllProductsPaginatedDTO(pageSettings);
-            log.info("PageSettings: " + pageSettings);
-            log.info("Products: " + inventoryProductDTOs);
-            for (InventoryProductDTO inventoryProductDTO : inventoryProductDTOs.getContent()) {
-                log.info("Product: " + inventoryProductDTO);
-            }
-            return ResponseEntity.ok(inventoryProductDTOs);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Error while getting products: " + e.getMessage());
-        }
-    }
+//    @RequestMapping("/getAllPaginated")
+//    public ResponseEntity<Page<InventoryProductDTO>> getAllPaginated(@RequestBody PageSettings pageSettings) {
+//        log.info("PageSettings: " + pageSettings);
+//        try {
+//            Page<InventoryProductDTO> inventoryProductDTOs = inventoryService.getAllProductsPaginatedDTO(pageSettings);
+//            log.info("PageSettings: " + pageSettings);
+//            log.info("Products: " + inventoryProductDTOs);
+//            for (InventoryProductDTO inventoryProductDTO : inventoryProductDTOs.getContent()) {
+//                log.info("Product: " + inventoryProductDTO);
+//            }
+//            return ResponseEntity.ok(inventoryProductDTOs);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+//                    "Error while getting products: " + e.getMessage());
+//        }
+//    }
 
     @RequestMapping("/getAllProductsByHavingTransactions")
     public ResponseEntity<List<InventoryProductDTO>> getAllProductsByHavingTransactions() {

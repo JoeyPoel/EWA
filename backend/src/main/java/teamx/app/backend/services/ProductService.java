@@ -31,7 +31,7 @@ public class ProductService {
 
     public Page<Product> getAllProductsPaginated(@NonNull PageSettings pageSetting) {
         Sort productSort = pageSetting.buildSort();
-        Pageable productPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementsPerPage(), productSort);
+        Pageable productPage = PageRequest.of(pageSetting.getPageNumber(), pageSetting.getPageSize(), productSort);
         return productRepository.findAll(productPage);
     }
 
