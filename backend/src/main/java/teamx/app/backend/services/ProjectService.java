@@ -51,14 +51,6 @@ public class ProjectService {
         return projectRepository.save(existingProject);
     }
 
-    public Team getProjectTeamByProjectId(Long id) {
-        Project project = projectRepository.findById(id).orElse(null);
-        if (project == null) {
-            return null;
-        }
-        return project.getTeam();
-    }
-
     public Project deleteProject(Long id) {
         Project project = projectRepository.findById(id).orElse(null);
         if (project == null) {
@@ -66,5 +58,9 @@ public class ProjectService {
         }
         projectRepository.deleteById(id);
         return project;
+    }
+
+    public List<Project> getAllProjectsByWarehouseId(Long warehouseId) {
+        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 }

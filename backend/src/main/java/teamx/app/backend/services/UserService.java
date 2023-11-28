@@ -17,6 +17,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public List<User> getAllByTeamId(Long teamId) {
+        return userRepository.getAllByTeam_Id(teamId);
+    }
+
     public List<User> getAll() {
         return userRepository.findAll();
     }

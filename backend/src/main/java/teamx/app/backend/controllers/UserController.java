@@ -10,6 +10,7 @@ import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 import teamx.app.backend.services.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -62,6 +63,19 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
+    }
+
+    @GetMapping("/getAllByTeamId/{teamId}")
+    public ResponseEntity<List<User>> getAllByTeamId(@PathVariable Long teamId) {
+        try {
+            List<User> users = userService.getAllByTeamId(teamId);
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting user", e);
+        }
     }
 
     @PostMapping("/add")

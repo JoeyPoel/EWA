@@ -24,6 +24,7 @@
           :headers="headers"
           :items="serverItems"
           :search="search"
+          class="elevation-1"
           item-value="name">
         <template v-slot:top>
           <v-toolbar flat>
@@ -303,13 +304,7 @@ export default {
     },
 
     getColor(category) {
-      if (category === Transaction.CATEGORY.ORDER ||
-          (category === Transaction.CATEGORY.ADJUSTMENT ||
-              category === Transaction.CATEGORY.RETURN ||
-              category === Transaction.CATEGORY.OTHER) && category.quantity > 0) {
-        return 'green'
-      }
-      return 'red'
+      return Transaction.getTransactionFlow(category, this.selectedWarehouse.id) === 'IN' ? 'green' : 'red';
     },
 
 
@@ -351,7 +346,7 @@ export default {
         Object.assign(this.serverItems[this.editedIndex], this.transaction)
       } else {
         this.$emit('add-item', this.transaction)
-        // this.tableItems.push(this.editedItem)
+        // this.tableItems.push(this.editedWarehouse)
       }
       this.closeNew()
     }

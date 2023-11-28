@@ -30,4 +30,14 @@ public class TransactionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping("/getAllTransactionsByWarehouseId/{id}")
+    public ResponseEntity<List<TransactionDTO>> getTransactionsByWarehouseID(@PathVariable Long id) {
+        try {
+            List<TransactionDTO> transactions = transactionService.getAllByWarehouse(id);
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

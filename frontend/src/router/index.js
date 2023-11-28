@@ -1,5 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
-import InventoryComponent from "@/views/admin/inventory/InventoryComponent.vue";
+import InventoryComponent from "@/views/admin/inventory/InventoriesComponent.vue";
 
 import warehouseOverviewComponent from "@/components/warehouses/WarehouseOverviewComponent.vue";
 import AdminProductsComponent from "@/components/AdminProductsComponent.vue";
@@ -15,6 +15,7 @@ import WarehouseDetailModalComponent from "@/components/warehouses/WarehouseModa
 import WarehouseAddModalComponent from "@/components/warehouses/WarehouseAddModalComponent.vue";
 import ProjectListComponent from "@/components/projects/ProjectListComponent.vue";
 import EditTeamModal from "@/components/teams/EditTeamModal";
+import warehousesComponent from "@/views/admin/warehouses/WarehousesComponent.vue";
 // import InventoryTableComponent from "@/components/inventory/InventoryTableComponent.vue";
 
 const routes = [{
@@ -35,8 +36,15 @@ const routes = [{
             path: ':id', name: 'WarehouseDetailModalComponent', component: WarehouseDetailModalComponent
         }, {
             path: 'add', name: 'WarehouseAddComponent', component: WarehouseAddModalComponent
-        }]
-}, {
+        },
+    ]
+},{
+    path: '/warehouses2', name: 'WarehousesComponent', component: warehousesComponent,
+    meta: {
+        requiresAuth: true
+    },
+},
+    {
     path: '/product', name: 'Product', meta: {
         requiresAuth: true
     }, component: productComponent, children: [{

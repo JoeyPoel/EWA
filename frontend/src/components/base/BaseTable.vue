@@ -73,9 +73,9 @@
                 <v-list-item v-for="detail in modelDetails" v-bind:key="detail.field" v-model="this.editedItem" :title="detail.label"
                              active>
                   <template v-slot:subtitle>
-                    <p v-if="detail.type === 'text'">{{ editedItem[detail.field] }}</p>
-                    <p v-if="detail.type === 'number'">{{ editedItem[detail.field] }}</p>
-                    <p v-if="detail.type === 'date'">{{ editedItem[detail.field] }}</p>
+                    <p v-if="detail.type === 'text'">{{ editedWarehouse[detail.field] }}</p>
+                    <p v-if="detail.type === 'number'">{{ editedWarehouse[detail.field] }}</p>
+                    <p v-if="detail.type === 'date'">{{ editedWarehouse[detail.field] }}</p>
                     <div v-if="detail.type === 'list'">
                       <v-chip v-for="item in detail.items" :key="item.value" :label="item.title" :value="item.value">
                       </v-chip>
@@ -305,7 +305,7 @@ export default {
         Object.assign(this.tableItems[this.editedIndex], this.editedItem)
       } else {
         this.$emit('add-item', this.editedItem)
-        // this.tableItems.push(this.editedItem)
+        // this.tableItems.push(this.editedWarehouse)
       }
       this.closeNew()
     },

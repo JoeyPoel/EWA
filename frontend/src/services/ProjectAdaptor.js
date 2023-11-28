@@ -56,4 +56,9 @@ export default class ProjectAdaptor extends Adaptor {
         }
         return null;
     }
+
+    async asyncGetAllByWarehouseId(warehouseId) {
+        return (await this.fetchJson(this.resourceUrl + "/getAllProjectsByWarehouseId/" + warehouseId))
+            .map(project => Object.assign(new Project(), project));
+    }
 }

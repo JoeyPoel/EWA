@@ -32,4 +32,25 @@ export class Transaction {
         });
         return categories;
     }
+
+    static getTransactionFlow(transaction, warehouseId) {
+        switch (transaction.transactionType) {
+            case Transaction.CATEGORY.ORDER:
+            case Transaction.CATEGORY.RETURN:
+                return 'IN';
+            case Transaction.CATEGORY.PROJECT_MATERIAL:
+            case Transaction.CATEGORY.EXTRA_MATERIAL_FOR_PROJECT:
+            case Transaction.CATEGORY.DAMAGED:
+            case Transaction.CATEGORY.LOST:
+                return 'OUT';
+            case Transaction.CATEGORY.TRANSFER:
+                return transaction.warehouseId === warehouseId ? 'IN' : 'OUT';
+            case Transaction.CATEGORY.ADJUSTMENT:
+            case Transaction.CATEGORY.OTHER:
+                return transaction.quantity > 0 ? 'IN' : 'OUT';
+            default:
+                throw new Error('Invalid transaction type for transaction: ' + transaction.id +
+                    ' transaction type: ' + transaction.transactionType);
+        }
+    }
 }

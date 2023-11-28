@@ -49,7 +49,7 @@ public class Project {
     }
 
     @ManyToOne
-//    @JsonIgnore
+    @JsonIgnore
     private Team team;
 
 

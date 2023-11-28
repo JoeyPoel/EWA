@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Team;
+import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.repositories.TeamRepository;
 import teamx.app.backend.services.TeamService;
 
@@ -43,7 +44,19 @@ public class TeamsController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams");
         }
+    }
 
+    @GetMapping("/getAllTeamsByWarehouseId/{warehouseId}")
+    public ResponseEntity<List<TeamDTO>> getAllTeamsByWarehouseId(@PathVariable Long warehouseId) {
+        try {
+            List<TeamDTO> teams = teamService.getAllByWarehouseIdDTO(warehouseId);
+            if (teams == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<>());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(teams);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams" + e.getMessage());
+        }
     }
 
     @GetMapping("/getTeamById/{id}")

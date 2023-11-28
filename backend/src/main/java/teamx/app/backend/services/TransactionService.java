@@ -48,6 +48,13 @@ public class TransactionService {
                 .toList();
     }
 
+    public List<TransactionDTO> getAllByWarehouse(@NonNull Long warehouseId) {
+        return transactionRepository.getAllByWarehouse(warehouseService.getWarehouseById(warehouseId))
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
     public int getProductCurrentStock(Long warehouseId, Long productId) {
         Warehouse warehouse = warehouseId != null ? warehouseService.getWarehouseById(warehouseId) : null;
         List<Transaction> productTransactions = warehouse == null ?

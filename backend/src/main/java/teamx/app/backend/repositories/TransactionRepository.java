@@ -15,4 +15,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> getAllByProductAndTransactionDateBefore(Product product, Date date);
 
     List<Transaction> getAllByProduct(Product product);
+
+    List<Transaction> getAllByWarehouse(Warehouse warehouse);
 }

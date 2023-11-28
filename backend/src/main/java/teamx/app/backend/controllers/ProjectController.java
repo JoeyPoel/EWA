@@ -47,6 +47,19 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/getAllProjectsByWarehouseId/{warehouseId}")
+    public ResponseEntity<List<Project>> getAllProjectsByWarehouseId(@PathVariable Long warehouseId) {
+        try {
+            List<Project> projects = projectService.getAllProjectsByWarehouseId(warehouseId);
+            if (projects == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(projects, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting projects", e);
+        }
+    }
+
     @PostMapping("/addProject")
     public ResponseEntity<Project> addProject(@RequestBody Project project) {
         try {

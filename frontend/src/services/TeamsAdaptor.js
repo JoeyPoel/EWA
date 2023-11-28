@@ -35,6 +35,11 @@ export default class TeamsAdaptor extends Adaptor {
         return Object.assign(new Team(), await this.fetchJson(this.resourceUrl + "/getTeamById/" + id));
     }
 
+    async asyncGetAllByWarehouseId(warehouseId) {
+        return (await this.fetchJson(this.resourceUrl + "/getAllTeamsByWarehouseId/" + warehouseId))
+            .map(team => Object.assign(new Team(), team));
+    }
+
     async asyncAddTeam(team) {
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(team)

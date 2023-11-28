@@ -16,4 +16,16 @@ export default class TransactionsAdaptor extends Adaptor{
             return response;
         }
     }
+
+    async asyncGetAllByWarehouseId(warehouseId) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(
+            this.resourceUrl + "/getAllTransactionsByWarehouseId/" + warehouseId, options);
+        if (response) {
+            return response;
+        }
+    }
 }

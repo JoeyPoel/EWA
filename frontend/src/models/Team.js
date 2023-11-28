@@ -1,7 +1,9 @@
 export class Team {
-    constructor(id, name, warehouse) {
+    constructor(id, warehouseId, name, leaderId, membersIds) {
         this.id = id;
+        this.warehouseId = warehouseId;
         this.name = name;
-        this.warehouse = warehouse;
+        this.leaderId = leaderId;
+        this.membersIds = membersIds;
     }
 }

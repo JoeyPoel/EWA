@@ -34,6 +34,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
+      // ordersService: new OrdersAdaptor(CONFIG.BACKEND_URL + "/orders"),
     }
   },
 }

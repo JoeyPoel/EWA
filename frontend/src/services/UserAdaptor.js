@@ -14,6 +14,15 @@ export default class UserAdaptor extends Adaptor {
         return Object.assign(new User(), await this.fetchJson(this.resourceUrl + "/login", options));
     }
 
+    async asyncFindAllByTeamId(teamId) {
+        const options = {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        }
+        return (await this.fetchJson(this.resourceUrl + "/getAllByTeamId/" + teamId, options))
+            .map(user => Object.assign(new User(), user));
+    }
+
     async asyncDeleteById(id) {
         const options = {
             method: "DELETE",
