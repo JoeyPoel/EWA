@@ -49,14 +49,14 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> getAllByWarehouse(@NonNull Long warehouseId) {
-        return transactionRepository.getAllByWarehouse(warehouseService.getWarehouseById(warehouseId))
+        return transactionRepository.getAllByWarehouse(warehouseService.getById(warehouseId))
                 .stream()
                 .map(this::convertToDTO)
                 .toList();
     }
 
     public int getProductCurrentStock(Long warehouseId, Long productId) {
-        Warehouse warehouse = warehouseId != null ? warehouseService.getWarehouseById(warehouseId) : null;
+        Warehouse warehouse = warehouseId != null ? warehouseService.getById(warehouseId) : null;
         List<Transaction> productTransactions = warehouse == null ?
                 transactionRepository.getAllByProductAndTransactionDateBefore(
                         productService.getProductById(productId),

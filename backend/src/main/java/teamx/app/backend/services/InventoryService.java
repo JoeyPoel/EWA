@@ -7,7 +7,6 @@ import teamx.app.backend.models.Product;
 import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.repositories.ProductRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,15 +21,24 @@ public class InventoryService {
         this.transactionService = transactionService;
     }
 
-    public List<Product> getAllProductsHavingTransactions() {
+    protected List<Product> getAll() {
         return productRepository.getAllByTransactionsIsNotEmpty();
     }
 
-    public List<Product> getProductsByWarehouseId(Long warehouseId) {
+    public List<InventoryProductDTO> getAllDTO() {
+        return getAll().stream().map(product -> convertToDTO(null, product)).toList();
+    }
+
+    protected List<Product> getByWarehouseId(Long warehouseId) {
         return productRepository.getAllByTransactions_Warehouse_Id(warehouseId);
     }
 
-    public InventoryProductDTO convertToInventoryProductDTO(Long warehouseId, Product product) {
+    public List<InventoryProductDTO> getByWarehouseIdDTO(Long warehouseId) {
+        return getByWarehouseId(warehouseId)
+                .stream().map(product -> convertToDTO(warehouseId, product)).toList();
+    }
+
+    protected InventoryProductDTO convertToDTO(Long warehouseId, Product product) {
         System.out.println("warehouseId: " + warehouseId);
         InventoryProductDTO inventoryProductDTO = new InventoryProductDTO();
         inventoryProductDTO.setProductId(product.getId());
@@ -40,13 +48,5 @@ public class InventoryService {
         inventoryProductDTO.setPrice(product.getPrice());
         inventoryProductDTO.setQuantity(transactionService.getProductCurrentStock(warehouseId, product.getId()));
         return inventoryProductDTO;
-    }
-
-    public List<InventoryProductDTO> convertToInventoryProductDTO(Long warehouseId, List<Product> products) {
-        List<InventoryProductDTO> inventoryProductDTOs = new ArrayList<>();
-        for (Product product : products) {
-            inventoryProductDTOs.add(convertToInventoryProductDTO(warehouseId, product));
-        }
-        return inventoryProductDTOs;
     }
 }

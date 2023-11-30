@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "WarehouseProductCategoryCapacities")
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseProductCategoryCapacity {
+public class Capacity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

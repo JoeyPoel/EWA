@@ -1,4 +1,4 @@
-export class InventoryProductDTO {
+export class InventoryProduct {
    constructor(productId, warehouseId, name, description, price, quantity) {
        this.productId = productId;
        this.warehouseId = warehouseId;

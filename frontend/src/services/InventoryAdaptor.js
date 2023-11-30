@@ -1,5 +1,5 @@
 import {Adaptor} from "@/services/Adaptor";
-import {InventoryProductDTO} from "@/models/InventoryProductDTO";
+import {InventoryProduct} from "@/models/InventoryProduct";
 
 export class InventoryAdaptor extends Adaptor {
     constructor(URL) {
@@ -14,7 +14,7 @@ export class InventoryAdaptor extends Adaptor {
         const response = await this.fetchJson(
             this.resourceUrl + "/getAllProductsByHavingTransactions", options);
         if (response) {
-            return response.map(inventoryProductDTO => Object.assign(new InventoryProductDTO(), inventoryProductDTO));
+            return response.map(inventoryProductDTO => Object.assign(new InventoryProduct(), inventoryProductDTO));
         }
     }
 
@@ -26,7 +26,7 @@ export class InventoryAdaptor extends Adaptor {
         const response = await this.fetchJson(
             this.resourceUrl + "/getProductsByWarehouseId/" + warehouseId, options);
         if (response) {
-            return response.map(inventoryProductDTO => Object.assign(new InventoryProductDTO(), inventoryProductDTO));
+            return response.map(inventoryProductDTO => Object.assign(new InventoryProduct(), inventoryProductDTO));
         }
     }
 }

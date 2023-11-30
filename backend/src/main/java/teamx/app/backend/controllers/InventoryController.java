@@ -2,13 +2,10 @@ package teamx.app.backend.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.PageSettings;
 import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.services.InventoryService;
 
@@ -26,32 +23,13 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-//    @RequestMapping("/getAllPaginated")
-//    public ResponseEntity<Page<InventoryProductDTO>> getAllPaginated(@RequestBody PageSettings pageSettings) {
-//        log.info("PageSettings: " + pageSettings);
-//        try {
-//            Page<InventoryProductDTO> inventoryProductDTOs = inventoryService.getAllProductsPaginatedDTO(pageSettings);
-//            log.info("PageSettings: " + pageSettings);
-//            log.info("Products: " + inventoryProductDTOs);
-//            for (InventoryProductDTO inventoryProductDTO : inventoryProductDTOs.getContent()) {
-//                log.info("Product: " + inventoryProductDTO);
-//            }
-//            return ResponseEntity.ok(inventoryProductDTOs);
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-//                    "Error while getting products: " + e.getMessage());
-//        }
-//    }
-
-    @RequestMapping("/getAllProductsByHavingTransactions")
-    public ResponseEntity<List<InventoryProductDTO>> getAllProductsByHavingTransactions() {
+    @GetMapping
+    public ResponseEntity<List<InventoryProductDTO>> getAll() {
         try {
-            List<InventoryProductDTO> inventoryProductDTOs = inventoryService
-                    .convertToInventoryProductDTO(null,
-                            inventoryService.getAllProductsHavingTransactions());
+            List<InventoryProductDTO> inventoryProductDTOs = inventoryService.getAllDTO();
 
-            if (inventoryProductDTOs == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found");
+            if (inventoryProductDTOs.isEmpty()) {
+                return new ResponseEntity<>(inventoryProductDTOs, HttpStatus.NO_CONTENT);
             }
 
             return ResponseEntity.ok(inventoryProductDTOs);
@@ -61,15 +39,13 @@ public class InventoryController {
         }
     }
 
-    @RequestMapping("/getProductsByWarehouseId/{warehouseId}")
+    @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<InventoryProductDTO>> getWarehouseProducts(@PathVariable Long warehouseId) {
         try {
-            List<InventoryProductDTO> inventoryProductDTOs = inventoryService
-                    .convertToInventoryProductDTO(warehouseId, inventoryService.getProductsByWarehouseId(warehouseId));
+            List<InventoryProductDTO> inventoryProductDTOs = inventoryService.getByWarehouseIdDTO(warehouseId);
 
-            if (inventoryProductDTOs == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No products found in warehouse with id " + warehouseId);
+            if (inventoryProductDTOs.isEmpty()) {
+                return new ResponseEntity<>(inventoryProductDTOs, HttpStatus.NO_CONTENT);
             }
 
             return ResponseEntity.ok(inventoryProductDTOs);

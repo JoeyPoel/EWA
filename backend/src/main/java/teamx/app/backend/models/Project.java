@@ -40,7 +40,7 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-    enum Status {
+    public enum Status {
         PENDING,
         CONFIRMED,
         IN_PROGRESS,

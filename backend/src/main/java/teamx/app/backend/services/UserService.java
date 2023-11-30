@@ -21,14 +21,6 @@ public class UserService {
         return userRepository.getAllByTeam_Id(teamId);
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
-
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -47,5 +39,9 @@ public class UserService {
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<User> getAllByIds(Long[] membersIds) {
+        return userRepository.findAllById(List.of(membersIds));
     }
 }

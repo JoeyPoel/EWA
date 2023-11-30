@@ -1,12 +1,10 @@
 package teamx.app.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.PageSettings;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
@@ -26,7 +24,7 @@ import java.util.List;
  */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
 
@@ -35,60 +33,22 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/page")
-    public ResponseEntity<Page<ProductDTO>> getAllProductsPaginated(@RequestParam PageSettings pageSettings) {
-        try {
-            Page<ProductDTO> products = productService.getAllProductsPaginatedDTO(pageSettings);
-            if (products == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Products not found");
-            }
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving products");
-        }
-    }
-
-    @GetMapping("/getAllProducts")
+    @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         try {
             List<ProductDTO> products = productService.getAllProductsDTO();
-            if (products == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Products not found");
+
+            if (products.isEmpty()) {
+                return new ResponseEntity<>(products, HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(products, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving products");
         }
     }
 
-    @GetMapping("/getProductById/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        try {
-            ProductDTO product = productService.getProductDTOById(id);
-            if (product == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-            }
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product");
-        }
-    }
-
-    @GetMapping("/getAllProductCategories")
-    public ResponseEntity<List<ProductCategory>> getAllProductCategories() {
-        try {
-            List<ProductCategory> productCategories = productService.getAllProductCategories();
-            if (productCategories == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product categories not found");
-            }
-            return new ResponseEntity<>(productCategories, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product categories");
-        }
-    }
-
-    // TODO: Add validation and authentication
-    @PostMapping("/addProduct")
+    @PostMapping
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO product) {
         try {
             ProductDTO newProduct = productService.addProductDTO(product);
@@ -101,7 +61,20 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/updateProduct/{id}")
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        try {
+            ProductDTO product = productService.getProductDTOById(id);
+            if (product == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+            }
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product");
+        }
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO newProductData) {
         try {
             ProductDTO updatedProduct = productService.updateProductDTO(newProductData, id);
@@ -114,7 +87,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/deleteProduct/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long id) {
         try {
             ProductDTO deletedProduct = productService.deleteProductDTO(id);
@@ -124,6 +97,19 @@ public class ProductController {
             return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting product");
+        }
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<ProductCategory>> getAllProductCategories() {
+        try {
+            List<ProductCategory> productCategories = productService.getAllProductCategories();
+            if (productCategories == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product categories not found");
+            }
+            return new ResponseEntity<>(productCategories, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product categories");
         }
     }
 }

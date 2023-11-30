@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Warehouse;
-import teamx.app.backend.models.WarehouseProductCategoryCapacity;
-import teamx.app.backend.models.dto.WarehouseProductCategoryCapacityDTO;
+import teamx.app.backend.models.dto.CapacityDTO;
 import teamx.app.backend.repositories.WarehouseRepository;
 import teamx.app.backend.services.WarehouseService;
 
@@ -32,10 +31,10 @@ public class WarehouseController {
         this.warehouseService = warehouseService;
     }
 
-    @GetMapping("/getAllWarehouses")
+    @GetMapping
     public ResponseEntity<List<Warehouse>> getAllWarehouses() {
         try {
-            List<Warehouse> warehouses = warehouseService.getAllWarehouses();
+            List<Warehouse> warehouses = warehouseService.getAll();
             if (warehouses == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouses not found");
             }
@@ -45,10 +44,10 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/getWarehouseById/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Warehouse> getWarehouseById(@PathVariable Long id) {
         try {
-            Warehouse warehouse = warehouseService.getWarehouseById(id);
+            Warehouse warehouse = warehouseService.getById(id);
             if (warehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
@@ -58,35 +57,20 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/getWarehouseCapacityCategories/{id}")
-    public ResponseEntity<List<WarehouseProductCategoryCapacityDTO>> getWarehouseCapacityCategories(@PathVariable Long id) {
-        try {
-            List<WarehouseProductCategoryCapacityDTO> warehouseCapacityCategories =
-                    warehouseService.getWarehouseCapacity(id);
-            if (warehouseCapacityCategories == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No warehouse capacity categories found");
-            }
-            return new ResponseEntity<>(warehouseCapacityCategories, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse" + e.getMessage());
-        }
-    }
-
-    @PostMapping("/addWarehouse")
+    @PostMapping
     public ResponseEntity<Warehouse> addWarehouse(@RequestBody Warehouse warehouse) {
         try {
-            Warehouse newWarehouse = warehouseService.addWarehouse(warehouse);
+            Warehouse newWarehouse = warehouseService.add(warehouse);
             return new ResponseEntity<>(newWarehouse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding warehouse");
         }
     }
 
-    @PutMapping("/updateWarehouseById/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Warehouse> updateWarehouseById(@PathVariable Long id, @RequestBody Warehouse newWarehouseData) {
         try {
-            Warehouse updatedWarehouse = warehouseService.updateWarehouseById(id, newWarehouseData);
+            Warehouse updatedWarehouse = warehouseService.updateById(id, newWarehouseData);
             if (updatedWarehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
@@ -96,10 +80,10 @@ public class WarehouseController {
         }
     }
 
-    @DeleteMapping("/deleteWarehouseById/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Warehouse> deleteWarehouseById(@PathVariable Long id) {
         try {
-            Warehouse deletedWarehouse = warehouseService.deleteWarehouseById(id);
+            Warehouse deletedWarehouse = warehouseService.deleteById(id);
             if (deletedWarehouse == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
@@ -109,13 +93,27 @@ public class WarehouseController {
         }
     }
 
-    @PostMapping("/addWarehouseCapacityByWarehouseId/{id}")
-    public ResponseEntity<WarehouseProductCategoryCapacityDTO>
-    addWarehouseCapacityByWarehouseId(@PathVariable Long id,
-                                      @RequestBody WarehouseProductCategoryCapacityDTO warehouseProductCategoryCapacity) {
+    @GetMapping("/{id}/capacity")
+    public ResponseEntity<List<CapacityDTO>> getWarehouseCapacityCategories(@PathVariable Long id) {
         try {
-            WarehouseProductCategoryCapacityDTO newWarehouseProductCategoryCapacity =
-                    warehouseService.addWarehouseCapacity(id, warehouseProductCategoryCapacity);
+            List<CapacityDTO> warehouseCapacityCategories =
+                    warehouseService.getCapacity(id);
+            if (warehouseCapacityCategories == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No warehouse capacity categories found");
+            }
+            return new ResponseEntity<>(warehouseCapacityCategories, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse" + e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/capacity")
+    public ResponseEntity<CapacityDTO>
+    addWarehouseCapacityByWarehouseId(@PathVariable Long id,
+                                      @RequestBody CapacityDTO warehouseProductCategoryCapacity) {
+        try {
+            CapacityDTO newWarehouseProductCategoryCapacity =
+                    warehouseService.addCapacity(id, warehouseProductCategoryCapacity);
             if (newWarehouseProductCategoryCapacity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
             }
@@ -125,13 +123,13 @@ public class WarehouseController {
         }
     }
 
-    @PutMapping("/updateWarehouseCapacityById/{id}")
-    public ResponseEntity<WarehouseProductCategoryCapacityDTO>
+    @PutMapping("/{id}/capacity")
+    public ResponseEntity<CapacityDTO>
     updateWarehouseCapacityById(@PathVariable Long id,
-                                @RequestBody WarehouseProductCategoryCapacityDTO warehouseProductCategoryCapacity) {
+                                @RequestBody CapacityDTO warehouseProductCategoryCapacity) {
         try {
-            WarehouseProductCategoryCapacityDTO updatedWarehouseProductCategoryCapacity =
-                    warehouseService.updateWarehouseCapacityById(id, warehouseProductCategoryCapacity);
+            CapacityDTO updatedWarehouseProductCategoryCapacity =
+                    warehouseService.updateCapacityById(id, warehouseProductCategoryCapacity);
             if (updatedWarehouseProductCategoryCapacity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse capacity not found");
             }

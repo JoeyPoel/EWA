@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Project;
+import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.services.ProjectService;
 
 import java.util.List;
@@ -21,80 +21,96 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/getAllProjects")
-    public ResponseEntity<List<Project>> getAllProjects() {
+    @GetMapping
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
         try {
-            List<Project> projects = projectService.getAllProjects();
-            if (projects == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            List<ProjectDTO> projects = projectService.getAllDTO();
+
+            if (projects.isEmpty()) {
+                return new ResponseEntity<>(projects, HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting projects", e);
         }
     }
 
-    @GetMapping("/getProjectById/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
         try {
-            Project project = projectService.getProjectById(id);
+            ProjectDTO project = projectService.getByIdDTO(id);
+
             if (project == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(project, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting project", e);
         }
     }
 
-    @GetMapping("/getAllProjectsByWarehouseId/{warehouseId}")
-    public ResponseEntity<List<Project>> getAllProjectsByWarehouseId(@PathVariable Long warehouseId) {
+    @GetMapping("/warehouse/{warehouseId}")
+    public ResponseEntity<List<ProjectDTO>> getAllProjectsByWarehouseId(@PathVariable Long warehouseId) {
         try {
-            List<Project> projects = projectService.getAllProjectsByWarehouseId(warehouseId);
+            List<ProjectDTO> projects = projectService.getAllByWarehouseIdDTO(warehouseId);
+
             if (projects == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting projects", e);
         }
     }
 
-    @PostMapping("/addProject")
-    public ResponseEntity<Project> addProject(@RequestBody Project project) {
+    @PostMapping
+    public ResponseEntity<ProjectDTO> addProject(@RequestBody ProjectDTO project) {
         try {
-            Project newProject = projectService.addProject(project);
+            ProjectDTO newProject = projectService.addDTO(project);
+
             if (newProject == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(newProject, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while adding project", e);
         }
     }
 
-    @PutMapping("/updateProjectById/{id}")
-    public ResponseEntity<Project> updateProjectById(@PathVariable Long id, @RequestBody Project project) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectDTO> updateProjectById(@PathVariable Long id, @RequestBody ProjectDTO project) {
         try {
-            Project updatedProject = projectService.updateProject(project, id);
+            ProjectDTO updatedProject = projectService.updateDTO(project, id);
+
             if (updatedProject == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(updatedProject, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while updating project", e);
         }
     }
 
-    @DeleteMapping("/deleteProjectById/{id}")
-    public ResponseEntity<Project> deleteProjectById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProjectDTO> deleteProjectById(@PathVariable Long id) {
         try {
-            Project project = projectService.getProjectById(id);
+            ProjectDTO project = projectService.getByIdDTO(id);
+
             if (project == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            Project deletedProject = projectService.deleteProject(id);
+            ProjectDTO deletedProject = projectService.deleteDTO(id);
+
+            if (deletedProject == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
             return new ResponseEntity<>(deletedProject, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while deleting project", e);

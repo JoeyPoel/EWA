@@ -33,21 +33,23 @@ public class TeamsController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/getAllTeams")
-    public ResponseEntity<List<Team>> getAllTeams() {
+    @GetMapping
+    public ResponseEntity<List<TeamDTO>> getAll() {
         try {
-            List<Team> teams = teamService.getAll();
-            if (teams == null) {
+            List<TeamDTO> teams = teamService.getAllDTO();
+
+            if (teams.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<>());
             }
+
             return ResponseEntity.status(HttpStatus.OK).body(teams);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams");
         }
     }
 
-    @GetMapping("/getAllTeamsByWarehouseId/{warehouseId}")
-    public ResponseEntity<List<TeamDTO>> getAllTeamsByWarehouseId(@PathVariable Long warehouseId) {
+    @GetMapping("/warehouse/{warehouseId}")
+    public ResponseEntity<List<TeamDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
         try {
             List<TeamDTO> teams = teamService.getAllByWarehouseIdDTO(warehouseId);
             if (teams == null) {
@@ -59,10 +61,11 @@ public class TeamsController {
         }
     }
 
-    @GetMapping("/getTeamById/{id}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<TeamDTO> getById(@PathVariable Long id) {
         try {
-            Team team = teamService.getTeamById(id);
+            TeamDTO team = teamService.getByIdDTO(id);
+
             if (team == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
@@ -72,40 +75,49 @@ public class TeamsController {
         }
     }
 
-    //TODO: add validation
-    @PostMapping("/addTeam")
-    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
+    @PostMapping
+    public ResponseEntity<TeamDTO> add(@RequestBody TeamDTO team) {
         try {
-            Team newTeam = teamService.addTeam(team);
-            if (newTeam == null) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Team already exists");
+            TeamDTO addedTeam = teamService.addDTO(team);
+
+            if (addedTeam == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team already exists");
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body(newTeam);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding team");
         }
     }
 
-    @PutMapping("/updateTeamById/{id}")
-    public ResponseEntity<Team> updateTeamById(@PathVariable Long id, @RequestBody Team team) {
+    @PutMapping("/{id}")
+    public ResponseEntity<TeamDTO> updateById(@PathVariable Long id, @RequestBody TeamDTO team) {
         try {
-            Team updatedTeam = teamService.updateTeam(team, id);
+            TeamDTO updatedTeam = teamService.updateDTO(team, id);
+
             if (updatedTeam == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
             }
+
             return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating team");
         }
     }
 
-    @DeleteMapping("/deleteTeamById/{id}")
-    public ResponseEntity<Team> deleteTeamById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable Long id) {
         try {
-            Team deletedTeam = teamService.deleteTeam(id);
+            if (teamService.getByIdDTO(id) == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
+            }
+
+            TeamDTO deletedTeam = teamService.deleteDTO(id);
+
             if (deletedTeam == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
             }
+
             return ResponseEntity.status(HttpStatus.OK).body(deletedTeam);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting team");

@@ -309,7 +309,7 @@ export default {
 
 
     async seeDetails(item) {
-      // this.selectedDetailProduct = Object.assign(new InventoryProductDTO(), item)
+      // this.selectedDetailProduct = Object.assign(new InventoryProduct(), item)
       this.editedIndex = this.serverItems.indexOf(item)
       this.dialogDetails = true
       await this.loadTransactionsData(item.productId)

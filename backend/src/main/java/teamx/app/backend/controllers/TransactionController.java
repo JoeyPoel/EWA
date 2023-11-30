@@ -21,7 +21,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/getAllTransactionsByProductId/{id}")
+    @GetMapping("/product/{id}")
     public ResponseEntity<List<TransactionDTO>> getTransactionsByProductID(@PathVariable Long id) {
         try {
             List<TransactionDTO> transactions = transactionService.getAllByProduct(id);
@@ -31,7 +31,7 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/getAllTransactionsByWarehouseId/{id}")
+    @GetMapping("/warehouse/{id}")
     public ResponseEntity<List<TransactionDTO>> getTransactionsByWarehouseID(@PathVariable Long id) {
         try {
             List<TransactionDTO> transactions = transactionService.getAllByWarehouse(id);
