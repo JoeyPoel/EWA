@@ -45,7 +45,7 @@ export default {
     }
   },
   async mounted() {
-    this.warehouses = await this.warehousesService.asyncGetAllWarehouses()
+    this.warehouses = await this.warehousesService.asyncGetAll()
   },
   computed: {
     shouldShowModal() {
@@ -58,7 +58,7 @@ export default {
     },
     async deselectWarehouse() {
       this.$router.push("/warehouse");
-      this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
+      this.warehouses = await this.warehousesService.asyncGetAll();
       this.selectedWarehouse = null;
     },
     selectWarehouse(warehouse) {

@@ -1,31 +1,42 @@
 import {Adaptor} from "@/services/Adaptor";
+import {Transaction} from "@/models/Transaction";
 
-export default class TransactionsAdaptor extends Adaptor{
+export default class TransactionsAdaptor extends Adaptor {
     constructor(URL) {
         super(URL);
     }
 
-    async asyncFindAllTransactionsByProductId(productId) {
+    /**
+     * Retrieve all transactions by product ID.
+     *
+     * @param {string} productId - The ID of the product.
+     * @return {Promise<Transaction[] | null>} - A promise that resolves to an array of Transaction objects
+     *                                           or null.
+     */
+    async asyncGetAllByProductId(productId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
 
-        const response = await this.fetchJson(
-            this.resourceUrl + "/getAllTransactionsByProductId/" + productId, options);
-        if (response) {
-            return response;
-        }
+        const response = await this.fetchJson(this.resourceUrl + "/product/" + productId, options);
+
+        return response ? response.map(transaction => Transaction.fromJson(transaction)) : null;
     }
 
+    /**
+     * Retrieves all transactions by warehouse ID asynchronously.
+     *
+     * @param {string} warehouseId - The ID of the warehouse.
+     * @returns {Promise<Array<Transaction> | null>} - A promise that resolves to an array of Transaction objects or
+     *                                                 null.
+     */
     async asyncGetAllByWarehouseId(warehouseId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
 
-        const response = await this.fetchJson(
-            this.resourceUrl + "/getAllTransactionsByWarehouseId/" + warehouseId, options);
-        if (response) {
-            return response;
-        }
+        const response = await this.fetchJson(this.resourceUrl + "/warehouse/" + warehouseId, options);
+
+        return response ? response.map(transaction => Transaction.fromJson(transaction)) : null;
     }
 }

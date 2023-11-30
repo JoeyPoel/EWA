@@ -1,6 +1,5 @@
 package teamx.app.backend.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,13 @@ import teamx.app.backend.services.InventoryService;
 
 import java.util.List;
 
-@Slf4j
+
+/**
+ * The InventoryController class is a REST controller that handles inventory-related operations.
+ * It exposes endpoints for retrieving inventory products.
+ *
+ * @author Junior Javier Brito Perez
+ */
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/inventories")
@@ -23,6 +28,13 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
+    /**
+     * Retrieves all inventory products as a list of InventoryProductDTO objects.
+     *
+     * @return a ResponseEntity containing a list of InventoryProductDTO objects
+     *
+     * @throws ResponseStatusException if an error occurs while retrieving the products
+     */
     @GetMapping
     public ResponseEntity<List<InventoryProductDTO>> getAll() {
         try {
@@ -39,8 +51,16 @@ public class InventoryController {
         }
     }
 
+    /**
+     * Retrieves all inventory products for a given warehouse id as a list of InventoryProductDTO objects.
+     *
+     * @param warehouseId the id of the warehouse to retrieve products from
+     * @return a ResponseEntity containing a list of InventoryProductDTO objects
+     *
+     * @throws ResponseStatusException if an error occurs while retrieving the products
+     */
     @GetMapping("/warehouse/{warehouseId}")
-    public ResponseEntity<List<InventoryProductDTO>> getWarehouseProducts(@PathVariable Long warehouseId) {
+    public ResponseEntity<List<InventoryProductDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
         try {
             List<InventoryProductDTO> inventoryProductDTOs = inventoryService.getByWarehouseIdDTO(warehouseId);
 

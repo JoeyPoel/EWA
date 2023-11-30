@@ -10,6 +10,13 @@ import teamx.app.backend.services.ProjectService;
 
 import java.util.List;
 
+/**
+ * The ProjectController class is a REST controller that handles project-related operations.
+ * It exposes endpoints for retrieving, adding, updating, and deleting projects.
+ *
+ * @author Nizar Amine
+ * @author Junior Javier Brito Perez
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/projects")
@@ -21,8 +28,14 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
+    /**
+     * Retrieves all projects.
+     *
+     * @return ResponseEntity object containing a list of ProjectDTO objects
+     * @throws ResponseStatusException if an error occurs while getting projects
+     */
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+    public ResponseEntity<List<ProjectDTO>> getAll() {
         try {
             List<ProjectDTO> projects = projectService.getAllDTO();
 
@@ -36,8 +49,15 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Retrieves a project by its ID.
+     *
+     * @param id the ID of the project to retrieve
+     * @return ResponseEntity object containing the ProjectDTO object for the given ID
+     * @throws ResponseStatusException if an error occurs while getting the project
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
+    public ResponseEntity<ProjectDTO> getById(@PathVariable Long id) {
         try {
             ProjectDTO project = projectService.getByIdDTO(id);
 
@@ -51,8 +71,15 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Retrieves all projects associated with a given warehouse ID.
+     *
+     * @param warehouseId the ID of the warehouse to retrieve the projects for
+     * @return ResponseEntity object containing a list of ProjectDTO objects associated with the given warehouse ID
+     * @throws ResponseStatusException if an error occurs while getting the projects
+     */
     @GetMapping("/warehouse/{warehouseId}")
-    public ResponseEntity<List<ProjectDTO>> getAllProjectsByWarehouseId(@PathVariable Long warehouseId) {
+    public ResponseEntity<List<ProjectDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
         try {
             List<ProjectDTO> projects = projectService.getAllByWarehouseIdDTO(warehouseId);
 
@@ -66,8 +93,15 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Adds a new project.
+     *
+     * @param project the ProjectDTO object to be added
+     * @return ResponseEntity object containing the added ProjectDTO object
+     * @throws ResponseStatusException if an error occurs while adding the project
+     */
     @PostMapping
-    public ResponseEntity<ProjectDTO> addProject(@RequestBody ProjectDTO project) {
+    public ResponseEntity<ProjectDTO> add(@RequestBody ProjectDTO project) {
         try {
             ProjectDTO newProject = projectService.addDTO(project);
 
@@ -81,8 +115,16 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Updates a project by its ID.
+     *
+     * @param id      the ID of the project to be updated
+     * @param project the updated ProjectDTO object
+     * @return ResponseEntity object containing the updated ProjectDTO object
+     * @throws ResponseStatusException if an error occurs while updating the project
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProjectById(@PathVariable Long id, @RequestBody ProjectDTO project) {
+    public ResponseEntity<ProjectDTO> updateById(@PathVariable Long id, @RequestBody ProjectDTO project) {
         try {
             ProjectDTO updatedProject = projectService.updateDTO(project, id);
 
@@ -96,8 +138,15 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Deletes a project by its ID.
+     *
+     * @param id the ID of the project to be deleted
+     * @return ResponseEntity object containing the deleted ProjectDTO object or NO_CONTENT status if the project does not exist
+     * @throws ResponseStatusException if an error occurs while deleting the project
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProjectDTO> deleteProjectById(@PathVariable Long id) {
+    public ResponseEntity<ProjectDTO> deleteById(@PathVariable Long id) {
         try {
             ProjectDTO project = projectService.getByIdDTO(id);
 

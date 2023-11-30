@@ -502,26 +502,26 @@ export default {
   },
   methods: {
     async loadWarehouses() {
-      this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
+      this.warehouses = await this.warehousesService.asyncGetAll();
     },
 
     async loadWarehouseDetails() {
-      this.selectedWarehouse = await this.warehousesService.asyncFindById(this.selectedWarehouse.id);
+      this.selectedWarehouse = await this.warehousesService.asyncGetById(this.selectedWarehouse.id);
     },
 
     async loadWarehouseCapacity() {
       this.warehouseProductCategoryCapacities =
-          await this.warehousesService.asyncGetWarehouseCapacityCategories(this.selectedWarehouse.id);
+          await this.warehousesService.asyncGetCapacity(this.selectedWarehouse.id);
     },
 
     async loadWarehouseTeams() {
       this.warehouseTeams = await this.teamsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
       for (const team of this.warehouseTeams) {
         if (team.leaderId !== null) {
-          team.teamLeader = await this.usersService.asyncFindById(team.leaderId);
+          team.teamLeader = await this.usersService.asyncGetById(team.leaderId);
         }
         if (team.teamMembers !== null) {
-          team.teamMembers = await this.usersService.asyncFindAllByTeamId(team.id);
+          team.teamMembers = await this.usersService.asyncGetAllByTeamId(team.id);
         }
       }
       console.log(this.warehouseTeams);
@@ -540,7 +540,7 @@ export default {
     // },
 
     async loadWarehouseProducts() {
-      this.warehouseProducts = await this.inventoryService.asyncGetProductsByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseProducts = await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     goToEditCapacity(capacity) {

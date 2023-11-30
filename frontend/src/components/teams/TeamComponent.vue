@@ -66,9 +66,9 @@ export default {
     editTeamModal,
   },
   async created() {
-    this.teams = await this.teamsService.asyncFindAll();
+    this.teams = await this.teamsService.asyncGetAll();
     this.warehouses = await this.warehousesService.asyncFindAll();
-    this.users = await this.usersService.asyncFindAll()
+    this.users = await this.usersService.asyncGetAll()
     console.log(this.users)
     this.users = this.hideAdmins()
   },
@@ -86,11 +86,11 @@ export default {
   },
   methods: {
     async addTeam(addedTeam) {
-      await this.teamsService.asyncAddTeam(addedTeam);
+      await this.teamsService.asyncAdd(addedTeam);
       this.teams.push(addedTeam); // Add the new team to the local list
     },
     async editTeam(editedTeam) {
-      await this.teamsService.asyncUpdateTeam(editedTeam.id, editedTeam);
+      await this.teamsService.asyncUpdate(editedTeam.id, editedTeam);
       const index = this.teams.findIndex(team => team.id === editedTeam.id);
       if (index !== -1) {
         this.teams.splice(index, 1, editedTeam); // Remove 1 element at index and replace with editedTeam

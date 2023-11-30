@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Product;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.UserRepository;
 import teamx.app.backend.services.UserService;
@@ -18,6 +17,7 @@ import java.util.Optional;
  * This class is a REST controller for the user model.
  *
  * @author Johnny Magielse
+ * @author Kaifie Dilmohamed
  * @author Junior Javier Brito Perez
  * @see User
  * @see UserRepository
@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(userService.findAll());
     }
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
-    @GetMapping("/getAllByTeamId/{teamId}")
+    @GetMapping("/team/{teamId}")
     public ResponseEntity<List<User>> getAllByTeamId(@PathVariable Long teamId) {
         try {
             List<User> users = userService.getAllByTeamId(teamId);
@@ -78,7 +78,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<User> add(@RequestBody User user) {
         try {
             User newUser = userService.save(user);
@@ -87,16 +87,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding User");
         }
     }
-
-
-//    @PostMapping("/add")
-//    public ResponseEntity<?> add(@RequestBody User user) {
-//        if (userService.findByEmail(user.getEmail()).isPresent()) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-//        }
-//        User savedUser = userService.save(user);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody User user) {

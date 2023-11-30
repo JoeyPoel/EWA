@@ -6,12 +6,12 @@ import java.sql.Date;
 
 @Data
 public class TransactionDTO {
-    Long id;
-    int quantity;
-    String transactionType;
-    Date transactionDate;
-    Long productId;
-    Long warehouseId;
-    Long transferFromWarehouseId;
-    Long ProjectId;
+    private Long id;
+    private int quantity;
+    private String transactionType;
+    private Date transactionDate;
+    private Long productId;
+    private Long warehouseId;
+    private Long transferFromWarehouseId;
+    private Long ProjectId;
 }

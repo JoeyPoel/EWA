@@ -129,7 +129,7 @@ export default {
       this.$router.push("/warehouse/" + this.selectedWarehouse.id);
     },
     async onUpdate() {
-      const savedWarehouse = await this.warehousesService.asyncUpdateWarehouse(this.selectedWarehouse.id,
+      const savedWarehouse = await this.warehousesService.asyncUpdate(this.selectedWarehouse.id,
           this.copyOfWarehouse);
       if (savedWarehouse) {
         this.selectedWarehouse = savedWarehouse;

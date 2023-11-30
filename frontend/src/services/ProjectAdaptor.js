@@ -1,64 +1,118 @@
 import {Adaptor} from "@/services/Adaptor";
 import {Project} from "@/models/Project";
 
+/**
+ * Class representing a ProjectAdaptor.
+ * @extends Adaptor
+ *
+ * @Author Nizar Amine
+ * @Author Junior Javier Brito Perez
+ */
 export default class ProjectAdaptor extends Adaptor {
     constructor(URL) {
         super(URL);
     }
 
-    async asyncFindAll() {
-        const response = await this.fetchJson(this.resourceUrl + "/getAllProjects");
-        if (response) {
-            return response.map(project => Object.assign(new Project(), project));
+    /**
+     * Retrieves all projects asynchronously.
+     *
+     * @returns {Promise<Array<Project>|null>} - A promise that resolves to an array of Project objects
+     * representing all projects, or null if no projects are found.
+     *
+     * @async
+     */
+    async asyncGetAll() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
         }
-        return null;
+
+        const response = await this.fetchJson(this.resourceUrl, options)
+
+        return response ? response.map(project => Project.fromJson(project)) : null;
     }
 
-    async asyncFindById(id) {
-        return Object.assign(new Project(), await this.fetchJson(this.resourceUrl + "/getProjectById/" + id));
+    /**
+     * Asynchronously retrieves a project by its ID.
+     *
+     * @param {string} id - The ID of the project to retrieve.
+     * @returns {Promise<Project|null>} A promise that resolves to the project if found, or null if not found.
+     */
+    async asyncGetById(id) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options)
+
+        return response ? Project.fromJson(response) : null;
     }
 
-    async asyncAddProject(project) {
+    /**
+     * Performs an asynchronous addition of a project.
+     * @param {Object} project - The project to be added.
+     * @return {Promise<Project|null>} - A promise that resolves to the added project (converted from JSON),
+     *                                   or null if the response is falsy.
+     */
+    async asyncAdd(project) {
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/addProject", options);
+        const response = await this.fetchJson(this.resourceUrl, options);
 
-        if (response) {
-            return Object.assign(new Project(),  response);
-        }
-        return null;
+        return response ? Project.fromJson(response) : null;
     }
 
-    async asyncUpdateProject(id, project) {
+    /**
+     * Updates a project asynchronously.
+     *
+     * @param {string} id - The ID of the project to update.
+     * @param {Object} project - The updated project data.
+     * @returns {Promise<Project|null>} A promise that resolves with the updated project object, or null if the update
+     * fails.
+     */
+    async asyncUpdate(id, project) {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/updateProjectById/" + id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
-        if (response) {
-            return Object.assign(new Project(),response);
-        }
-        return null;
+        return response ? Project.fromJson(response) : null;
     }
 
-    async asyncDeleteProjectById(id) {
+    /**
+     * Deletes a project by ID asynchronously.
+     *
+     * @param {string} id - The ID of the project to delete.
+     * @returns {Promise<Project|null>} - A Promise that resolves with the deleted Project object if successful,
+     *                                    resolves with null if the response is empty or unsuccessful.
+     */
+    async asyncDeleteById(id) {
         const options = {
             method: "DELETE", headers: {"Content-Type": "application/json"}
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/deleteProjectById/" + id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
-        if (response) {
-            return Object.assign(new Project(),  response);
-        }
-        return null;
+        return response ? Project.fromJson(response) : null;
     }
 
+    /**
+     * Retrieves all projects by warehouse ID.
+     *
+     * @param {number} warehouseId - The ID of the warehouse.
+     *
+     * @return {Promise<Project[]|null>} A promise that resolves to an array of projects mapped from the response JSON,
+     * or null if response is falsy.
+     */
     async asyncGetAllByWarehouseId(warehouseId) {
-        return (await this.fetchJson(this.resourceUrl + "/getAllProjectsByWarehouseId/" + warehouseId))
-            .map(project => Object.assign(new Project(), project));
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/warehouse/" + warehouseId, options)
+
+        return response ? response.map(project => Project.fromJson(project)) : null;
     }
 }

@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class OrderDTO {
-    Long id;
-    List<OrderLineDTO> products;
-    String orderDate;
-    String deliveryDate;
-    Long warehouseId;
-    Long ProjectId;
-    Long userId;
+    private Long id;
+    private List<OrderLineDTO> products;
+    private String orderDate;
+    private String deliveryDate;
+    private Long warehouseId;
+    private Long ProjectId;
+    private Long userId;
 }

@@ -5,22 +5,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
-import teamx.app.backend.repositories.ProductRepository;
 import teamx.app.backend.services.ProductService;
 
 import java.util.List;
 
 /**
- * Product Controller
- * This class is a REST controller for the product model.
+ * The ProductController class is a REST controller that handles product-related operations.
+ * It exposes endpoints for retrieving, adding, updating, and deleting products.
  *
  * @author Joey van der Poel
  * @author Junior Javier Brito Perez
- * @see Product
- * @see ProductRepository
  */
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,8 +29,14 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * Retrieves all products.
+     *
+     * @return a ResponseEntity containing a list of ProductDTOs
+     * @throws ResponseStatusException if there is an error retrieving products
+     */
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    public ResponseEntity<List<ProductDTO>> getAll() {
         try {
             List<ProductDTO> products = productService.getAllProductsDTO();
 
@@ -48,8 +50,15 @@ public class ProductController {
         }
     }
 
+    /**
+     * Adds a new product.
+     *
+     * @param product the ProductDTO object to be added
+     * @return a ResponseEntity containing the added ProductDTO
+     * @throws ResponseStatusException if there is an error adding the product
+     */
     @PostMapping
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO product) {
+    public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO product) {
         try {
             ProductDTO newProduct = productService.addProductDTO(product);
             if (newProduct == null) {
@@ -61,8 +70,15 @@ public class ProductController {
         }
     }
 
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param id the ID of the product to retrieve
+     * @return a ResponseEntity containing the retrieved ProductDTO object
+     * @throws ResponseStatusException if the product is not found or if there is an error retrieving it
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
         try {
             ProductDTO product = productService.getProductDTOById(id);
             if (product == null) {
@@ -74,8 +90,16 @@ public class ProductController {
         }
     }
 
+    /**
+     * Updates a product with new data.
+     *
+     * @param id                 the ID of the product to update
+     * @param newProductData     the new ProductDTO object containing updated data
+     * @return a ResponseEntity containing the updated ProductDTO object
+     * @throws ResponseStatusException if the product is not found or if there is an error updating it
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO newProductData) {
+    public ResponseEntity<ProductDTO> updateById(@PathVariable Long id, @RequestBody ProductDTO newProductData) {
         try {
             ProductDTO updatedProduct = productService.updateProductDTO(newProductData, id);
             if (updatedProduct == null) {
@@ -87,8 +111,15 @@ public class ProductController {
         }
     }
 
+    /**
+     * Deletes a product with the specified ID.
+     *
+     * @param id the ID of the product to delete
+     * @return a ResponseEntity containing the deleted ProductDTO object
+     * @throws ResponseStatusException if the product is not found or if there is an error deleting it
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> deleteById(@PathVariable Long id) {
         try {
             ProductDTO deletedProduct = productService.deleteProductDTO(id);
             if (deletedProduct == null) {
@@ -100,8 +131,14 @@ public class ProductController {
         }
     }
 
+    /**
+     * Retrieves all product categories.
+     *
+     * @return a ResponseEntity containing a list of ProductCategory objects
+     * @throws ResponseStatusException if the product categories are not found or if there is an error retrieving them
+     */
     @GetMapping("/categories")
-    public ResponseEntity<List<ProductCategory>> getAllProductCategories() {
+    public ResponseEntity<List<ProductCategory>> getAllCategories() {
         try {
             List<ProductCategory> productCategories = productService.getAllProductCategories();
             if (productCategories == null) {

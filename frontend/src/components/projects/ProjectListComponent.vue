@@ -237,12 +237,12 @@ export default {
     },
 
     async fetchTeams() {
-      this.teams = await this.teamsService.asyncFindAll();
+      this.teams = await this.teamsService.asyncGetAll();
       console.log(this.teams);
     },
 
     async fetchProjects() {
-      this.projects = await this.projectsService.asyncFindAll();
+      this.projects = await this.projectsService.asyncGetAll();
     },
 
     deselectProject() {
@@ -302,7 +302,7 @@ export default {
     },
 
     async deleteItemConfirm() {
-      await this.projectsService.asyncDeleteProjectById(this.originalProject.id);
+      await this.projectsService.asyncDeleteById(this.originalProject.id);
       this.closeDelete();
       await this.fetchProjects();
     },
@@ -346,7 +346,7 @@ export default {
     },
 
     async editExistingProject() {
-      await this.projectsService.asyncUpdateProject(this.editedProject.id, this.editedProject);
+      await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
       this.deselectProject()
       await this.fetchProjects();
       console.log("Saved changes to project", this.editedProject);
@@ -356,7 +356,7 @@ export default {
       if (!this.isValidProject()) {
         return;
       }
-      await this.projectsService.asyncAddProject(this.editedProject);
+      await this.projectsService.asyncAdd(this.editedProject);
 
       this.deselectProject();
       await this.fetchProjects();

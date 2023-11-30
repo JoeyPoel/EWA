@@ -98,11 +98,11 @@ export default {
     };
   },
   async mounted() {
-    this.teams = await this.teamsService.asyncFindAll();
+    this.teams = await this.teamsService.asyncGetAll();
   },
   async created() {
     console.log("test")
-    this.users = await this.usersService.asyncFindAll();
+    this.users = await this.usersService.asyncGetAll();
     console.log(this.users)
 
 

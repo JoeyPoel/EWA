@@ -260,12 +260,12 @@ export default {
       this.loading = true;
       console.log(this.selectedWarehouse)
       this.serverItems = this.selectedWarehouse ?
-          await this.inventoryService.asyncGetProductsByWarehouseId(this.selectedWarehouse) :
-          await this.inventoryService.asyncFindAllProductsHavingTransactions();
+          await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
+          await this.inventoryService.asyncGetAll();
 
       this.transActionCategories = Transaction.getCategories;
 
-      this.products = await this.productsService.asyncFindAll().then(products => {
+      this.products = await this.productsService.asyncGetAll().then(products => {
         return products.map(product => {
           return {
             title: product.name,
@@ -274,7 +274,7 @@ export default {
         })
       })
 
-      this.warehouses = await this.warehousesService.asyncGetAllWarehouses().then(warehouses => {
+      this.warehouses = await this.warehousesService.asyncGetAll().then(warehouses => {
         return warehouses.map(warehouse => {
           return {
             title: warehouse.name,
@@ -288,7 +288,7 @@ export default {
 
     async loadTransactionsData(productId) {
       this.transactionsLoading = true;
-      const serverData = await this.transactionsService.asyncFindAllTransactionsByProductId(
+      const serverData = await this.transactionsService.asyncGetAllByProductId(
           productId)
 
       // TODO: Make a Model for this and map the data to it.

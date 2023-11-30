@@ -54,7 +54,7 @@ export default {
     },
     async getCapacities() {
       this.warehouseProductCategoryCapacities = this.$route.params.id ?
-          await this.warehousesService.asyncGetWarehouseCapacityCategories(this.$route.params.id) : null;
+          await this.warehousesService.asyncGetCapacity(this.$route.params.id) : null;
     },
     mouseOver() {
       this.isActivated = true;

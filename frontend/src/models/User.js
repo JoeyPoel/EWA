@@ -1,5 +1,8 @@
-export class User{
+import {Model} from "@/models/Model";
+
+export class User extends Model{
     constructor(id, name, email, password, role, team) {
+        super();
         this.id = id;
         this.name = name;
         this.email = email;

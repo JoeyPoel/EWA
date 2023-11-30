@@ -118,7 +118,7 @@ export default {
       this.$emit('close-modal');
     },
     async saveWarehouse() {
-      const warehouse = await this.warehousesService.asyncAddWarehouse(this.newWarehouse);
+      const warehouse = await this.warehousesService.asyncAdd(this.newWarehouse);
       console.log(warehouse);
       if (warehouse) {
         this.$emit('warehouse-added', warehouse);

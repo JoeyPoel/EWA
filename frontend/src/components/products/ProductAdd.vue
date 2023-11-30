@@ -62,7 +62,7 @@ export default {
         this.$refs.addModalRef.addEventListener('hidden.bs.modal', this.closeModal);
       }
     });
-    this.categories = await this.productsService.asyncGetAllProductCategories();
+    this.categories = await this.productsService.asyncGetAllCategories();
   },
   computed: {
     isFormValid() {

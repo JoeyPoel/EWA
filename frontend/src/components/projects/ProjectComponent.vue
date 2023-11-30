@@ -73,7 +73,7 @@ export default {
     };
   },
   async created() {
-    this.projects = await this.projectsService.asyncFindAll();
+    this.projects = await this.projectsService.asyncGetAll();
     this.sortProjectsByStatus();
   },
   methods: {

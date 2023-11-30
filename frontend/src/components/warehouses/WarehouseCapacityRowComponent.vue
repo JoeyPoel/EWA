@@ -77,9 +77,9 @@ export default {
     async save() {
       this.isEditing = false;
       const savedCategory = this.category.id ?
-          await this.warehousesService.asyncUpdateWarehouseCapacityById(
+          await this.warehousesService.asyncUpdateCapacityById(
               this.category.id, this.categoryCopy) :
-          await this.warehousesService.asyncAddWarehouseCapacityByWarehouseId(
+          await this.warehousesService.asyncAddCapacityByWarehouseId(
               this.$route.params.id, this.categoryCopy);
 
       if (savedCategory) {

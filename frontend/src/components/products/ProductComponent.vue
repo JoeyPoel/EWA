@@ -65,13 +65,13 @@ export default {
   },
 
   async created() {
-    this.products = await this.productsService.asyncFindAll()
+    this.products = await this.productsService.asyncGetAll()
   },
 
   methods: {
     async handleNewProduct() {
       this.searchTerm = ""
-      this.products = await this.productsService.asyncFindAll()
+      this.products = await this.productsService.asyncGetAll()
       this.deselectProduct();
     },
 

@@ -99,13 +99,13 @@ export default {
     }
   },
   async created() {
-    this.products = await this.productsService.asyncFindAll();
+    this.products = await this.productsService.asyncGetAll();
     this.filteredProducts = this.products;
     console.log(this.products)
     this.sortInventoryByStockLevel()
-    this.teams = await this.teamsService.asyncFindAll();
-    this.warehouses = await this.warehousesService.asyncGetAllWarehouses();
-    this.projects = await this.projectsService.asyncFindAll();
+    this.teams = await this.teamsService.asyncGetAll();
+    this.warehouses = await this.warehousesService.asyncGetAll();
+    this.projects = await this.projectsService.asyncGetAll();
     this.sortProjectsByDate()
   },
   watch: {
