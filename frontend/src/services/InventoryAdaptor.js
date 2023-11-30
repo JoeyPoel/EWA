@@ -13,7 +13,7 @@ export class InventoryAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all inventory products asynchronously.
+     * Retrieves all inventories products asynchronously.
      *
      * @async
      * @return {Promise<Array<InventoryProduct>>} A promise that resolves with an array of InventoryProduct objects.
@@ -30,7 +30,7 @@ export class InventoryAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all inventory products by warehouse id asynchronously.
+     * Retrieves all inventories products by warehouse id asynchronously.
      *
      * @param {string} warehouseId - The id of the warehouse.
      * @return {Promise<Array<InventoryProduct>>} - A Promise that resolves to an array of

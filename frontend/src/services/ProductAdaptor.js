@@ -30,7 +30,7 @@ export default class ProductAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl, options);
 
-        return response ? response.map(product => Product.fromJSON(product)) : null;
+        return response ? response.map(product => Product.fromJson(product)) : null;
     }
 
     /**

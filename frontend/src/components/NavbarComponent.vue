@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer v-if="!$route.meta.hideNavbar" class="bg-white bg-custom"
-                        expand-on-hover rail permanent>
+                       expand-on-hover rail permanent>
     <v-list>
       <router-link to="/dashboard">
         <v-list-item prepend-icon="">
@@ -10,22 +10,22 @@
       <router-link class="nav-link text-black" to="/dashboard">
         <v-list-item prepend-icon="$dashboard" title="Dashboard"></v-list-item>
       </router-link>
-      <router-link class="nav-link text-black" to="/inventory">
+      <router-link class="nav-link text-black" to="/inventories">
         <v-list-item prepend-icon="$inventory" title="Inventories"></v-list-item>
       </router-link>
-      <router-link class="nav-link text-black" to="/warehouse">
+      <router-link class="nav-link text-black" to="/warehouses">
         <v-list-item prepend-icon="$warehouse" title="Warehouses"></v-list-item>
       </router-link>
-      <router-link class="nav-link text-black" to="/product">
+      <router-link class="nav-link text-black" to="/products">
         <v-list-item prepend-icon="$product" title="Products"></v-list-item>
       </router-link>
-      <router-link class="nav-link text-black" to="/project">
+      <router-link class="nav-link text-black" to="/projects">
         <v-list-item prepend-icon="$project" title="Projects"></v-list-item>
       </router-link>
       <router-link class="nav-link text-black" to="/teams">
         <v-list-item prepend-icon="$team" title="Teams"></v-list-item>
       </router-link>
-      <router-link class="nav-link text-black" to="/user">
+      <router-link class="nav-link text-black" to="/users">
         <v-list-item prepend-icon="$user" title="Users"></v-list-item>
       </router-link>
     </v-list>

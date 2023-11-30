@@ -112,7 +112,7 @@ export default class WarehousesAdaptor extends Adaptor {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/" + id + "/capacity");
+        const response = await this.fetchJson(this.resourceUrl + "/" + id + "/capacity", options);
 
         return response ? response.map(capacity => Capacity.fromJson(capacity)) : null;
     }

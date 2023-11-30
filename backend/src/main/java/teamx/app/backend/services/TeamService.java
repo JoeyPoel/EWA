@@ -90,7 +90,7 @@ public class TeamService {
         teamDTO.setId(team.getId());
         teamDTO.setName(team.getName());
         teamDTO.setWarehouseId(team.getWarehouse().getId());
-        teamDTO.setLeaderId(team.getLeader().getId() != null ? team.getLeader().getId() : null);
+        teamDTO.setLeaderId(team.getLeader() != null ? team.getLeader().getId() : null);
         teamDTO.setMembersIds(team.getMembers().stream().map(User::getId).toArray(Long[]::new));
         return teamDTO;
     }

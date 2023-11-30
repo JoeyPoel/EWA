@@ -1,8 +1,9 @@
 package teamx.app.backend.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 public class ProjectDTO {
@@ -13,7 +14,9 @@ public class ProjectDTO {
     private String clientName;
     private String clientEmail;
     private String clientPhone;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date endDate;
     private String status;
     private Long teamId;

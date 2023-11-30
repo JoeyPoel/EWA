@@ -45,7 +45,8 @@ public class TeamsController {
 
             return ResponseEntity.status(HttpStatus.OK).body(teams);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams: " +
+                    e.getMessage());
         }
     }
 

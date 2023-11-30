@@ -89,7 +89,7 @@
 <!--      <div class="col col-8">-->
 <!--        <WarehouseDetailInventoryComponent :selected-warehouse="selectedWarehouse" :warehouses="warehouses"-->
 <!--                                           :products="products" :vendors="vendors" :transactions="transactions"-->
-<!--                                           :inventory="inventories" @save-product="saveProduct"-->
+<!--                                           :inventories="inventories" @save-product="saveProduct"-->
 <!--        @remove-product="removeProduct" @add-product="addProduct"/>-->
 <!--      </div>-->
 <!--    </div>-->

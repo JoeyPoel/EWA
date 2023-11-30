@@ -85,7 +85,7 @@ export default {
       this.selectedProject = null;
     },
 
-    // TODO Remove double code -  available in ProjectListComponent.vue
+    // TODO Remove double code -  available in ProjectsComponent.vue
 
     sortProjectsByStatus() {
       const statusOrder = [

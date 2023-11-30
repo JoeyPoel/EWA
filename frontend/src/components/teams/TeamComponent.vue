@@ -115,7 +115,7 @@ export default {
       this.showModal = true;
     },
     closeModal() {
-      this.$router.push({name: 'Teams'});
+      this.$router.push({name: 'teams'});
       this.resetForm()
       this.showModal = false;
     },

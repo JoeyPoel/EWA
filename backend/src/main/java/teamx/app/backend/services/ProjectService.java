@@ -6,7 +6,6 @@ import teamx.app.backend.models.Project;
 import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 
-import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -113,8 +112,8 @@ public class ProjectService {
         project.setClientEmail(projectDTO.getClientEmail());
         project.setClientPhone(projectDTO.getClientPhone());
         // TODO: CHECK IF THIS WORKS
-        project.setStartDate(Date.valueOf(String.valueOf(projectDTO.getStartDate())));
-        project.setEndDate(Date.valueOf(String.valueOf(projectDTO.getEndDate())));
+        project.setStartDate(projectDTO.getStartDate());
+        project.setEndDate(projectDTO.getEndDate());
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
         project.setTeam(projectDTO.getTeamId() != null ? teamService.getById(projectDTO.getTeamId()) : null);
         return project;

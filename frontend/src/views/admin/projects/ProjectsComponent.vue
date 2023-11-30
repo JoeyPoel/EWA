@@ -78,7 +78,7 @@
   <!--              <div v-if="!isValidProjectStatus" class="text-danger mt-1">Project status is required</div>-->
   <!--            </div>-->
   <!--            <div class="mb-3">-->
-  <!--              <h6 class="text">Assigned Teams:</h6>-->
+  <!--              <h6 class="text">Assigned teams:</h6>-->
   <!--              <select id="editTeams" v-model="editedProject.team" class="form-select">-->
   <!--                <option v-for="team in teams" :key="team" :value="team">-->
   <!--                  {{ team.name }}-->
