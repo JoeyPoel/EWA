@@ -35,7 +35,7 @@
 
 <script>
 // import {BIconArrowCounterclockwise, BIconPen, BIconSave} from "bootstrap-icons-vue";
-import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
+import {Capacity} from "@/models/Capacity";
 import {Tooltip} from "bootstrap";
 
 export default {
@@ -48,18 +48,18 @@ export default {
   },
   props: {
     category: {
-      type: WarehouseProductCategoryCapacity,
+      type: Capacity,
       required: true
     },
   },
   computed: {
     hasChanged() {
-      return !WarehouseProductCategoryCapacity.equals(this.category, this.categoryCopy);
+      return !Capacity.equals(this.category, this.categoryCopy);
     }
   },
   data() {
     return {
-      categoryCopy: Object.assign(new WarehouseProductCategoryCapacity(), this.category),
+      categoryCopy: Object.assign(new Capacity(), this.category),
       isEditing: false,
       mouseOver: false
     }
@@ -83,13 +83,13 @@ export default {
               this.$route.params.id, this.categoryCopy);
 
       if (savedCategory) {
-        this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), savedCategory);
+        this.categoryCopy = Object.assign(new Capacity(), savedCategory);
       }
       this.$emit('save-category-capacity', this.category);
     },
     reset() {
       this.isEditing = false;
-      this.categoryCopy = Object.assign(new WarehouseProductCategoryCapacity(), this.category);
+      this.categoryCopy = Object.assign(new Capacity(), this.category);
     },
   },
   watch: {

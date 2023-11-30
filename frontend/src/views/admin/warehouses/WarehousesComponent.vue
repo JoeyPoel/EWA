@@ -184,7 +184,7 @@
                     <v-window-item value="details">
                       <v-row>
                         <v-col>
-                          <v-list lines="1">
+                          <v-list>
                             <v-list-item>
                               <v-list-item-title>Warehouse Name</v-list-item-title>
                               <v-list-item-subtitle>{{ selectedWarehouse.name }}</v-list-item-subtitle>
@@ -370,7 +370,7 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Warehouse} from "@/models/Warehouse";
-import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
+import {Capacity} from "@/models/Capacity";
 
 export default {
   name: "WarehousesComponent",
@@ -444,9 +444,9 @@ export default {
       ],
       selectedWarehouse: new Warehouse(),
       editedWarehouse: new Warehouse(),
-      editedWarehouseCapacityObject: new WarehouseProductCategoryCapacity(),
+      editedWarehouseCapacityObject: new Capacity(),
       defaultItem: new Warehouse(),
-      defaultCapacityItem: new WarehouseProductCategoryCapacity(),
+      defaultCapacityItem: new Capacity(),
       warehouseProductCategoryCapacities: [],
       warehouseTeams: [],
       warehouseProjects: [],

@@ -1,6 +1,9 @@
-export class Transaction {
-    constructor(id, quantity, transactionType, transactionDate, productId, warehouseId,
-                transferFromWarehouseId, projectId) {
+import {Model} from "@/models/Model";
+
+export class Transaction extends Model{
+    constructor(id, quantity, transactionType, transactionDate, productId, warehouseId, transferFromWarehouseId,
+                projectId) {
+        super();
         this.id = id;
         this.quantity = quantity;
         this.transactionType = transactionType;

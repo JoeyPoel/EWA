@@ -1,6 +1,6 @@
 import {Adaptor} from "./Adaptor.js";
 import {Warehouse} from "@/models/Warehouse.js";
-import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
+import {Capacity} from "@/models/Capacity";
 
 /**
  * Adaptor for the warehouses REST API.
@@ -86,7 +86,7 @@ export default class WarehousesAdaptor extends Adaptor {
     async asyncGetWarehouseCapacityCategories(id) {
         const response = await this.fetchJson(this.resourceUrl + "/getWarehouseCapacityCategories/" + id);
         if (response) {
-            return response.map(category => Object.assign(new WarehouseProductCategoryCapacity(), category));
+            return response.map(category => Object.assign(new Capacity(), category));
         }
         return null;
     }
@@ -101,7 +101,7 @@ export default class WarehousesAdaptor extends Adaptor {
             options);
 
         if (response) {
-            return Object.assign(new WarehouseProductCategoryCapacity(), response);
+            return Object.assign(new Capacity(), response);
         }
         return null;
     }
@@ -116,7 +116,7 @@ export default class WarehousesAdaptor extends Adaptor {
             this.resourceUrl + "/updateWarehouseCapacityById/" + id, options);
 
         if (response) {
-            return Object.assign(new WarehouseProductCategoryCapacity(), response);
+            return Object.assign(new Capacity(), response);
         }
         return null;
     }
