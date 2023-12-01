@@ -1,15 +1,20 @@
 package teamx.app.backend.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
 import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.repositories.TeamRepository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TeamService {
     private final TeamRepository teamRepository;
     private final WarehouseService warehouseService;
@@ -43,25 +48,45 @@ public class TeamService {
     }
 
     protected Team add(Team team) {
+        if (team.getId() != null && teamRepository.existsById(team.getId())) {
+            return null;
+        }
+        log.info("Adding Team: "+ team.getName() +team.getMembers()+ team.getLeader() +team.getWarehouse());
+        log.info("Adding team members: "+ team.getMembers());
         return teamRepository.save(team);
     }
 
     public TeamDTO addDTO(TeamDTO teamDTO) {
-        return convertToDTO(add(convertToEntity(teamDTO)));
+        log.info("Adding team members: ", teamDTO.getMembersIds());
+        Team team = convertToEntity(teamDTO);
+        log.info("Adding team members: ", team.getMembers());
+        Team addedTeam = add(team);
+        log.info("Added team members: ", addedTeam.getMembers());
+        return convertToDTO(addedTeam);
     }
 
-    protected Team updateDTO(Team team, Long id) {
+    protected Team update(Team team, Long id) {
         Team existingTeam = teamRepository.findById(id).orElse(null);
+        log.info("Updating Team: "+ team.getName() +team.getMembers()+ team.getLeader() +team.getWarehouse());
+        log.info("Updating team members: "+ team.getMembers());
         if (existingTeam == null || team == null || !team.getId().equals(id)) {
             return null;
         }
+
         existingTeam.setName(team.getName());
         existingTeam.setWarehouse(team.getWarehouse());
+        existingTeam.setLeader(team.getLeader());
+        existingTeam.setMembers(team.getMembers() );
         return teamRepository.save(existingTeam);
     }
 
     public TeamDTO updateDTO(TeamDTO teamDTO, Long id) {
-        return convertToDTO(updateDTO(convertToEntity(teamDTO), id));
+        Team team = convertToEntity(teamDTO);
+        Team updatedTeam = update(team, id);
+        if (updatedTeam == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update team");
+        }
+        return convertToDTO(updatedTeam);
     }
 
     protected Team delete(Long id) {
@@ -85,22 +110,27 @@ public class TeamService {
         return getAllByWarehouseId(warehouseId).stream().map(this::convertToDTO).toList();
     }
 
+
     private TeamDTO convertToDTO(Team team) {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setId(team.getId());
         teamDTO.setName(team.getName());
         teamDTO.setWarehouseId(team.getWarehouse().getId());
         teamDTO.setLeaderId(team.getLeader() != null ? team.getLeader().getId() : null);
-        teamDTO.setMembersIds(team.getMembers().stream().map(User::getId).toArray(Long[]::new));
+        teamDTO.setMembersIds(team.getMembers().stream().map(User::getId).toList());
         return teamDTO;
     }
 
     private Team convertToEntity(TeamDTO teamDTO) {
         Team team = new Team();
-        team.setId(teamDTO.getId());
+        if (teamDTO.getId() != null) {
+            team.setId(teamDTO.getId());
+        }
         team.setName(teamDTO.getName());
         team.setWarehouse(warehouseService.getById(teamDTO.getWarehouseId()));
-        team.setLeader(userService.findById(teamDTO.getLeaderId()).orElse(null));
+        if (teamDTO.getLeaderId() != null) {
+            team.setLeader(userService.findById(teamDTO.getLeaderId()));
+        }
         team.setMembers(userService.getAllByIds(teamDTO.getMembersIds()));
         return team;
     }

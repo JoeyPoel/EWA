@@ -29,6 +29,17 @@ export default class UserAdaptor extends Adaptor {
         return response ? response.map(user => User.fromJson(user)) : null;
     }
 
+    async asyncGetAllByNoTeam() {
+        const options = {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/noTeam", options);
+
+        return response ? response.map(user => User.fromJson(user)) : null;
+    }
+
     async asyncDeleteById(id) {
         const options = {
             method: "DELETE",

@@ -1,5 +1,6 @@
 package teamx.app.backend.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/teams")
+@Slf4j
 public class TeamsController {
     private final TeamService teamService;
 
@@ -91,7 +93,8 @@ public class TeamsController {
 
             return ResponseEntity.status(HttpStatus.OK).body(team);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team : " +
+                    e.getMessage());
         }
     }
 
@@ -106,14 +109,14 @@ public class TeamsController {
     public ResponseEntity<TeamDTO> add(@RequestBody TeamDTO team) {
         try {
             TeamDTO addedTeam = teamService.addDTO(team);
-
-            if (addedTeam == null) {
+            if (addedTeam == null)  {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team already exists");
             }
 
             return ResponseEntity.status(HttpStatus.CREATED).body(addedTeam);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding team");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding team : " +
+                    e.getMessage());
         }
     }
 
@@ -137,7 +140,8 @@ public class TeamsController {
 
             return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating team");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating team : " +
+                    e.getMessage());
         }
     }
 
@@ -164,7 +168,8 @@ public class TeamsController {
 
             return ResponseEntity.status(HttpStatus.OK).body(deletedTeam);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting team");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting team : " +
+                    e.getMessage());
         }
     }
 }
