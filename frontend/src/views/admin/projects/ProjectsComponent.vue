@@ -122,51 +122,129 @@
                 <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
                 </v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn class="mb-2" color="secundary" dark v-bind="props" @click="newProject">{{ dialogTitle }}</v-btn>
+                <v-btn class="mb-2" color="secundary" dark v-bind="props" @click="newProject">New Project</v-btn>
               </template>
               <v-card title="New Project">
                 <v-card-text>
                   <v-container>
-                      <v-form>
-                        <v-col>
-                          <!--                        TODO: re-add rules-->
-                          <v-row>
-                            <v-text-field v-model="editedProject.name" label="Name" required></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedProject.startDate" label="Start Date" required></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedProject.endDate" label="End Date" required></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-select v-model="editedProject.status" :items="Project.statusList"
-                                      item-title="displayName" item-value="value" label="Status">
-                            </v-select>
-                          </v-row>
-                          <v-row>
-                            <v-select v-model="editedProject.team" :items="teams" label="Team" item-title ></v-select>
-                          </v-row>
-                          <v-row>
-                            <v-textarea v-model="editedProject.description" label="Description" ></v-textarea>
-                            </v-row>
-                        </v-col>
-                      </v-form>
+                    <v-form>
+                      <v-col>
+                        <!--                        TODO: re-add rules-->
+                        <v-row>
+                          <v-text-field v-model="editedProject.name" label="Name" required/>
+                        </v-row>
+                        <v-row>
+                          <v-text-field v-model="editedProject.startDate" label="Start Date" type="date" required/>
+                        </v-row>
+                        <v-row>
+                          <v-text-field v-model="editedProject.endDate" label="End Date" type="date"  required/>
+                        </v-row>
+                        <v-row>
+                          <v-select v-model="editedProject.status" :items="Project.statusList"
+                                    item-title="displayName" item-value="value" label="Status"/>
+                        </v-row>
+                        <v-row>
+                          <v-select v-model="editedProject.teamId" :items="teams" label="Team"
+                                    :item-title="item => item.name" :item-value="item => item.id"/>
+                        </v-row>
+                        <v-row>
+                          <v-textarea v-model="editedProject.description" label="Description"/>
+                        </v-row>
+                      </v-col>
+                    </v-form>
                   </v-container>
                 </v-card-text>
               </v-card>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialogNew = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="saveProject">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="saveNew">Save</v-btn>
               </v-card-actions>
+            </v-dialog>
+            <v-dialog v-model="dialogEdit" max-width="800px">
+              <v-card title="Edit Project">
+                <v-card-text>
+                  <v-form>
+                    <v-col>
+                      <!--                        TODO: re-add rules-->
+                      <v-row>
+                        <v-text-field v-model="editedProject.name" label="Name" required></v-text-field>
+                      </v-row>
+                      <v-row>
+                        <v-text-field v-model="editedProject.startDate" label="Start Date" type="date"
+                                      required></v-text-field>
+                      </v-row>
+                      <v-row>
+                        <v-text-field v-model="editedProject.endDate" label="End Date" type="date"
+                                      required></v-text-field>
+                      </v-row>
+                      <v-row>
+                        <v-select v-model="editedProject.status" :items="Project.statusList"
+                                  item-title="displayName" item-value="value" label="Status">
+                        </v-select>
+                      </v-row>
+                      <v-row>
+                        <v-select v-model="editedProject.teamId" :items="teams" label="Team"
+                                  :item-title="item => item.name" :item-value="item => item.id"/>
+                      </v-row>
+                      <v-row>
+                        <v-textarea v-model="editedProject.description" label="Description"></v-textarea>
+                      </v-row>
+                    </v-col>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" variant="text" @click="close">Cancel</v-btn>
+                  <v-btn color="blue darken-1" variant="text" @click="saveEdited">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDetail" max-width="800px">
+              <v-card>
+                <v-tabs v-model="tab" bg-color="transparent">
+                  <v-tab value="details">Project Detail</v-tab>
+                  <v-tab value="tasks">Project Tasks</v-tab>
+                  <v-tab value="materials">Project Materials</v-tab>
+                </v-tabs>
+                <v-card-text>
+                  <v-window v-model="tab">
+                    <v-window-item value="details">
+                      <v-container>
+                        <v-list>
+                          <v-list-item title="Name" :subtitle="selectedProject.name"/>
+                          <v-list-item title="Start Date" :subtitle="selectedProject.startDate"/>
+                          <v-list-item title="End Date" :subtitle="selectedProject.endDate"/>
+                          <v-list-item title="Status" :subtitle="selectedProject.status"/>
+                          <v-list-item title="Team" :subtitle="teams.find(t => t.id === selectedProject.teamId)?.name"/>
+                          <v-list-item title="Description" :subtitle="selectedProject.description"/>
+                        </v-list>
+                      </v-container>
+                    </v-window-item>
+                    <v-window-item value="tasks">
+                      <v-container>
+                        <h2>
+                          In development
+                        </h2>
+                      </v-container>
+                    </v-window-item>
+                    <v-window-item value="materials">
+                      <v-container>
+                        <h2>
+                          In development
+                        </h2>
+                      </v-container>
+                    </v-window-item>
+                  </v-window>
+                </v-card-text>
+              </v-card>
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="800px">
               <v-card>
                 <v-card-title class="text-h5">Are you sure you want to delete this warehouse?</v-card-title>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
                   <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -179,9 +257,13 @@
           <v-chip :color="getStatusColor(item)" :text="getStatusDisplayName(item.status)">
           </v-chip>
         </template>
+        <template v-slot:[`item.teamName`]="{ item }">
+          {{ this.teams.find(t => t.id === item.teamId)?.name }}
+        </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small @click="selectProject(item)">$edit</v-icon>
-          <v-icon small @click="deleteProject(item)">$delete</v-icon>
+          <v-icon @click="seeDetails(item)">$info</v-icon>
+          <v-icon @click="edit(item)">$edit</v-icon>
+          <v-icon @click="deleteProject(item)">$delete</v-icon>
         </template>
       </v-data-table>
     </base-card>
@@ -195,6 +277,11 @@ import BaseCard from "@/components/base/BaseCard.vue";
 
 export default {
   name: "ProjectListComponent",
+  computed: {
+    Project() {
+      return Project
+    }
+  },
   components: {BaseCard},
   inject: ['projectsService', 'teamsService'],
   data() {
@@ -212,66 +299,49 @@ export default {
       teams: [],
       selectedProject: new Project(),
       editedProject: new Project(),
-      originalProject: new Project(),
       search: "",
+      tab: "",
       itemsPerPage: 10,
-      dialogNew: false,
-      sortBy: "status",
       isAddingNewProject: false,
-      dialogTitle: "New Project",
+
       dialogDelete: false,
+      dialogEdit: false,
+      dialogDetail: false,
+      dialogNew: false,
     };
   },
+
   async mounted() {
-    await this.fetchProjects();
-    await this.fetchTeams();
-    this.sortProjectsByStatus();
+    await this.initialize();
   },
+
+  watch: {
+    dialogNew(val) {
+      val || this.close();
+    },
+    dialogEdit(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.close();
+    },
+    dialogDetail(val) {
+      val || this.close();
+    },
+  },
+
   methods: {
-    selectProject(project) {
-      this.originalProject = project;
-      this.editedProject = {...project};
-      this.selectedProject = {...project};
-      this.dialogTitle = "Edit Project";
-      this.dialogNew = true;
+    async initialize() {
+      await this.getProjects();
+      await this.getTeams();
     },
 
-    async fetchTeams() {
+    async getTeams() {
       this.teams = await this.teamsService.asyncGetAll();
-      console.log(this.teams);
     },
 
-    async fetchProjects() {
+    async getProjects() {
       this.projects = await this.projectsService.asyncGetAll();
-    },
-
-    deselectProject() {
-      this.editedProject = {};
-      this.originalProject = {};
-      this.selectedProject = {};
-      this.dialogNew = false;
-    },
-
-    newProject() {
-      this.editedProject = new Project();
-      this.formTitle = "New Project";
-      this.dialogNew = true;
-    },
-
-    sortProjectsByStatus() {
-      const statusOrder = [
-        "in_progress",
-        "completed",
-        "on_hold",
-        "cancelled"
-      ];
-
-      this.projects.sort((a, b) => {
-        const indexA = statusOrder.indexOf(a.status);
-        const indexB = statusOrder.indexOf(b.status);
-
-        return indexA - indexB;
-      });
     },
 
     getStatusColor(project) {
@@ -291,33 +361,55 @@ export default {
       }
     },
 
-    async deleteProject() {
-      this.dialogDelete = true;
-      this.originalProject = this.selectedProject;
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.originalProject = new Project();
-    },
-
-    async deleteItemConfirm() {
-      await this.projectsService.asyncDeleteById(this.originalProject.id);
-      this.closeDelete();
-      await this.fetchProjects();
-    },
-
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
-    saveProject() {
-      if (!this.isValidProject()) return;
-      if (this.isAddingNewProject) {
-        this.addNewProject();
-      } else {
-        this.editExistingProject();
+    newProject() {
+      this.assignSelectedProject(new Project());
+      this.dialogNew = true;
+    },
+
+    async saveNew() {
+      if (!this.isValidProject()) {
+        return;
       }
+      await this.projectsService.asyncAdd(this.editedProject);
+      this.close();
+      await this.getProjects();
+    },
+
+    edit(project) {
+      this.assignSelectedProject(project);
+      this.dialogEdit = true;
+    },
+
+    async saveEdited() {
+      if (!this.isValidProject()) {
+        return;
+      }
+      await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
+      this.close();
+      await this.getProjects();
+    },
+
+    deleteProject(project) {
+      this.assignSelectedProject(project);
+      this.dialogDelete = true;
+    },
+
+    async deleteItemConfirm() {
+      await this.projectsService.asyncDeleteById(this.selectedProject.id);
+      this.close();
+      await this.getProjects();
+    },
+
+    seeDetails(project) {
+      console.log(project)
+      this.assignSelectedProject(project);
+      console.log(this.selectedProject);
+      console.log(this.editedProject);
+      this.dialogDetail = true;
     },
 
     isValidProject() {
@@ -345,40 +437,17 @@ export default {
       return !!this.editedProject.description;
     },
 
-    async editExistingProject() {
-      await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
-      this.deselectProject()
-      await this.fetchProjects();
-      console.log("Saved changes to project", this.editedProject);
+    assignSelectedProject(project) {
+      this.selectedProject = Object.assign(new Project(), project);
+      this.editedProject = Object.assign(new Project(), project);
     },
 
-    async addNewProject() {
-      if (!this.isValidProject()) {
-        return;
-      }
-      await this.projectsService.asyncAdd(this.editedProject);
-
-      this.deselectProject();
-      await this.fetchProjects();
-
-      console.log("Added new project", this.editedProject);
-    },
-
-    findTeamIdByName(teamName) {
-      const team = this.teams.find(t => t.name === teamName);
-      return team ? team.id : null;
-    }
-  },
-  computed: {
-    Project() {
-      return Project
-    },
-    filteredProjects() {
-      if (!this.searchTerm) return this.projects;
-
-      return this.projects.filter((project) => {
-        return project.name?.toLowerCase().includes(this.searchTerm.toLowerCase());
-      });
+    close() {
+      this.assignSelectedProject(new Project())
+      this.dialogEdit = false;
+      this.dialogDelete = false;
+      this.dialogDetail = false;
+      this.dialogNew = false;
     },
   },
 };

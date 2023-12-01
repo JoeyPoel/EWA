@@ -115,10 +115,10 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:[`item.actions`]="{ product }">
-          <v-icon class="me-2" size="small" @click="seeDetails(product)">$info</v-icon>
-          <v-icon class="me-2" size="small" @click="editProduct(product)">$edit</v-icon>
-          <v-icon size="small" @click="deleteProduct(product)">$delete</v-icon>
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon @click="seeDetails(item)">$info</v-icon>
+          <v-icon @click="editProduct(item)">$edit</v-icon>
+          <v-icon @click="deleteProduct(item)">$delete</v-icon>
         </template>
         <template v-slot:no-data>
           <v-btn color="secondary" @click="initialize">Reset</v-btn>
@@ -234,6 +234,8 @@ export default {
     seeDetails(product) {
       this.assignSelectedProduct(product);
       this.dialogDetail = true;
+      console.log('seeDetails -- Still in development');
+      console.log(product);
     },
 
     assignSelectedProduct(product) {
