@@ -47,7 +47,7 @@ export default class ProductAdaptor extends Adaptor {
         let response = await this.fetchJson(this.resourceUrl, options);
 
         if (response) {
-            return Product.fromJSON(response);
+            return Product.fromJson(response);
         }
         return null;
     }

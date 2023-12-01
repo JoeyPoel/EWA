@@ -19,13 +19,8 @@
           </v-select>
         </v-col>
       </v-row>
-      <v-data-table
-          v-model:items-per-page="itemsPerPage"
-          :headers="headers"
-          :items="serverItems"
-          :search="search"
-          class="elevation-1"
-          item-value="name">
+      <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
+          :search="search" class="elevation-1" item-value="name">
         <template v-slot:top>
           <v-toolbar flat>
             <v-dialog v-model="dialogNewOrder" max-width="800px">

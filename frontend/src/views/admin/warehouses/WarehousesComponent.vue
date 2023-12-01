@@ -7,7 +7,7 @@
           :items="warehouses"
           :search="search"
           class="elevation-1"
-          item-value="name">
+          item-value="id">
         <template v-slot:top>
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
