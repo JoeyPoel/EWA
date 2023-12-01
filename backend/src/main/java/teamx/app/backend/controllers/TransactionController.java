@@ -1,19 +1,20 @@
 package teamx.app.backend.controllers;
 
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Transaction;
-import teamx.app.backend.repositories.TransactionRepository;
+import teamx.app.backend.models.dto.TransactionDTO;
 import teamx.app.backend.services.TransactionService;
 
-import java.sql.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
+/**
+ * The TransactionController class is a REST controller that handles transaction-related operations.
+ *
+ * @author Junior Javier Brito Perez
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "/transactions")
@@ -25,66 +26,47 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping(path = "/getAllTransactions")
-    public ResponseEntity<List<Transaction>> getAllTransactions() {
+    /**
+     * Retrieves all transactions for a given product ID.
+     *
+     * @param id the ID of the product
+     * @return object containing a list of TransactionDTO objects
+     * @throws ResponseStatusException if an error occurs while getting the transactions
+     */
+    @GetMapping("/product/{id}")
+    public ResponseEntity<List<TransactionDTO>> getAllByProductId(@PathVariable Long id) {
         try {
-            List<Transaction> transactions = transactionService.getAllTransactions();
+            List<TransactionDTO> transactions = transactionService.getAllByProduct(id);
+
             if (transactions.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No transactions found");
+                return new ResponseEntity<>(transactions, HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(transactions, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving transactions");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    @GetMapping(path = "/getTransactionByProjectId/{projectId}")
-    public ResponseEntity<List<Transaction>> getTransactionsByProjectId(@PathVariable Long projectId) {
+    /**
+     * Retrieves all transactions for a given warehouse ID.
+     *
+     * @param id the ID of the warehouse
+     * @return object containing a list of TransactionDTO objects
+     * @throws ResponseStatusException if an error occurs while getting the transactions
+     */
+    @GetMapping("/warehouse/{id}")
+    public ResponseEntity<List<TransactionDTO>> getAllByWarehouseId(@PathVariable Long id) {
         try {
-            List<Transaction> transactions = transactionService.getTransactionsByProjectId(projectId);
+            List<TransactionDTO> transactions = transactionService.getAllByWarehouse(id);
+
             if (transactions.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No transactions found");
+                return new ResponseEntity<>(transactions, HttpStatus.NO_CONTENT);
             }
+
             return new ResponseEntity<>(transactions, HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving transactions");
-        }
-    }
-
-    @GetMapping(path = "/getTransactionByWarehouseId/{warehouseId}")
-    public ResponseEntity<List<Transaction>> getTransactionsByWarehouseId(@PathVariable Long warehouseId) {
-        try {
-            List<Transaction> transactions = transactionService.getTransactionsByWarehouseId(warehouseId);
-            if (transactions.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No transactions found");
-            }
-            return new ResponseEntity<>(transactions, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving transactions");
-        }
-    }
-
-    @GetMapping(path = "/getTransactionsByProductId/{productId}")
-    public ResponseEntity<List<Transaction>> getTransactionsByProductId(@PathVariable Long productId) {
-        try {
-            List<Transaction> transactions = transactionService.getTransactionsByProductId(productId);
-            if (transactions.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No transactions found");
-            }
-            return new ResponseEntity<>(transactions, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving transactions");
-        }
-    }
-
-    @GetMapping(path = "/getCurrentStock/{warehouseId}/{productId}")
-    public ResponseEntity<Integer> getCurrentStock(@PathVariable Long productId, @PathVariable Long warehouseId) {
-        try {
-
-            Integer stock = transactionService.getCurrentStock(warehouseId, productId);
-            return new ResponseEntity<>(stock, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving transactions");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

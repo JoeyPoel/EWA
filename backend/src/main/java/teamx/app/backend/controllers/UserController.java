@@ -5,18 +5,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Product;
 import teamx.app.backend.models.User;
+import teamx.app.backend.models.dto.UserDTO;
 import teamx.app.backend.repositories.UserRepository;
 import teamx.app.backend.services.UserService;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * User Controller
  * This class is a REST controller for the user model.
  *
  * @author Johnny Magielse
+ * @author Kaifie Dilmohamed
  * @author Junior Javier Brito Perez
  * @see User
  * @see UserRepository
@@ -34,73 +35,75 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<UserDTO> login(@RequestBody User user) {
         try {
-            Optional<User> foundUser = userService.findByEmail(user.getEmail());
-            if (foundUser.isPresent()) {
-                if (!foundUser.get().getPassword().equals(user.getPassword())) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Wrong password");
-                }
-                return ResponseEntity.status(HttpStatus.OK).body(foundUser.get());
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-            }
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+            UserDTO foundUser = userService.login(user);
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(e.getStatusCode(), e.getReason() + e.getMessage());
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(userService.findAll());
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAll() {
+        return ResponseEntity.ok(userService.findAllDTO());
     }
+
+    @GetMapping("/noTeam")
+    public ResponseEntity<List<UserDTO>> getAllNoTeam() {
+        return ResponseEntity.ok(userService.getAllByNoTeamDTO());
+    }
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
-        Optional<User> user = userService.findById(id);
-        if (user.isEmpty()) {
+    public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
+        UserDTO user = userService.findByIdDTO(id);
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> add(@RequestBody User user) {
+    @GetMapping("/team/{teamId}")
+    public ResponseEntity<List<UserDTO>> getAllByTeamId(@PathVariable Long teamId) {
         try {
-            User newUser = userService.save(user);
+            List<UserDTO> users = userService.getAllByTeamIdDTO(teamId);
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while getting user", e);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> add(@RequestBody UserDTO user) {
+        try {
+            UserDTO newUser = userService.saveDTO(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding User");
         }
     }
 
-
-//    @PostMapping("/add")
-//    public ResponseEntity<?> add(@RequestBody User user) {
-//        if (userService.findByEmail(user.getEmail()).isPresent()) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-//        }
-//        User savedUser = userService.save(user);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-//    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody User user) {
-        Optional<User> existingUser = userService.findById(id);
-        if (existingUser.isEmpty()) {
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO user) {
+        UserDTO existingUser = userService.findByIdDTO(id);
+        if (existingUser == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        User updatedUser = userService.save(user);
+        UserDTO updatedUser = userService.saveDTO(user);
         return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        Optional<User> existingUser = userService.findById(id);
-        if (existingUser.isEmpty()) {
+    public ResponseEntity<UserDTO> delete(@PathVariable Long id) {
+        UserDTO existingUser = userService.findByIdDTO(id);
+        if (existingUser == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        userService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        userService.deleteByIdDTO(id);
+        return ResponseEntity.status(HttpStatus.OK).body(existingUser);
     }
 }

@@ -1,13 +1,13 @@
 import {Model} from "@/models/Model";
 
-export class WarehouseProductCategoryCapacity extends Model {
-    constructor(id, capacity, warehouseId, categoryId, minimumStockLevel, categoryName) {
+export class Capacity extends Model {
+    constructor(id, warehouseId, categoryName, categoryId, capacity, minimumStockLevel) {
         super();
         this.id = id;
-        this.capacity = capacity;
         this.warehouseId = warehouseId;
         this.categoryName = categoryName;
         this.categoryId = categoryId;
+        this.capacity = capacity;
         this.minimumStockLevel = minimumStockLevel;
     }
 }
