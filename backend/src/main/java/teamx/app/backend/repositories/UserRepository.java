@@ -2,6 +2,7 @@ package teamx.app.backend.repositories;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import teamx.app.backend.models.User;
 
@@ -20,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getAllByTeam_Id(Long teamId);
 
     List<User> getAllByTeamIsNull();
+
+    @Query("SELECT u FROM Users u WHERE u.id IN :ids")
+    List<User> getAllByIdIn(List<Long> ids);
 }

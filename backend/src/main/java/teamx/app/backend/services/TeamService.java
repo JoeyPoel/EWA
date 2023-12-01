@@ -10,7 +10,6 @@ import teamx.app.backend.models.User;
 import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.repositories.TeamRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -51,8 +50,8 @@ public class TeamService {
         if (team.getId() != null && teamRepository.existsById(team.getId())) {
             return null;
         }
-        log.info("Adding Team: "+ team.getName() +team.getMembers()+ team.getLeader() +team.getWarehouse());
-        log.info("Adding team members: "+ team.getMembers());
+        log.info("Adding Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
+        log.info("Adding team members: " + team.getMembers());
         return teamRepository.save(team);
     }
 
@@ -66,9 +65,10 @@ public class TeamService {
     }
 
     protected Team update(Team team, Long id) {
+        log.error("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
         Team existingTeam = teamRepository.findById(id).orElse(null);
-        log.info("Updating Team: "+ team.getName() +team.getMembers()+ team.getLeader() +team.getWarehouse());
-        log.info("Updating team members: "+ team.getMembers());
+        log.info("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
+        log.info("Updating team members: " + team.getMembers());
         if (existingTeam == null || team == null || !team.getId().equals(id)) {
             return null;
         }
@@ -76,13 +76,17 @@ public class TeamService {
         existingTeam.setName(team.getName());
         existingTeam.setWarehouse(team.getWarehouse());
         existingTeam.setLeader(team.getLeader());
-        existingTeam.setMembers(team.getMembers() );
+        existingTeam.setMembers(team.getMembers());
         return teamRepository.save(existingTeam);
     }
 
     public TeamDTO updateDTO(TeamDTO teamDTO, Long id) {
+        log.error("TeamDTO: " + teamDTO);
         Team team = convertToEntity(teamDTO);
+        log.error("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
+        log.error("Updating team members: " + team.getMembers());
         Team updatedTeam = update(team, id);
+        log.error("Updated team: " + updatedTeam);
         if (updatedTeam == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update team");
         }
@@ -112,26 +116,31 @@ public class TeamService {
 
 
     private TeamDTO convertToDTO(Team team) {
+        log.error("Team to convert to DTO: " + team);
+        if (team == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found is null");
+        }
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setId(team.getId());
         teamDTO.setName(team.getName());
         teamDTO.setWarehouseId(team.getWarehouse().getId());
         teamDTO.setLeaderId(team.getLeader() != null ? team.getLeader().getId() : null);
         teamDTO.setMembersIds(team.getMembers().stream().map(User::getId).toList());
+        log.error("Team to convert to DTO converted: " + teamDTO);
         return teamDTO;
     }
 
     private Team convertToEntity(TeamDTO teamDTO) {
-        Team team = new Team();
-        if (teamDTO.getId() != null) {
-            team.setId(teamDTO.getId());
+        log.error("TeamDTO to convert to entity: " + teamDTO);
+        if (teamDTO == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamDTO not found is null");
         }
-        team.setName(teamDTO.getName());
-        team.setWarehouse(warehouseService.getById(teamDTO.getWarehouseId()));
-        if (teamDTO.getLeaderId() != null) {
-            team.setLeader(userService.findById(teamDTO.getLeaderId()));
-        }
-        team.setMembers(userService.getAllByIds(teamDTO.getMembersIds()));
-        return team;
+        return new Team(
+                teamDTO.getId(),
+                teamDTO.getName(),
+                teamDTO.getWarehouseId() != null ? warehouseService.getById(teamDTO.getWarehouseId()) : null,
+                teamDTO.getLeaderId() != null ? userService.findById(teamDTO.getLeaderId()) : null,
+                teamDTO.getMembersIds() != null ? userService.getAllByIds(teamDTO.getMembersIds()) : null
+        );
     }
 }

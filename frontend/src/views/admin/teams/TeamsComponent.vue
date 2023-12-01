@@ -215,7 +215,7 @@ export default {
 
     close() {
       this.dialog.open = false;
-      this.initialize();
+      // this.initialize();
     },
 
     getWarehouseName(team) {

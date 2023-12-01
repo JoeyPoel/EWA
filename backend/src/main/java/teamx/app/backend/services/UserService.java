@@ -1,5 +1,6 @@
 package teamx.app.backend.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import teamx.app.backend.repositories.UserRepository;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -80,7 +82,10 @@ public class UserService {
     }
 
     protected List<User> getAllByIds(List<Long> membersIds) {
-        return userRepository.findAllById(membersIds);
+        log.error("Members ids: " + membersIds);
+        List<User> users = userRepository.getAllByIdIn(membersIds);
+        log.error("Users: " + users);
+        return users;
     }
 
     protected List<User> getAllByNoTeam() {
