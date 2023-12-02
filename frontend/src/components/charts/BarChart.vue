@@ -29,7 +29,7 @@ import {
   getElementAtEvent,
   getElementsAtEvent
 } from 'vue-chartjs'
-import * as chartConfig from "@/views/admin/dashboard/barChartConfig";
+import * as chartConfig from "@/components/charts/barChartConfig";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -49,7 +49,7 @@ export default {
 
       const datasetIndex = dataset[0].datasetIndex
 
-      console.log('dataset', this.data.datasets[datasetIndex].label)
+      console.log('dataset', chartConfig.data.datasets[datasetIndex].label)
     }
 
     function elementAtEvent(element) {
@@ -59,8 +59,8 @@ export default {
 
       console.log(
           'element',
-          this.data.labels[index],
-          this.data.datasets[datasetIndex].data[index]
+          chartConfig.data.labels[index],
+          chartConfig.data.datasets[datasetIndex].data[index]
       )
     }
 

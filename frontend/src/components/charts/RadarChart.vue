@@ -34,7 +34,7 @@ export default {
         datasets: [
           {
             label: 'My First dataset',
-            backgroundColor: 'rgba(179,181,198,0.2)',
+            backgroundColor: 'rgba(179,43,198,0.2)',
             pointBackgroundColor: 'rgba(179,181,198,1)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',

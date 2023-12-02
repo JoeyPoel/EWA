@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col>
         <v-card>
           <v-card-title>
             <h5>Line Chart</h5>
@@ -11,7 +11,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col>
         <v-card>
           <v-card-title>
             <h5>Bar Chart</h5>
@@ -23,7 +23,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col>
         <v-card>
           <v-card-title>
             <h5>Pie Chart</h5>
@@ -33,7 +33,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col>
         <v-card>
           <v-card-title>
             <h5>Radar Chart</h5>
@@ -50,10 +50,10 @@
 <script>
 
 import {defineComponent} from "vue";
-import PieChart from "@/views/admin/dashboard/PieChart.vue";
-import RadarChart from "@/views/admin/dashboard/RadarChart.vue";
-import LineChart from "@/views/admin/dashboard/LineChart.vue";
-import BarChart from "@/views/admin/dashboard/BarChart.vue";
+import PieChart from "@/components/charts/PieChart.vue";
+import RadarChart from "@/components/charts/RadarChart.vue";
+import LineChart from "@/components/charts/LineChart.vue";
+import BarChart from "@/components/charts/BarChart.vue";
 
 export default defineComponent({
   components: {BarChart, LineChart, RadarChart, PieChart}
