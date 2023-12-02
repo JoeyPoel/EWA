@@ -1,45 +1,42 @@
 package teamx.app.backend.services;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.repositories.ProductRepository;
 
 import java.util.List;
 
-@Slf4j
 @Service
+@RequiredArgsConstructor
 public class InventoryService {
     private final ProductRepository productRepository;
     private final TransactionService transactionService;
 
-    @Autowired
-    public InventoryService(ProductRepository productRepository, TransactionService transactionService) {
-        this.productRepository = productRepository;
-        this.transactionService = transactionService;
+    public List<Product> getAll() {
+        List<Product> products = productRepository.findAll();
+        throwExceptionIfProductsEmpty(products);
+        return products;
     }
 
-    protected List<Product> getAll() {
-        return productRepository.getAllByTransactionsIsNotEmpty();
+    public List<Product> getByWarehouseId(Long warehouseId) {
+        List<Product> products = productRepository.getAllByTransactions_Warehouse_Id(warehouseId);
+        throwExceptionIfProductsEmpty(products);
+        return products;
     }
 
-    public List<InventoryProductDTO> getAllDTO() {
-        return getAll().stream().map(product -> convertToDTO(null, product)).toList();
+    private void throwExceptionIfProductsEmpty(List<Product> products) {
+        if (products.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No products found"
+            );
+        }
     }
 
-    protected List<Product> getByWarehouseId(Long warehouseId) {
-        return productRepository.getAllByTransactions_Warehouse_Id(warehouseId);
-    }
-
-    public List<InventoryProductDTO> getByWarehouseIdDTO(Long warehouseId) {
-        return getByWarehouseId(warehouseId)
-                .stream().map(product -> convertToDTO(warehouseId, product)).toList();
-    }
-
-    protected InventoryProductDTO convertToDTO(Long warehouseId, Product product) {
-        System.out.println("warehouseId: " + warehouseId);
+    public InventoryProductDTO convertToDTO(Long warehouseId, Product product) {
         InventoryProductDTO inventoryProductDTO = new InventoryProductDTO();
         inventoryProductDTO.setProductId(product.getId());
         inventoryProductDTO.setWarehouseId(warehouseId);
@@ -47,6 +44,7 @@ public class InventoryService {
         inventoryProductDTO.setDescription(product.getDescription());
         inventoryProductDTO.setPrice(product.getPrice());
         inventoryProductDTO.setQuantity(transactionService.getProductCurrentStock(warehouseId, product.getId()));
+
         return inventoryProductDTO;
     }
 }

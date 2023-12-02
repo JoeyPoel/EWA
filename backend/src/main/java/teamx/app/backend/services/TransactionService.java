@@ -72,7 +72,7 @@ public class TransactionService {
         return getCurrentStock(productTransactions);
     }
 
-    private TransactionDTO convertToDTO(Transaction transaction) {
+    public TransactionDTO convertToDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setId(transaction.getId());
         transactionDTO.setProductId(transaction.getProduct().getId());

@@ -186,6 +186,9 @@ export default {
       this.users = await this.usersService.asyncGetAll();
       this.possibleTeamMembers = await this.usersService.asyncGetAllByNoTeam();
       this.assignSelectedTeam(new Team());
+
+      console.log(this.users);
+      console.log(this.teams);
     },
 
     async saveNew() {

@@ -22,7 +22,7 @@ public class ProductService {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    protected List<Product> getAllProducts() {
+    public List<Product> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             return null;
@@ -30,31 +30,19 @@ public class ProductService {
         return products;
     }
 
-    public List<ProductDTO> getAllProductsDTO() {
-        return getAllProducts().stream().map(this::convertToDTO).toList();
-    }
-
     public List<ProductCategory> getAllProductCategories() {
         return productCategoryRepository.findAll();
     }
 
-    protected Product getProductById(Long id) {
+    public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
-    }
-
-    public ProductDTO getProductDTOById(Long id) {
-        return convertToDTO(getProductById(id));
     }
 
     protected Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public ProductDTO addProductDTO(ProductDTO productDTO) {
-        return convertToDTO(addProduct(convertToEntity(productDTO)));
-    }
-
-    protected Product updateProduct(Product product, Long id) {
+    public Product updateProduct(Product product, Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null || product == null || !Objects.equals(product.getId(), id)) {
             return null;
@@ -66,11 +54,7 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    public ProductDTO updateProductDTO(ProductDTO productDTO, Long id) {
-        return convertToDTO(updateProduct(convertToEntity(productDTO), id));
-    }
-
-    protected Product deleteProduct(Long id) {
+    public Product deleteProduct(Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
             return null;
@@ -79,11 +63,7 @@ public class ProductService {
         return existingProduct;
     }
 
-    public ProductDTO deleteProductDTO(Long id) {
-        return convertToDTO(deleteProduct(id));
-    }
-
-    private ProductDTO convertToDTO(Product product) {
+    public ProductDTO convertToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
@@ -93,7 +73,7 @@ public class ProductService {
         return productDTO;
     }
 
-    private Product convertToEntity(ProductDTO productDTO) {
+    public Product convertToEntity(ProductDTO productDTO) {
         Product product = new Product();
         product.setId(productDTO.getId());
         product.setName(productDTO.getName());

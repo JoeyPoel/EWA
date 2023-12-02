@@ -119,7 +119,7 @@ public class WarehouseService {
         return convertToCapacityDTO(warehouseProductCategoryCapacityRepository.save(existingCapacity));
     }
 
-    private CapacityDTO convertToCapacityDTO
+    public CapacityDTO convertToCapacityDTO
             (Capacity capacity) {
         CapacityDTO dto = new CapacityDTO();
         dto.setId(capacity.getId());
@@ -131,7 +131,7 @@ public class WarehouseService {
         return dto;
     }
 
-    private Capacity convertToCapacityEntity(CapacityDTO dto) {
+    public Capacity convertToCapacityEntity(CapacityDTO dto) {
         Capacity capacity = new Capacity();
         capacity.setId(dto.getId());
         capacity.setWarehouse(warehouseRepository.findById(dto.getWarehouseId()).orElse(null));

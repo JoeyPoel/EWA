@@ -24,8 +24,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @JsonIgnore
     @ManyToOne()
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @Override

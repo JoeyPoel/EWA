@@ -26,27 +26,15 @@ public class TeamService {
         this.userService = userService;
     }
 
-    protected List<Team> getAll() {
+    public List<Team> getAll() {
         return teamRepository.findAll();
     }
 
-    public List<TeamDTO> getAllDTO() {
-        return getAll().stream().map(this::convertToDTO).toList();
-    }
-
-    protected Team getById(Long id) {
+    public Team getById(Long id) {
         return teamRepository.findById(id).orElse(null);
     }
 
-    public TeamDTO getByIdDTO(Long id) {
-        Team team = teamRepository.findById(id).orElse(null);
-        if (team == null) {
-            return null;
-        }
-        return convertToDTO(team);
-    }
-
-    protected Team add(Team team) {
+    public Team add(Team team) {
         if (team.getId() != null && teamRepository.existsById(team.getId())) {
             return null;
         }
@@ -55,21 +43,12 @@ public class TeamService {
         return teamRepository.save(team);
     }
 
-    public TeamDTO addDTO(TeamDTO teamDTO) {
-        log.info("Adding team members: ", teamDTO.getMembersIds());
-        Team team = convertToEntity(teamDTO);
-        log.info("Adding team members: ", team.getMembers());
-        Team addedTeam = add(team);
-        log.info("Added team members: ", addedTeam.getMembers());
-        return convertToDTO(addedTeam);
-    }
-
-    protected Team update(Team team, Long id) {
+    public Team update(Team team, Long id) {
         log.error("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
         Team existingTeam = teamRepository.findById(id).orElse(null);
         log.info("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
         log.info("Updating team members: " + team.getMembers());
-        if (existingTeam == null || team == null || !team.getId().equals(id)) {
+        if (existingTeam == null || !team.getId().equals(id)) {
             return null;
         }
 
@@ -80,20 +59,7 @@ public class TeamService {
         return teamRepository.save(existingTeam);
     }
 
-    public TeamDTO updateDTO(TeamDTO teamDTO, Long id) {
-        log.error("TeamDTO: " + teamDTO);
-        Team team = convertToEntity(teamDTO);
-        log.error("Updating Team: " + team.getName() + team.getMembers() + team.getLeader() + team.getWarehouse());
-        log.error("Updating team members: " + team.getMembers());
-        Team updatedTeam = update(team, id);
-        log.error("Updated team: " + updatedTeam);
-        if (updatedTeam == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update team");
-        }
-        return convertToDTO(updatedTeam);
-    }
-
-    protected Team delete(Long id) {
+    public Team delete(Long id) {
         Team existingTeam = teamRepository.findById(id).orElse(null);
         if (existingTeam == null) {
             return null;
@@ -102,20 +68,11 @@ public class TeamService {
         return existingTeam;
     }
 
-    public TeamDTO deleteDTO(Long id) {
-        return convertToDTO(delete(id));
-    }
-
-    protected List<Team> getAllByWarehouseId(Long warehouseId) {
+    public List<Team> getAllByWarehouseId(Long warehouseId) {
         return teamRepository.getAllByWarehouse_Id(warehouseId);
     }
 
-    public List<TeamDTO> getAllByWarehouseIdDTO(Long warehouseId) {
-        return getAllByWarehouseId(warehouseId).stream().map(this::convertToDTO).toList();
-    }
-
-
-    private TeamDTO convertToDTO(Team team) {
+    public TeamDTO convertToDTO(Team team) {
         log.error("Team to convert to DTO: " + team);
         if (team == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found is null");
@@ -130,17 +87,16 @@ public class TeamService {
         return teamDTO;
     }
 
-    private Team convertToEntity(TeamDTO teamDTO) {
+    public Team convertToEntity(TeamDTO teamDTO) {
         log.error("TeamDTO to convert to entity: " + teamDTO);
         if (teamDTO == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamDTO not found is null");
         }
-        return new Team(
-                teamDTO.getId(),
-                teamDTO.getName(),
-                teamDTO.getWarehouseId() != null ? warehouseService.getById(teamDTO.getWarehouseId()) : null,
-                teamDTO.getLeaderId() != null ? userService.findById(teamDTO.getLeaderId()) : null,
-                teamDTO.getMembersIds() != null ? userService.getAllByIds(teamDTO.getMembersIds()) : null
-        );
+        Team team = new Team();
+        team.setId(teamDTO.getId());
+        team.setName(teamDTO.getName());
+        team.setWarehouse(warehouseService.getById(teamDTO.getWarehouseId()));
+        team.setLeader(userService.findById(teamDTO.getLeaderId()));
+        return team;
     }
 }

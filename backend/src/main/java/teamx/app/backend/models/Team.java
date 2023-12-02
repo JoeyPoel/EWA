@@ -36,7 +36,8 @@ public class Team {
     private User leader;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "team")
+    @OneToMany
+    @JoinColumn(name = "team_id")
     private List<User> members;
 }
 

@@ -19,31 +19,18 @@ public class ProjectService {
         this.teamService = teamService;
     }
 
-    protected List<Project> getAll() {
+    public List<Project> getAll() {
         return projectRepository.findAll();
     }
 
-    public List<ProjectDTO> getAllDTO() {
-        return getAll().stream().map(this::convertToDTO).toList();
-    }
-
-    protected Project getById(Long id) {
+    public Project getById(Long id) {
         return projectRepository.findById(id).orElse(null);
     }
-
-    public ProjectDTO getByIdDTO(Long id) {
-        return convertToDTO(getById(id));
-    }
-
-    protected Project add(Project project) {
+    public Project add(Project project) {
         return projectRepository.save(project);
     }
 
-    public ProjectDTO addDTO(ProjectDTO projectDTO) {
-        return convertToDTO(add(convertToEntity(projectDTO)));
-    }
-
-    protected Project update(Project project, Long id) {
+    public Project update(Project project, Long id) {
         Project existingProject = projectRepository.findById(id).orElse(null);
         if (existingProject == null || project == null) {
             return null;
@@ -61,11 +48,7 @@ public class ProjectService {
         return projectRepository.save(existingProject);
     }
 
-    public ProjectDTO updateDTO(ProjectDTO projectDTO, Long id) {
-        return convertToDTO(update(convertToEntity(projectDTO), id));
-    }
-
-    protected Project delete(Long id) {
+    public Project delete(Long id) {
         Project project = projectRepository.findById(id).orElse(null);
         if (project == null) {
             return null;
@@ -74,19 +57,11 @@ public class ProjectService {
         return project;
     }
 
-    public ProjectDTO deleteDTO(Long id) {
-        return convertToDTO(delete(id));
-    }
-
-    protected List<Project> getAllByWarehouseId(Long warehouseId) {
+    public List<Project> getAllByWarehouseId(Long warehouseId) {
         return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 
-    public List<ProjectDTO> getAllByWarehouseIdDTO(Long warehouseId) {
-        return getAllByWarehouseId(warehouseId).stream().map(this::convertToDTO).toList();
-    }
-
-    private ProjectDTO convertToDTO(Project project) {
+    public ProjectDTO convertToDTO(Project project) {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(project.getId());
         projectDTO.setName(project.getName());
@@ -102,7 +77,7 @@ public class ProjectService {
         return projectDTO;
     }
 
-    private Project convertToEntity(ProjectDTO projectDTO) {
+    public Project convertToEntity(ProjectDTO projectDTO) {
         Project project = new Project();
         project.setId(projectDTO.getId());
         project.setName(projectDTO.getName());

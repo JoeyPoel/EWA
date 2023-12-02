@@ -1,120 +1,162 @@
 package teamx.app.backend.services;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
-import teamx.app.backend.models.dto.UserDTO;
 import teamx.app.backend.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    public User login(User user) {
+        User foundUser = userRepository
+                .findByEmail(user.getEmail())
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+                );
 
-    public UserDTO login(User user) {
-        User foundUser = findByEmail(user.getEmail());
-        if (foundUser == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
-        if (!foundUser.getPassword().equals(user.getPassword())) {
+        if (!Objects.equals(foundUser.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
         }
-        return convertToDTO(foundUser);
+
+        return foundUser;
     }
 
-    protected List<User> getAllByTeamId(Long teamId) {
-        return userRepository.getAllByTeam_Id(teamId);
-    }
+    public List<User> getAllByTeamId(Long teamId) {
+        if (teamId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team id is null");
+        }
 
-    public List<UserDTO> getAllByTeamIdDTO(Long teamId) {
-        return getAllByTeamId(teamId).stream().map(this::convertToDTO).toList();
-    }
-    protected User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
+        List<User> users = userRepository.getAllByTeam_Id(teamId);
 
-    public UserDTO findByEmailDTO(String email) {
-        return convertToDTO(findByEmail(email));
-    }
+        if (users.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Users not found");
+        }
 
-    protected List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public List<UserDTO> findAllDTO() {
-        return findAll().stream().map(this::convertToDTO).toList();
-    }
-
-    protected User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public UserDTO findByIdDTO(Long id) {
-        return convertToDTO(findById(id));
-    }
-
-    protected User save(User user) {
-        return userRepository.save(user);
-    }
-
-    public UserDTO saveDTO(UserDTO userDTO) {
-        return convertToDTO(save(convertToEntity(userDTO)));
-    }
-
-    protected User deleteById(Long id) {
-        User user = findById(id);
-        userRepository.deleteById(id);
-        return user;
-    }
-
-    public UserDTO deleteByIdDTO(Long id) {
-        return convertToDTO(deleteById(id));
-    }
-
-    protected List<User> getAllByIds(List<Long> membersIds) {
-        log.error("Members ids: " + membersIds);
-        List<User> users = userRepository.getAllByIdIn(membersIds);
-        log.error("Users: " + users);
         return users;
     }
 
-    protected List<User> getAllByNoTeam() {
-        return userRepository.getAllByTeamIsNull();
+    public User findByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+                );
     }
 
-    public List<UserDTO> getAllByNoTeamDTO() {
-        return getAllByNoTeam().stream().map(this::convertToDTO).toList();
+    public List<User> findAll() {
+        List<User> users = userRepository.findAll();
+
+        if (users.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Users not found");
+        }
+
+        return users;
     }
 
-    public List<UserDTO> getAllByIdsDTO(List<Long> membersIds) {
-        return getAllByIds(membersIds).stream().map(this::convertToDTO).toList();
+    public User findById(Long id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+                );
     }
 
-    private UserDTO convertToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRole(String.valueOf(user.getRole()));
-        return userDTO;
+    public User add(User user) {
+        if (userRepository.existsById(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this id already exists");
+        }
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists");
+        }
+
+        return userRepository.save(user);
     }
 
-    private User convertToEntity(UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setRole(User.Role.valueOf(userDTO.getRole()));
+    public User update(User user, Long id) {
+        User existingUser = findById(id);
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setRole(user.getRole());
+        existingUser.setTeam(user.getTeam());
+
+        return userRepository.save(existingUser);
+    }
+
+    public User deleteById(Long id) {
+        User user = findById(id);
+
+        userRepository.deleteById(id);
+
+        if (userRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User could not be deleted");
+        }
+
         return user;
+    }
+
+
+    public List<User> getAllByIds(List<Long> membersIds) {
+        List<User> users = userRepository.getAllByIdIn(membersIds);
+
+        if (users.size() != membersIds.size()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Users not found");
+        }
+
+        return users;
+    }
+
+    public List<User> getAllByNoTeam() {
+        List<User> users = userRepository.getAllByTeamIsNull();
+
+        if (users.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Users not found");
+        }
+
+        return users;
+    }
+
+    public List<User> setTeam(List<Long> membersIds, Team team) {
+        validateInput(membersIds, team);
+        List<User> users = getAllByIds(membersIds);
+        unsetUsersFromTeam(team, membersIds);
+        return setUserTeamAndSave(users, team);
+    }
+
+    private void validateInput(List<Long> membersIds, Team team){
+        if(membersIds == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User IDs are null");
+        }
+        if(team == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team is null");
+        }
+    }
+
+    private void unsetUsersFromTeam(Team team, List<Long> membersIds) {
+        List<User> usersToUnset = userRepository.getAllByTeam_IdAndIdNotIn(team.getId(), membersIds);
+        usersToUnset.forEach(user -> user.setTeam(null));
+        userRepository.saveAll(usersToUnset);
+    }
+
+    private List<User> setUserTeamAndSave(List<User> users, Team team){
+        users.forEach(user -> user.setTeam(team));
+        List<User> savedUsers = userRepository.saveAll(users);
+        if (savedUsers.size() != users.size()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
+        }
+        return savedUsers;
     }
 }
