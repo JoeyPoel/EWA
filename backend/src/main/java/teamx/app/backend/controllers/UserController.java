@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-
+// TODO: Return DTOs instead of entities
     private final UserService userService;
 
     @PostMapping("/login")
