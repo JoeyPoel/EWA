@@ -4,6 +4,7 @@
       <v-toolbar flat>
         <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
         </v-text-field>
+        <v-spacer></v-spacer>
       </v-toolbar>
       <v-data-table
         v-model:items-per-page="itemsPerPage"
@@ -90,7 +91,7 @@ export default {
     return {
       headers: [
         {title: "Name", key: "name"},
-        {title: "Team", key: "team"},
+        {title: "Team", key: "teamName"},
         {title: 'Start Date', key: 'startDate'},
         {title: 'End Date', key: 'endDate'},
         {text:  "Status", key: "status"},
