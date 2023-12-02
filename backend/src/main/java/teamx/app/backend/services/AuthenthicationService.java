@@ -24,6 +24,13 @@ public class AuthenthicationService {
         this.jwtTokenGenerator = jwtTokenGenerator;
     }
 
+    /**
+     * Authenticates a user based on the provided credentials.
+     *
+     * @param inputUser The User object containing login credentials.
+     * @return UserDTO with user details and JWT token on successful authentication,
+     *         null otherwise.
+     */
     public UserDTO authenticateUser(User inputUser) {
         Optional<User> userOptional = userRepository.findByEmail(inputUser.getEmail());
 
