@@ -1,10 +1,9 @@
 package teamx.app.backend.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.dto.CapacityDTO;
 import teamx.app.backend.services.WarehouseService;
@@ -12,200 +11,108 @@ import teamx.app.backend.services.WarehouseService;
 import java.util.List;
 
 /**
- * This class is a REST controller for the Warehouse model.
- *
- * @author Junior Javier Brito Perez
+ * Controller class for managing warehouses.
  */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/warehouses")
+@RequiredArgsConstructor
 public class WarehouseController {
     private final WarehouseService warehouseService;
-
-    @Autowired
-    public WarehouseController(WarehouseService warehouseService) {
-        this.warehouseService = warehouseService;
-    }
 
     /**
      * Retrieves all warehouses.
      *
-     * @return a ResponseEntity object containing a list of Warehouse objects if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if no warehouses are found
-     * @throws ResponseStatusException with HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while
-     *                                 retrieving warehouses
+     * @return ResponseEntity contaning a list of Warehouse objects.
      */
     @GetMapping
-    public ResponseEntity<List<Warehouse>> getAll() {
-        try {
-            List<Warehouse> warehouses = warehouseService.getAll();
-
-            if (warehouses == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouses not found");
-            }
-
-            return new ResponseEntity<>(warehouses, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouses");
-        }
+    public ResponseEntity<List<Warehouse>> findAll() {
+        return ResponseEntity.ok(warehouseService.findAll());
     }
 
     /**
      * Retrieves a warehouse by its ID.
      *
-     * @param id the ID of the warehouse to retrieve
-     * @return a ResponseEntity object containing the Warehouse object if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if the warehouse with the given ID is not found
-     * @throws ResponseStatusException with HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while retrieving
-     *                                 the warehouse
+     * @param id The ID of the warehouse to retrieve.
+     * @return ResponseEntity containing the Warehouse object with the specified ID.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Warehouse> getById(@PathVariable Long id) {
-        try {
-            Warehouse warehouse = warehouseService.getById(id);
-            if (warehouse == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
-            }
-            return new ResponseEntity<>(warehouse, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse");
-        }
+    public ResponseEntity<Warehouse> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(warehouseService.findById(id));
     }
 
     /**
-     * Adds a new warehouse.
+     * Adds a new Warehouse to the system.
      *
-     * @param warehouse the Warehouse object to add
-     * @return a ResponseEntity object containing the newly added Warehouse object if successful
-     * @throws ResponseStatusException with HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while adding the
-     * warehouse
+     * @param warehouse The Warehouse object to be added.
+     * @return ResponseEntity containing the created Warehouse object.
      */
     @PostMapping
     public ResponseEntity<Warehouse> add(@RequestBody Warehouse warehouse) {
-        try {
-            Warehouse newWarehouse = warehouseService.add(warehouse);
-            return new ResponseEntity<>(newWarehouse, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding warehouse");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(warehouseService.add(warehouse));
     }
 
     /**
-     * Updates a warehouse by its ID.
+     * Updates a Warehouse in the system by its ID.
      *
-     * @param id               the ID of the warehouse to update
-     * @param newWarehouseData the Warehouse object containing the updated data
-     * @return a ResponseEntity object containing the updated Warehouse object if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if the warehouse is not found,
-     *                                 or HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while updating
-     *                                 the warehouse
+     * @param id               The ID of the Warehouse to be updated.
+     * @param newWarehouseData The updated Warehouse object.
+     * @return ResponseEntity containing the updated Warehouse object.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Warehouse> updateById(@PathVariable Long id, @RequestBody Warehouse newWarehouseData) {
-        try {
-            Warehouse updatedWarehouse = warehouseService.updateById(id, newWarehouseData);
-            if (updatedWarehouse == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
-            }
-            return new ResponseEntity<>(updatedWarehouse, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse");
-        }
+        return ResponseEntity.ok(warehouseService.updateById(id, newWarehouseData));
     }
 
     /**
-     * Deletes a warehouse by its ID.
+     * Deletes a Warehouse from the system by its ID.
      *
-     * @param id the ID of the warehouse to delete
-     * @return a ResponseEntity object containing the deleted Warehouse object if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if the warehouse is not found,
-     *                                 or HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while deleting
-     *                                 the warehouse
+     * @param id The ID of the Warehouse to be deleted.
+     * @return ResponseEntity containing the deleted Warehouse object.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Warehouse> deleteById(@PathVariable Long id) {
-        try {
-            Warehouse deletedWarehouse = warehouseService.deleteById(id);
-            if (deletedWarehouse == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
-            }
-            return new ResponseEntity<>(deletedWarehouse, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting warehouse");
-        }
+        return ResponseEntity.ok(warehouseService.deleteById(id));
     }
 
     /**
-     * Retrieves the capacity of a warehouse by its ID.
+     * Retrieves the capacity details for a Warehouse by its ID.
      *
-     * @param id the ID of the warehouse to retrieve capacity for
-     * @return a ResponseEntity object containing a list of CapacityDTO objects if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if no capacity categories are found for the warehouse,
-     *                                 or HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while retrieving the
-     *                                 capacity of the warehouse
+     * @param id The ID of the Warehouse for which capacity details are to be retrieved.
+     * @return ResponseEntity containing a list of CapacityDTO objects representing the capacity details of the
+     * Warehouse.
      */
     @GetMapping("/{id}/capacity")
     public ResponseEntity<List<CapacityDTO>> getCapacity(@PathVariable Long id) {
-        try {
-            List<CapacityDTO> warehouseCapacityCategories =
-                    warehouseService.getCapacity(id);
-            if (warehouseCapacityCategories == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No warehouse capacity categories found");
-            }
-            return new ResponseEntity<>(warehouseCapacityCategories, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving warehouse"
-                    + e.getMessage());
-        }
+        return ResponseEntity.ok(warehouseService.getCapacity(id));
     }
 
     /**
-     * Adds capacity to a warehouse by its ID.
+     * Adds the capacity details for a Warehouse by its ID.
      *
-     * @param id                               the ID of the warehouse to add capacity to
-     * @param warehouseProductCategoryCapacity the CapacityDTO object containing the capacity details to be added
-     * @return a ResponseEntity object containing the newly added CapacityDTO object if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if the warehouse is not found,
-     *                                 or HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while adding the capacity
+     * @param id                               The ID of the Warehouse to add the capacity details to.
+     * @param warehouseProductCategoryCapacity The CapacityDTO object representing the capacity details to be added.
+     * @return ResponseEntity containing the CapacityDTO object representing the added capacity details of the
+     * Warehouse.
      */
     @PostMapping("/{id}/capacity")
     public ResponseEntity<CapacityDTO>
     addCapacityByWarehouseId(@PathVariable Long id, @RequestBody CapacityDTO warehouseProductCategoryCapacity) {
-        try {
-            CapacityDTO newWarehouseProductCategoryCapacity =
-                    warehouseService.addCapacity(id, warehouseProductCategoryCapacity);
-            if (newWarehouseProductCategoryCapacity == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse not found");
-            }
-            return new ResponseEntity<>(newWarehouseProductCategoryCapacity, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding warehouse capacity");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(warehouseService.addCapacity(id, warehouseProductCategoryCapacity));
     }
 
     /**
-     * Updates the capacity of a warehouse by its ID.
+     * Updates the capacity details for a Warehouse by its ID.
      *
-     * @param id                               the ID of the warehouse to update the capacity for
-     * @param warehouseProductCategoryCapacity the CapacityDTO object containing the updated capacity details
-     * @return a ResponseEntity object containing the updated CapacityDTO object if successful
-     * @throws ResponseStatusException with HttpStatus.NOT_FOUND if the warehouse capacity is not found,
-     *                                 or HttpStatus.INTERNAL_SERVER_ERROR if an error occurs while updating the
-     *                                 capacity
+     * @param id                               The ID of the Warehouse to update the capacity details of.
+     * @param warehouseProductCategoryCapacity The CapacityDTO object representing the updated capacity details.
+     * @return ResponseEntity containing the CapacityDTO object representing the updated capacity details of the
+     * Warehouse.
      */
     @PutMapping("/{id}/capacity")
     public ResponseEntity<CapacityDTO>
     updateCapacityById(@PathVariable Long id, @RequestBody CapacityDTO warehouseProductCategoryCapacity) {
-        try {
-            CapacityDTO updatedWarehouseProductCategoryCapacity =
-                    warehouseService.updateCapacityById(id, warehouseProductCategoryCapacity);
-            if (updatedWarehouseProductCategoryCapacity == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Warehouse capacity not found");
-            }
-            return new ResponseEntity<>(updatedWarehouseProductCategoryCapacity, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating warehouse capacity"
-                    + e.getMessage());
-        }
+        return ResponseEntity.ok(warehouseService.updateCapacityById(id, warehouseProductCategoryCapacity));
     }
 }

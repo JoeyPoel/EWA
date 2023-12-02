@@ -9,7 +9,7 @@ import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
@@ -22,64 +22,81 @@ public class ProductService {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> findAll() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
-            return null;
+            throw new NoSuchElementException("No products found");
         }
-        return products;
+        return mapToDTO(products);
     }
 
-    public List<ProductCategory> getAllProductCategories() {
-        return productCategoryRepository.findAll();
+    public List<ProductCategory> findAllProductCategories() {
+        List<ProductCategory> productCategories = productCategoryRepository.findAll();
+        if (productCategories.isEmpty()) {
+            throw new NoSuchElementException("No product categories found");
+        }
+        return productCategories;
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public Product findById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Product not found with id " + productId));
     }
 
-    protected Product addProduct(Product product) {
+    public ProductDTO findDTOById(Long productId) {
+        return mapToDTO(findById(productId));
+    }
+
+    private Product save(Product product) {
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Product product, Long id) {
-        Product existingProduct = productRepository.findById(id).orElse(null);
-        if (existingProduct == null || product == null || !Objects.equals(product.getId(), id)) {
-            return null;
-        }
-        existingProduct.setName(product.getName());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setCategory(product.getCategory());
-        return productRepository.save(existingProduct);
+    public ProductDTO add(ProductDTO productDTO) {
+        Product product = mapToEntity(new Product(), productDTO);
+        return mapToDTO(product);
     }
 
-    public Product deleteProduct(Long id) {
+    public ProductDTO update(Long productId, ProductDTO productDTO) {
+        if (!productId.equals(productDTO.getId())) throw new IllegalArgumentException("Product ID does not match");
+        Product product = mapToEntity(findById(productId), productDTO);
+        return mapToDTO(product);
+    }
+
+    public ProductDTO delete(Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
             return null;
         }
         productRepository.deleteById(id);
-        return existingProduct;
+        return mapToDTO(existingProduct);
     }
 
-    public ProductDTO convertToDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(product.getId());
-        productDTO.setName(product.getName());
-        productDTO.setDescription(product.getDescription());
-        productDTO.setPrice(product.getPrice());
-        productDTO.setCategoryId(product.getCategory().getId());
-        return productDTO;
-    }
-
-    public Product convertToEntity(ProductDTO productDTO) {
-        Product product = new Product();
+    private Product mapToEntity(Product product, ProductDTO productDTO) {
         product.setId(productDTO.getId());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
-        product.setCategory(productCategoryRepository.findById(productDTO.getCategoryId()).orElse(null));
-        return product;
+        if (productDTO.getCategoryId() != null) {
+            product.setCategory(
+                    productCategoryRepository
+                            .findById(productDTO.getCategoryId())
+                            .orElseThrow(() ->
+                                    new NoSuchElementException("Product category not found with id " +
+                                            productDTO.getCategoryId() + " for product " + productDTO.getId())
+                            )
+            );
+        }
+        return save(product);
+    }
+
+    private ProductDTO mapToDTO(Product product) {
+        return new ProductDTO(product);
+    }
+
+    private List<ProductDTO> mapToDTO(List<Product> products) {
+        return products
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 }

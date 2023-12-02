@@ -25,9 +25,8 @@ export default class ProjectAdaptor extends Adaptor {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
-
         const response = await this.fetchJson(this.resourceUrl, options)
-
+        console.log(response)
         return response ? response.map(project => Project.fromJson(project)) : null;
     }
 
@@ -57,9 +56,8 @@ export default class ProjectAdaptor extends Adaptor {
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
-
+        console.log(project)
         const response = await this.fetchJson(this.resourceUrl, options);
-
         return response ? Project.fromJson(response) : null;
     }
 
@@ -75,7 +73,7 @@ export default class ProjectAdaptor extends Adaptor {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
-
+        console.log(project)
         const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
         return response ? Project.fromJson(response) : null;

@@ -1,7 +1,5 @@
 package teamx.app.backend.services;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,9 +12,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User login(User user) {
         User foundUser = userRepository
@@ -54,7 +56,7 @@ public class UserService {
                 );
     }
 
-    public List<User> findAll() {
+    public List<User> getAll() {
         List<User> users = userRepository.findAll();
 
         if (users.isEmpty()) {
@@ -64,7 +66,7 @@ public class UserService {
         return users;
     }
 
-    public User findById(Long id) {
+    public User getById(Long id) {
         return userRepository
                 .findById(id)
                 .orElseThrow(
@@ -74,7 +76,7 @@ public class UserService {
 
     public User add(User user) {
         if (userRepository.existsById(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this id already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this id already exists");
         }
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
@@ -85,7 +87,7 @@ public class UserService {
     }
 
     public User update(User user, Long id) {
-        User existingUser = findById(id);
+        User existingUser = getById(id);
 
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
@@ -96,8 +98,8 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    public User deleteById(Long id) {
-        User user = findById(id);
+    public User delete(Long id) {
+        User user = getById(id);
 
         userRepository.deleteById(id);
 
@@ -136,11 +138,11 @@ public class UserService {
         return setUserTeamAndSave(users, team);
     }
 
-    private void validateInput(List<Long> membersIds, Team team){
-        if(membersIds == null){
+    private void validateInput(List<Long> membersIds, Team team) {
+        if (membersIds == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User IDs are null");
         }
-        if(team == null){
+        if (team == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team is null");
         }
     }
@@ -151,7 +153,7 @@ public class UserService {
         userRepository.saveAll(usersToUnset);
     }
 
-    private List<User> setUserTeamAndSave(List<User> users, Team team){
+    private List<User> setUserTeamAndSave(List<User> users, Team team) {
         users.forEach(user -> user.setTeam(team));
         List<User> savedUsers = userRepository.saveAll(users);
         if (savedUsers.size() != users.size()) {

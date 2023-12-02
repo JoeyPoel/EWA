@@ -27,7 +27,6 @@ public class User {
 
     @JsonIgnore
     @ManyToOne()
-    @JoinColumn(name = "team_id")
     private Team team;
 
     @Override
