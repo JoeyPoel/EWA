@@ -303,10 +303,7 @@ export default {
     },
 
     seeDetails(project) {
-      console.log(project)
       this.assignSelectedProject(project);
-      console.log(this.selectedProject);
-      console.log(this.editedProject);
       this.dialogDetail = true;
     },
 

@@ -165,7 +165,6 @@ export default {
 
   async mounted() {
     await this.initialize();
-    console.log(this.products)
   },
 
   watch: {

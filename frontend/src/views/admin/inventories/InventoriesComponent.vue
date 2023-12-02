@@ -253,12 +253,10 @@ export default {
   methods: {
     async loadTableData() {
       this.loading = true;
-      console.log(this.selectedWarehouse)
       this.serverItems = this.selectedWarehouse ?
           await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
           await this.inventoryService.asyncGetAll();
 
-      console.log(this.serverItems)
       this.transActionCategories = Transaction.getCategories;
 
       this.products = await this.productsService.asyncGetAll().then(products => {
