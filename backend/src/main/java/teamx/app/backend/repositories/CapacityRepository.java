@@ -5,7 +5,7 @@ import teamx.app.backend.models.Capacity;
 
 import java.util.List;
 
-public interface WarehouseProductCategoryCapacityRepository extends
+public interface CapacityRepository extends
         JpaRepository<Capacity, Long> {
     List<Capacity> findAllByWarehouseId(Long warehouseId);
 }

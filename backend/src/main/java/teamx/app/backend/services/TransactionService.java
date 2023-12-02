@@ -11,7 +11,14 @@ import teamx.app.backend.repositories.TransactionRepository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+/**
+ * The TransactionService class is responsible for handling transaction-related operations.
+ * It interacts with the TransactionRepository, ProductService, and WarehouseService classes.
+ *
+ * @author Junior Javier Brito Perez
+ */
 @Service
 public class TransactionService {
     TransactionRepository transactionRepository;
@@ -19,72 +26,67 @@ public class TransactionService {
     WarehouseService warehouseService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, ProductService productService, WarehouseService warehouseService) {
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            ProductService productService,
+            WarehouseService warehouseService) {
         this.transactionRepository = transactionRepository;
         this.productService = productService;
         this.warehouseService = warehouseService;
     }
 
     private static int getCurrentStock(List<Transaction> productTransactions) {
-        int currentStock = 0;
-        for (Transaction transaction : productTransactions) {
-
-            if (transaction.getTransactionType() == Transaction.Type.ORDER ||
-                    (transaction.getTransactionType() == Transaction.Type.ADJUSTMENT ||
-                            transaction.getTransactionType() == Transaction.Type.RETURN ||
-                            transaction.getTransactionType() == Transaction.Type.OTHER) &&
-                            transaction.getQuantity() > 0) {
-                currentStock += transaction.getQuantity();
-            } else {
-                currentStock -= transaction.getQuantity();
-            }
-        }
-        return currentStock;
-    }
-
-    public List<TransactionDTO> getAllByProduct(@NonNull Long productId) {
-        return transactionRepository.getAllByProduct(productService.getProductById(productId))
-                .stream()
-                .map(this::convertToDTO)
-                .toList();
-    }
-
-    public List<TransactionDTO> getAllByWarehouse(@NonNull Long warehouseId) {
-        return transactionRepository.getAllByWarehouse(warehouseService.getById(warehouseId))
-                .stream()
-                .map(this::convertToDTO)
-                .toList();
-    }
-
-    public int getProductCurrentStock(Long warehouseId, Long productId) {
-        Warehouse warehouse = warehouseId != null ? warehouseService.getById(warehouseId) : null;
-        List<Transaction> productTransactions = warehouse == null ?
-                transactionRepository.getAllByProductAndTransactionDateBefore(
-                        productService.getProductById(productId),
-                        new Date(System.currentTimeMillis())
+        return productTransactions.stream()
+                .mapToInt(
+                        transaction -> transaction.isPositiveTransaction() ?
+                                transaction.getQuantity() :
+                                -transaction.getQuantity()
                 )
-                :
-                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(
-                        warehouse,
-                        productService.getProductById(productId),
-                        new Date(System.currentTimeMillis())
-                );
-        return getCurrentStock(productTransactions);
+                .sum();
     }
 
-    private TransactionDTO convertToDTO(Transaction transaction) {
-        TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setId(transaction.getId());
-        transactionDTO.setProductId(transaction.getProduct().getId());
-        transactionDTO.setQuantity(transaction.getQuantity());
-        transactionDTO.setTransactionDate(transaction.getTransactionDate());
-        transactionDTO.setTransactionType(transaction.getTransactionType().toString());
 
-        Long warehouseId = transaction.getWarehouse() != null ? transaction.getWarehouse().getId() : null;
-        transactionDTO.setWarehouseId(warehouseId);
-        transactionDTO.setTransferFromWarehouseId(transaction.getTransferFrom() != null ?
-                transaction.getTransferFrom().getId() : null);
-        transactionDTO.setProjectId(transaction.getProject() != null ? transaction.getProject().getId() : null);
-        return transactionDTO;
+    public List<TransactionDTO> findAllByProduct(@NonNull Long productId) {
+        List<TransactionDTO> transactions = transactionRepository
+                .getAllByProduct(productService.findById(productId))
+                .stream()
+                .map(TransactionDTO::new)
+                .toList();
+
+        if (transactions.isEmpty()) {
+            throw new NoSuchElementException("No transactions found for product with id " + productId);
+        }
+
+        return transactions;
+    }
+
+    public List<TransactionDTO> findAllByWarehouse(@NonNull Long warehouseId) {
+        List<TransactionDTO> transactions = transactionRepository
+                .getAllByWarehouse(warehouseService.findById(warehouseId))
+                .stream()
+                .map(TransactionDTO::new)
+                .toList();
+
+        if (transactions.isEmpty()) {
+            throw new NoSuchElementException("No transactions found for warehouse with id " + warehouseId);
+        }
+
+        return transactions;
+    }
+
+    public int findProductCurrentStock(Long warehouseId, Long productId) {
+        Warehouse warehouse = null;
+        if (warehouseId != null) {
+            warehouse = warehouseService.findById(warehouseId);
+        }
+
+        Product product = productService.findById(productId);
+        Date date = new Date(System.currentTimeMillis());
+
+        List<Transaction> productTransactions = warehouseId == null ?
+                transactionRepository.getAllByProductAndTransactionDateBefore(product, date) :
+                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(warehouse, product, date);
+
+        return getCurrentStock(productTransactions);
     }
 }

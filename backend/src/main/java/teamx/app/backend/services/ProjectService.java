@@ -7,115 +7,80 @@ import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final TeamService teamService;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, TeamService teamService) {
+    public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
-        this.teamService = teamService;
     }
 
-    protected List<Project> getAll() {
-        return projectRepository.findAll();
+    public List<ProjectDTO> findAll() {
+        List<Project> projects = projectRepository.findAll();
+        if (projects.isEmpty()) {
+            throw new NoSuchElementException("No projects found");
+        }
+        return mapToDTO(projects);
     }
 
-    public List<ProjectDTO> getAllDTO() {
-        return getAll().stream().map(this::convertToDTO).toList();
+    protected Project findById(Long projectID) {
+        return projectRepository.findById(projectID)
+                .orElseThrow(() -> new NoSuchElementException("Project not found with id " + projectID));
     }
 
-    protected Project getById(Long id) {
-        return projectRepository.findById(id).orElse(null);
+    public ProjectDTO findDTOById(Long projectID) {
+        return mapToDTO(findById(projectID));
     }
 
-    public ProjectDTO getByIdDTO(Long id) {
-        return convertToDTO(getById(id));
-    }
-
-    protected Project add(Project project) {
+    private Project save(Project project) {
         return projectRepository.save(project);
     }
 
-    public ProjectDTO addDTO(ProjectDTO projectDTO) {
-        return convertToDTO(add(convertToEntity(projectDTO)));
-    }
-
-    protected Project update(Project project, Long id) {
-        Project existingProject = projectRepository.findById(id).orElse(null);
-        if (existingProject == null || project == null) {
-            return null;
-        }
-        existingProject.setName(project.getName());
-        existingProject.setDescription(project.getDescription());
-        existingProject.setLocation(project.getLocation());
-        existingProject.setTeam(project.getTeam());
-        existingProject.setClientName(project.getClientName());
-        existingProject.setClientEmail(project.getClientEmail());
-        existingProject.setClientPhone(project.getClientPhone());
-        existingProject.setStartDate(project.getStartDate());
-        existingProject.setEndDate(project.getEndDate());
-        existingProject.setStatus(project.getStatus());
-        return projectRepository.save(existingProject);
-    }
-
-    public ProjectDTO updateDTO(ProjectDTO projectDTO, Long id) {
-        return convertToDTO(update(convertToEntity(projectDTO), id));
-    }
-
-    protected Project delete(Long id) {
-        Project project = projectRepository.findById(id).orElse(null);
-        if (project == null) {
-            return null;
-        }
-        projectRepository.deleteById(id);
-        return project;
-    }
-
-    public ProjectDTO deleteDTO(Long id) {
-        return convertToDTO(delete(id));
-    }
-
-    protected List<Project> getAllByWarehouseId(Long warehouseId) {
-        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
-    }
-
-    public List<ProjectDTO> getAllByWarehouseIdDTO(Long warehouseId) {
-        return getAllByWarehouseId(warehouseId).stream().map(this::convertToDTO).toList();
-    }
-
-    private ProjectDTO convertToDTO(Project project) {
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setId(project.getId());
-        projectDTO.setName(project.getName());
-        projectDTO.setDescription(project.getDescription());
-        projectDTO.setLocation(project.getLocation());
-        projectDTO.setClientName(project.getClientName());
-        projectDTO.setClientEmail(project.getClientEmail());
-        projectDTO.setClientPhone(project.getClientPhone());
-        projectDTO.setStartDate(project.getStartDate());
-        projectDTO.setEndDate(project.getEndDate());
-        projectDTO.setStatus(String.valueOf(project.getStatus()));
-        projectDTO.setTeamId(project.getTeam() != null ? project.getTeam().getId() : null);
-        return projectDTO;
-    }
-
-    private Project convertToEntity(ProjectDTO projectDTO) {
+    public ProjectDTO add(ProjectDTO projectDTO) {
         Project project = new Project();
-        project.setId(projectDTO.getId());
+        return mapToDTO(mapToEntity(project, projectDTO));
+    }
+
+    public ProjectDTO update(Long projectId, ProjectDTO newProjectData) {
+        if (!projectId.equals(newProjectData.getId())) throw new IllegalArgumentException("Project ID does not match");
+        Project project = findById(projectId);
+        return mapToDTO(mapToEntity(project, newProjectData));
+    }
+
+    public ProjectDTO delete(Long projectId) {
+        Project deletedProject = findById(projectId);
+        projectRepository.deleteById(projectId);
+        return mapToDTO(deletedProject);
+    }
+
+    public List<ProjectDTO> findAllByWarehouseId(Long warehouseId) {
+        return mapToDTO(projectRepository.getAllByTeam_Warehouse_Id(warehouseId));
+    }
+
+    private Project mapToEntity(Project project, ProjectDTO projectDTO) {
         project.setName(projectDTO.getName());
         project.setDescription(projectDTO.getDescription());
         project.setLocation(projectDTO.getLocation());
         project.setClientName(projectDTO.getClientName());
         project.setClientEmail(projectDTO.getClientEmail());
         project.setClientPhone(projectDTO.getClientPhone());
-        // TODO: CHECK IF THIS WORKS
         project.setStartDate(projectDTO.getStartDate());
         project.setEndDate(projectDTO.getEndDate());
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
-        project.setTeam(projectDTO.getTeamId() != null ? teamService.getById(projectDTO.getTeamId()) : null);
-        return project;
+        return save(project);
+    }
+
+    private ProjectDTO mapToDTO(Project project) {
+        return new ProjectDTO(project);
+    }
+
+    private List<ProjectDTO> mapToDTO(List<Project> projects) {
+        return projects
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 }

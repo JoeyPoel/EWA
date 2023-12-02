@@ -1,9 +1,7 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,31 +29,35 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private Type transactionType;
-    public enum Type {
-        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
-    }
-
     @ManyToOne
     @JsonIgnore
     private Product product;
-
     @JsonIgnore
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date transactionDate;
-
     @ManyToOne
     @JsonIgnore
     private Warehouse warehouse;
-
     @ManyToOne
     @JsonIgnore
     private Project project;
-
     @ManyToOne
     @JsonIgnore
     private Warehouse transferFrom;
-
     @ManyToOne
     @JsonIgnore
     private Order order;
+
+
+    public boolean isPositiveTransaction() {
+        return this.getTransactionType() == Type.ORDER ||
+                (this.getTransactionType() == Type.ADJUSTMENT ||
+                        this.getTransactionType() == Type.RETURN ||
+                        this.getTransactionType() == Type.OTHER)
+                        && this.getQuantity() > 0;
+    }
+
+    public enum Type {
+        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+    }
 }

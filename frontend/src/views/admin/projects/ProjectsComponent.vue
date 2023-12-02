@@ -205,7 +205,7 @@ export default {
     };
   },
 
-  async mounted() {
+  async created() {
     await this.initialize();
   },
 
@@ -284,7 +284,11 @@ export default {
       }
       await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
       this.close();
-      await this.getProjects();
+    },
+
+    setDateFormats() {
+      this.editedProject.startDate = this.editedProject.startDate.toISOString().slice(0, 10);
+      this.editedProject.endDate = this.editedProject.endDate.toISOString().slice(0, 10);
     },
 
     deleteProject(project) {
@@ -299,10 +303,7 @@ export default {
     },
 
     seeDetails(project) {
-      console.log(project)
       this.assignSelectedProject(project);
-      console.log(this.selectedProject);
-      console.log(this.editedProject);
       this.dialogDetail = true;
     },
 

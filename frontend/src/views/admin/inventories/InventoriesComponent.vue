@@ -253,7 +253,6 @@ export default {
   methods: {
     async loadTableData() {
       this.loading = true;
-      console.log(this.selectedWarehouse)
       this.serverItems = this.selectedWarehouse ?
           await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
           await this.inventoryService.asyncGetAll();
@@ -286,7 +285,6 @@ export default {
       const serverData = await this.transactionsService.asyncGetAllByProductId(
           productId)
 
-      // TODO: Make a Model for this and map the data to it.
       this.transactions = serverData.map(transaction => {
         return {
           id: transaction.id,
@@ -295,6 +293,7 @@ export default {
           transactionDate: new Date(transaction.transactionDate).toLocaleDateString()
         }
       })
+
       this.transactionsLoading = false;
     },
 

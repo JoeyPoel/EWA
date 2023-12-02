@@ -18,47 +18,44 @@
                 <v-btn class="mb-2" color="secundary" dark v-bind="props">New Warehouse</v-btn>
               </template>
               <v-card>
-                <v-card-title><span class="text-h5">New Warehouse</span></v-card-title>
+                <v-card-title class="text-h5">New Warehouse</v-card-title>
                 <v-card-text>
-                  <v-container>
+                  <v-form>
                     <v-row>
-                      <v-form>
-                        <v-col>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.name" label="Name" type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.location" label="Location"
-                                          type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.postcode" label="Postcode"
-                                          type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.country" label="Country" type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.contactName" label="Contact Name"
-                                          type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.contactEmail" label="Contact Email"
-                                          type="text"></v-text-field>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="editedWarehouse.contactPhone" label="Contact Phone"
-                                          type="text"></v-text-field>
-                          </v-row>
-                        </v-col>
-                      </v-form>
+                      <v-text-field v-model="editedWarehouse.name" label="Name" type="text"></v-text-field>
                     </v-row>
-                  </v-container>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.address" label="Address" type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.location" label="Location"
+                                    type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.postcode" label="Postcode"
+                                    type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.country" label="Country" type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.contactName" label="Contact Name"
+                                    type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.contactEmail" label="Contact Email"
+                                    type="text"></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field v-model="editedWarehouse.contactPhone" label="Contact Phone"
+                                    type="text"></v-text-field>
+                    </v-row>
+                  </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
-                  <v-btn color="blue-darken-1" variant="text" @click="save">Save</v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="saveNew">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -153,7 +150,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
-                  <v-btn color="blue-darken-1" variant="text" @click="save">Save</v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="saveCapacity">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -162,7 +159,7 @@
                 <v-card-title class="text-h5">Are you sure you want to delete this warehouse?</v-card-title>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
                   <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -481,7 +478,7 @@ export default {
       await this.loadWarehouseCapacity();
     },
     dialogDelete(val) {
-      val || this.closeDelete();
+      val || this.close();
     },
     async dialogDetails(val) {
       if (!val) {
@@ -580,47 +577,42 @@ export default {
       this.dialogDetails = true;
     },
 
-    editItem(item) {
-      this.editedIndex = this.warehouses.indexOf(item);
-      this.editedWarehouse = Object.assign({}, item);
+    editItem(warehouse) {
+      this.editedWarehouse = Object.assign({}, warehouse);
+      this.selectedWarehouse = Object.assign({}, warehouse);
       this.dialogEdit = true;
     },
+
     async editCapacity(item) {
       this.editedCapacityIndex = this.warehouseProductCategoryCapacities.indexOf(item);
-      await this.warehouseService.asyncUpdateWarehouseCapacityById(this.editedWarehouseCapacityObject.id, this.editedWarehouseCapacityObject);
+      await this.warehousesService.asyncUpdateCapacityById(this.editedWarehouseCapacityObject.id,
+          this.editedWarehouseCapacityObject);
 
       this.editedWarehouseCapacityObject = Object.assign({}, item);
-      this.dialogEditCapacity = true;
     },
-    deleteItem(item) {
-      this.editedIndex = this.warehouses.indexOf(item);
-      this.editedWarehouse = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-    deleteItemConfirm() {
-      this.warehouses.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-    close() {
+    async close() {
       this.dialogNew = false;
       this.dialogEdit = false;
       this.dialogDelete = false;
-      this.dialogEditCapacity = false;
-      this.dialogEditTeam = false;
       this.editedIndex = -1;
       this.editedCapacityIndex = -1;
       this.editedTeamIndex = -1;
+      this.editedWarehouse = new Warehouse();
+      this.selectedWarehouse = new Warehouse();
+      await this.loadWarehouses();
     },
-    closeDelete() {
-      this.dialogDelete = false;
-      this.editedIndex = -1;
+
+    deleteItem(item) {
+      this.editedIndex = this.warehouses.indexOf(item);
+      this.editedWarehouse = Object.assign(new Warehouse(), item);
+      this.dialogDelete = true;
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.warehouses[this.editedIndex], this.editedWarehouse);
-      } else {
-        this.warehouses.push(this.editedWarehouse);
-      }
+    async deleteItemConfirm() {
+      await this.warehousesService.asyncDeleteById(this.editedWarehouse.id);
+      await this.close();
+    },
+    async saveNew() {
+      await this.warehousesService.asyncAdd(this.editedWarehouse);
       this.close();
     },
     saveCapacity() {
@@ -628,14 +620,6 @@ export default {
         Object.assign(this.warehouseProductCategoryCapacities[this.editedCapacityIndex], this.editedWarehouseCapacityObject);
       } else {
         this.warehouseProductCategoryCapacities.push(this.editedWarehouseCapacityObject);
-      }
-      this.close();
-    },
-    saveTeam() {
-      if (this.editedTeamIndex > -1) {
-        Object.assign(this.warehouseTeams[this.editedTeamIndex], this.editedTeamItem);
-      } else {
-        this.warehouseTeams.push(this.editedTeamItem);
       }
       this.close();
     }

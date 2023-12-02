@@ -22,6 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> getAllByTeamIsNull();
 
-    @Query("SELECT u FROM Users u WHERE u.id IN :ids")
     List<User> getAllByIdIn(List<Long> ids);
+
+    List<User> getAllByTeam_IdAndIdNotIn(Long id, List<Long> membersIds);
 }

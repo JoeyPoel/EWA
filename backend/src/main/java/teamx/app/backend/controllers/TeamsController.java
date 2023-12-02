@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.services.TeamService;
 
@@ -33,144 +32,68 @@ public class TeamsController {
     /**
      * Retrieves all teams.
      *
-     * @return List of TeamDTO objects representing all teams.
-     * @throws ResponseStatusException if an error occurs while retrieving the teams.
+     * @return a ResponseEntity containing a list of TeamDTO representing all teams.
      */
     @GetMapping
     public ResponseEntity<List<TeamDTO>> getAll() {
-        try {
-            List<TeamDTO> teams = teamService.getAllDTO();
-
-            if (teams.isEmpty()) {
-                return new ResponseEntity<>(teams, HttpStatus.NO_CONTENT);
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(teams);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams: " +
-                    e.getMessage());
-        }
+        return ResponseEntity.ok(teamService.findAll());
     }
 
     /**
      * Retrieves all teams by warehouse ID.
      *
-     * @param warehouseId the ID of the warehouse for which to retrieve teams.
-     * @return List of TeamDTO objects representing all teams associated with the specified warehouse.
-     * @throws ResponseStatusException if an error occurs while retrieving the teams.
+     * @param warehouseId the ID of the warehouse
+     * @return a ResponseEntity containing a list of TeamDTO representing all teams in the specified warehouse.
      */
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<TeamDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
-        try {
-            List<TeamDTO> teams = teamService.getAllByWarehouseIdDTO(warehouseId);
-
-            if (teams.isEmpty()) {
-                return new ResponseEntity<>(teams, HttpStatus.NO_CONTENT);
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(teams);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving teams" +
-                    e.getMessage());
-        }
+        return ResponseEntity.ok(teamService.findAllByWarehouseId(warehouseId));
     }
 
     /**
-     * Retrieves a team by its ID.
+     * Retrieves the team with the given ID.
      *
-     * @param id the ID of the team to retrieve.
-     * @return TeamDTO object representing the team with the specified ID.
-     * @throws ResponseStatusException if an error occurs while retrieving the team.
+     * @param id the ID of the team
+     * @return a ResponseEntity containing the TeamDTO representing the team with the specified ID.
      */
     @GetMapping("/{id}")
     public ResponseEntity<TeamDTO> getById(@PathVariable Long id) {
-        try {
-            TeamDTO team = teamService.getByIdDTO(id);
-
-            if (team == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(team);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving team : " +
-                    e.getMessage());
-        }
+        return ResponseEntity.ok(teamService.findByIdDTO(id));
     }
 
     /**
      * Adds a new team.
      *
-     * @param team the TeamDTO object representing the team to add.
-     * @return TeamDTO object representing the added team.
-     * @throws ResponseStatusException if the team already exists or an error occurs while adding the team.
+     * @param team the TeamDTO representing the team to be added
+     * @return a ResponseEntity containing the TeamDTO representing the added team.
      */
     @PostMapping
     public ResponseEntity<TeamDTO> add(@RequestBody TeamDTO team) {
-        try {
-            TeamDTO addedTeam = teamService.addDTO(team);
-            if (addedTeam == null)  {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team already exists");
-            }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(addedTeam);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding team : " +
-                    e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.add(team));
     }
 
     /**
      * Updates a team by its ID.
      *
-     * @param id   the ID of the team to update.
-     * @param team the TeamDTO object representing the updated team data.
-     * @return TeamDTO object representing the updated team.
-     * @throws ResponseStatusException if the team with the given ID is not found or an error occurs while updating the
-     *                                 team.
+     * @param id the ID of the team to be updated
+     * @param team the TeamDTO representing the updated team
+     * @return a ResponseEntity containing the TeamDTO representing the updated team.
      */
     @PutMapping("/{id}")
     public ResponseEntity<TeamDTO> updateById(@PathVariable Long id, @RequestBody TeamDTO team) {
-        try {
-            TeamDTO updatedTeam = teamService.updateDTO(team, id);
-
-            if (updatedTeam == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating team : " +
-                    e.getMessage());
-        }
+        return ResponseEntity.ok(teamService.update(id, team));
     }
 
     /**
      * Deletes a team by its ID.
      *
-     * @param id the ID of the team to delete.
-     * @return TeamDTO object representing the deleted team.
-     * @throws ResponseStatusException if the team with the given ID is not found or an error occurs while deleting the
-     *                                 team.
+     * @param id the ID of the team to be deleted
+     * @return a ResponseEntity containing the TeamDTO representing the deleted team.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable Long id) {
-        try {
-            if (teamService.getByIdDTO(id) == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
-            }
-
-            TeamDTO deletedTeam = teamService.deleteDTO(id);
-
-            if (deletedTeam == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found");
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(deletedTeam);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting team : " +
-                    e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(teamService.delete(id));
     }
 }
 

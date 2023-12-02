@@ -24,6 +24,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @JsonIgnore
     @ManyToOne()
     private Team team;

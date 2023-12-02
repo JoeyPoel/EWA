@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
 import teamx.app.backend.services.ProductService;
@@ -30,123 +29,68 @@ public class ProductController {
     }
 
     /**
-     * Retrieves all products.
+     * Retrieves all products from the database.
      *
-     * @return a ResponseEntity containing a list of ProductDTOs
-     * @throws ResponseStatusException if there is an error retrieving products
+     * @return ResponseEntity object with a list of ProductDTO objects representing all products.
      */
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAll() {
-        try {
-            List<ProductDTO> products = productService.getAllProductsDTO();
-
-            if (products.isEmpty()) {
-                return new ResponseEntity<>(products, HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving products");
-        }
+        return ResponseEntity.ok(productService.findAll());
     }
 
     /**
-     * Adds a new product.
+     * Adds a new product to the database.
      *
-     * @param product the ProductDTO object to be added
-     * @return a ResponseEntity containing the added ProductDTO
-     * @throws ResponseStatusException if there is an error adding the product
+     * @param product The ProductDTO object representing the product to be added.
+     * @return ResponseEntity object with a ProductDTO object representing the newly added product.
      */
     @PostMapping
     public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO product) {
-        try {
-            ProductDTO newProduct = productService.addProductDTO(product);
-            if (newProduct == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-            }
-            return new ResponseEntity<>(newProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error adding product");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.add(product));
     }
 
+
     /**
-     * Retrieves a product by its ID.
+     * Retrieves a product from the database based on the provided ID.
      *
-     * @param id the ID of the product to retrieve
-     * @return a ResponseEntity containing the retrieved ProductDTO object
-     * @throws ResponseStatusException if the product is not found or if there is an error retrieving it
+     * @param id The ID of the product to be retrieved.
+     * @return ResponseEntity object with a ProductDTO object representing the retrieved product.
      */
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
-        try {
-            ProductDTO product = productService.getProductDTOById(id);
-            if (product == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-            }
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product");
-        }
+        return ResponseEntity.ok(productService.findDTOById(id));
     }
 
     /**
-     * Updates a product with new data.
+     * Updates a product in the database based on the provided ID and new product data.
      *
-     * @param id                 the ID of the product to update
-     * @param newProductData     the new ProductDTO object containing updated data
-     * @return a ResponseEntity containing the updated ProductDTO object
-     * @throws ResponseStatusException if the product is not found or if there is an error updating it
+     * @param id             The ID of the product to be updated.
+     * @param newProductData The new product data to update the existing product with.
+     * @return ResponseEntity object with a ProductDTO object representing the updated product.
      */
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateById(@PathVariable Long id, @RequestBody ProductDTO newProductData) {
-        try {
-            ProductDTO updatedProduct = productService.updateProductDTO(newProductData, id);
-            if (updatedProduct == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-            }
-            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating product");
-        }
+        return ResponseEntity.ok(productService.update(id, newProductData));
     }
 
     /**
-     * Deletes a product with the specified ID.
+     * Deletes a product from the database based on the provided ID.
      *
-     * @param id the ID of the product to delete
-     * @return a ResponseEntity containing the deleted ProductDTO object
-     * @throws ResponseStatusException if the product is not found or if there is an error deleting it
+     * @param id The ID of the product to be deleted.
+     * @return ResponseEntity object with a ProductDTO object representing the deleted product.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> deleteById(@PathVariable Long id) {
-        try {
-            ProductDTO deletedProduct = productService.deleteProductDTO(id);
-            if (deletedProduct == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-            }
-            return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting product");
-        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(productService.delete(id));
     }
 
     /**
-     * Retrieves all product categories.
+     * Retrieves all product categories from the database.
      *
-     * @return a ResponseEntity containing a list of ProductCategory objects
-     * @throws ResponseStatusException if the product categories are not found or if there is an error retrieving them
+     * @return ResponseEntity object with a List of ProductCategory objects representing all the product categories.
      */
     @GetMapping("/categories")
     public ResponseEntity<List<ProductCategory>> getAllCategories() {
-        try {
-            List<ProductCategory> productCategories = productService.getAllProductCategories();
-            if (productCategories == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product categories not found");
-            }
-            return new ResponseEntity<>(productCategories, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving product categories");
-        }
+        return ResponseEntity.ok(productService.findAllProductCategories());
     }
 }
