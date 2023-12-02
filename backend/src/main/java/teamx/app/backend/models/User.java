@@ -36,7 +36,7 @@ public class User {
                 ", name=" + name +
                 ", email=" + email +
                 ", role=" + role +
-                ", team=" + team.getId() +
+                ", team=" + (team != null ? team.getId() : null) +
                 '}';
     }
 

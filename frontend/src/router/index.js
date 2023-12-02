@@ -68,6 +68,15 @@ const routes = [
     {
         path: '/', redirect: '/log-in',
     },
+
+    {
+        path: '/team-projects',
+        name: 'Project',
+        component: () => import('@/views/user/projects/ProjectsComponent.vue'),
+        meta: {
+            requiresAuth: true
+        }
+    },
 ];
 
 export const router = createRouter({

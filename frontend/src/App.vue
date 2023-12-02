@@ -18,6 +18,7 @@ import UserAdaptor from "@/services/UserAdaptor";
 import ProjectAdaptor from "@/services/ProjectAdaptor";
 import {InventoryAdaptor} from "@/services/InventoryAdaptor";
 import TransactionsAdaptor from "@/services/TransactionsAdaptor";
+import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
 
 export default {
   name: 'App',
@@ -34,6 +35,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
+      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth"),
     }
   },
 }
