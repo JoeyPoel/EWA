@@ -61,7 +61,7 @@
                           <v-row>
                             <v-select
                                 v-model="editedTeam.membersIds"
-                                :items="possibleTeamMembers"
+                                :items="users"
                                 item-title="name"
                                 item-value="id"
                                 label="Team Members"
