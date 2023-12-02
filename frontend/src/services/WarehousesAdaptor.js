@@ -1,13 +1,12 @@
 import {Adaptor} from "./Adaptor.js";
 import {Warehouse} from "@/models/Warehouse.js";
-import {ProductCategory} from "@/models/ProductCategory";
-import {WarehouseProductCategoryCapacity} from "@/models/WarehouseProductCategoryCapacity";
+import {Capacity} from "@/models/Capacity";
 
 /**
  * Adaptor for the warehouses REST API.
  *
  * @extends Adaptor
- * @category Services
+ *
  * @Author Junior Javier Brito Perez
  */
 export default class WarehousesAdaptor extends Adaptor {
@@ -21,12 +20,14 @@ export default class WarehousesAdaptor extends Adaptor {
      * @async
      * @returns {Promise<*>} The warehouses.
      */
-    async asyncFindAll() {
-        const response = await this.fetchJson(this.resourceUrl + "/getAllWarehouses");
-        if (response) {
-            return response.map(warehouse => Object.assign(new Warehouse(), warehouse));
+    async asyncGetAll() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
         }
-        return null;
+
+        const response = await this.fetchJson(this.resourceUrl, options);
+
+        return response ? response.map(warehouse => Warehouse.fromJson(warehouse)) : null;
     }
 
     /**
@@ -36,34 +37,50 @@ export default class WarehousesAdaptor extends Adaptor {
      * @param {string} id - The ID of the warehouse.
      * @returns {Promise<*>} The warehouse.
      */
-    async asyncFindById(id) {
-        return Object.assign(new Warehouse(), await this.fetchJson(this.resourceUrl + "/getWarehouseById/" + id));
+    async asyncGetById(id) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
+
+        return response ? Warehouse.fromJson(response) : null;
     }
 
-    async asyncAddWarehouse(warehouse) {
+    /**
+     * Sends a POST request to add a warehouse asynchronously.
+     * @param {Object} warehouse - The warehouse object to be added.
+     * @returns {Promise<Warehouse|null>} - A Promise that resolves with the added warehouse object, or null if the
+     * request fails.
+     */
+    async asyncAdd(warehouse) {
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouse)
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/addWarehouse", options);
+        const response = await this.fetchJson(this.resourceUrl, options);
 
-        if (response) {
-            return Object.assign(new Warehouse(), await response.json());
-        }
-        return null;
+        return response ? Warehouse.fromJson(response) : null;
     }
 
-    async asyncUpdateWarehouse(id, warehouse) {
+    /**
+     * Updates a warehouse asynchronously.
+     *
+     * @param {string} id - The ID of the warehouse to be updated.
+     * @param {object} warehouse - The updated warehouse object.
+     *                           It should be in JSON format.
+     *
+     * @returns {Promise<Warehouse|null>} - A promise that resolves with the updated Warehouse object
+     *                                    or null if the update was unsuccessful.
+     */
+    async asyncUpdate(id, warehouse) {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouse)
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/updateWarehouseById/" + id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
-        if (response) {
-            return Object.assign(new Warehouse(), await response.json());
-        }
-        return null;
+        return response ? Warehouse.fromJson(response) : null;
     }
 
     /**
@@ -77,41 +94,65 @@ export default class WarehousesAdaptor extends Adaptor {
         const options = {
             method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-        const response = await this.fetchJson(this.resourceUrl + "/deleteWarehouseById/" + id, options);
-        if (response) {
-            return Object.assign(new Warehouse(), await response.json());
-        }
-        return null;
+
+        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
+
+        return response ? Warehouse.fromJson(response) : null;
     }
 
-    async asyncGetMissingWarehouseCapacityCategories(id) {
-        const response = await this.fetchJson(this.resourceUrl + "/getMissingWarehouseCapacityCategories/"
-            + id);
-        if (response) {
-            return response.map(category => Object.assign(new ProductCategory(), category));
-        }
-        return null;
-    }
-
-    async asyncGetWarehouseCapacityCategories(id) {
-        const response = await this.fetchJson(this.resourceUrl + "/getWarehouseCapacityCategories/" + id);
-        if (response) {
-            return response.map(category => Object.assign(new WarehouseProductCategoryCapacity(), category));
-        }
-        return null;
-    }
-
-    async asyncAddWarehouseCapacityByWarehouseId(id, warehouseProductCategoryCapacity) {
+    /**
+     * Retrieves the capacity information for the specified ID asynchronously.
+     *
+     * @param {number|string} id - The ID of the resource.
+     * @return {Promise<Array<Capacity>|null>} - A Promise that resolves to an array of capacity objects, or null if
+     * there is no response.
+     */
+    async asyncGetCapacity(id) {
         const options = {
-            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(warehouseProductCategoryCapacity)
+            method: "GET", headers: {"Content-Type": "application/json"},
         }
 
-        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" +
-            id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/" + id + "/capacity", options);
 
-        if (response) {
-            return Object.assign(new WarehouseProductCategoryCapacity(), await response.json());
+        return response ? response.map(capacity => Capacity.fromJson(capacity)) : null;
+    }
+
+    /**
+     * Adds warehouse capacity by warehouse id.
+     *
+     * @param {string} id - The id of the warehouse.
+     * @param {object} warehouseProductCategoryCapacity - The warehouse product category capacity.
+     * @returns {object} - The capacity after adding the warehouse capacity.
+     */
+    async asyncAddCapacityByWarehouseId(id, warehouseProductCategoryCapacity) {
+        const options = {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(warehouseProductCategoryCapacity)
         }
-        return null;
+
+        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" + id,
+            options);
+
+        return response ? Capacity.fromJson(response) : null;
+    }
+
+    /**
+     * Updates warehouse capacity by ID asynchronously.
+     *
+     * @param {string} id - The ID of the warehouse.
+     * @param {object} warehouseProductCategoryCapacity - The new warehouse capacity information.
+     * @return {Promise<Capacity|null>} - A promise that resolves to the updated warehouse capacity as a Capacity object
+     * , or null if the update failed.
+     */
+    async asyncUpdateCapacityById(id, warehouseProductCategoryCapacity) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(warehouseProductCategoryCapacity)
+        }
+
+        const response = await this.fetchJson(
+            this.resourceUrl + "/updateWarehouseCapacityById/" + id, options);
+
+        return response ? Capacity.fromJson(response) : null;
     }
 }

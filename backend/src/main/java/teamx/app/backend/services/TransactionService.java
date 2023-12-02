@@ -1,8 +1,12 @@
 package teamx.app.backend.services;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Transaction;
+import teamx.app.backend.models.Warehouse;
+import teamx.app.backend.models.dto.TransactionDTO;
 import teamx.app.backend.repositories.TransactionRepository;
 
 import java.sql.Date;
@@ -11,70 +15,76 @@ import java.util.List;
 @Service
 public class TransactionService {
     TransactionRepository transactionRepository;
+    ProductService productService;
+    WarehouseService warehouseService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, ProductService productService, WarehouseService warehouseService) {
         this.transactionRepository = transactionRepository;
+        this.productService = productService;
+        this.warehouseService = warehouseService;
     }
 
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    private static int getCurrentStock(List<Transaction> productTransactions) {
+        int currentStock = 0;
+        for (Transaction transaction : productTransactions) {
+
+            if (transaction.getTransactionType() == Transaction.Type.ORDER ||
+                    (transaction.getTransactionType() == Transaction.Type.ADJUSTMENT ||
+                            transaction.getTransactionType() == Transaction.Type.RETURN ||
+                            transaction.getTransactionType() == Transaction.Type.OTHER) &&
+                            transaction.getQuantity() > 0) {
+                currentStock += transaction.getQuantity();
+            } else {
+                currentStock -= transaction.getQuantity();
+            }
+        }
+        return currentStock;
     }
 
-    public List<Transaction> getTransactionsByOrderId(Long id) {
-        return transactionRepository.findByOrderId(id);
+    public List<TransactionDTO> getAllByProduct(@NonNull Long productId) {
+        return transactionRepository.getAllByProduct(productService.getProductById(productId))
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
-    public List<Transaction> getTransactionsByProductId(Long id) {
-        return transactionRepository.findByProductId(id);
+    public List<TransactionDTO> getAllByWarehouse(@NonNull Long warehouseId) {
+        return transactionRepository.getAllByWarehouse(warehouseService.getById(warehouseId))
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
-    public List<Transaction> getTransactionsByProjectId(Long id) {
-        return transactionRepository.findByProjectId(id);
+    public int getProductCurrentStock(Long warehouseId, Long productId) {
+        Warehouse warehouse = warehouseId != null ? warehouseService.getById(warehouseId) : null;
+        List<Transaction> productTransactions = warehouse == null ?
+                transactionRepository.getAllByProductAndTransactionDateBefore(
+                        productService.getProductById(productId),
+                        new Date(System.currentTimeMillis())
+                )
+                :
+                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(
+                        warehouse,
+                        productService.getProductById(productId),
+                        new Date(System.currentTimeMillis())
+                );
+        return getCurrentStock(productTransactions);
     }
 
-    public List<Transaction> getTransactionsByWarehouseId(Long id) {
-        return transactionRepository.getTransactionsByWarehouseId(id);
-    }
+    private TransactionDTO convertToDTO(Transaction transaction) {
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setId(transaction.getId());
+        transactionDTO.setProductId(transaction.getProduct().getId());
+        transactionDTO.setQuantity(transaction.getQuantity());
+        transactionDTO.setTransactionDate(transaction.getTransactionDate());
+        transactionDTO.setTransactionType(transaction.getTransactionType().toString());
 
-    public Integer getCurrentStock(Long warehouseId, Long productId) {
-        List<Integer> projectsProductsQuantitiesInFlow = transactionRepository
-                .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionFlowAndTransactionDateBefore(
-                warehouseId, productId, Transaction.Flow.IN, new Date(System.currentTimeMillis()));
-
-        List<Integer> transferInflow = transactionRepository
-                .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionTypeAndTransactionDateBefore(
-                warehouseId, productId, Transaction.Type.TRANSFER, new Date(System.currentTimeMillis()));
-
-        System.out.println(transferInflow);
-        List<Integer> projectsProductsQuantitiesOutFlow = transactionRepository
-                .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionFlowAndTransactionDateBefore(
-                warehouseId, productId, Transaction.Flow.OUT, new Date(System.currentTimeMillis()));
-
-        List<Integer> transferOutflowQuantity = transactionRepository
-                .findTransactionQuantitiesByTransferFromIdAndWarehouseIdAndTransactionDateBefore(
-                warehouseId, productId, new Date(System.currentTimeMillis()));
-
-
-        Integer totalInflow = projectsProductsQuantitiesInFlow.stream().mapToInt(Integer::intValue).sum() +
-                transferInflow.stream().mapToInt(Integer::intValue).sum();
-        Integer totalOutflow = projectsProductsQuantitiesOutFlow.stream().mapToInt(Integer::intValue).sum() +
-                transferOutflowQuantity.stream().mapToInt(Integer::intValue).sum();
-        return totalInflow - totalOutflow;
-    }
-
-    public List<Integer> getTransactionQuantitiesByWarehouseIdAndByProductIdAndTransactionTypeAndDateBetween(
-            Long warehouseId, Long productId, Transaction.Type transactionType, Date startDate, Date endDate) {
-        return transactionRepository
-                .findTransactionQuantitiesByWarehouseIdAndProductIdAndTransactionTypeAndTransactionDateBetween(
-                warehouseId, productId, transactionType, startDate, endDate);
-    }
-
-    public Transaction getTransactionById(Long id) {
-        return transactionRepository.findById(id).orElse(null);
-    }
-
-    public Transaction addTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
+        Long warehouseId = transaction.getWarehouse() != null ? transaction.getWarehouse().getId() : null;
+        transactionDTO.setWarehouseId(warehouseId);
+        transactionDTO.setTransferFromWarehouseId(transaction.getTransferFrom() != null ?
+                transaction.getTransferFrom().getId() : null);
+        transactionDTO.setProjectId(transaction.getProject() != null ? transaction.getProject().getId() : null);
+        return transactionDTO;
     }
 }

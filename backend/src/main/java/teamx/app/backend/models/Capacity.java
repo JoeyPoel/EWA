@@ -1,7 +1,6 @@
 package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "WarehouseProductCategoryCapacities")
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseProductCategoryCapacity {
+public class Capacity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +22,6 @@ public class WarehouseProductCategoryCapacity {
     private Warehouse warehouse;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private ProductCategory productCategory;
 }

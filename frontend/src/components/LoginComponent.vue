@@ -55,7 +55,7 @@ export default {
       }
 
       let givenUser = User.loginUser(this.email, this.password);
-      this.user = await this.usersService.asyncFindUser(givenUser);
+      this.user = await this.usersService.asyncGetUser(givenUser);
 
       if (this.user.email) {
         sessionStorage.setItem("email", this.user.email);

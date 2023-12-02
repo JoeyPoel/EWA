@@ -31,4 +31,8 @@ public class Product {
 
     @ManyToOne
     private ProductCategory category;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<Transaction> transactions;
 }

@@ -57,7 +57,7 @@ export default {
   },
   async created() {
     this.products = null;
-    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses = await this.warehousesService.asyncGetAll();
   },
   methods: {
     addProduct() {

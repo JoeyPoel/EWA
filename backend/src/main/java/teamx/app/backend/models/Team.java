@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Team entity
  * Represents a team
@@ -25,7 +27,16 @@ public class Team {
     private String name;
 
     @ManyToOne
-//    @JsonIgnore
+    @JsonIgnore
     private Warehouse warehouse;
+
+    // TODO: Can a team have multiple leaders?
+    @ManyToOne
+    @JsonIgnore
+    private User leader;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "team")
+    private List<User> members;
 }
 

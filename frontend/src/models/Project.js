@@ -1,6 +1,9 @@
-export class Project {
-    constructor(id, name, description, location, clientName, clientEmail, clientPhone, startDate,
-                endDate, status, team, tasks, materials) {
+import {Model} from "@/models/Model";
+
+export class Project extends Model{
+    constructor(id, name, description, location, clientName, clientEmail, clientPhone, startDate, endDate, status,
+                teamId) {
+        super();
         this.id = id;
         this.name = name;
         this.description = description;
@@ -11,9 +14,7 @@ export class Project {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.team = team;
-        this.tasks = tasks;
-        this.materials = materials;
+        this.teamId = teamId;
     }
 
     static statusList = [

@@ -3,6 +3,9 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Product;
+import teamx.app.backend.models.ProductCategory;
+import teamx.app.backend.models.dto.ProductDTO;
+import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
 
 import java.util.List;
@@ -11,13 +14,15 @@ import java.util.Objects;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
         this.productRepository = productRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
-    public List<Product> getAllProducts() {
+    protected List<Product> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             return null;
@@ -25,15 +30,31 @@ public class ProductService {
         return products;
     }
 
-    public Product getProductById(Long id) {
+    public List<ProductDTO> getAllProductsDTO() {
+        return getAllProducts().stream().map(this::convertToDTO).toList();
+    }
+
+    public List<ProductCategory> getAllProductCategories() {
+        return productCategoryRepository.findAll();
+    }
+
+    protected Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Product addProduct(Product product) {
+    public ProductDTO getProductDTOById(Long id) {
+        return convertToDTO(getProductById(id));
+    }
+
+    protected Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Product product, Long id) {
+    public ProductDTO addProductDTO(ProductDTO productDTO) {
+        return convertToDTO(addProduct(convertToEntity(productDTO)));
+    }
+
+    protected Product updateProduct(Product product, Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null || product == null || !Objects.equals(product.getId(), id)) {
             return null;
@@ -45,12 +66,40 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    public Product deleteProduct(Long id) {
+    public ProductDTO updateProductDTO(ProductDTO productDTO, Long id) {
+        return convertToDTO(updateProduct(convertToEntity(productDTO), id));
+    }
+
+    protected Product deleteProduct(Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
             return null;
         }
         productRepository.deleteById(id);
         return existingProduct;
+    }
+
+    public ProductDTO deleteProductDTO(Long id) {
+        return convertToDTO(deleteProduct(id));
+    }
+
+    private ProductDTO convertToDTO(Product product) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setName(product.getName());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setCategoryId(product.getCategory().getId());
+        return productDTO;
+    }
+
+    private Product convertToEntity(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setId(productDTO.getId());
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setCategory(productCategoryRepository.findById(productDTO.getCategoryId()).orElse(null));
+        return product;
     }
 }

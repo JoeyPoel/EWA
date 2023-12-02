@@ -1,6 +1,5 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,4 +25,8 @@ public class ProductCategory {
     private Long id;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "productCategory")
+    @JsonIgnore
+    private List<Capacity> warehouseProductCategoryCapacities;
 }
