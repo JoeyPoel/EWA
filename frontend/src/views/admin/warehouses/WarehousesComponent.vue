@@ -18,12 +18,9 @@
                 <v-btn class="mb-2" color="secundary" dark v-bind="props">New Warehouse</v-btn>
               </template>
               <v-card>
-                <v-card-title><span class="text-h5">New Warehouse</span></v-card-title>
+                <v-card-title class="text-h5">New Warehouse</v-card-title>
                 <v-card-text>
-                  <v-container>
-                    <v-row>
                       <v-form>
-                        <v-col>
                           <v-row>
                             <v-text-field v-model="editedWarehouse.name" label="Name" type="text"></v-text-field>
                           </v-row>
@@ -50,10 +47,7 @@
                             <v-text-field v-model="editedWarehouse.contactPhone" label="Contact Phone"
                                           type="text"></v-text-field>
                           </v-row>
-                        </v-col>
                       </v-form>
-                    </v-row>
-                  </v-container>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>

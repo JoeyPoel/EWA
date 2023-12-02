@@ -120,7 +120,6 @@ export default {
       warehouses: [],
       users: [],
       teamMembers: [],
-      possibleTeamMembers: [],
       selectedWarehouse: null,
       teamName: '',
       searchTerm: "",
@@ -184,17 +183,11 @@ export default {
       this.teams = await this.teamsService.asyncGetAll();
       this.warehouses = await this.warehousesService.asyncGetAll();
       this.users = await this.usersService.asyncGetAll();
-      this.possibleTeamMembers = await this.usersService.asyncGetAllByNoTeam();
       this.assignSelectedTeam(new Team());
-
-      console.log(this.users);
-      console.log(this.teams);
     },
 
     async saveNew() {
-      console.log(this.editedTeam);
-      const saved = await this.teamsService.asyncAdd(this.editedTeam);
-      console.log('Saved: ', saved);
+      await this.teamsService.asyncAdd(this.editedTeam);
       await this.close();
     },
 
@@ -204,9 +197,7 @@ export default {
     },
 
     async saveEdited() {
-      console.log(this.editedTeam);
-      const saved = await this.teamsService.asyncUpdate(this.editedTeam.id, this.editedTeam);
-      console.log('Saved edited: ', saved);
+      await this.teamsService.asyncUpdate(this.editedTeam.id, this.editedTeam);
       await this.close();
     },
 
@@ -218,7 +209,7 @@ export default {
 
     close() {
       this.dialog.open = false;
-      // this.initialize();
+      this.initialize();
     },
 
     getWarehouseName(team) {
@@ -229,8 +220,8 @@ export default {
     },
 
     getTeamLeadName(team) {
-      if (team.teamLeadId && this.users.length > 0) {
-        return this.users.find(user => user.id === team.teamLeadId).name;
+      if (team.leaderId && this.users.length > 0) {
+        return this.users.find(user => user.id === team.leaderId).name;
       }
       return '';
     },
