@@ -32,12 +32,11 @@
 </template>
 
 <script>
-
-import {User} from "@/models/User";
+// import User from "@/models/User";
 
 export default {
   name: "LoginComponent",
-  inject: ["usersService"],
+  inject: ["usersService", "authenthicationService"],
   data() {
     return {
       email: "admin@admin.com",
@@ -47,7 +46,7 @@ export default {
     }
   },
   methods: {
-    async login() {
+    /*async login() {
       //Check if email and password are not empty
       if (!this.email || !this.password) {
         this.formIsValid = false;
@@ -59,11 +58,40 @@ export default {
 
       if (this.user.email) {
         sessionStorage.setItem("email", this.user.email);
+        sessionStorage.setItem("role", this.user.role);
         this.$router.push("/dashboard");
       } else {
         this.formIsValid = false;
       }
     },
+  }*/
+    async login() {
+      if (!this.email || !this.password) {
+        this.formIsValid = false;
+        return;
+      }
+
+      try {
+        const response = await this.authenthicationService.asyncLogin({
+          email: this.email,
+          password: this.password
+        });
+
+        if (response) {
+          sessionStorage.setItem("email", response.email);
+          sessionStorage.setItem("role", response.role);
+          sessionStorage.setItem("token", response.jwtToken);
+          console.log(response)
+          this.$router.push("/dashboard");
+        } else {
+          this.formIsValid = false;
+        }
+      } catch (error) {
+        console.error("Login failed:", error);
+        this.formIsValid = false;
+      }
+
+    }
   }
 }
 </script>
