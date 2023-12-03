@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
+import teamx.app.backend.models.dto.WarehouseStockDTO;
 import teamx.app.backend.services.ProductService;
 
 import java.util.List;
@@ -92,5 +93,17 @@ public class ProductController {
     @GetMapping("/categories")
     public ResponseEntity<List<ProductCategory>> getAllCategories() {
         return ResponseEntity.ok(productService.findAllProductCategories());
+    }
+
+
+    /**
+     * Retrieves all stock levels for a product from the database based on the provided product ID.
+     *
+     * @param id The ID of the product to retrieve the stock levels for.
+     * @return ResponseEntity object with a List of WarehouseStockDTO objects representing the stock levels for the product.
+     */
+    @GetMapping("/{id}/stock-levels")
+    public ResponseEntity<List<WarehouseStockDTO>> getStockLevelsByProductId(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getStockLevelsByProductId(id));
     }
 }

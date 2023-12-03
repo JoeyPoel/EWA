@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.dto.ProductDTO;
+import teamx.app.backend.models.dto.WarehouseStockDTO;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
 
@@ -69,6 +70,10 @@ public class ProductService {
         }
         productRepository.deleteById(id);
         return mapToDTO(existingProduct);
+    }
+
+    public List<WarehouseStockDTO> getStockLevelsByProductId(Long productId) {
+        return productRepository.findStockLevelsByProductId(productId);
     }
 
     private Product mapToEntity(Product product, ProductDTO productDTO) {

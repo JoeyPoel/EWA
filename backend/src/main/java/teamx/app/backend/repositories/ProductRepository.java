@@ -2,6 +2,7 @@ package teamx.app.backend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamx.app.backend.models.Product;
+import teamx.app.backend.models.dto.WarehouseStockDTO;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> getAllByTransactionsIsNotEmpty();
     List<Product> getAllByTransactions_Warehouse_Id(Long warehouseId);
+    List<WarehouseStockDTO> findStockLevelsByProductId(Long productId);
 }
