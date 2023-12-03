@@ -167,8 +167,14 @@ export default {
     async initialize() {
       this.teams = await this.teamsService.asyncGetAll();
       this.users = await this.usersService.asyncGetAll();
-      //TODO Endpoint for Roles or just use Roles array??
-      // this.roles = await this.usersService.asyncGetAll();
+
+      this.roles = this.users.reduce((uniqueRoles, user) => {
+        if (!uniqueRoles.some(role => role.role === user.role)) {
+          uniqueRoles.push({role: user.role});
+        }
+        return uniqueRoles;
+      }, []);
+
       this.assignSelectedUser(new User());
     },
 
