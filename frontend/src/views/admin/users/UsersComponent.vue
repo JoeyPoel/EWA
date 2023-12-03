@@ -1,147 +1,231 @@
 <template>
-  <div class="container mt-5">
-    <h1 class="text-center card text-light bg-dark mb-2 p-3">User List</h1>
+  <v-container fluid>
+    <base-card class="mt-1" color="secondary" title="Users">
+      <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
+      <v-select
+          v-model="selectedTeam"
+          :items="teams"
+          item-title="name"
+          item-value="id"
+          label="Teams"
+      />
+      <v-data-table
+          v-model:items-per-page="itemsPerPage"
+          :headers="headers"
+          :items="users"
+          :search="search"
+          class="elevation-1"
+          item-value="id"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-dialog v-model="dialog.open" max-width="800px">
+              <template v-slot:activator="{ props }">
+                <v-btn color="secondary" dark class="mb-2" v-bind="props" @click="showNew">
+                  New User</v-btn>
+              </template>
+              <v-card>
+                <v-card-title><h5>{{ dialogTitle[dialog.type] }}</h5></v-card-title>
+                <v-card-text>
+                  <v-form>
+                    <v-container>
+                      <template v-if="dialog.type === 'new' || dialog.type === 'edit'">
+                        <v-col>
+                          <v-row>
+                            <v-text-field v-model="editedUser.name" label="Name" type="text"/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="editedUser.email" label="Email" type="text"/>
+                          </v-row>
+                          <v-row>
+                            <v-select
+                                v-model="editedUser.role"
+                                :items="roles"
+                                item-title="role"
+                                item-value="role"
+                                label="Role"
+                            />
+                          </v-row>
 
-    <!-- "Create User" button -->
-    <button class="btn btn-dark mb-2" data-bs-toggle="modal"
-            data-bs-target="#createUserModal" @click="openCreateUserModal">Create User
-    </button>
-
-    <div class="row">
-      <div class="col-md-6" v-for="(user, index) in users" :key="index">
-        <div class="card mb-4">
-          <!-- Your card component -->
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title">{{ user.name }}</h5>
-            <button class="btn btn-dark" @click="openCreateUserModal(user)">Update</button>
-          </div>
-          <div class="card-body">
-            <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-            <p class="card-text"><strong>Team:</strong> {{ user.team.name }}</p>
-            <p class="card-text"><strong>Role:</strong> {{ user.role }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal for creating a new user -->
-    <div class="modal fade" id="createUserModal" ref="createUserModal" tabindex="-1" aria-labelledby="projectModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-
-        <div class="modal-content">
-
-          <div class="modal-header bg-dark text-white">
-
-            <h5 class="modal-title">Create User</h5>
-
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                    @click="closeCreateUserModal"></button>
-
-          </div>
-
-          <div class="modal-body">
-            <!-- Form to fill in name, email, role, and team for creating a new user -->
-
-            <form @submit.prevent="createUser">
-
-              <div class="mb-3">
-                <label for="newUserName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="newUserName" v-model="newUser.name" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="newUserEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="newUserEmail" v-model="newUser.email" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="newUserRole" class="form-label">Role</label>
-                <select class="form-control" id="newUserRole" v-model="newUser.role" required>
-                  <option>USER</option>
-                  <option>ADMIN</option>
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label for="newUserTeam" class="form-label">Team</label>
-                <select id="editTeams" v-model="newUser.team" class="form-select">
-                  <option v-for="team in teams" :key="team.id" :value="team">{{ team.name }}</option>
-                </select>
-              </div>
-
-              <button type="submit" class="btn btn-dark" data-bs-toggle="modal"
-                      data-bs-target="#createUserModal">Create
-              </button>
-
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                        </v-col>
+                      </template>
+                      <template v-if="dialog.type === 'delete'">
+                        <h3>Are you sure you want to delete this user?</h3>
+                      </template>
+                      <template v-else-if="dialog.type === 'details'">
+                        <h1>In development</h1>
+                      </template>
+                    </v-container>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn variant="text" @click="close">Cancel</v-btn>
+                  <v-btn v-if="dialog.type === 'new'" variant="text" @click="saveNew">Save</v-btn>
+                  <v-btn v-if="dialog.type === 'edit'" variant="text" @click="saveEdited">Save</v-btn>
+                  <v-btn v-if="dialog.type === 'delete'" variant="text" @click="deleteConfirm">Delete</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon small class="mr-2" @click="showDetails(item)">$info</v-icon>
+          <v-icon small class="mr-2" @click="showEdit(item)">$edit</v-icon>
+          <v-icon small @click="showDelete(item)">$delete</v-icon>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </base-card>
+  </v-container>
 </template>
-
 <script>
+import BaseCard from "@/components/base/BaseCard.vue";
+import {User} from "@/models/User";
 
 export default {
-  name: "UserComponent",
-  inject: ['usersService', 'teamsService'],
+  name: "UsersComponent",
+  inject: ['teamsService', 'usersService'],
+  components: {BaseCard},
   data() {
     return {
       teams: [],
+      projects: [],
       users: [],
-      newUser: {
-
+      teamMembers: [],
+      teamName: '',
+      searchTerm: "",
+      selectedTeam: null,
+      selectedUser: null,
+      team: null,
+      dialog: {
+        type: null,
+        open: false
       },
-      isCreateUserModalOpen: false,
-    };
+      editedUser: {
+        id: null,
+        name: null,
+        role: null,
+        email: null,
+      },
+      roles: [
+        {role: 'ADMIN'},
+        {role: 'USER'},
+      ],
+      headers: [
+        {title: 'Name', value: 'name'},
+        {title: 'Role', value: 'role'},
+        {title: 'Email', value: 'email'},
+        {title: 'Actions', value: 'actions', sortable: false},
+      ],
+      search: '',
+      itemsPerPage: 10,
+    }
   },
-  async mounted() {
-    this.teams = await this.teamsService.asyncFindAll();
-  },
-  async created() {
-    console.log("test")
-    this.users = await this.usersService.asyncFindAll();
-    console.log(this.users)
 
-
-  },
-  methods: {
-    async openCreateUserModal() {
-      this.newUser = {
-
-      };
-      this.isCreateUserModalOpen = true;
-    },
-    closeCreateUserModal() {
-      this.isCreateUserModalOpen = false;
-    },
-    async createUser() {
-      // Validate the form fields (add additional validation as needed)
-      if (!this.newUser.name || !this.newUser.email || !this.newUser.role) {
-        alert("Please fill in all fields.");
-        return;
+  computed: {
+    dialogTitle() {
+      return {
+        new: 'New User',
+        edit: 'Edit User',
+        delete: 'Delete User',
+        details: 'Project Details',
       }
+    },
+  },
 
-      // Create a new object with all properties of newUser except team
-      const userToSave = { ...this.newUser };
-
-      console.log(userToSave)
-      const savedUser = await this.usersService.asyncSave(userToSave);
-      if (savedUser) {
-        this.users.push(savedUser);
-        this.closeCreateUserModal();
+  watch: {
+    search(val) {
+      this.searchTerm = val;
+    },
+    async selectedTeam(val) {
+      if (val) {
+        this.teams = await this.teamsService.asyncGetById(val.id);
       } else {
-        alert("Failed to create user. Please try again.");
+        this.teams = await this.teamsService.asyncGetAll();
       }
+    },
+    'dialog.open': function (val) {
+      val || this.close();
+    }
+  },
+
+  async created() {
+    await this.initialize();
+    console.log(this.teams)
+    console.log(this.editedUser.teams)
+  },
+
+  methods: {
+    async initialize() {
+      this.teams = await this.teamsService.asyncGetAll();
+      this.users = await this.usersService.asyncGetAll();
+      //TODO Endpoint for Roles or just use Roles array??
+      // this.roles = await this.usersService.asyncGetAll();
+      this.assignSelectedUser(new User());
+    },
+
+    async saveNew() {
+      await this.usersService.asyncSave(this.editedUser);
+      await this.close();
+    },
+
+    async deleteConfirm() {
+      await this.usersService.asyncDeleteById(this.selectedUser.id);
+      await this.close();
+    },
+
+    async saveEdited() {
+      await this.usersService.asyncUpdate(this.editedUser.id, this.editedUser);
+      await this.close();
+    },
+
+    openDialog(type, user) {
+      this.assignSelectedUser(user);
+      this.dialog.type = type;
+      this.dialog.open = true;
+    },
+
+    close() {
+      this.dialog.open = false;
+      this.initialize();
+    },
+
+    showDetails(user) {
+      this.openDialog('details', user);
+    },
+
+    showEdit(user) {
+      this.openDialog('edit', user);
+    },
+
+    showDelete(user) {
+      this.openDialog('delete', user);
+    },
+
+    async showNew() {
+      this.openDialog('new', new User());
+    },
+
+    async deleteUser() {
+      if (this.selectedUser) {
+        await this.usersService.asyncDeleteById(this.selectedUser.id);
+        await this.initialize();
+      }
+    },
+
+    assignSelectedUser(user) {
+      this.selectedUser = Object.assign(new User(), user);
+      this.editedUser = Object.assign(new User(), user);
     },
   }
-};
+}
+
+
 </script>
 
 <style scoped>
-.modal {
-  pointer-events: none; /* Prevent interaction with hidden elements */
-}
+
 </style>
