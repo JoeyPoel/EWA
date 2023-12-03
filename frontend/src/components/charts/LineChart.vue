@@ -40,20 +40,7 @@ export default {
       type: Object,
       required: false
     }
-  },
-  data() {
-  },
-  watch: {
-    labels: function (newVal, oldVal) {
-      this.chartsData.labels = newVal
-    },
-    datasets: function (newVal, oldVal) {
-      this.chartsData.datasets = newVal
-    },
-    options: function (newVal, oldVal) {
-      this.chartsData.options = newVal
-    }
-  },
+  }
 }
 </script>
 

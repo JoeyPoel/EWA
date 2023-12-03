@@ -13,7 +13,6 @@ import {
   LinearScale
 } from 'chart.js'
 import {Chart,} from 'vue-chartjs'
-import {ChartsData} from "@/models/charts/ChartsData";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -24,8 +23,8 @@ export default {
   },
   props: {
     chartsData: {
-      type: ChartsData,
-      required: true
+      type: Object,
+      required: false
     },
     options: {
       type: Object,
@@ -33,16 +32,8 @@ export default {
     }
   },
   data() {
-  },
-  watch: {
-    labels: function (newVal, oldVal) {
-      this.chartsData.labels = newVal
-    },
-    datasets: function (newVal, oldVal) {
-      this.chartsData.datasets = newVal
-    },
-    options: function (newVal, oldVal) {
-      this.chartsData.options = newVal
+    return {
+      data: this.chartsData
     }
   },
 }

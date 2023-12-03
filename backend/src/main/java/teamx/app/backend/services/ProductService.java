@@ -71,6 +71,28 @@ public class ProductService {
         return mapToDTO(existingProduct);
     }
 
+    protected List<Long> findAllIds() {
+        return productRepository.findAll()
+                .stream()
+                .map(Product::getId)
+                .toList();
+    }
+
+    protected List<Long> findAllActiveIds() {
+        return productRepository.findAllByTransactionsIsNotEmpty()
+                .stream()
+                .map(Product::getId)
+                .toList();
+    }
+
+    protected List<Product> findAllByIds(List<Long> productIds) {
+        return productRepository.findAllById(productIds);
+    }
+
+    protected List<Product> findAllByCategoryId(Long categoryId) {
+        return productRepository.findAllByCategory_Id(categoryId);
+    }
+
     private Product mapToEntity(Product product, ProductDTO productDTO) {
         product.setId(productDTO.getId());
         product.setName(productDTO.getName());

@@ -20,7 +20,6 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/teams")
-@Slf4j
 public class TeamsController {
     private final TeamService teamService;
 

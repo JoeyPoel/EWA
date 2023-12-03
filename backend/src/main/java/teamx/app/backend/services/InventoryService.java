@@ -1,6 +1,7 @@
 package teamx.app.backend.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,10 +17,15 @@ import java.util.List;
  * @author Junior Javier Brito Perez
  */
 @Service
-@RequiredArgsConstructor
 public class InventoryService {
     private final ProductRepository productRepository;
     private final TransactionService transactionService;
+
+    @Autowired
+    public InventoryService(ProductRepository productRepository, TransactionService transactionService) {
+        this.productRepository = productRepository;
+        this.transactionService = transactionService;
+    }
 
     public List<InventoryProductDTO> getAll() {
         List<Product> products = productRepository.findAll();

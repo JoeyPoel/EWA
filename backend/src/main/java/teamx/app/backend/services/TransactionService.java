@@ -89,4 +89,24 @@ public class TransactionService {
 
         return getCurrentStock(productTransactions);
     }
+
+    public List<Integer> findProductStockHistory(Long warehouseId, Long productId) {
+        Warehouse warehouse = null;
+        if (warehouseId != null) {
+            warehouse = warehouseService.findById(warehouseId);
+        }
+
+        Product product = productService.findById(productId);
+        Date date = new Date(System.currentTimeMillis());
+
+        List<Transaction> productTransactions = warehouseId == null ?
+                transactionRepository.getAllByProductAndTransactionDateBefore(product, date) :
+                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(warehouse, product, date);
+
+        return productTransactions.stream()
+                .map(transaction -> transaction.isPositiveTransaction() ?
+                        transaction.getQuantity() :
+                        -transaction.getQuantity())
+                .toList();
+    }
 }

@@ -7,7 +7,7 @@
           <v-img :src="logo" max-height="100" max-width="100" class="align-center justify-center"></v-img>
         </v-list-item>
       </router-link>
-        <router-link v-for="(route, key) in filteredRoutes" :key="key" :to="route.to" class="nav-link text-black">
+      <router-link v-for="(route, key) in filteredRoutes" :key="key" :to="route.to" class="nav-link text-black">
         <v-list-item :prepend-icon="route.icon" :title="route.title"></v-list-item>
       </router-link>
     </v-list>
@@ -24,60 +24,60 @@
 </template>
 
 <script>
-import logo from "@/assets/logo.png";
-import { jwtDecode } from "jwt-decode";
+// import logo from "@/assets/logo.png";
+// import {jwtDecode} from "jwt-decode";
 
 export default {
-  name: "NavbarComponent",
-  data() {
-    return {
-      logo: logo,
-      session: true,
-      routes: [
-        { name: 'dashboard', icon: '$dashboard', title: 'Dashboard', to: '/dashboard',  roles: ['ADMIN', 'USER'] },
-        { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventories', roles: ['ADMIN'] },
-        { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-projects', roles: ['USER'] },
-        { name: 'projects', icon: '$project', title: 'Projects', to: '/projects', roles: ['ADMIN'] },
-        { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN', 'USER'] },
-        { name: 'products', icon: '$product', title: 'Products', to: '/products', roles: ['ADMIN'] },
-        { name: 'team', icon: '$team', title: 'Team', to: '/teams', roles: ['ADMIN', 'USER'] },
-        { name: 'users', icon: '$user', title: 'Users', to: '/users', roles: ['ADMIN'] },
-      ],
-    };
-  },
-  computed: {
-    isAdmin() {
-      const isAuthenticated = sessionStorage.getItem('token');
-      if (isAuthenticated) {
-        const decodedToken = jwtDecode(isAuthenticated);
-        return decodedToken.role === 'ADMIN';
-      }
-      return false;
-    },
-    isUser() {
-      const isAuthenticated = sessionStorage.getItem('token');
-      if (isAuthenticated) {
-        const decodedToken = jwtDecode(isAuthenticated);
-        return decodedToken.role === 'USER';
-      }
-      return false;
-    },
-    filteredRoutes() {
-      const userRole = this.isAdmin ? 'ADMIN' : (this.isUser ? 'USER' : null);
-      if (!userRole) {
-        return [];
-      }
-      return this.routes.filter(route => route.roles.includes(userRole));
-    },
-  },
-  methods: {
-    logout() {
-      if (sessionStorage.getItem("email") != null) {
-        sessionStorage.clear();
-        this.$router.push("/log-in");
-      }
-    }
-  },
+  name: "NavbarComponent"
+//   data() {
+//     return {
+//       logo: logo,
+//       session: true,
+//       routes: [
+//         { name: 'dashboard', icon: '$dashboard', title: 'Dashboard', to: '/dashboard',  roles: ['ADMIN', 'USER'] },
+//         { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventories', roles: ['ADMIN'] },
+//         { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-projects', roles: ['USER'] },
+//         { name: 'projects', icon: '$project', title: 'Projects', to: '/projects', roles: ['ADMIN'] },
+//         { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN', 'USER'] },
+//         { name: 'products', icon: '$product', title: 'Products', to: '/products', roles: ['ADMIN'] },
+//         { name: 'team', icon: '$team', title: 'Team', to: '/teams', roles: ['ADMIN', 'USER'] },
+//         { name: 'users', icon: '$user', title: 'Users', to: '/users', roles: ['ADMIN'] },
+//       ],
+//     };
+//   },
+//   computed: {
+//     isAdmin() {
+//       const isAuthenticated = sessionStorage.getItem('token');
+//       if (isAuthenticated) {
+//         const decodedToken = jwtDecode(isAuthenticated);
+//         return decodedToken.role === 'ADMIN';
+//       }
+//       return false;
+//     },
+//     isUser() {
+//       const isAuthenticated = sessionStorage.getItem('token');
+//       if (isAuthenticated) {
+//         const decodedToken = jwtDecode(isAuthenticated);
+//         return decodedToken.role === 'USER';
+//       }
+//       return false;
+//     },
+//     filteredRoutes() {
+//       const userRole = this.isAdmin ? 'ADMIN' : (this.isUser ? 'USER' : null);
+//       if (!userRole) {
+//         return [];
+//       }
+//       return this.routes.filter(route => route.roles.includes(userRole));
+//     },
+//   },
+//   methods: {
+//     logout() {
+//       if (sessionStorage.getItem("email") != null) {
+//         sessionStorage.clear();
+//         this.$router.push("/log-in");
+//       }
+//     }
+//   },
 };
 </script>
 

@@ -7,17 +7,17 @@
             <h5>Line Chart</h5>
           </v-card-title>
           <v-card-text>
-            <line-chart></line-chart>
+            <!--            <line-chart></line-chart>-->
           </v-card-text>
         </v-card>
       </v-col>
       <v-col>
         <v-card>
           <v-card-title>
-            <h5>Bar Chart</h5>
+            <h5>Inventory</h5>
           </v-card-title>
-          <v-card-text>
-            <bar-chart></bar-chart>
+          <v-card-text v-if="inventoryBarChartData">
+            <bar-chart :charts-data="inventoryBarChartData"/>
           </v-card-text>
         </v-card>
       </v-col>
@@ -29,7 +29,7 @@
             <h5>Pie Chart</h5>
           </v-card-title>
           <v-card-text>
-            <pie-chart></pie-chart>
+            <!--            <pie-chart></pie-chart>-->
           </v-card-text>
         </v-card>
       </v-col>
@@ -39,7 +39,7 @@
             <h5>Radar Chart</h5>
           </v-card-title>
           <v-card-text>
-            <radar-chart></radar-chart>
+            <!--            <radar-chart></radar-chart>-->
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,16 +48,37 @@
 </template>
 
 <script>
-
-import {defineComponent} from "vue";
-import PieChart from "@/components/charts/PieChart.vue";
-import RadarChart from "@/components/charts/RadarChart.vue";
-import LineChart from "@/components/charts/LineChart.vue";
 import BarChart from "@/components/charts/BarChart.vue";
 
-export default defineComponent({
-  components: {BarChart, LineChart, RadarChart, PieChart}
-})
+export default {
+  inject: ['chartsService'],
+  components: {
+    BarChart,
+    // LineChart,
+    // RadarChart,
+    // PieChart
+  },
+  data() {
+    return {
+      inventoryBarChartData: null,
+    }
+  },
+  async mounted() {
+    await this.getInventoryBarChartData()
+  },
+  methods: {
+    async getInventoryBarChartData() {
+      let data = await this.chartsService.asyncFindAllInventoryBar();
+      console.log(data);
+      data.datasets.push({...data.datasets[0]})
+      data.datasets.push({...data.datasets[0]})
+      data.datasets.forEach((dataset, index) => {
+        dataset.backgroundColor = index % 2 === 0 ? '#c7d02c' : '#572700'
+      })
+      this.inventoryBarChartData = data;
+    },
+  }
+}
 </script>
 
 <style scoped>
