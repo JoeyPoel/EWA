@@ -1,5 +1,5 @@
 <template>
-  <PolarArea :data="data" :options="options" />
+  <PolarArea :data="this.chartsData" :options="options" />
 </template>
 
 <script>
@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js'
 import { PolarArea } from 'vue-chartjs'
+import {ChartsData} from "@/models/charts/ChartsData";
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
 
@@ -19,44 +20,32 @@ export default {
   components: {
     PolarArea
   },
-  data() {
-    return {
-      data: {
-        labels: [
-          'Eating',
-          'Drinking',
-          'Sleeping',
-          'Designing',
-          'Coding',
-          'Cycling',
-          'Running'
-        ],
-        datasets: [
-          {
-            label: 'My First dataset',
-            backgroundColor: 'rgba(179,43,198,0.2)',
-            pointBackgroundColor: 'rgba(179,181,198,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(179,181,198,1)',
-            data: [65, 59, 90, 81, 56, 55, 40]
-          },
-          {
-            label: 'My Second dataset',
-            backgroundColor: 'rgba(255,99,132,0.2)',
-            pointBackgroundColor: 'rgba(255,99,132,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(255,99,132,1)',
-            data: [28, 48, 40, 19, 96, 27, 100]
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+  props: {
+    chartsData: {
+      type: ChartsData,
+      required: true
+    },
+    options: {
+      type: Object,
+      required: false
     }
-  }
+  },
+  data() {
+  },
+  watch: {
+    labels: function (newVal, oldVal) {
+      this.chartsData.labels = newVal
+    },
+    datasets: function (newVal, oldVal) {
+      this.chartsData.datasets = newVal
+    },
+    options: function (newVal, oldVal) {
+      this.chartsData.options = newVal
+    }
+  },
 }
 </script>
+
+<style scoped>
+
+</style>

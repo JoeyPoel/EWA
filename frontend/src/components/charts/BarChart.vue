@@ -1,15 +1,8 @@
 <template>
-  <Chart
-      ref="chartRef"
-      type="bar"
-      :data="this.chartConfig.data"
-      :options="this.chartConfig.options"
-      @click="onClick"
-  />
+  <Chart type="bar" :data="this.chartsData" :options="options"/>
 </template>
 
 <script>
-import {ref} from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -17,19 +10,10 @@ import {
   Legend,
   BarElement,
   CategoryScale,
-  LinearScale,
-  // eslint-disable-next-line no-unused-vars
-  InteractionItem
+  LinearScale
 } from 'chart.js'
-import {
-  // eslint-disable-next-line no-unused-vars
-  ChartComponentRef,
-  Chart,
-  getDatasetAtEvent,
-  getElementAtEvent,
-  getElementsAtEvent
-} from 'vue-chartjs'
-import * as chartConfig from "@/components/charts/barChartConfig";
+import {Chart,} from 'vue-chartjs'
+import {ChartsData} from "@/models/charts/ChartsData";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -38,59 +22,32 @@ export default {
   components: {
     Chart
   },
-  data() {
-    return {
-      chartConfig
+  props: {
+    chartsData: {
+      type: ChartsData,
+      required: true
+    },
+    options: {
+      type: Object,
+      required: false
     }
   },
-  setup() {
-    function datasetAtEvent(dataset) {
-      if (!dataset.length) return
-
-      const datasetIndex = dataset[0].datasetIndex
-
-      console.log('dataset', chartConfig.data.datasets[datasetIndex].label)
+  data() {
+  },
+  watch: {
+    labels: function (newVal, oldVal) {
+      this.chartsData.labels = newVal
+    },
+    datasets: function (newVal, oldVal) {
+      this.chartsData.datasets = newVal
+    },
+    options: function (newVal, oldVal) {
+      this.chartsData.options = newVal
     }
-
-    function elementAtEvent(element) {
-      if (!element.length) return
-
-      const {datasetIndex, index} = element[0]
-
-      console.log(
-          'element',
-          chartConfig.data.labels[index],
-          chartConfig.data.datasets[datasetIndex].data[index]
-      )
-    }
-
-    function elementsAtEvent(elements) {
-      if (!elements.length) return
-
-      console.log('elements', elements)
-    }
-
-    const chartRef = ref(null)
-
-    function onClick(event) {
-      const {
-        value: {chart}
-      } = chartRef
-
-      if (!chart) {
-        return
-      }
-
-      datasetAtEvent(getDatasetAtEvent(chart, event))
-      elementAtEvent(getElementAtEvent(chart, event))
-      elementsAtEvent(getElementsAtEvent(chart, event))
-    }
-
-    return {
-      chartRef,
-      onClick,
-      ...chartConfig
-    }
-  }
+  },
 }
 </script>
+
+<style scoped>
+
+</style>

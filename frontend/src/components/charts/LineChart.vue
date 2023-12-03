@@ -1,5 +1,5 @@
 <template>
-  <ChartLine :data="data" :options="options" />
+  <ChartLine :data="this.chartsData" :options="options"/>
 </template>
 
 <script>
@@ -13,7 +13,8 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
-import { Line as ChartLine} from 'vue-chartjs'
+import {Line as ChartLine} from 'vue-chartjs'
+import {ChartsData} from "@/models/charts/ChartsData";
 
 ChartJS.register(
     CategoryScale,
@@ -30,31 +31,29 @@ export default {
   components: {
     ChartLine
   },
-  data() {
-    return {
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-          label: "Data One",
-          backgroundColor: "#f87979",
-          data: [40, 39, 10, 40, 39, 80, 40]
-        },
-          {
-            label: "Data Two",
-            backgroundColor: "#7CFC00",
-            data: [60, 55, 32, 10, 2, 12, 53]
-          }
-          ]
-      },
-      options: {
-        legend: {
-          display: true,
-        },
-        responsive: true,
-        maintainAspectRatio: false
-      }
+  props: {
+    chartsData: {
+      type: ChartsData,
+      required: true
+    },
+    options: {
+      type: Object,
+      required: false
     }
-  }
+  },
+  data() {
+  },
+  watch: {
+    labels: function (newVal, oldVal) {
+      this.chartsData.labels = newVal
+    },
+    datasets: function (newVal, oldVal) {
+      this.chartsData.datasets = newVal
+    },
+    options: function (newVal, oldVal) {
+      this.chartsData.options = newVal
+    }
+  },
 }
 </script>
 

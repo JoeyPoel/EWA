@@ -1,10 +1,11 @@
 <template>
-  <Pie :data="data" :options="options"/>
+  <Pie :data="this.chartsData" :options="options"/>
 </template>
 
 <script>
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js'
 import {Pie} from 'vue-chartjs'
+import {ChartsData} from "@/models/charts/ChartsData";
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -13,22 +14,32 @@ export default {
   components: {
     Pie
   },
-  data() {
-    return {
-      data: {
-        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-        datasets: [
-          {
-            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10]
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+  props: {
+    chartsData: {
+      type: ChartsData,
+      required: true
+    },
+    options: {
+      type: Object,
+      required: false
     }
-  }
+  },
+  data() {
+  },
+  watch: {
+    labels: function (newVal, oldVal) {
+      this.chartsData.labels = newVal
+    },
+    datasets: function (newVal, oldVal) {
+      this.chartsData.datasets = newVal
+    },
+    options: function (newVal, oldVal) {
+      this.chartsData.options = newVal
+    }
+  },
 }
 </script>
+
+<style scoped>
+
+</style>
