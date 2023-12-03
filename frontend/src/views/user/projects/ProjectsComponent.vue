@@ -1,11 +1,9 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Projects">
-      <v-toolbar flat>
         <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
         </v-text-field>
         <v-spacer></v-spacer>
-      </v-toolbar>
       <v-data-table
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
@@ -76,9 +74,9 @@
 
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
+import {jwtDecode} from "jwt-decode";
 export default {
   // TODO Add Team Authenthicatio to this view
-  // TODO Fix Team in List items
   name: "ProjectsComponent.vue",
   computed: {
     Project() {
@@ -94,7 +92,7 @@ export default {
         {title: "Team", key: "teamName"},
         {title: 'Start Date', key: 'startDate'},
         {title: 'End Date', key: 'endDate'},
-        {text:  "Status", key: "status"},
+        {title:  "Status", key: "status"},
         {title: "Description", key: "description"},
         {title: "Actions", key: "actions", sortable: false}],
       projects: [],
@@ -103,6 +101,7 @@ export default {
       search: "",
       tab: "",
       itemsPerPage: 10,
+      userId: "",
       dialogDetail: false,
     }
   },
@@ -119,8 +118,9 @@ export default {
 
   methods: {
     async initialize() {
-      await this.getProjects();
       await this.getTeams();
+      await this.getUserIdFromToken();
+      await this.getProjects();
     },
 
     async getTeams() {
@@ -128,9 +128,27 @@ export default {
       console.log(this.teams);
     },
 
+    async getUserIdFromToken() {
+      const isAuthenticated = sessionStorage.getItem("token");
+      if (isAuthenticated) {
+        const decodedToken = jwtDecode(isAuthenticated);
+        this.userId = decodedToken.id;
+      }
+    },
+
     async getProjects() {
-      this.projects = await this.projectsService.asyncGetAll();
-      console.log(this.projects);
+      try {
+        const userTeams = this.teams.filter(team => team.membersIds.includes(this.userId));
+
+        const allProjects = await this.projectsService.asyncGetAll();
+        this.projects = allProjects.filter(project => {
+          return userTeams.some(team => team.id === project.teamId);
+        });
+
+        console.log(this.projects);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
     },
 
     getStatusColor(project) {

@@ -79,14 +79,12 @@ export default {
 
         if (response) {
           sessionStorage.setItem("email", response.email);
-          //sessionStorage.setItem("role", response.role);
           console.log('Token from server:', response.jwtToken);
           sessionStorage.setItem("token", response.jwtToken);
           console.log(response)
           this.$router.push("/dashboard");
-
           //TODO After login navbar isnt loaded in properly firsly, after refresh it is
-          window.location.reload();
+          window.location.reload()
         } else {
           this.formIsValid = false;
         }
@@ -96,7 +94,7 @@ export default {
       }
 
     }
-  }
+  },
 }
 </script>
 
