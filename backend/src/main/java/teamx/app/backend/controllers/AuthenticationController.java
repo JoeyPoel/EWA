@@ -7,8 +7,15 @@ import teamx.app.backend.models.User;
 import teamx.app.backend.models.dto.UserDTO;
 import teamx.app.backend.services.AuthenthicationService;
 
-import java.util.*;
-
+/**
+ * AuthenticationController handles authentication-related HTTP requests.
+ *
+ * This controller provides an endpoint for user login. It receives a User object
+ * in the request body and attempts to authenticate the user.
+ * Further implementation will be added
+ *
+ * @author Nizar Amine
+ */
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,6 +28,14 @@ public class AuthenticationController {
     public AuthenticationController(AuthenthicationService authenticationService) {
         this.authenticationService = authenticationService;
     }
+
+    /**
+     * Handles user login requests.
+     *
+     * @param user The User object containing login credentials.
+     * @return ResponseEntity with UserDTO and JWT token on successful authentication,
+     * 401 status otherwise.
+     */
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody User user) {
