@@ -2,13 +2,20 @@
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Users">
       <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
-      <v-select
-          v-model="selectedTeam"
-          :items="teams"
-          item-title="name"
-          item-value="id"
-          label="Teams"
-      />
+      <v-row class="d-flex align-center">
+        <v-col class="flex-grow-1">
+          <v-select
+              v-model="selectedTeam"
+              :items="teams"
+              item-title="name"
+              item-value="id"
+              label="Teams"
+          />
+        </v-col>
+        <v-col cols="auto" v-if="selectedTeam">
+          <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
+        </v-col>
+      </v-row>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -163,6 +170,10 @@ export default {
       //TODO Endpoint for Roles or just use Roles array??
       // this.roles = await this.usersService.asyncGetAll();
       this.assignSelectedUser(new User());
+    },
+
+    unselectTeam() {
+      this.selectedTeam = null;
     },
 
     async saveNew() {
