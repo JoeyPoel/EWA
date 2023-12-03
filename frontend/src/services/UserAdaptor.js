@@ -82,4 +82,14 @@ export default class UserAdaptor extends Adaptor {
 
         return response ? User.fromJson(response) : null;
     }
+
+    async asyncUpdate(id, user) {
+        const options = {
+            method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(user)
+        }
+
+        let response = await this.fetchJson(this.resourceUrl + "/" +  id, options);
+
+        return response ? User.fromJson(response) : null;
+    }
 }
