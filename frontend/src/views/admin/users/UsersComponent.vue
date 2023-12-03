@@ -140,6 +140,8 @@ export default {
     search(val) {
       this.searchTerm = val;
     },
+
+    // TODO needs fixing.  Currently, when a team is selected, the users are not filtered by that team.
     async selectedTeam(val) {
       if (val) {
         this.teams = await this.teamsService.asyncGetById(val.id);
