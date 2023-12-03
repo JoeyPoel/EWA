@@ -133,8 +133,9 @@ export default {
         return new Date(a.date) - new Date(b.date);
       })
     },
-  }
+  },
 }
+
 </script>
 
 <style scoped>
