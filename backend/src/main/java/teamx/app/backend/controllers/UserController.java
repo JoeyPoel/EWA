@@ -26,10 +26,10 @@ public class UserController {
 // TODO: Return DTOs instead of entities
     private final UserService userService;
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         return ResponseEntity.ok(userService.login(user));
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
