@@ -3,11 +3,14 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.Transaction;
+import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -91,5 +94,36 @@ public class ProjectService {
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+    }
+
+    private InventoryProjectDTO mapInventoryToDTO(Transaction transaction) {
+        InventoryProjectDTO dto = new InventoryProjectDTO();
+        dto.setId(transaction.getId());
+        dto.setQuantity(transaction.getQuantity());
+        dto.setTransactionType(transaction.getTransactionType().name());
+        dto.setTransactionDate(transaction.getTransactionDate());
+
+        if (transaction.getProduct() != null) {
+            dto.setProductName(transaction.getProduct().getName());
+        }
+
+        if (transaction.getWarehouse() != null) {
+            dto.setWarehouseName(transaction.getWarehouse().getName());
+        }
+
+        return dto;
+    }
+
+    public List<InventoryProjectDTO> getProjectMaterials(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElse(null);
+
+        if (project != null) {
+            return project.getMaterials()
+                    .stream()
+                    .map(this::mapInventoryToDTO)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
     }
 }
