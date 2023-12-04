@@ -59,9 +59,24 @@
                       <template v-if="dialog.type === 'delete'">
                         <h3>Are you sure you want to delete this user?</h3>
                       </template>
+
                       <template v-else-if="dialog.type === 'details'">
-                        <h1>In development</h1>
+                        <v-col>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.name" label="Name" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.email" label="Email" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.role" label="Role" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.teamName" label="Team" type="text" readonly/>
+                          </v-row>
+                        </v-col>
                       </template>
+
                     </v-container>
                   </v-form>
                 </v-card-text>
@@ -160,7 +175,6 @@ export default {
   async created() {
     await this.initialize();
     console.log(this.teams)
-    console.log(this.editedUser.teams)
   },
 
   methods: {
@@ -208,7 +222,16 @@ export default {
       this.initialize();
     },
 
-    showDetails(user) {
+    async showDetails(user) {
+
+      if (user.teamId) {
+        const team = await this.teamsService.asyncGetById(user.teamId);
+        console.log(team);
+        user.teamName = team ? team.name : 'No team';
+      } else {
+        user.teamName = 'No team';
+      }
+
       this.openDialog('details', user);
     },
 
