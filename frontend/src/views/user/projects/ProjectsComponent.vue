@@ -129,7 +129,7 @@ export default {
     },
 
     async getUserIdFromToken() {
-      const isAuthenticated = localStorage.getItem("token");
+      const isAuthenticated = sessionStorage.getItem("token");
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         this.userId = decodedToken.id;
@@ -153,10 +153,16 @@ export default {
 
     getStatusColor(project) {
       switch (project.status) {
+        case "PENDING":
+          return "yellow";
+        case "CONFIRMED":
+          return "green";
         case "IN_PROGRESS":
           return "blue";
         case "FINISHED":
           return "green";
+        case "CANCELED":
+          return "red";
         default:
           return "grey";
       }

@@ -12,10 +12,14 @@ public class UserDTO {
     private Long teamId;
     private String jwtToken;
 
-    public UserDTO(String jwtToken) {
+    public UserDTO(Long userId, String email, String role, String jwtToken) {
+        this.id = userId;
+        this.email = email;
+        this.role = role;
         this.jwtToken = jwtToken;
     }
 
     public UserDTO() {
+
     }
 }

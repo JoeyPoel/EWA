@@ -45,14 +45,9 @@ export default {
       ],
     };
   },
-  watch: {
-    $route() {
-      this.session = localStorage.getItem("token") != null;
-    },
-  },
   computed: {
     isAdmin() {
-      const isAuthenticated = localStorage.getItem('token');
+      const isAuthenticated = sessionStorage.getItem('token');
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         return decodedToken.role === 'ADMIN';
@@ -60,7 +55,7 @@ export default {
       return false;
     },
     isUser() {
-      const isAuthenticated = localStorage.getItem('token');
+      const isAuthenticated = sessionStorage.getItem('token');
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         return decodedToken.role === 'USER';
@@ -77,8 +72,8 @@ export default {
   },
   methods: {
     logout() {
-      if (localStorage.getItem("token") != null) {
-        localStorage.clear();
+      if (sessionStorage.getItem("email") != null) {
+        sessionStorage.clear();
         this.$router.push("/log-in");
       }
     }
