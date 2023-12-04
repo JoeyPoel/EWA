@@ -167,11 +167,12 @@ export default {
 
     async selectedTeam(val) {
       if (val) {
-        this.teams = await this.teamsService.asyncGetById(val.id);
+        this.users = await this.usersService.asyncGetAllByTeamId(val);
       } else {
-        this.teams = await this.teamsService.asyncGetAll();
+        this.users = await this.usersService.asyncGetAll();
       }
     },
+
     'dialog.open': function (val) {
       val || this.close();
     }
