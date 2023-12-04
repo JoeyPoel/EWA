@@ -194,9 +194,14 @@ export default {
   methods: {
     async initialize() {
       this.teams = await this.teamsService.asyncGetAll();
-      this.users = await this.usersService.asyncGetAll();
+      if (this.selectedTeam) {
+        this.users = await this.usersService.asyncGetAllByTeamId(this.selectedTeam);
+      } else {
+        this.users = await this.usersService.asyncGetAll();
+      }
       this.assignSelectedUser(new User());
     },
+
     unselectTeam() {
       this.selectedTeam = null;
     },
