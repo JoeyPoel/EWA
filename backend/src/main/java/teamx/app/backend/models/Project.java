@@ -41,11 +41,8 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private Status status;
     public enum Status {
-        PENDING,
-        CONFIRMED,
         IN_PROGRESS,
         FINISHED,
-        CANCELED
     }
 
     @ManyToOne

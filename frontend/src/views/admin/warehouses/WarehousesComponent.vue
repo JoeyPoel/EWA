@@ -1,6 +1,14 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Warehouses">
+
+      <v-row>
+        <v-col>
+          <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined">
+          </v-text-field>
+        </v-col>
+      </v-row>
+
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -12,8 +20,6 @@
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
-                <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined">
-                </v-text-field>
                 <v-spacer></v-spacer>
                 <v-btn class="mb-2" color="secundary" dark v-bind="props">New Warehouse</v-btn>
               </template>

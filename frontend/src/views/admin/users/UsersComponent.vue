@@ -84,6 +84,9 @@
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="close">Cancel</v-btn>
                   <v-btn v-if="dialog.type === 'new'" variant="text" @click="saveNew">Save</v-btn>
+                  <v-btn v-if="dialog.type === 'edit'" variant="text" @click="deactivateUser">
+                    {{ editedUser.active ? 'Deactivate' : 'Activate' }}
+                  </v-btn>
                   <v-btn v-if="dialog.type === 'edit'" variant="text" @click="saveEdited">Save</v-btn>
                   <v-btn v-if="dialog.type === 'delete'" variant="text" @click="deleteConfirm">Delete</v-btn>
                 </v-card-actions>
@@ -131,6 +134,7 @@ export default {
         name: null,
         role: null,
         email: null,
+        active: true,
       },
       roles: [
         {role: 'ADMIN'},
@@ -208,6 +212,12 @@ export default {
 
     async saveEdited() {
       await this.usersService.asyncUpdate(this.editedUser.id, this.editedUser);
+      await this.close();
+    },
+
+    async deactivateUser() {
+      this.editedUser.active = false;
+      await this.usersService.asyncDeactivateUser(this.editedUser.id);
       await this.close();
     },
 

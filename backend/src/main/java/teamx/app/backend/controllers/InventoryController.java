@@ -7,6 +7,7 @@ import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.services.InventoryService;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -44,5 +45,10 @@ public class InventoryController {
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<InventoryProductDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
         return ResponseEntity.ok(inventoryService.getByWarehouseId(warehouseId));
+    }
+
+    @GetMapping("/product/{productId}/warehouses")
+    public ResponseEntity<Map<String, Integer>> findAllStockLevelsByProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(inventoryService.getAllStockLevelsByProduct(productId));
     }
 }
