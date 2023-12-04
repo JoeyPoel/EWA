@@ -29,6 +29,7 @@
           <v-toolbar flat>
             <v-dialog v-model="dialog.open" max-width="800px">
               <template v-slot:activator="{ props }">
+                <v-spacer></v-spacer>
                 <v-btn color="secondary" dark class="mb-2" v-bind="props" @click="showNew">
                   New User</v-btn>
               </template>
@@ -69,24 +70,32 @@
                       <template v-if="dialog.type === 'delete'">
                         <h3>Are you sure you want to delete this user?</h3>
                       </template>
-
-                      <template v-else-if="dialog.type === 'details'">
-                        <v-col>
+                      <v-window v-else-if="dialog.type === 'details'">
+                        <v-window-item value="details">
                           <v-row>
-                            <v-text-field v-model="selectedUser.name" label="Name" type="text" readonly/>
+                            <v-col>
+                              <v-list>
+                                <v-list-item>
+                                  <v-list-item-title>Name</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedUser.name }}</v-list-item-subtitle>
+                                </v-list-item>
+                                <v-list-item>
+                                  <v-list-item-title>Email</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedUser.email }}</v-list-item-subtitle>
+                                </v-list-item>
+                                <v-list-item>
+                                  <v-list-item-title>Role</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedUser.role }}</v-list-item-subtitle>
+                                </v-list-item>
+                                <v-list-item>
+                                  <v-list-item-title>Team</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedUser.teamName }}</v-list-item-subtitle>
+                                </v-list-item>
+                              </v-list>
+                            </v-col>
                           </v-row>
-                          <v-row>
-                            <v-text-field v-model="selectedUser.email" label="Email" type="text" readonly/>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="selectedUser.role" label="Role" type="text" readonly/>
-                          </v-row>
-                          <v-row>
-                            <v-text-field v-model="selectedUser.teamName" label="Team" type="text" readonly/>
-                          </v-row>
-                        </v-col>
-                      </template>
-
+                        </v-window-item>
+                      </v-window>
                     </v-container>
                   </v-form>
                 </v-card-text>
