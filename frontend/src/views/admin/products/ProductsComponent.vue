@@ -1,26 +1,21 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Products">
-
-      <v-row>
-        <v-col>
-          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
-          </v-text-field>
-        </v-col>
-      </v-row>
-
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
           :items="products"
           :search="search"
           class="elevation-1"
-          item-value="id">
+          item-value="id"
+      >
         <template v-slot:top>
-
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
+                <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search"
+                              variant="outlined"/>
+                <v-spacer></v-spacer>
                 <v-btn color="secondary" dark class="mb-2" v-bind="props">New Product</v-btn>
               </template>
               <v-card>
@@ -63,19 +58,9 @@
                 <v-card-title><h5>Edit Product</h5></v-card-title>
                 <v-card-text>
                   <v-form>
-                    <v-col>
-                      <v-row>
-                        <v-text-field v-model="editedProduct.name" label="Name" type="text"></v-text-field>
-                      </v-row>
-                      <v-row>
-                        <v-text-field v-model="editedProduct.description" label="Description"
-                                      type="text"></v-text-field>
-                      </v-row>
-                      <v-row>
-                        <v-text-field v-model="editedProduct.price" label="Price"
-                                      type="text"></v-text-field>
-                      </v-row>
-                    </v-col>
+                    <v-container>
+                      <h1>In development</h1>
+                    </v-container>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -95,35 +80,20 @@
                   <v-window v-model="tab">
                     <v-window-item value="details">
                       <v-container>
-                        <v-row>
-                          <v-col>
-                            <v-list>
-                              <v-list-item>
-                                <v-list-item-title>Product Name</v-list-item-title>
-                                <v-list-item-subtitle>{{ selectedProduct.name }}</v-list-item-subtitle>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Product Description</v-list-item-title>
-                                <v-list-item-subtitle>{{ selectedProduct.description }}</v-list-item-subtitle>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Product Price</v-list-item-title>
-                                <v-list-item-subtitle>{{ selectedProduct.price }}</v-list-item-subtitle>
-                              </v-list-item>
-                            </v-list>
-                          </v-col>
-                        </v-row>
+                        <h1>In development</h1>
                       </v-container>
                     </v-window-item>
                     <v-window-item value="stock">
-                      <v-data-table
-                          :headers="stockHeaders"
-                          :items="productStockLevels"
-                          class="elevation-1">
-                      </v-data-table>
+                      <v-container>
+                        <h1>In development</h1>
+                      </v-container>
                     </v-window-item>
                   </v-window>
                 </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" variant="text" @click="close">Cancel</v-btn>
+                </v-card-actions>
               </v-card>
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="800px">
@@ -132,7 +102,7 @@
                 <v-card-text>
                   <v-form>
                     <v-container>
-                      <h3>Are you sure you want to delete this product?</h3>
+                      <h1>In development</h1>
                     </v-container>
                   </v-form>
                 </v-card-text>
@@ -164,7 +134,7 @@ import {Product} from "@/models/Product";
 
 export default {
   name: "ProductsComponent",
-  inject: ['productsService', 'inventoryService'],
+  inject: ['productsService'],
   components: {
     BaseCard,
   },
@@ -177,11 +147,6 @@ export default {
         {title: "Price", value: "price"},
         {title: "Actions", value: "actions", sortable: false},
       ],
-      stockHeaders: [
-        {title: "Warehouse Name", value: "warehouseName"},
-        {title: "Stock", value: "stockLevel"}
-      ],
-      productStockLevels: [],
       tab: "",
       search: "",
       products: [],
@@ -195,7 +160,6 @@ export default {
 
       editedProduct: new Product(),
       defaultProduct: new Product(),
-      selectedProduct: new Product()
     };
   },
 
@@ -238,28 +202,14 @@ export default {
       await this.getProducts();
     },
 
-    async deleteConfirm() {
-      await this.productsService.asyncDeleteById(this.selectedProduct.id);
-      this.close();
-      await this.getProducts();
-    },
-
-    async saveEdited() {
-      if (!this.editedProduct.equals(this.defaultProduct)) {
-        await this.productsService.asyncUpdateById(this.editedProduct.id, this.editedProduct);
-        this.close();
-        await this.getProducts();
-        return;
-      }
+    deleteConfirm() {
+      console.log('deleteConfirm -- Still in development');
       this.close();
     },
 
-    async fetchProductStockLevels(productId) {
-      const stockData = await this.inventoryService.asyncGetStockByProductId(productId);
-      this.productStockLevels = Object.entries(stockData).map(([warehouseName, stockLevel]) => ({
-        warehouseName,
-        stockLevel
-      }));
+    saveEdited() {
+      console.log('saveEdited -- Still in development');
+      this.close();
     },
 
     close() {
@@ -280,16 +230,16 @@ export default {
       this.dialogDelete = true;
     },
 
-    async seeDetails(product) {
+    seeDetails(product) {
       this.assignSelectedProduct(product);
-      await this.fetchProductStockLevels(product.id);
       this.dialogDetail = true;
+      console.log('seeDetails -- Still in development');
+      console.log(product);
     },
 
     assignSelectedProduct(product) {
       this.editedProduct = Object.assign(new Product(), product);
       this.defaultProduct = Object.assign(new Product(), product);
-      this.selectedProduct = Object.assign(new Product(), product);
     },
   }
 }

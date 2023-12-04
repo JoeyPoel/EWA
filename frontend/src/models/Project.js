@@ -18,7 +18,10 @@ export class Project extends Model{
     }
 
     static statusList = [
+        { value: "PENDING", displayName: "Pending" },
+        { value: "CONFIRMED", displayName: "Confirmed" },
         { value: "IN_PROGRESS", displayName: "In Progress" },
         { value: "FINISHED", displayName: "Finished" },
+        { value: "CANCELED", displayName: "Canceled" }
     ];
 }

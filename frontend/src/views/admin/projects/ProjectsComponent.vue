@@ -14,8 +14,6 @@
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
-                <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
-                </v-text-field>
                 <v-spacer></v-spacer>
                 <v-btn class="mb-2" color="secundary" dark v-bind="props" @click="newProject">New Project</v-btn>
               </template>
@@ -47,14 +45,14 @@
                         </v-row>
                       </v-col>
                     </v-form>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="saveNew">Save</v-btn>
-                    </v-card-actions>
                   </v-container>
                 </v-card-text>
               </v-card>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="saveNew">Save</v-btn>
+              </v-card-actions>
             </v-dialog>
             <v-dialog v-model="dialogEdit" max-width="800px">
               <v-card title="Edit Project">
@@ -242,11 +240,16 @@ export default {
 
     getStatusColor(project) {
       switch (project.status) {
-
+        case "PENDING":
+          return "yellow";
+        case "CONFIRMED":
+          return "green";
         case "IN_PROGRESS":
           return "blue";
         case "FINISHED":
           return "green";
+        case "CANCELED":
+          return "red";
         default:
           return "grey";
       }

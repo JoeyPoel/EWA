@@ -46,6 +46,4 @@ public class AuthenticationController {
             return ResponseEntity.status(401).body(null);
         }
     }
-
-
 }

@@ -34,13 +34,13 @@ public class AuthenthicationService {
     public UserDTO authenticateUser(User inputUser) {
         Optional<User> userOptional = userRepository.findByEmail(inputUser.getEmail());
 
-        if (userOptional.isPresent() && userOptional.get().isActive()) {
+        if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
 
             if (passwordMatches(existingUser.getPassword(), inputUser.getPassword())) {
                 String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name());
 
-                return new UserDTO(jwtToken);
+                return new UserDTO(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name(), jwtToken);
             }
         }
         return null;

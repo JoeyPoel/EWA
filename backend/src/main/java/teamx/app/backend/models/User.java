@@ -21,8 +21,6 @@ public class User {
     private String email;
     private String password;
 
-    private boolean active = true;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -45,7 +43,6 @@ public class User {
                 "id=" + id +
                 ", name=" + name +
                 ", email=" + email +
-                ", active=" + active +
                 ", role=" + role +
                 ", team=" + (team != null ? team.getId() : null) +
                 '}';

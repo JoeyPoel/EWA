@@ -46,15 +46,4 @@ export class InventoryAdaptor extends Adaptor {
             return response.map(inventoryProduct => InventoryProduct.fromJson(inventoryProduct));
         }
     }
-
-    async asyncGetStockByProductId(productId) {
-        const options = {
-            method: "GET", headers: {"Content-Type": "application/json"},
-        }
-        const response = await this.fetchJson(
-            this.resourceUrl + `/product/${productId}/warehouses`, options);
-        if (response) {
-            return response;
-        }
-    }
 }

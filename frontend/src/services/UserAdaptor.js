@@ -90,13 +90,4 @@ export default class UserAdaptor extends Adaptor {
 
         return response ? User.fromJson(response) : null;
     }
-
-    async asyncDeactivateUser(id) {
-        const options = {
-            method: "PUT", headers: {"Content-Type": "application/json"}
-        }
-
-        let response = await this.fetchJson(this.resourceUrl + "/deactivate/" + id, options);
-        return response ? User.fromJson(response) : null;
-    }
 }
