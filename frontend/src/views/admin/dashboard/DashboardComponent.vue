@@ -1,49 +1,61 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>
-            <h5>Line Chart</h5>
-          </v-card-title>
-          <v-card-text>
-            <!--            <line-chart></line-chart>-->
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card>
-          <v-card-title>
-            <h5>Inventory</h5>
-          </v-card-title>
-          <v-card-text v-if="inventoryBarChartData">
-            <bar-chart :charts-data="inventoryBarChartData"/>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>
-            <h5>Pie Chart</h5>
-          </v-card-title>
-          <v-card-text>
-            <!--            <pie-chart></pie-chart>-->
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card>
-          <v-card-title>
-            <h5>Radar Chart</h5>
-          </v-card-title>
-          <v-card-text>
-            <!--            <radar-chart></radar-chart>-->
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-card>
+      <v-card-title>
+        <h5>Line Chart</h5>
+      </v-card-title>
+      <v-card-text>
+        <!--            <line-chart></line-chart>-->
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>Inventory Bar By product ADD SELECT PRODUCT</h5>
+      </v-card-title>
+      <v-card-text>
+        <bar-chart :charts-data="inventoryByProductBarChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>inventoryBarByAllWarehouses</h5>
+      </v-card-title>
+      <v-card-text>
+        <bar-chart :charts-data="inventoryByAllWarehousesBarChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>inventoryBarByWarehouse</h5>
+      </v-card-title>
+      <v-card-text>
+        <bar-chart :charts-data="inventoryByWarehouseBarChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>inventoryBarTotalStock</h5>
+      </v-card-title>
+      <v-card-text>
+        <bar-chart :charts-data="inventoryTotalStockBarChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>Pie Chart</h5>
+      </v-card-title>
+      <v-card-text>
+        <!--            <pie-chart></pie-chart>-->
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>Radar Chart</h5>
+      </v-card-title>
+      <v-card-text>
+        <!--            <radar-chart></radar-chart>-->
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -60,23 +72,24 @@ export default {
   },
   data() {
     return {
-      inventoryBarChartData: null,
+      inventoryByProductBarChartData: null,
+      inventoryByAllWarehousesBarChartData: null,
+      inventoryByWarehouseBarChartData: null,
+      inventoryTotalStockBarChartData: null,
     }
   },
   async mounted() {
-    await this.getInventoryBarChartData()
+    await this.findAllBarChartData()
   },
   methods: {
-    async getInventoryBarChartData() {
-      let data = await this.chartsService.asyncFindAllInventoryBar();
-      console.log(data);
-      data.datasets.push({...data.datasets[0]})
-      data.datasets.push({...data.datasets[0]})
-      data.datasets.forEach((dataset, index) => {
-        dataset.backgroundColor = index % 2 === 0 ? '#c7d02c' : '#572700'
-      })
-      this.inventoryBarChartData = data;
+    async findAllBarChartData() {
+      // TODO: Remove hardcoded product id
+      this.inventoryByProductBarChartData = await this.chartsService.asyncInventoryBarByProduct(1);
+      this.inventoryByAllWarehousesBarChartData = await this.chartsService.asyncInventoryBarByAllWarehouses();
+      this.inventoryByWarehouseBarChartData = await this.chartsService.asyncInventoryBarByWarehouse(1);
+      this.inventoryTotalStockBarChartData = await this.chartsService.asyncInventoryBarByAllProducts();
     },
+
   }
 }
 </script>

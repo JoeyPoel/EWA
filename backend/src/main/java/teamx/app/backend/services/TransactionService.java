@@ -10,6 +10,7 @@ import teamx.app.backend.models.dto.TransactionDTO;
 import teamx.app.backend.repositories.TransactionRepository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,7 +36,7 @@ public class TransactionService {
         this.warehouseService = warehouseService;
     }
 
-    private static int getCurrentStock(List<Transaction> productTransactions) {
+    private int getStockLevel(List<Transaction> productTransactions) {
         return productTransactions.stream()
                 .mapToInt(
                         transaction -> transaction.isPositiveTransaction() ?
@@ -87,26 +88,61 @@ public class TransactionService {
                 transactionRepository.getAllByProductAndTransactionDateBefore(product, date) :
                 transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(warehouse, product, date);
 
-        return getCurrentStock(productTransactions);
+        return getStockLevel(productTransactions);
     }
 
-    public List<Integer> findProductStockHistory(Long warehouseId, Long productId) {
+    public List<Integer> findProductStockHistoryByInterval(Long warehouseId, Long productId, Date startDate,
+                                                           Date endDate) {
         Warehouse warehouse = null;
         if (warehouseId != null) {
             warehouse = warehouseService.findById(warehouseId);
         }
 
         Product product = productService.findById(productId);
-        Date date = new Date(System.currentTimeMillis());
+
+        List<Transaction> productTransactions = warehouseId == null ?
+                transactionRepository.getAllByProductAndTransactionDateBetween(product, startDate, endDate) :
+                transactionRepository.getAllByWarehouseAndProductAndTransactionDateBetween(warehouse, product,
+                        startDate, endDate);
+
+        List<Date> transactionDates = productTransactions.stream()
+                .map(Transaction::getTransactionDate)
+                .toList();
+
+        List<Integer> stockHistory = new ArrayList<>();
+        int stockLevelAtStartDate = findProductStockAtDate(warehouseId, productId, startDate);
+        stockHistory.add(stockLevelAtStartDate);
+
+        int totalDays = (int) ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        for (int i = 0; i < totalDays; i++) {
+            Date currentDate = new Date(startDate.getTime() + (i * 1000 * 60 * 60 * 24));
+            if (transactionDates.contains(currentDate)) {
+                int stockLevelAtDate = stockLevelAtStartDate + productTransactions.stream()
+                        .filter(transaction -> transaction.getTransactionDate().equals(currentDate))
+                        .mapToInt(transaction -> transaction.isPositiveTransaction() ?
+                                transaction.getQuantity() :
+                                -transaction.getQuantity())
+                        .sum();
+                stockHistory.add(stockLevelAtDate);
+            }
+        }
+
+        return stockHistory;
+    }
+
+    private int findProductStockAtDate(Long warehouseId, Long productId, Date date) {
+        Warehouse warehouse = null;
+        if (warehouseId != null) {
+            warehouse = warehouseService.findById(warehouseId);
+        }
+
+        Product product = productService.findById(productId);
 
         List<Transaction> productTransactions = warehouseId == null ?
                 transactionRepository.getAllByProductAndTransactionDateBefore(product, date) :
                 transactionRepository.getAllByWarehouseAndProductAndTransactionDateBefore(warehouse, product, date);
 
-        return productTransactions.stream()
-                .map(transaction -> transaction.isPositiveTransaction() ?
-                        transaction.getQuantity() :
-                        -transaction.getQuantity())
-                .toList();
+        return getStockLevel(productTransactions);
     }
 }

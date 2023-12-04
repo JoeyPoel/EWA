@@ -8,7 +8,6 @@ import teamx.app.backend.services.InventoryService;
 
 import java.util.List;
 
-
 /**
  * The InventoryController class is a REST controller that handles inventory-related operations.
  * It exposes endpoints for retrieving inventory products.
@@ -22,7 +21,9 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @Autowired
-    public InventoryController(InventoryService inventoryService) { this.inventoryService = inventoryService; }
+    public InventoryController(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
+    }
 
     /**
      * Retrieves all inventory products.

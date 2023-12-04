@@ -1,5 +1,11 @@
 <template>
-  <Chart type="bar" :data="this.chartsData" :options="options"/>
+  <v-container v-if="data">
+    <Chart type="bar" :data="this.data" :options="options"/>
+  </v-container>
+  <v-container v-else>
+    <h6>Loading...</h6>
+    <v-progress-circular indeterminate size="64"/>
+  </v-container>
 </template>
 
 <script>
@@ -33,9 +39,25 @@ export default {
   },
   data() {
     return {
-      data: this.chartsData
+      data: null,
     }
   },
+  watch: {
+    chartsData: {
+      handler() {
+        this.data = this.chartsData;
+        this.setColor()
+      },
+      deep: true
+    }
+  },
+  methods: {
+    setColor() {
+      this.data.datasets.forEach((dataset, index) => {
+        dataset.backgroundColor = index % 2 === 0 ? '#c7d02c' : '#572700'
+      })
+    }
+  }
 }
 </script>
 

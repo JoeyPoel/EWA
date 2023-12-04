@@ -1,6 +1,5 @@
 package teamx.app.backend.services;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ public class InventoryService {
     public InventoryService(ProductRepository productRepository, TransactionService transactionService) {
         this.productRepository = productRepository;
         this.transactionService = transactionService;
+
     }
 
     public List<InventoryProductDTO> getAll() {
