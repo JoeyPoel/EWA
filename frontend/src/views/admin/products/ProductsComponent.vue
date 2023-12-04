@@ -119,8 +119,7 @@
                       <v-data-table
                           :headers="stockHeaders"
                           :items="productStockLevels"
-                          class="elevation-1"
-                          show-expand>
+                          class="elevation-1">
                       </v-data-table>
                     </v-window-item>
                   </v-window>
@@ -133,7 +132,7 @@
                 <v-card-text>
                   <v-form>
                     <v-container>
-                      <h3>Are you sure you want to delete this warehouse?</h3>
+                      <h3>Are you sure you want to delete this product?</h3>
                     </v-container>
                   </v-form>
                 </v-card-text>
