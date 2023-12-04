@@ -115,8 +115,6 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    public User delete(Long id) {
-        User user = getById(id);
     @Transactional
     public User delete(Long userId) {
         // Retrieve all orders related to the user
