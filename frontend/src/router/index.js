@@ -95,7 +95,7 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = sessionStorage.getItem('token');
+    const isAuthenticated = localStorage.getItem('token');
     console.log('isAuthenticatedRouter:', isAuthenticated);
 
 
