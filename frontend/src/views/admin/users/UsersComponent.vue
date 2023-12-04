@@ -2,13 +2,21 @@
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Users">
       <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
-      <v-select
-          v-model="selectedTeam"
-          :items="teams"
-          item-title="name"
-          item-value="id"
-          label="Teams"
-      />
+      <v-row class="d-flex align-center">
+        <v-col class="flex-grow-1">
+          <v-select
+              v-model="selectedTeam"
+              :items="teams"
+              item-title="name"
+              item-value="id"
+              label="Teams"
+          />
+        </v-col>
+        <v-col cols="auto" v-if="selectedTeam">
+          <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
+        </v-col>
+      </v-row>
+
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -189,7 +197,10 @@ export default {
       this.users = await this.usersService.asyncGetAll();
       this.assignSelectedUser(new User());
     },
-
+    unselectTeam() {
+      this.selectedTeam = null;
+    },
+    
     async saveNew() {
       // Validate the form fields (add additional validation as needed)
       if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
