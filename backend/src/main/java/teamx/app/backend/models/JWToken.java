@@ -90,7 +90,6 @@ public class JWToken {
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
                 .signWith(key, SIGNATURE_ALGORITHM)
                 .compact();
-
         return jwtToken;
     }
 }
