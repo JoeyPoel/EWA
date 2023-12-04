@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getAllByIdIn(List<Long> ids);
 
     List<User> getAllByTeam_IdAndIdNotIn(Long id, List<Long> membersIds);
+
+    List<User> findByRole(User.Role role);
 }
