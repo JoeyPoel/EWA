@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.User;
+
 import teamx.app.backend.services.UserService;
 
 import java.util.List;
@@ -65,4 +66,10 @@ public class UserController {
     public ResponseEntity<User> delete(@PathVariable Long id) {
         return ResponseEntity.ok(userService.delete(id));
     }
+
+    @PutMapping("/passReset")
+    public ResponseEntity<User> update(@RequestBody User userInfo) {
+        return ResponseEntity.ok(userService.resetPass(userInfo.getId(), userInfo.getPassword()));
+    }
+
 }

@@ -34,6 +34,11 @@ public class UserService {
         return foundUser;
     }
 
+    public List<User> findByRole(User.Role role) {
+        return userRepository.findByRole(role);
+    }
+
+
     public List<User> getAllByTeamId(Long teamId) {
         if (teamId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team id is null");
@@ -94,6 +99,13 @@ public class UserService {
         existingUser.setPassword(user.getPassword());
         existingUser.setRole(user.getRole());
         existingUser.setTeam(user.getTeam());
+
+        return userRepository.save(existingUser);
+    }
+
+    public User resetPass(long id, String password) {
+        User existingUser = getById(id);
+        existingUser.setPassword(password);
 
         return userRepository.save(existingUser);
     }
