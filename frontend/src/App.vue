@@ -27,12 +27,11 @@ export default {
     NavbarComponent
   },
   mounted() {
-    document.title = 'Boolet Console';
+    document.title = 'Solar Console';
     this.setFavicon(logo);
   },
   methods: {
     setFavicon(href) {
-      console.log("starting...")
       let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
       link.type = 'image/x-icon';
       link.rel = 'shortcut icon';
