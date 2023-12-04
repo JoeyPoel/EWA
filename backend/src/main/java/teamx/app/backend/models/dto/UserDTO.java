@@ -17,5 +17,6 @@ public class UserDTO {
     }
 
     public UserDTO() {
+
     }
 }
