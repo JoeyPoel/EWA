@@ -14,6 +14,8 @@
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
+                <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
+                </v-text-field>
                 <v-spacer></v-spacer>
                 <v-btn class="mb-2" color="secundary" dark v-bind="props" @click="newProject">New Project</v-btn>
               </template>
