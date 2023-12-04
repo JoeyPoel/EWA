@@ -45,6 +45,11 @@ export default {
       ],
     };
   },
+  watch: {
+    $route() {
+      this.session = localStorage.getItem("token") != null;
+    },
+  },
   computed: {
     isAdmin() {
       const isAuthenticated = localStorage.getItem('token');
@@ -72,7 +77,7 @@ export default {
   },
   methods: {
     logout() {
-      if (localStorage.getItem("email") != null) {
+      if (localStorage.getItem("token") != null) {
         localStorage.clear();
         this.$router.push("/log-in");
       }
