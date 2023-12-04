@@ -7,6 +7,7 @@ import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.services.InventoryService;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**

@@ -8,7 +8,9 @@ import teamx.app.backend.models.Product;
 import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.repositories.ProductRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents an InventoryService that provides operations related to managing inventory products.
@@ -20,6 +22,7 @@ import java.util.List;
 public class InventoryService {
     private final ProductRepository productRepository;
     private final TransactionService transactionService;
+    private final WarehouseService warehouseService;
 
     public List<InventoryProductDTO> getAll() {
         List<Product> products = productRepository.findAll();

@@ -116,16 +116,15 @@
                       </v-container>
                     </v-window-item>
                     <v-window-item value="stock">
-                      <v-container>
-                        <h1>In development warehouse</h1>
-                      </v-container>
+                      <v-data-table
+                          :headers="stockHeaders"
+                          :items="productStockLevels"
+                          class="elevation-1"
+                          show-expand>
+                      </v-data-table>
                     </v-window-item>
                   </v-window>
                 </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" variant="text" @click="close">Cancel</v-btn>
-                </v-card-actions>
               </v-card>
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="800px">
@@ -166,7 +165,7 @@ import {Product} from "@/models/Product";
 
 export default {
   name: "ProductsComponent",
-  inject: ['productsService'],
+  inject: ['productsService', 'inventoryService'],
   components: {
     BaseCard,
   },
@@ -179,6 +178,11 @@ export default {
         {title: "Price", value: "price"},
         {title: "Actions", value: "actions", sortable: false},
       ],
+      stockHeaders: [
+        {title: "Warehouse Name", value: "warehouseName"},
+        {title: "Stock", value: "stockLevel"}
+      ],
+      productStockLevels: [],
       tab: "",
       search: "",
       products: [],
@@ -236,14 +240,12 @@ export default {
     },
 
     async deleteConfirm() {
-      console.log('deleteConfirm -- Still in development');
       await this.productsService.asyncDeleteById(this.selectedProduct.id);
       this.close();
       await this.getProducts();
     },
 
     async saveEdited() {
-      console.log('saveEdited -- Still in development');
       if (!this.editedProduct.equals(this.defaultProduct)) {
         await this.productsService.asyncUpdateById(this.editedProduct.id, this.editedProduct);
         this.close();
@@ -251,6 +253,14 @@ export default {
         return;
       }
       this.close();
+    },
+
+    async fetchProductStockLevels(productId) {
+      const stockData = await this.inventoryService.asyncGetStockByProductId(productId);
+      this.productStockLevels = Object.entries(stockData).map(([warehouseName, stockLevel]) => ({
+        warehouseName,
+        stockLevel
+      }));
     },
 
     close() {
@@ -271,11 +281,10 @@ export default {
       this.dialogDelete = true;
     },
 
-    seeDetails(product) {
+    async seeDetails(product) {
       this.assignSelectedProduct(product);
+      await this.fetchProductStockLevels(product.id);
       this.dialogDetail = true;
-      console.log('seeDetails -- Still in development');
-      console.log(product);
     },
 
     assignSelectedProduct(product) {
