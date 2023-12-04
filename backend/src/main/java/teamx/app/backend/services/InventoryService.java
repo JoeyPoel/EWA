@@ -52,4 +52,15 @@ public class InventoryService {
                 .map(product -> mapToDTO(warehouseId, product))
                 .toList();
     }
+
+    public Map<String, Integer> getAllStockLevelsByProduct(Long productId) {
+        Map<String, Integer> stockLevels = new HashMap<>();
+        warehouseService.findAll().stream()
+                .map(warehouse -> {
+                    int stockLevel = transactionService.findProductCurrentStock(warehouse.getId(), productId);
+                    return Map.entry(warehouse.getName(), stockLevel);
+                })
+                .forEach(entry -> stockLevels.put(entry.getKey(), entry.getValue()));
+        return stockLevels;
+    }
 }
