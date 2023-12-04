@@ -16,6 +16,7 @@
           <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
         </v-col>
       </v-row>
+
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -53,15 +54,39 @@
                                 label="Role"
                             />
                           </v-row>
+                          <v-row>
+                            <v-select
+                                v-model="editedUser.team"
+                                :items="teams"
+                                item-title="name"
+                                item-value="id"
+                                label="Team"
+                            />
+                          </v-row>
 
                         </v-col>
                       </template>
                       <template v-if="dialog.type === 'delete'">
                         <h3>Are you sure you want to delete this user?</h3>
                       </template>
+
                       <template v-else-if="dialog.type === 'details'">
-                        <h1>In development</h1>
+                        <v-col>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.name" label="Name" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.email" label="Email" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.role" label="Role" type="text" readonly/>
+                          </v-row>
+                          <v-row>
+                            <v-text-field v-model="selectedUser.teamName" label="Team" type="text" readonly/>
+                          </v-row>
+                        </v-col>
                       </template>
+
                     </v-container>
                   </v-form>
                 </v-card-text>
@@ -69,9 +94,6 @@
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="close">Cancel</v-btn>
                   <v-btn v-if="dialog.type === 'new'" variant="text" @click="saveNew">Save</v-btn>
-                  <v-btn v-if="dialog.type === 'edit'" variant="text" @click="deactivateUser">
-                    {{ editedUser.active ? 'Deactivate' : 'Activate' }}
-                  </v-btn>
                   <v-btn v-if="dialog.type === 'edit'" variant="text" @click="saveEdited">Save</v-btn>
                   <v-btn v-if="dialog.type === 'delete'" variant="text" @click="deleteConfirm">Delete</v-btn>
                 </v-card-actions>
@@ -119,7 +141,6 @@ export default {
         name: null,
         role: null,
         email: null,
-        active: true,
       },
       roles: [
         {role: 'ADMIN'},
@@ -142,7 +163,7 @@ export default {
         new: 'New User',
         edit: 'Edit User',
         delete: 'Delete User',
-        details: 'Project Details',
+        details: 'User Details',
       }
     },
   },
@@ -159,36 +180,55 @@ export default {
         this.users = await this.usersService.asyncGetAll();
       }
     },
+
+    'dialog.open': function (val) {
+      val || this.close();
+    }
   },
 
   async created() {
     await this.initialize();
     console.log(this.teams)
-    console.log(this.editedUser.teams)
   },
 
   methods: {
     async initialize() {
       this.teams = await this.teamsService.asyncGetAll();
-      this.users = await this.usersService.asyncGetAll();
-
-      this.roles = this.users.reduce((uniqueRoles, user) => {
-        if (!uniqueRoles.some(role => role.role === user.role)) {
-          uniqueRoles.push({role: user.role});
-        }
-        return uniqueRoles;
-      }, []);
-
+      if (this.selectedTeam) {
+        this.users = await this.usersService.asyncGetAllByTeamId(this.selectedTeam);
+      } else {
+        this.users = await this.usersService.asyncGetAll();
+      }
       this.assignSelectedUser(new User());
     },
 
     unselectTeam() {
       this.selectedTeam = null;
     },
-
+    
     async saveNew() {
-      await this.usersService.asyncSave(this.editedUser);
-      await this.close();
+      // Validate the form fields (add additional validation as needed)
+      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Find the selected team in the teams array
+      const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
+
+      const userToSave = {
+        name: this.editedUser.name,
+        email: this.editedUser.email,
+        role: this.editedUser.role,
+        team: selectedTeam
+      };
+
+      const savedUser = await this.usersService.asyncSave(userToSave);
+      if (savedUser) {
+        await this.close();
+      } else {
+        alert("Failed to create user. Please try again.");
+      }
     },
 
     async deleteConfirm() {
@@ -197,14 +237,28 @@ export default {
     },
 
     async saveEdited() {
-      await this.usersService.asyncUpdate(this.editedUser.id, this.editedUser);
-      await this.close();
-    },
+      // Validate the form fields (add additional validation as needed)
+      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
+        alert("Please fill in all fields.");
+        return;
+      }
 
-    async deactivateUser() {
-      this.editedUser.active = false;
-      await this.usersService.asyncDeactivateUser(this.editedUser.id);
-      await this.close();
+      // Find the selected team in the teams array
+      const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
+
+      const userToSave = {
+        name: this.editedUser.name,
+        email: this.editedUser.email,
+        role: this.editedUser.role,
+        team: { id: selectedTeam.id } // Set the team id
+      };
+
+      const savedUser = await this.usersService.asyncUpdate(this.editedUser.id, userToSave);
+      if (savedUser) {
+        await this.close();
+      } else {
+        alert("Failed to update user. Please try again.");
+      }
     },
 
     openDialog(type, user) {
@@ -218,7 +272,16 @@ export default {
       this.initialize();
     },
 
-    showDetails(user) {
+    async showDetails(user) {
+
+      if (user.teamId) {
+        const team = await this.teamsService.asyncGetById(user.teamId);
+        console.log(team);
+        user.teamName = team ? team.name : 'No team';
+      } else {
+        user.teamName = 'No team';
+      }
+
       this.openDialog('details', user);
     },
 
@@ -234,21 +297,12 @@ export default {
       this.openDialog('new', new User());
     },
 
-    async deleteUser() {
-      if (this.selectedUser) {
-        await this.usersService.asyncDeleteById(this.selectedUser.id);
-        await this.initialize();
-      }
-    },
-
     assignSelectedUser(user) {
       this.selectedUser = Object.assign(new User(), user);
       this.editedUser = Object.assign(new User(), user);
     },
   }
 }
-
-
 </script>
 
 <style scoped>

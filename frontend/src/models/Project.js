@@ -18,6 +18,7 @@ export class Project extends Model{
     }
 
     static statusList = [
+
         { value: "IN_PROGRESS", displayName: "In Progress" },
         { value: "FINISHED", displayName: "Finished" },
     ];

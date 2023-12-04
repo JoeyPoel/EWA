@@ -1,26 +1,34 @@
 package teamx.app.backend.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.models.Order;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
+import teamx.app.backend.repositories.OrderRepository;
 import teamx.app.backend.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final OrderService orderService;
+
+
+
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository, OrderService orderService) {
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
-
     public User login(User user) {
         User foundUser = userRepository
                 .findByEmail(user.getEmail())
@@ -34,6 +42,11 @@ public class UserService {
 
         return foundUser;
     }
+
+    public List<User> findByRole(User.Role role) {
+        return userRepository.findByRole(role);
+    }
+
 
     public List<User> getAllByTeamId(Long teamId) {
         if (teamId == null) {
@@ -76,10 +89,6 @@ public class UserService {
     }
 
     public User add(User user) {
-        if (userRepository.existsById(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this id already exists");
-        }
-
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists");
         }
@@ -99,15 +108,27 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    public User delete(Long id) {
-        User user = getById(id);
+    public User resetPass(long id, String password) {
+        User existingUser = getById(id);
+        existingUser.setPassword(password);
 
-        userRepository.deleteById(id);
+        return userRepository.save(existingUser);
+    }
 
-        if (userRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User could not be deleted");
+    @Transactional
+    public User delete(Long userId) {
+        // Retrieve all orders related to the user
+        List<Order> orders = orderRepository.findAllByOrderedById(userId);
+        User user = getById(userId);
+
+        // Remove the user from all orders related to the user
+        for (Order order : orders) {
+            order.setOrderedBy(null);
+            orderRepository.save(order);
         }
 
+        // Delete the user
+        userRepository.delete(user);
         return user;
     }
 
@@ -161,17 +182,5 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
         }
         return savedUsers;
-    }
-
-    public User deactivateUser(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setActive(!user.isActive());
-            return userRepository.save(user);
-        } else {
-            // Handle user not found
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users not found");
-        }
     }
 }

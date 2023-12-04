@@ -1,4 +1,4 @@
 export class CONFIG{
-    static BACKEND_URL = process.env.VUE_APP_API_URL;
+    static BACKEND_URL = "http://localhost:8087/api";
 }
 //Hi from Jayden

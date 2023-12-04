@@ -1,6 +1,5 @@
 package teamx.app.backend.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,14 +21,21 @@ public class User {
     private String email;
     private String password;
 
-    private boolean active = true;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonIgnore
     @ManyToOne()
     private Team team;
+
+    @Transient
+    private Long teamId;
+
+    @PostLoad
+    void fillTransient() {
+        if (team != null) {
+            this.teamId = team.getId();
+        }
+    }
 
     @Override
     public String toString() {
@@ -37,7 +43,6 @@ public class User {
                 "id=" + id +
                 ", name=" + name +
                 ", email=" + email +
-                ", active=" + active +
                 ", role=" + role +
                 ", team=" + (team != null ? team.getId() : null) +
                 '}';

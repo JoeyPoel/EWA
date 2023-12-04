@@ -19,6 +19,8 @@ import ProjectAdaptor from "@/services/ProjectAdaptor";
 import {InventoryAdaptor} from "@/services/InventoryAdaptor";
 import TransactionsAdaptor from "@/services/TransactionsAdaptor";
 import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
+import EmailAdaptor from "@/services/EmailAdaptor";
+
 import logo from "@/assets/console.png";
 
 export default {
@@ -50,6 +52,8 @@ export default {
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
       authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth"),
+      emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail")
+
     }
   },
 }

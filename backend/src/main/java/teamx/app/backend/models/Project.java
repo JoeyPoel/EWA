@@ -42,7 +42,7 @@ public class Project {
     private Status status;
     public enum Status {
         IN_PROGRESS,
-        FINISHED,
+        FINISHED
     }
 
     @ManyToOne

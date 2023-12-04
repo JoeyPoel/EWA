@@ -1,36 +1,35 @@
 <template>
-  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0 bg-custom">
+  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0 bg-custom w-100">
     <div class="container p-5">
       <div class="card login-card">
         <div class="row no-gutters">
           <div class="col-md-5 position-relative">
-            <img src="@/assets/Solar-panel-login.jpeg" alt="login" class="login-card-img">
+            <img src="../../assets/Solar-panel-login.jpeg" alt="login" class="login-card-img">
           </div>
           <div class="col-md-7">
             <div class="card-body">
               <div class="brand-wrapper">
-                <img src="@/assets/logo.png" alt="logo" class="logo">
+                <img src="../../assets/logo.png" alt="logo" class="logo">
               </div>
               <p class="login-card-description">Log into your account</p>
-              <p v-if="!formIsValid" class="error text-danger mt-2">
-                {{'Email and/or password are wrong if issue presist contact support.' }}
-              </p>
+              <p v-if="!formIsValid" class="error text-danger mt-2">Email and/or password are wrong</p>
               <form @submit.prevent="login">
                 <div class="form-group">
-                  <input type="email" name="email" id="email" class="form-control" v-model.trim="email">
+                  <input type="email" name="email" id="email" class="form-control" v-model.trim="email" placeholder="Email">
                 </div>
                 <div class="form-group mb-4">
-                  <input type="password" name="password" id="password" class="form-control" v-model.trim="password">
+                  <input type="password" name="password" id="password" class="form-control" v-model.trim="password" placeholder="Password">
                 </div>
                 <input name="login" id="login" class="btn btn-block login-btn mb-4 w-100" type="submit" value="Login">
               </form>
-              <a href="#" class="forgot-password-link">Forgot password?</a>
+              <router-link to="/pass-forgot" class="forgot-password-link">Forgot password?</router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
 </template>
 
 <script>
@@ -44,11 +43,29 @@ export default {
       email: null,
       password: null,
       user: null,
-      formIsValid: true,
-      activatedUser: true,
+      formIsValid: true
     }
   },
   methods: {
+    /*async login() {
+      //Check if email and password are not empty
+      if (!this.email || !this.password) {
+        this.formIsValid = false;
+        return;
+      }
+
+      let givenUser = User.loginUser(this.email, this.password);
+      this.user = await this.usersService.asyncGetUser(givenUser);
+
+      if (this.user.email) {
+        sessionStorage.setItem("email", this.user.email);
+        sessionStorage.setItem("role", this.user.role);
+        this.$router.push("/dashboard");
+      } else {
+        this.formIsValid = false;
+      }
+    },
+  }*/
     async login() {
       if (!this.email || !this.password) {
         this.formIsValid = false;
@@ -62,12 +79,13 @@ export default {
         });
 
         if (response) {
+          sessionStorage.setItem("email", response.email);
           console.log('Token from server:', response.jwtToken);
-          localStorage.setItem("token", response.jwtToken);
+          sessionStorage.setItem("token", response.jwtToken);
           console.log(response)
           this.$router.push("/dashboard");
-          window.location.reload()
           //TODO After login navbar isnt loaded in properly firsly, after refresh it is
+          window.location.reload()
         } else {
           this.formIsValid = false;
         }

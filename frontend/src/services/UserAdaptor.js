@@ -42,10 +42,8 @@ export default class UserAdaptor extends Adaptor {
 
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-
         const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
         return response ? User.fromJson(response) : null;
@@ -74,12 +72,11 @@ export default class UserAdaptor extends Adaptor {
     }
 
     async asyncSave(user) {
+        console.log(user);
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(user)
         }
-
-        let response = await this.fetchJson(this.resourceUrl + "/add", options);
-
+        const response = await this.fetchJson(this.resourceUrl, options);
         return response ? User.fromJson(response) : null;
     }
 
@@ -93,12 +90,17 @@ export default class UserAdaptor extends Adaptor {
         return response ? User.fromJson(response) : null;
     }
 
-    async asyncDeactivateUser(id) {
+    async asyncResetPassword(password, id) {
         const options = {
-            method: "PUT", headers: {"Content-Type": "application/json"}
-        }
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"password": password, "id": id}),
+        };
 
-        let response = await this.fetchJson(this.resourceUrl + "/deactivate/" + id, options);
+        const response = await this.fetchJson(this.resourceUrl + "/passReset", options);
+
         return response ? User.fromJson(response) : null;
     }
 }

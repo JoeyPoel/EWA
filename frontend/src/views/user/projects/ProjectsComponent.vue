@@ -17,35 +17,52 @@
               <v-card>
                 <v-tabs v-model="tab" bg-color="transparent">
                   <v-tab value="details">Project Detail</v-tab>
-                  <v-tab value="tasks">Project Tasks</v-tab>
                   <v-tab value="materials">Project Materials</v-tab>
                 </v-tabs>
                 <v-card-text>
                   <v-window v-model="tab">
                     <v-window-item value="details">
-                      <v-container>
-                        <v-list>
-                          <v-list-item title="Name" :subtitle="selectedProject.name"/>
-                          <v-list-item title="Start Date" :subtitle="selectedProject.startDate"/>
-                          <v-list-item title="End Date" :subtitle="selectedProject.endDate"/>
-                          <v-list-item title="Status" :subtitle="selectedProject.status"/>
-                          <v-list-item title="Team" :subtitle="teams.find(t => t.id === selectedProject.teamId)?.name"/>
-                          <v-list-item title="Description" :subtitle="selectedProject.description"/>
-                        </v-list>
-                      </v-container>
-                    </v-window-item>
-                    <v-window-item value="tasks">
-                      <v-container>
-                        <h2>
-                          In development
-                        </h2>
-                      </v-container>
+                      <v-row>
+                        <v-col>
+                          <v-list>
+                            <v-list-item>
+                              <v-list-item-title>Name</v-list-item-title>
+                              <v-list-item-subtitle>{{ selectedProject.name }}</v-list-item-subtitle>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-title>Start Date</v-list-item-title>
+                              <v-list-item-subtitle>{{ selectedProject.startDate }}</v-list-item-subtitle>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-title>End Date</v-list-item-title>
+                              <v-list-item-subtitle>{{ selectedProject.endDate }}</v-list-item-subtitle>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-title>Status</v-list-item-title>
+                              <v-list-item-subtitle>{{ getStatusDisplayName(selectedProject.status) }}</v-list-item-subtitle>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-title>Team</v-list-item-title>
+                              <v-list-item-subtitle>{{ teams.find(t => t.id === selectedProject.teamId)?.name }}</v-list-item-subtitle>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-title>Description</v-list-item-title>
+                              <v-list-item-subtitle>{{ selectedProject.description }}</v-list-item-subtitle>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                      </v-row>
                     </v-window-item>
                     <v-window-item value="materials">
                       <v-container>
-                        <h2>
-                          In development
-                        </h2>
+                        <v-data-table
+                            :headers="projectProductHeaders"
+                            :items="projectProducts"
+                            :items-per-page-options="[5, 10]"
+                            :search="projectProductSearch"
+                            :sort-by="['name']"
+                            class="elevation-1">
+                        </v-data-table>
                       </v-container>
                     </v-window-item>
                   </v-window>
@@ -95,6 +112,12 @@ export default {
         {title:  "Status", key: "status"},
         {title: "Description", key: "description"},
         {title: "Actions", key: "actions", sortable: false}],
+      projectProductHeaders: [
+        {title: "Name", value: "productName"},
+        {title: "Quantity", value: "quantity"},
+        {title: "Warehouse", value: "warehouseName"},],
+      projectProductSearch: "",
+      projectProducts: [],
       projects: [],
       teams: [],
       selectedProject: new Project(),
@@ -103,6 +126,7 @@ export default {
       itemsPerPage: 10,
       userId: "",
       dialogDetail: false,
+      dialogEdit: false,
     }
   },
 
@@ -111,8 +135,19 @@ export default {
   },
 
   watch: {
-    dialogDetail(val) {
-      val || this.close();
+    async dialogDetail(val) {
+      if (!val) {
+        this.close();
+        return;
+      }
+      await this.loadInventory();
+    },
+    async dialogEdit(val) {
+      if (!val) {
+        this.close();
+        return;
+      }
+      await this.loadInventory();
     },
   },
 
@@ -129,7 +164,7 @@ export default {
     },
 
     async getUserIdFromToken() {
-      const isAuthenticated = localStorage.getItem("token");
+      const isAuthenticated = sessionStorage.getItem("token");
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         this.userId = decodedToken.id;
@@ -148,6 +183,15 @@ export default {
         console.log(this.projects);
       } catch (error) {
         console.error("Error fetching projects:", error);
+      }
+    },
+
+    async loadInventory() {
+      try {
+        this.projectProducts = await this.projectsService.asyncGetProjectProducts(this.selectedProject.id);
+        console.log(this.projectProducts);
+      } catch (error) {
+        console.error("Error fetching project products:", error);
       }
     },
 
@@ -181,6 +225,7 @@ export default {
     close() {
       this.assignSelectedProject(new Project())
       this.dialogDetail = false;
+      this.dialogEdit = false;
     },
   },
 }
