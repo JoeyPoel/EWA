@@ -84,10 +84,6 @@ public class UserService {
     }
 
     public User add(User user) {
-        if (userRepository.existsById(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this id already exists");
-        }
-
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists");
         }

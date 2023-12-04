@@ -50,10 +50,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllByTeamId(teamId));
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<User> add(@RequestBody User user) {
-        User createdUser = userService.add(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.ok(userService.add(user));
     }
 
     @PutMapping("/{id}")

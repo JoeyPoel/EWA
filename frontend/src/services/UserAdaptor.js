@@ -72,12 +72,11 @@ export default class UserAdaptor extends Adaptor {
     }
 
     async asyncSave(user) {
+        console.log(user);
         const options = {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(user)
         }
-
-        let response = await this.fetchJson(this.resourceUrl + "/add", options);
-
+        const response = await this.fetchJson(this.resourceUrl, options);
         return response ? User.fromJson(response) : null;
     }
 
