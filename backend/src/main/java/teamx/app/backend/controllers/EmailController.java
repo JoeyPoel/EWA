@@ -51,7 +51,7 @@ public class EmailController {
                         LocalDate dateOneWeekFromNow = LocalDate.now().plusWeeks(1);
                         return projectDate != null &&
                                 !projectDate.isBefore(dateOneWeekFromNow) &&
-                                project.getStatus() == Project.Status.PENDING;
+                                project.getStatus() == Project.Status.IN_PROGRESS;
                     })
                     .collect(Collectors.toList());
         } catch (Exception e) {
