@@ -46,6 +46,15 @@
                                 label="Role"
                             />
                           </v-row>
+                          <v-row>
+                            <v-select
+                                v-model="editedUser.team"
+                                :items="teams"
+                                item-title="name"
+                                item-value="id"
+                                label="Team"
+                            />
+                          </v-row>
 
                         </v-col>
                       </template>
@@ -146,7 +155,7 @@ export default {
         new: 'New User',
         edit: 'Edit User',
         delete: 'Delete User',
-        details: 'Project Details',
+        details: 'User Details',
       }
     },
   },
@@ -156,7 +165,6 @@ export default {
       this.searchTerm = val;
     },
 
-    // TODO needs fixing.  Currently, when a team is selected, the users are not filtered by that team.
     async selectedTeam(val) {
       if (val) {
         this.teams = await this.teamsService.asyncGetById(val.id);
@@ -178,14 +186,32 @@ export default {
     async initialize() {
       this.teams = await this.teamsService.asyncGetAll();
       this.users = await this.usersService.asyncGetAll();
-      //TODO Endpoint for Roles or just use Roles array??
-      // this.roles = await this.usersService.asyncGetAll();
       this.assignSelectedUser(new User());
     },
 
     async saveNew() {
-      await this.usersService.asyncSave(this.editedUser);
-      await this.close();
+      // Validate the form fields (add additional validation as needed)
+      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Find the selected team in the teams array
+      const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
+
+      const userToSave = {
+        name: this.editedUser.name,
+        email: this.editedUser.email,
+        role: this.editedUser.role,
+        team: selectedTeam
+      };
+
+      const savedUser = await this.usersService.asyncSave(userToSave);
+      if (savedUser) {
+        await this.close();
+      } else {
+        alert("Failed to create user. Please try again.");
+      }
     },
 
     async deleteConfirm() {
@@ -194,8 +220,28 @@ export default {
     },
 
     async saveEdited() {
-      await this.usersService.asyncUpdate(this.editedUser.id, this.editedUser);
-      await this.close();
+      // Validate the form fields (add additional validation as needed)
+      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Find the selected team in the teams array
+      const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
+
+      const userToSave = {
+        name: this.editedUser.name,
+        email: this.editedUser.email,
+        role: this.editedUser.role,
+        team: { id: selectedTeam.id } // Set the team id
+      };
+
+      const savedUser = await this.usersService.asyncUpdate(this.editedUser.id, userToSave);
+      if (savedUser) {
+        await this.close();
+      } else {
+        alert("Failed to update user. Please try again.");
+      }
     },
 
     openDialog(type, user) {
@@ -234,21 +280,12 @@ export default {
       this.openDialog('new', new User());
     },
 
-    async deleteUser() {
-      if (this.selectedUser) {
-        await this.usersService.asyncDeleteById(this.selectedUser.id);
-        await this.initialize();
-      }
-    },
-
     assignSelectedUser(user) {
       this.selectedUser = Object.assign(new User(), user);
       this.editedUser = Object.assign(new User(), user);
     },
   }
 }
-
-
 </script>
 
 <style scoped>
