@@ -1,5 +1,10 @@
 import {Model} from "@/models/Model";
 
+/**
+ * A class representing a Product.
+ * @extends Model
+ */
+
 export class Product extends Model {
     constructor(id, name, description, price, categoryId) {
         super();

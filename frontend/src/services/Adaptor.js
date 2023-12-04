@@ -28,7 +28,7 @@ export class Adaptor {
         let response = await fetch(url, options);
 
         if (response.status === 204) {
-            return null; // Handle no content
+            return null; // For no content
         }
 
         if (response.ok) {

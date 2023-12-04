@@ -47,6 +47,13 @@ export class InventoryAdaptor extends Adaptor {
         }
     }
 
+    /**
+     * Retrieves a single inventory product by product id asynchronously.
+     *
+     * @param productId - The id of the product.
+     * @returns {Promise<Object>} - A Promise that resolves to an InventoryProduct instance.
+     */
+
     async asyncGetStockByProductId(productId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},

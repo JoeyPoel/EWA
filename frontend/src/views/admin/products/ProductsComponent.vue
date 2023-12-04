@@ -181,6 +181,7 @@ export default {
         {title: "Warehouse Name", value: "warehouseName"},
         {title: "Stock", value: "stockLevel"}
       ],
+
       productStockLevels: [],
       tab: "",
       search: "",
