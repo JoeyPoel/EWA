@@ -82,13 +82,14 @@ export class ChartsAdaptor extends Adaptor {
         return response ? Object.assign(new ChartsData(), response) : null;
     }
 
-    async asyncInventoryLineByAllProducts() {
+    async asyncInventoryLineByAllProducts(startDate, endDate) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"}
         }
 
         const response = await this.fetchJson(this.resourceUrl +
-            "/inventories/line/stock-history/products", options);
+            "/inventories/line/stock-history/products" +
+            "?startDate=" + startDate + "&endDate=" + endDate, options);
 
         return response ? Object.assign(new ChartsData(), response) : null;
     }

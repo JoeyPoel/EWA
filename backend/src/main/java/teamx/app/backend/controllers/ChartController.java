@@ -41,23 +41,25 @@ public class ChartController {
     }
 
     @GetMapping("/inventories/line/stock-history/products")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByAllProducts() {
+    public ResponseEntity<ChartsDataDTO> inventoryLineByAllProducts(
+            @RequestParam Date startDate, @RequestParam Date endDate) {
         return ResponseEntity.ok(chartService
-                .getStockHistoryByAllProducts()
-        );
+                .getStockHistoryByAllProducts(startDate, endDate));
     }
 
     @GetMapping("/inventories/line/stock-history/products/{productId}")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByWarehouse(@PathVariable Long productId) {
+    public ResponseEntity<ChartsDataDTO> inventoryLineByWarehouse(
+            @PathVariable Long productId, @RequestParam Date startDate, @RequestParam Date endDate) {
         return ResponseEntity.ok(chartService
-                .getStockHistoryByProduct(productId)
+                .getStockHistoryByProduct(productId, startDate, endDate)
         );
     }
 
     @GetMapping("/inventories/line/stock-history/warehouses/{warehouseId}")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByProduct(@PathVariable Long warehouseId) {
+    public ResponseEntity<ChartsDataDTO> inventoryLineByProduct(
+            @PathVariable Long warehouseId, @RequestParam Date startDate, @RequestParam Date endDate) {
         return ResponseEntity.ok(chartService
-                .getStockHistoryByWarehouse(warehouseId)
+                .getStockHistoryByWarehouse(warehouseId, startDate, endDate)
         );
     }
 }

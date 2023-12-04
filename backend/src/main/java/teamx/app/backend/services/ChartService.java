@@ -78,23 +78,23 @@ public class ChartService {
                 .build();
     }
 
-    public ChartsDataDTO getStockHistoryByWarehouse(Long warehouseId) {
+    public ChartsDataDTO getStockHistoryByWarehouse(Long warehouseId, Date startDate, Date endDate) {
         List<Long> productIds = productService.findAllActiveIds();
         return productStockHistoryLine(
                 warehouseId,
                 productIds,
-                transactionService.getOldestTransactionDateByWarehouse(warehouseId),
-                transactionService.getLatestTransactionDateByWarehouse(warehouseId)
+                startDate,
+                endDate
         );
     }
 
-    public ChartsDataDTO getStockHistoryByProduct(Long productId) {
+    public ChartsDataDTO getStockHistoryByProduct(Long productId, Date startDate, Date endDate) {
         List<Long> productIds = List.of(productId);
         return productStockHistoryLine(
                 null,
                 productIds,
-                transactionService.getOldestTransactionDateByProduct(productId),
-                transactionService.getLatestTransactionDateByProduct(productId)
+                startDate,
+                endDate
         );
     }
 
@@ -123,6 +123,7 @@ public class ChartService {
                         .data(data.get(productIds.indexOf(productId)))
                         .build())
                 .toList();
+//TODO: remove logging
         log.error("dataSets: " + dataSets);
 
         List<String> chartLabels = new ArrayList<>();
@@ -173,10 +174,13 @@ public class ChartService {
     }
 
     // TODO: This is a test method, remove or implement properly
-    public ChartsDataDTO getStockHistoryByAllProducts() {
+    public ChartsDataDTO getStockHistoryByAllProducts(Date startDate, Date endDate) {
         List<Long> productIds = productService.findAllActiveIds();
-        return productStockHistoryLine(null, productIds,
-                transactionService.getOldestTransactionDate(),
-                transactionService.getLatestTransactionDate());
+        return productStockHistoryLine(
+                null,
+                productIds,
+                startDate,
+                endDate
+        );
     }
 }

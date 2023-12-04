@@ -108,7 +108,6 @@ export default {
       this.inventoryByAllWarehousesBarChartData = await this.chartsService.asyncInventoryBarByAllWarehouses();
       this.inventoryByWarehouseBarChartData = await this.chartsService.asyncInventoryBarByWarehouse(1);
       this.inventoryTotalStockBarChartData = await this.chartsService.asyncInventoryBarByAllProducts();
-      this.inventoryByAllProductsLineChartData = await this.chartsService.asyncInventoryLineByAllProducts();
     },
     async findAllLineChartData() {
       this.inventoryByWarehouseLineChartData = await this.chartsService.asyncInventoryLineByWarehouse(
@@ -119,6 +118,10 @@ export default {
       this.inventoryByProductLineChartData = await this.chartsService.asyncInventoryLineByProduct(
           1,
           '2023-06-01',
+          '2023-12-31'
+      );
+      this.inventoryByAllProductsLineChartData = await this.chartsService.asyncInventoryLineByAllProducts(
+          '2023-01-01',
           '2023-12-31'
       );
     }
