@@ -7,6 +7,9 @@
             <img src="../../assets/logo.png" alt="logo" class="logo">
           </div>
           <p class="login-card-description">Reset password</p>
+          <p v-if="notEqual" class="error text-error mt-2">Passwords do not match</p>
+          <p v-if="succes" class="success text-success mt-2">Succesfully changed password</p>
+
           <form @submit.prevent="resetPassword">
             <div class="form-group">
               <input type="password" name="password" placeholder="New password" id="password" class="form-control"
@@ -26,6 +29,8 @@
 </template>
 
 <script>
+import {jwtDecode} from "jwt-decode";
+
 export default {
   name: "ResetPasswordComponent",
   inject: ["usersService", "emailService"],
@@ -33,11 +38,27 @@ export default {
     return {
       password: "",
       repeatPassword: "",
+      token: null,
+      notEqual: false,
+      succes: false
     }
   },
   methods: {
     resetPassword() {
-      // TODO verbind de form met een password update endpoint, pak token van route url en validate in backend
+      this.token = this.$route.params.token.substring(1);
+      const decodedToken = jwtDecode(this.token);
+      console.log(decodedToken);
+
+      if (this.password === this.repeatPassword && this.password !== "" && this.repeatPassword !== "" ) {
+
+        this.usersService.asyncResetPassword(this.password, decodedToken.id);
+        this.succes = true;
+
+        this.$router.push("/log-in");
+
+      } else {
+        this.notEqual = true;
+      }
     }
   }
 }

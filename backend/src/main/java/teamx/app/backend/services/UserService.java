@@ -103,6 +103,13 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
+    public User resetPass(long id, String password) {
+        User existingUser = getById(id);
+        existingUser.setPassword(password);
+
+        return userRepository.save(existingUser);
+    }
+
     public User delete(Long id) {
         User user = getById(id);
 

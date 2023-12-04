@@ -66,4 +66,10 @@ public class UserController {
     public ResponseEntity<User> delete(@PathVariable Long id) {
         return ResponseEntity.ok(userService.delete(id));
     }
+
+    @PutMapping("/passReset")
+    public ResponseEntity<User> update(@RequestBody User userInfo) {
+        return ResponseEntity.ok(userService.resetPass(userInfo.getId(), userInfo.getPassword()));
+    }
+
 }

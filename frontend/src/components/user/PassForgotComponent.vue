@@ -38,17 +38,12 @@ export default {
   },
   methods: {
     async forgotPassword() {
-      // 1. verify email
-      // this.user = await this.usersService.getByEmail(this.email); // returns user
-      // if (this.user != null) {
-      //2. send email
-      await this.emailService.sendPassResetEmail(this.email); //this.user.email
-
-      //3. show message
-      this.emailSent = true;
-      // } else {
-      //   this.wrongEmail = false;
-      // }
+      try {
+        this.user = await this.emailService.sendPassResetEmail(this.email);
+        this.emailSent = true;
+      } catch(e) {
+        this.wrongEmail = true;
+      }
 
     }
   },

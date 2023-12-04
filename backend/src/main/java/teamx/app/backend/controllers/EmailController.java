@@ -12,9 +12,11 @@ import teamx.app.backend.models.dto.UserDTO;
 import teamx.app.backend.services.EmailService;
 import teamx.app.backend.services.ProjectService;
 import teamx.app.backend.services.UserService;
+import teamx.app.backend.services.AuthenthicationService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -27,12 +29,15 @@ public class EmailController {
     private final EmailService emailService;
     private final ProjectService projectService;
     private final UserService userService;
+    private final AuthenthicationService authenthicationService;
 
 
-    public EmailController(EmailService emailService, ProjectService projectService, UserService userService) {
+    public EmailController(EmailService emailService, ProjectService projectService, UserService userService,
+                           AuthenthicationService authenthicationService) {
         this.emailService = emailService;
         this.projectService = projectService;
         this.userService = userService;
+        this.authenthicationService = authenthicationService;
     }
 
     @GetMapping("/filteredProjects")
@@ -56,24 +61,28 @@ public class EmailController {
 
     @PostMapping("/sendPassResetEmail")
     public void sendPassResetEmail(@RequestBody UserDTO user) {
-        String subject = "Password reset request";
-        String content = "Please click this link underneath to reset your password for the solar sedum website";
-        StringBuilder emailBody = new StringBuilder();
+        UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
+        if (foundUser != null) {
+            String link = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
 
-        String name = "user";
-        // TODO token laten generate
-        String link = "http://localhost:8080/#/pass-reset:" + "abcdefg";
+            String subject = "Password reset request";
+            String content = "Please click this link underneath to reset your password for the solar sedum website";
 
-        emailBody.append("<h2 style=\"margin-bottom: 15px;\">Dear ").append(name).append(",</h2>");
-        emailBody.append("<h3 style=\"margin-bottom: 20px;\">").append(content).append("</h3>");
-        emailBody.append("<h4 style=\"margin-bottom: 20px;\">").append(link).append("</h4>");
+            // TODO change to Dear username
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<h2 style=\"margin-bottom: 15px;\">Dear ").append("user").append(",</h2>");
+            emailBody.append("<h3 style=\"margin-bottom: 20px;\">").append(content).append("</h3>");
+            emailBody.append("<h4 style=\"margin-bottom: 20px;\">").append(link).append("</h4>");
 
-        try {
-            emailService.sendEmail(user.getEmail(), subject, emailBody.toString());
-        } catch (Exception e) {
-            logger.error("Failed to send email to user", e);
+            try {
+                emailService.sendEmail(user.getEmail(), subject, emailBody.toString());
+            } catch (Exception e) {
+                logger.error("Failed to send email to user", e);
+            }
+        } else {
+            // TODO make a better error return
+            logger.error("Failed to send email to user");
         }
-
     }
 
     @PostMapping("/sendProjectEmail")
