@@ -69,7 +69,7 @@ const routes = [
     {
         path: '/log-in',
         name: 'Login',
-        component: () => import('@/components/LoginComponent.vue'),
+        component: () => import('@/components/user/LoginComponent.vue'),
         meta: {
             hideNavbar: true
         },
@@ -77,7 +77,22 @@ const routes = [
     {
         path: '/', redirect: '/log-in',
     },
-
+    {
+        path: '/pass-forgot',
+        name: 'PassForgot',
+        component: () => import('@/components/user/PassForgotComponent.vue'),
+        meta: {
+            hideNavbar: true
+        },
+    },
+    {
+        path: '/pass-reset:token',
+        name: 'PassReset',
+        component: () => import('@/components/user/ResetPassComponent.vue'),
+        meta: {
+            hideNavbar: true
+        },
+    },
     {
         path: '/team-projects',
         name: 'Team Projects',

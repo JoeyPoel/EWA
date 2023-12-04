@@ -89,4 +89,18 @@ export default class UserAdaptor extends Adaptor {
 
         return response ? User.fromJson(response) : null;
     }
+
+    async asyncResetPassword(password, id) {
+        const options = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"password": password, "id": id}),
+        };
+
+        const response = await this.fetchJson(this.resourceUrl + "/passReset", options);
+
+        return response ? User.fromJson(response) : null;
+    }
 }

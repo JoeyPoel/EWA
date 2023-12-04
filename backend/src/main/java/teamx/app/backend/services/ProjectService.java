@@ -18,6 +18,15 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
+    public List<Project> getAllProjects() { // otherwise joeys code breaks
+        List<Project> projects = projectRepository.findAll();
+        if (projects.isEmpty()) {
+            return null;
+        }
+        return projects;
+    }
+
+
     public List<ProjectDTO> findAll() {
         List<Project> projects = projectRepository.findAll();
         if (projects.isEmpty()) {
