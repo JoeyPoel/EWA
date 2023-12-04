@@ -2,20 +2,13 @@
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Users">
       <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
-      <v-row class="d-flex align-center">
-        <v-col class="flex-grow-1">
-          <v-select
-              v-model="selectedTeam"
-              :items="teams"
-              item-title="name"
-              item-value="id"
-              label="Teams"
-          />
-        </v-col>
-        <v-col cols="auto" v-if="selectedTeam">
-          <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
-        </v-col>
-      </v-row>
+      <v-select
+          v-model="selectedTeam"
+          :items="teams"
+          item-title="name"
+          item-value="id"
+          label="Teams"
+      />
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -69,9 +62,6 @@
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="close">Cancel</v-btn>
                   <v-btn v-if="dialog.type === 'new'" variant="text" @click="saveNew">Save</v-btn>
-                  <v-btn v-if="dialog.type === 'edit'" variant="text" @click="deactivateUser">
-                    {{ editedUser.active ? 'Deactivate' : 'Activate' }}
-                  </v-btn>
                   <v-btn v-if="dialog.type === 'edit'" variant="text" @click="saveEdited">Save</v-btn>
                   <v-btn v-if="dialog.type === 'delete'" variant="text" @click="deleteConfirm">Delete</v-btn>
                 </v-card-actions>
@@ -119,7 +109,6 @@ export default {
         name: null,
         role: null,
         email: null,
-        active: true,
       },
       roles: [
         {role: 'ADMIN'},
@@ -152,13 +141,17 @@ export default {
       this.searchTerm = val;
     },
 
+    // TODO needs fixing.  Currently, when a team is selected, the users are not filtered by that team.
     async selectedTeam(val) {
       if (val) {
-        this.users = await this.usersService.asyncGetAllByTeamId(val);
+        this.teams = await this.teamsService.asyncGetById(val.id);
       } else {
-        this.users = await this.usersService.asyncGetAll();
+        this.teams = await this.teamsService.asyncGetAll();
       }
     },
+    'dialog.open': function (val) {
+      val || this.close();
+    }
   },
 
   async created() {
@@ -171,19 +164,9 @@ export default {
     async initialize() {
       this.teams = await this.teamsService.asyncGetAll();
       this.users = await this.usersService.asyncGetAll();
-
-      this.roles = this.users.reduce((uniqueRoles, user) => {
-        if (!uniqueRoles.some(role => role.role === user.role)) {
-          uniqueRoles.push({role: user.role});
-        }
-        return uniqueRoles;
-      }, []);
-
+      //TODO Endpoint for Roles or just use Roles array??
+      // this.roles = await this.usersService.asyncGetAll();
       this.assignSelectedUser(new User());
-    },
-
-    unselectTeam() {
-      this.selectedTeam = null;
     },
 
     async saveNew() {
@@ -198,12 +181,6 @@ export default {
 
     async saveEdited() {
       await this.usersService.asyncUpdate(this.editedUser.id, this.editedUser);
-      await this.close();
-    },
-
-    async deactivateUser() {
-      this.editedUser.active = false;
-      await this.usersService.asyncDeactivateUser(this.editedUser.id);
       await this.close();
     },
 

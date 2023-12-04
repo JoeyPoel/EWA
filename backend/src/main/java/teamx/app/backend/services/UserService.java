@@ -10,7 +10,6 @@ import teamx.app.backend.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -161,17 +160,5 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
         }
         return savedUsers;
-    }
-
-    public User deactivateUser(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setActive(!user.isActive());
-            return userRepository.save(user);
-        } else {
-            // Handle user not found
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users not found");
-        }
     }
 }
