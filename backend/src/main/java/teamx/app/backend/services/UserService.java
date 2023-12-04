@@ -1,11 +1,14 @@
 package teamx.app.backend.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.models.Order;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
+import teamx.app.backend.repositories.OrderRepository;
 import teamx.app.backend.repositories.UserRepository;
 
 import java.util.List;
@@ -14,12 +17,18 @@ import java.util.Objects;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final OrderService orderService;
+
+
+
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository, OrderService orderService) {
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
-
     public User login(User user) {
         User foundUser = userRepository
                 .findByEmail(user.getEmail())
@@ -98,15 +107,20 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    public User delete(Long id) {
-        User user = getById(id);
+    @Transactional
+    public User delete(Long userId) {
+        // Retrieve all orders related to the user
+        List<Order> orders = orderRepository.findAllByOrderedById(userId);
+        User user = getById(userId);
 
-        userRepository.deleteById(id);
-
-        if (userRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User could not be deleted");
+        // Remove the user from all orders related to the user
+        for (Order order : orders) {
+            order.setOrderedBy(null);
+            orderRepository.save(order);
         }
 
+        // Delete the user
+        userRepository.delete(user);
         return user;
     }
 

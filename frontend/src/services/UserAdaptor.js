@@ -42,10 +42,8 @@ export default class UserAdaptor extends Adaptor {
 
     async asyncDeleteById(id) {
         const options = {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
+            method: "DELETE", headers: {"Content-Type": "application/json"},
         }
-
         const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
         return response ? User.fromJson(response) : null;
