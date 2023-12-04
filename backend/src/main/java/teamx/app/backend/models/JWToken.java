@@ -67,8 +67,6 @@ public class JWToken {
         return new JWToken();
     }
 
-
-
     /**
      * Generates a JWT token with user-related claims.
      * Claims can be changed to desired values as the JWT is generated it encodes
@@ -90,7 +88,6 @@ public class JWToken {
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
                 .signWith(key, SIGNATURE_ALGORITHM)
                 .compact();
-
         return jwtToken;
     }
 }
