@@ -2,10 +2,27 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <h5>Line Chart</h5>
+        <h1>WORK</h1>
+        <h5>inventoryByAllProductsLineChartData</h5>
       </v-card-title>
       <v-card-text>
-        <!--            <line-chart></line-chart>-->
+        <line-chart :charts-data="inventoryByAllProductsLineChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>inventoryLineByWarehouse</h5>
+      </v-card-title>
+      <v-card-text>
+        <line-chart :charts-data="inventoryByWarehouseLineChartData"/>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        <h5>inventoryLineByProduct</h5>
+      </v-card-title>
+      <v-card-text>
+        <line-chart :charts-data="inventoryByProductLineChartData"/>
       </v-card-text>
     </v-card>
     <v-card>
@@ -61,14 +78,13 @@
 
 <script>
 import BarChart from "@/components/charts/BarChart.vue";
+import LineChart from "@/components/charts/LineChart.vue";
 
 export default {
   inject: ['chartsService'],
   components: {
-    BarChart,
-    // LineChart,
-    // RadarChart,
-    // PieChart
+    LineChart,
+    BarChart
   },
   data() {
     return {
@@ -76,20 +92,36 @@ export default {
       inventoryByAllWarehousesBarChartData: null,
       inventoryByWarehouseBarChartData: null,
       inventoryTotalStockBarChartData: null,
+      inventoryByWarehouseLineChartData: null,
+      inventoryByProductLineChartData: null,
+      inventoryByAllProductsLineChartData: null,
     }
   },
   async mounted() {
     await this.findAllBarChartData()
+    await this.findAllLineChartData()
   },
   methods: {
     async findAllBarChartData() {
-      // TODO: Remove hardcoded product id
+      // TODO: Remove hardcoded params
       this.inventoryByProductBarChartData = await this.chartsService.asyncInventoryBarByProduct(1);
       this.inventoryByAllWarehousesBarChartData = await this.chartsService.asyncInventoryBarByAllWarehouses();
       this.inventoryByWarehouseBarChartData = await this.chartsService.asyncInventoryBarByWarehouse(1);
       this.inventoryTotalStockBarChartData = await this.chartsService.asyncInventoryBarByAllProducts();
+      this.inventoryByAllProductsLineChartData = await this.chartsService.asyncInventoryLineByAllProducts();
     },
-
+    async findAllLineChartData() {
+      this.inventoryByWarehouseLineChartData = await this.chartsService.asyncInventoryLineByWarehouse(
+          1,
+          '2023-01-01',
+          '2023-12-31'
+      );
+      this.inventoryByProductLineChartData = await this.chartsService.asyncInventoryLineByProduct(
+          1,
+          '2023-06-01',
+          '2023-12-31'
+      );
+    }
   }
 }
 </script>

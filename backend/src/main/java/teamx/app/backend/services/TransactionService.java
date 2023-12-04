@@ -116,19 +116,67 @@ public class TransactionService {
         int totalDays = (int) ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
         for (int i = 0; i < totalDays; i++) {
-            Date currentDate = new Date(startDate.getTime() + (i * 1000 * 60 * 60 * 24));
+            Date currentDate = new Date(startDate.getTime() + ((long) i * 1000 * 60 * 60 * 24));
             if (transactionDates.contains(currentDate)) {
-                int stockLevelAtDate = stockLevelAtStartDate + productTransactions.stream()
+                 stockLevelAtStartDate += productTransactions.stream()
                         .filter(transaction -> transaction.getTransactionDate().equals(currentDate))
                         .mapToInt(transaction -> transaction.isPositiveTransaction() ?
                                 transaction.getQuantity() :
                                 -transaction.getQuantity())
                         .sum();
-                stockHistory.add(stockLevelAtDate);
             }
+            stockHistory.add(stockLevelAtStartDate);
         }
 
         return stockHistory;
+    }
+
+    protected Date getOldestTransactionDate() {
+        return transactionRepository.findAll()
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .min(Date::compareTo)
+                .orElseThrow(null);
+    }
+
+    protected Date getOldestTransactionDateByWarehouse(Long warehouseId) {
+        return transactionRepository.getAllByWarehouse(warehouseService.findById(warehouseId))
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .min(Date::compareTo)
+                .orElseThrow(null);
+    }
+
+    protected Date getOldestTransactionDateByProduct(Long productId) {
+        return transactionRepository.getAllByProduct(productService.findById(productId))
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .min(Date::compareTo)
+                .orElseThrow(null);
+    }
+
+    protected Date getLatestTransactionDate() {
+        return transactionRepository.findAll()
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .max(Date::compareTo)
+                .orElseThrow(null);
+    }
+
+    protected Date getLatestTransactionDateByWarehouse(Long warehouseId) {
+        return transactionRepository.getAllByWarehouse(warehouseService.findById(warehouseId))
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .max(Date::compareTo)
+                .orElseThrow(null);
+    }
+
+    protected Date getLatestTransactionDateByProduct(Long productId) {
+        return transactionRepository.getAllByProduct(productService.findById(productId))
+                .stream()
+                .map(Transaction::getTransactionDate)
+                .max(Date::compareTo)
+                .orElseThrow(null);
     }
 
     private int findProductStockAtDate(Long warehouseId, Long productId, Date date) {

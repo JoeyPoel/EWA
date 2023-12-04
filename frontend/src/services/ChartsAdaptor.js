@@ -82,11 +82,23 @@ export class ChartsAdaptor extends Adaptor {
         return response ? Object.assign(new ChartsData(), response) : null;
     }
 
+    async asyncInventoryLineByAllProducts() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+
+        const response = await this.fetchJson(this.resourceUrl +
+            "/inventories/line/stock-history/products", options);
+
+        return response ? Object.assign(new ChartsData(), response) : null;
+    }
+
     async asyncInventoryLineByProduct(productId, startDate, endDate) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"}
         }
-        const response = await this.fetchJson(this.resourceUrl + "/line/stock-history/products/" + productId
+        const response = await this.fetchJson(this.resourceUrl +
+            "/inventories/line/stock-history/products/" + productId
             + "?startDate=" + startDate + "&endDate=" + endDate, options);
 
         return response ? Object.assign(new ChartsData(), response) : null;
@@ -96,7 +108,8 @@ export class ChartsAdaptor extends Adaptor {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"}
         }
-        const response = await this.fetchJson(this.resourceUrl + "/line/stock-history/warehouses/"
+        const response = await this.fetchJson(this.resourceUrl +
+            "/inventories/line/stock-history/warehouses/"
             + warehouseId + "?startDate=" + startDate + "&endDate=" + endDate, options);
 
         return response ? Object.assign(new ChartsData(), response) : null;

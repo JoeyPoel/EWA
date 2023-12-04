@@ -1,5 +1,6 @@
 package teamx.app.backend.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ChartService {
     InventoryService inventoryService;
     ProjectService projectService;
@@ -76,14 +78,24 @@ public class ChartService {
                 .build();
     }
 
-    public ChartsDataDTO getStockHistoryByWarehouse(Long warehouseId, Date startDate, Date endDate) {
+    public ChartsDataDTO getStockHistoryByWarehouse(Long warehouseId) {
         List<Long> productIds = productService.findAllActiveIds();
-        return productStockHistoryLine(warehouseId, productIds, startDate, endDate);
+        return productStockHistoryLine(
+                warehouseId,
+                productIds,
+                transactionService.getOldestTransactionDateByWarehouse(warehouseId),
+                transactionService.getLatestTransactionDateByWarehouse(warehouseId)
+        );
     }
 
-    public ChartsDataDTO getStockHistoryByProduct(Long productId, Date startDate, Date endDate) {
+    public ChartsDataDTO getStockHistoryByProduct(Long productId) {
         List<Long> productIds = List.of(productId);
-        return productStockHistoryLine(null, productIds, startDate, endDate);
+        return productStockHistoryLine(
+                null,
+                productIds,
+                transactionService.getOldestTransactionDateByProduct(productId),
+                transactionService.getLatestTransactionDateByProduct(productId)
+        );
     }
 
     private ChartsDataDTO productStockHistoryLine(Long warehouseId, List<Long> productIds, Date startDate, Date endDate) {
@@ -111,6 +123,7 @@ public class ChartService {
                         .data(data.get(productIds.indexOf(productId)))
                         .build())
                 .toList();
+        log.error("dataSets: " + dataSets);
 
         List<String> chartLabels = new ArrayList<>();
         Date date = startDate;
@@ -157,5 +170,13 @@ public class ChartService {
                 .labels(List.of(productService.findById(productId).getName()))
                 .datasets(dataSets)
                 .build();
+    }
+
+    // TODO: This is a test method, remove or implement properly
+    public ChartsDataDTO getStockHistoryByAllProducts() {
+        List<Long> productIds = productService.findAllActiveIds();
+        return productStockHistoryLine(null, productIds,
+                transactionService.getOldestTransactionDate(),
+                transactionService.getLatestTransactionDate());
     }
 }

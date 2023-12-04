@@ -72,14 +72,16 @@ public class ProductService {
     }
 
     protected List<Long> findAllIds() {
-        return productRepository.findAll()
+        return productRepository
+                .findAll()
                 .stream()
                 .map(Product::getId)
                 .toList();
     }
 
     protected List<Long> findAllActiveIds() {
-        return productRepository.findAllByTransactionsIsNotEmpty()
+        return productRepository
+                .findAllByTransactionsIsNotEmpty()
                 .stream()
                 .map(Product::getId)
                 .toList();

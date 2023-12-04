@@ -32,11 +32,19 @@ public class WarehouseService {
     }
 
     public List<Warehouse> findAll() {
+//        TODO: Return empty list instead of throwing exception in production
         List<Warehouse> warehouses = warehouseRepository.findAll();
         if (warehouses.isEmpty()) {
             throw new NoSuchElementException("No warehouses found");
         }
         return warehouses;
+    }
+
+    protected List<Long> findAllIds() {
+        return findAll()
+                .stream()
+                .map(Warehouse::getId)
+                .toList();
     }
 
     public Warehouse findById(Long id) {
