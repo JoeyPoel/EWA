@@ -8,6 +8,8 @@ import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 import teamx.app.backend.repositories.TeamRepository;
 
+import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,7 +24,11 @@ public class ProjectService {
         this.teamRepository = teamRepository;
     }
 
-    public List<ProjectDTO> findAll() {
+    protected List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    public List<ProjectDTO> findAllDTO() {
         List<Project> projects = projectRepository.findAll();
         if (projects.isEmpty()) {
             throw new NoSuchElementException("No projects found");
@@ -64,8 +70,12 @@ public class ProjectService {
         return mapToDTO(deletedProject);
     }
 
-    public List<ProjectDTO> findAllByWarehouseId(Long warehouseId) {
+    public List<ProjectDTO> findAllByWarehouseIdDTO(Long warehouseId) {
         return mapToDTO(projectRepository.getAllByTeam_Warehouse_Id(warehouseId));
+    }
+
+    public List<Project> findAllByWarehouseId(Long warehouseId) {
+        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 
     private Project mapToEntity(Project project, ProjectDTO projectDTO) {
@@ -95,5 +105,21 @@ public class ProjectService {
     protected void setTeam(List<Project> projects, Team team) {
         projects.forEach(project -> project.setTeam(team));
         projectRepository.saveAll(projects);
+    }
+
+    protected List<Project> findProjectsByStatusAndDateBetween
+            (Project.Status status, Long warehouseId, Date startDate, Date endDate) {
+        return warehouseId == null ?
+                projectRepository.findAllByStatusAndEndDateBetween(status, startDate, endDate) :
+                projectRepository.findAllByStatusAndTeam_Warehouse_IdAndEndDateBetween(
+                        status, warehouseId, startDate, endDate);
+    }
+
+    public Collection<Object> findProjectsByStatus(Project.Status status) {
+        return projectRepository.findAllByStatus(status);
+    }
+
+    public Collection<Object> findProjectsByStatus(Project.Status status, Long warehouseId) {
+        return projectRepository.findAllByStatusAndTeam_Warehouse_Id(status, warehouseId);
     }
 }

@@ -34,7 +34,7 @@ public class ProjectController {
      */
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAll() {
-        return ResponseEntity.ok(projectService.findAll());
+        return ResponseEntity.ok(projectService.findAllDTO());
     }
 
     /**
@@ -56,7 +56,7 @@ public class ProjectController {
      */
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<ProjectDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
-        return ResponseEntity.ok(projectService.findAllByWarehouseId(warehouseId));
+        return ResponseEntity.ok(projectService.findAllByWarehouseIdDTO(warehouseId));
     }
 
     /**

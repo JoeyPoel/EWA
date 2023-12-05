@@ -17,11 +17,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        if (orders.isEmpty()) {
-            return null;
-        }
-        return orders;
+    protected Long totalOrders() {
+        return orderRepository.count();
     }
 }

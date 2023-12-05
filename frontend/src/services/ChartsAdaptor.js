@@ -115,4 +115,34 @@ export class ChartsAdaptor extends Adaptor {
 
         return response ? Object.assign(new ChartsData(), response) : null;
     }
+
+    async asyncProjectsPieByStatusThisMonth(warehouseId) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        const response = await this.fetchJson(this.resourceUrl +
+            "/projects/pie/by-status-this-month/warehouses/" + warehouseId, options);
+
+        return response ? Object.assign(new ChartsData(), response) : null;
+    }
+
+    async asyncProjectsPieByStatusThisMonthAll() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        const response = await this.fetchJson(this.resourceUrl +
+            "/projects/pie/by-status-this-month/warehouses", options);
+
+        return response ? Object.assign(new ChartsData(), response) : null;
+    }
+
+    async asyncLifetimeStatisticsAll() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        const response = await this.fetchJson(this.resourceUrl +
+            "/statistics/lifetime", options);
+
+        return response;
+    }
 }

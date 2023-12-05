@@ -4,3 +4,4 @@ export { default as InventoryByProductBarChart } from "./InventoryByProductBarCh
 export { default as InventoryByWarehouseLineChart } from "./InventoryByWarehouseLineChart.vue";
 export { default as InventoryByProductLineChart } from "./InventoryByProductLineChart.vue";
 export { default as InventoryTotalStockBarChart } from "./InventoryTotalStockBarChart.vue";
+export { default as ProjectsThisMontPieChart } from "./ProjectsThisMonthPie.vue";

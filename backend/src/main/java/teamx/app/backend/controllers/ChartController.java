@@ -8,6 +8,7 @@ import teamx.app.backend.models.dto.charts.ChartsDataDTO;
 import teamx.app.backend.services.ChartService;
 
 import java.sql.Date;
+import java.util.HashMap;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -61,5 +62,20 @@ public class ChartController {
         return ResponseEntity.ok(chartService
                 .getStockHistoryByWarehouse(warehouseId, startDate, endDate)
         );
+    }
+
+    @GetMapping("/projects/pie/by-status-this-month/warehouses/{warehouseId}")
+    public ResponseEntity<ChartsDataDTO> projectsPieByStatusThisMonth(@PathVariable Long warehouseId) {
+        return ResponseEntity.ok(chartService.getProjectsPieByStatusThisMonth(warehouseId));
+    }
+
+    @GetMapping("/projects/pie/by-status-this-month/warehouses")
+    public ResponseEntity<ChartsDataDTO> projectsPieByStatusThisMonthAllWarehouses() {
+        return ResponseEntity.ok(chartService.getProjectsPieByStatusThisMonth(null));
+    }
+
+    @GetMapping("/statistics/lifetime")
+    public ResponseEntity<HashMap<String, Long>> getLifetimeStatistics() {
+        return ResponseEntity.ok(chartService.getLifetimeStatistics());
     }
 }

@@ -58,7 +58,6 @@ export default {
       handler() {
         this.data = this.chartsData;
         this.setColor()
-        console.log(this.chartsData)
       },
       deep: true,
     }
