@@ -93,4 +93,9 @@ public class ProductController {
     public ResponseEntity<List<ProductCategory>> getAllCategories() {
         return ResponseEntity.ok(productService.findAllProductCategories());
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductDTO>> getAllActive() {
+        return ResponseEntity.ok(productService.findAllActive());
+    }
 }
