@@ -314,7 +314,7 @@ export default {
 
       this.transaction = new Transaction();
       this.transaction.productId = item.productId;
-      if (this.selectedWarehouse !== {}) {
+      if (this.selectedWarehouse !== {} && this.selectedWarehouse !== null) {
         this.transaction.warehouseId = this.selectedWarehouse.id;
       }
 

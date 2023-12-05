@@ -121,6 +121,12 @@ public class UserService {
         List<Order> orders = orderRepository.findAllByOrderedById(userId);
         User user = getById(userId);
 
+        // Remove the user from all orders related to the user
+        for (Order order : orders) {
+            order.setOrderedBy(null);
+            orderRepository.save(order);
+        }
+        
         userRepository.deleteById(userId);
 
         if (userRepository.existsById(userId)) {
