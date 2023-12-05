@@ -1,7 +1,7 @@
 package teamx.app.backend.controllers;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -9,14 +9,13 @@ import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.models.User;
 import teamx.app.backend.models.dto.UserDTO;
+import teamx.app.backend.services.AuthenthicationService;
 import teamx.app.backend.services.EmailService;
 import teamx.app.backend.services.ProjectService;
 import teamx.app.backend.services.UserService;
-import teamx.app.backend.services.AuthenthicationService;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -108,7 +107,7 @@ public class EmailController {
 
         if (!filterProjects().isEmpty()) {
             for (User admin : admins) {
-                String emailBody = generateEmailWithTable(admin.getName(), "https://placekitten.com/600/200", subject, columnNames , tableRows);
+                String emailBody = generateEmailWithTable(admin.getName(), "https://placekitten.com/600/200", subject, columnNames, tableRows);
                 try {
                     emailService.sendEmail("joeywognum@gmail.com", subject, emailBody);
                 } catch (Exception e) {
@@ -138,6 +137,7 @@ public class EmailController {
 //        }
         return null;
     }
+
     @PostMapping("/sendProductEmail")
     @Scheduled(cron = "0 0 12 * * ?")
     public void sendProductEmail() {
@@ -158,7 +158,7 @@ public class EmailController {
 
         if (!filterProjects().isEmpty()) {
             for (User admin : admins) {
-                String emailBody = generateEmailWithTable(admin.getName(), "https://placekitten.com/600/200", subject, columnNames , tableRows);
+                String emailBody = generateEmailWithTable(admin.getName(), "https://placekitten.com/600/200", subject, columnNames, tableRows);
                 try {
                     emailService.sendEmail("joeywognum@gmail.com", subject, emailBody);
                 } catch (Exception e) {
