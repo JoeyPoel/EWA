@@ -46,4 +46,22 @@ export class InventoryAdaptor extends Adaptor {
             return response.map(inventoryProduct => InventoryProduct.fromJson(inventoryProduct));
         }
     }
+
+    /**
+     * Retrieves a single inventory product by product id asynchronously.
+     *
+     * @param productId - The id of the product.
+     * @returns {Promise<Object>} - A Promise that resolves to an InventoryProduct instance.
+     */
+
+    async asyncGetStockByProductId(productId) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+        const response = await this.fetchJson(
+            this.resourceUrl + `/product/${productId}/warehouses`, options);
+        if (response) {
+            return response;
+        }
+    }
 }

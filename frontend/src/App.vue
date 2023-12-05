@@ -21,11 +21,25 @@ import TransactionsAdaptor from "@/services/TransactionsAdaptor";
 import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
 import EmailAdaptor from "@/services/EmailAdaptor";
 
+import logo from "@/assets/console.png";
 
 export default {
   name: 'App',
   components: {
     NavbarComponent
+  },
+  mounted() {
+    document.title = 'Solar Console';
+    this.setFavicon(logo);
+  },
+  methods: {
+    setFavicon(href) {
+      let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = href;
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
   },
   provide() {
     return {
