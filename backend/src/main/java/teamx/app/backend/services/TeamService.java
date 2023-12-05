@@ -56,7 +56,9 @@ public class TeamService {
 
     public TeamDTO update(Long teamId, TeamDTO teamDTO) throws IllegalArgumentException {
         Team existingTeam = findById(teamId);
-        return mapToDTO(mapToEntity(teamDTO, existingTeam));
+        userService.setTeamById(teamDTO.getMembersIds(), existingTeam);
+        Team savedTeam = save(mapToEntity(teamDTO, existingTeam));
+        return mapToDTO(savedTeam);
     }
 
     public TeamDTO delete(Long id) {

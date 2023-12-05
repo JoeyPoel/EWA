@@ -109,10 +109,11 @@ export default class TeamsAdaptor extends Adaptor {
      * @returns {Promise<*>} The deleted team.
      */
     async asyncDeleteById(id) {
-        const options = {
-            method: "DELETE", headers: {"Content-Type": "application/json"},
-        }
-        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
+        const response = await this.fetchJson(`${this.resourceUrl}/${id}`,
+            {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        });
 
         return response ? Team.fromJson(response) : null;
     }

@@ -192,7 +192,7 @@ export default {
     },
 
     async deleteConfirm() {
-      await this.teamsService.asyncDeleteById(this.selectedTeam.id);
+      console.log(await this.teamsService.asyncDeleteById(this.editedTeam.id))
       await this.close();
     },
 
@@ -242,16 +242,9 @@ export default {
       this.openDialog('new', new Team());
     },
 
-    async deleteTeam() {
-      if (this.selectedTeam) {
-        await this.teamsService.asyncDeleteById(this.selectedTeam.id);
-        await this.initialize();
-      }
-    },
-
     assignSelectedTeam(team) {
-      this.selectedTeam = Object.assign(new Team(), team);
-      this.editedTeam = Object.assign(new Team(), team);
+      this.selectedTeam = {...team};
+      this.editedTeam = {...team};
     },
   }
 }
