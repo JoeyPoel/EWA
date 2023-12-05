@@ -47,12 +47,12 @@
                     </v-form>
                   </v-container>
                 </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                  <v-btn color="blue darken-1" text @click="saveNew">Save</v-btn>
+                </v-card-actions>
               </v-card>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="saveNew">Save</v-btn>
-              </v-card-actions>
             </v-dialog>
             <v-dialog v-model="dialogEdit" max-width="800px">
               <v-card title="Edit Project">
@@ -151,7 +151,7 @@
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="800px">
               <v-card>
-                <v-card-title class="text-h5">Are you sure you want to delete this warehouse?</v-card-title>
+                <v-card-title class="text-h5">Are you sure you want to delete this Project?</v-card-title>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
