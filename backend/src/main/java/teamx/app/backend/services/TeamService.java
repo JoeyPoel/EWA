@@ -28,9 +28,6 @@ public class TeamService {
 
     public List<TeamDTO> findAll() {
         List<Team> teams = teamRepository.findAll();
-        if (teams.isEmpty()) {
-            throw new NoSuchElementException("No teams found");
-        }
         return mapToDTO(teams);
     }
 
@@ -54,7 +51,7 @@ public class TeamService {
         return mapToDTO(savedTeam);
     }
 
-    public TeamDTO update(Long teamId, TeamDTO teamDTO) throws IllegalArgumentException {
+    public TeamDTO update(Long teamId, TeamDTO teamDTO)  {
         Team existingTeam = findById(teamId);
         userService.setTeamById(teamDTO.getMembersIds(), existingTeam);
         Team savedTeam = save(mapToEntity(teamDTO, existingTeam));
@@ -71,9 +68,6 @@ public class TeamService {
 
     public List<TeamDTO> findAllByWarehouseId(Long warehouseId) {
         List<Team> teams = teamRepository.getAllByWarehouse_Id(warehouseId);
-        if (teams.isEmpty()) {
-            throw new NoSuchElementException("No teams found for warehouse with id " + warehouseId);
-        }
         return mapToDTO(teams);
     }
 

@@ -1,6 +1,18 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Teams">
+      <v-row>
+        <v-col cols="5">
+          <v-text-field v-model="search" label="Search Team" prepend-inner-icon="$search" variant="outlined"/>
+        </v-col>
+        <v-col cols="5">
+          <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
+                    label="Warehouse"/>
+        </v-col>
+        <v-col cols="2" class="justify-content-center">
+          <v-btn @click="selectedWarehouse = null; search = ''">Reset</v-btn>
+        </v-col>
+      </v-row>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -19,66 +31,78 @@
           <v-toolbar flat>
             <v-dialog v-model="dialog.open" max-width="800px">
               <template v-slot:activator="{ props }">
-                <v-text-field v-model="search" label="Search Team" prepend-inner-icon="$search" variant="outlined"/>
-                <v-select
-                    v-model="selectedWarehouse"
-                    :items="warehouses"
-                    item-title="name"
-                    item-value="id"
-                    label="Warehouse"
-                />
                 <v-btn color="secondary" dark class="mb-2" v-bind="props" @click="showNew">
-                  New Team</v-btn>
+                  New Team
+                </v-btn>
               </template>
-              <v-card>
-                <v-card-title><h5>{{ dialogTitle[dialog.type] }}</h5></v-card-title>
+              <v-card :title="dialogTitle[dialog.type]">
                 <v-card-text>
-                  <v-form>
-                    <v-container>
-                      <template v-if="dialog.type === 'new' || dialog.type === 'edit'">
-                        <v-col>
-                          <v-row>
-                            <v-text-field v-model="editedTeam.name" label="Name" type="text"/>
-                          </v-row>
-                          <v-row>
-                            <v-select
-                                v-model="editedTeam.warehouseId"
-                                :items="warehouses"
-                                item-title="name"
-                                item-value="id"
-                                label="Warehouse"
-                            />
-                          </v-row>
-                          <v-row>
-                            <v-select
-                                v-model="editedTeam.leaderId"
-                                :items="users"
-                                item-title="name"
-                                item-value="id"
-                                label="Team Lead"
-                            />
-                          </v-row>
-                          <v-row>
-                            <v-select
-                                v-model="editedTeam.membersIds"
-                                :items="users"
-                                item-title="name"
-                                item-value="id"
-                                label="Team Members"
-                                multiple
-                                chips
-                            />
-                          </v-row>
-                        </v-col>
-                      </template>
-                      <template v-if="dialog.type === 'delete'">
-                        <h3>Are you sure you want to delete this team?</h3>
-                      </template>
-                      <template v-else-if="dialog.type === 'details'">
-                        <h1>In development</h1>
-                      </template>
-                    </v-container>
-                  </v-form>
+                  <v-container>
+                    <template v-if="dialog.type === 'new' || dialog.type === 'edit'">
+                      <v-col>
+                        <v-row>
+                          <v-text-field v-model="editedTeam.name" label="Name" type="text"/>
+                        </v-row>
+                        <v-row>
+                          <v-select
+                              v-model="editedTeam.warehouseId"
+                              :items="warehouses"
+                              item-title="name"
+                              item-value="id"
+                              label="Warehouse"
+                          />
+                        </v-row>
+                        <v-row>
+                          <v-select
+                              v-model="editedTeam.leaderId"
+                              :items="users"
+                              item-title="name"
+                              item-value="id"
+                              label="Team Lead"
+                          />
+                        </v-row>
+                        <v-row>
+                          <v-select
+                              v-model="editedTeam.membersIds"
+                              :items="users"
+                              item-title="name"
+                              item-value="id"
+                              label="Team Members"
+                              multiple
+                              chips
+                          />
+                        </v-row>
+                      </v-col>
+                    </template>
+                    <template v-if="dialog.type === 'delete'">
+                      <h3>Are you sure you want to delete this team?</h3>
+                    </template>
+                    <template v-else-if="dialog.type === 'details'">
+                      <v-tabs v-model="detailTab" bg-color="transparent">
+                        <v-tab value="details">Product Detail</v-tab>
+                        <v-tab value="projects">Projects</v-tab>
+                      </v-tabs>
+                      <v-window v-model="detailTab">
+                        <v-window-item value="details">
+                          <v-list>
+                            <v-list-item title="Name" :subtitle="selectedTeam.name"/>
+                            <v-list-item title="Warehouse" :subtitle="getWarehouseName(selectedTeam)"/>
+                            <v-list-item title="Team Lead" :subtitle="getTeamLeadName(selectedTeam)"/>
+                            <v-list-item title="Team Members">
+                              <v-list-item-subtitle v-for="member in users" :key="member.id">
+                                {{ member.name }}
+                              </v-list-item-subtitle>
+                            </v-list-item>
+                          </v-list>
+                        </v-window-item>
+                        <v-window-item value="projects">
+                          <v-container>
+                            <h1>In development</h1>
+                          </v-container>
+                        </v-window-item>
+                      </v-window>
+                    </template>
+                  </v-container>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -123,6 +147,7 @@ export default {
       selectedWarehouse: null,
       teamName: '',
       searchTerm: "",
+      detailTab: 'details',
       selectedTeam: null,
       team: null,
       dialog: {
@@ -131,9 +156,9 @@ export default {
       },
       editedTeam: {
         id: null,
-        name: null,
+        name: '',
         warehouseId: null,
-        teamLeadId: null,
+        leaderId: null,
         teamMembers: [],
       },
       headers: [
@@ -164,7 +189,7 @@ export default {
     },
     async selectedWarehouse(val) {
       if (val) {
-        this.teams = await this.teamsService.asyncGetAllByWarehouseId(val.id);
+        this.teams = await this.teamsService.asyncGetAllByWarehouseId(val);
       } else {
         this.teams = await this.teamsService.asyncGetAll();
       }
@@ -180,7 +205,9 @@ export default {
 
   methods: {
     async initialize() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = this.selectedWarehouse ?
+          await this.teamsService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
+          await this.teamsService.asyncGetAll();
       this.warehouses = await this.warehousesService.asyncGetAll();
       this.users = await this.usersService.asyncGetAll();
       this.assignSelectedTeam(new Team());
@@ -243,8 +270,8 @@ export default {
     },
 
     assignSelectedTeam(team) {
-      this.selectedTeam = {...team};
-      this.editedTeam = {...team};
+      this.selectedTeam = Object.assign({}, team);
+      this.editedTeam = Object.assign({}, team);
     },
   }
 }

@@ -6,6 +6,7 @@ import teamx.app.backend.models.Project;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
+import teamx.app.backend.repositories.TeamRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,10 +14,12 @@ import java.util.NoSuchElementException;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, TeamRepository teamRepository) {
         this.projectRepository = projectRepository;
+        this.teamRepository = teamRepository;
     }
 
     public List<ProjectDTO> findAll() {
@@ -48,7 +51,11 @@ public class ProjectService {
     public ProjectDTO update(Long projectId, ProjectDTO newProjectData) {
         if (!projectId.equals(newProjectData.getId())) throw new IllegalArgumentException("Project ID does not match");
         Project project = findById(projectId);
-        return mapToDTO(mapToEntity(project, newProjectData));
+        if (newProjectData.getTeamId() != null){
+            project.setTeam(teamRepository.findById(newProjectData.getTeamId()).orElseThrow());
+        }
+        Project savedProject = mapToEntity(project, newProjectData);
+        return mapToDTO(savedProject);
     }
 
     public ProjectDTO delete(Long projectId) {
