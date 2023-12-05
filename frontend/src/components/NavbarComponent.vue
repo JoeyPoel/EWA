@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     isAdmin() {
-      const isAuthenticated = sessionStorage.getItem('token');
+      const isAuthenticated = localStorage.getItem('token');
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         return decodedToken.role === 'ADMIN';
@@ -55,7 +55,7 @@ export default {
       return false;
     },
     isUser() {
-      const isAuthenticated = sessionStorage.getItem('token');
+      const isAuthenticated = localStorage.getItem('token');
       if (isAuthenticated) {
         const decodedToken = jwtDecode(isAuthenticated);
         return decodedToken.role === 'USER';
@@ -72,8 +72,8 @@ export default {
   },
   methods: {
     logout() {
-      if (sessionStorage.getItem("email") != null) {
-        sessionStorage.clear();
+      if (localStorage.getItem("email") != null) {
+        localStorage.clear();
         this.$router.push("/log-in");
       }
     }
