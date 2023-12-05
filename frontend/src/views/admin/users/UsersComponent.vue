@@ -10,6 +10,7 @@
               item-title="name"
               item-value="id"
               label="Teams"
+              prepend-inner-icon="$team"
           />
         </v-col>
         <v-col cols="auto" v-if="selectedTeam">
@@ -214,7 +215,7 @@ export default {
     unselectTeam() {
       this.selectedTeam = null;
     },
-    
+
     async saveNew() {
       // Validate the form fields (add additional validation as needed)
       if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
@@ -222,7 +223,7 @@ export default {
         return;
       }
 
-      // Find the selected team in the teams array
+      //Find the selected team in the teams array
       const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
 
       const userToSave = {
@@ -259,7 +260,7 @@ export default {
         name: this.editedUser.name,
         email: this.editedUser.email,
         role: this.editedUser.role,
-        team: { id: selectedTeam.id } // Set the team id
+        team: selectedTeam // Set the team id
       };
 
       const savedUser = await this.usersService.asyncUpdate(this.editedUser.id, userToSave);

@@ -228,10 +228,6 @@ export default {
     };
   },
 
-  async created() {
-    await this.initialize();
-  },
-
   watch: {
     dialogNew(val) {
       val || this.close();
@@ -249,6 +245,10 @@ export default {
       }
       await this.loadInventory();
     },
+  },
+
+  async created() {
+    await this.initialize();
   },
 
   methods: {
@@ -373,6 +373,7 @@ export default {
       this.dialogDelete = false;
       this.dialogDetail = false;
       this.dialogNew = false;
+      this.initialize()
     },
   },
 };
