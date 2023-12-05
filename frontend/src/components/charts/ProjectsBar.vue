@@ -40,8 +40,8 @@ export default {
     return {
       interval: 'week',
       menu: false,
-      startDate: new Date (new Date().setMonth(new Date().getMonth() - 2)).toISOString().substring(0, 10),
-      endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().substring(0, 10),
+      startDate: new Date (new Date().setMonth(new Date().getMonth() - 7)).toISOString().substring(0, 10),
+      endDate: new Date(new Date().setMonth(new Date().getMonth() + 5)).toISOString().substring(0, 10),
       chartData: null,
       chartOptions: {
         responsive: true,
@@ -64,7 +64,9 @@ export default {
   },
   watch: {
     chartData(val) {
-      val || this.updateChartData();
+      if(val){
+        this.updateChartData();
+      }
     },
     interval(val){
       if (val){
@@ -82,9 +84,7 @@ export default {
   },
   methods: {
     async updateChartData() {
-      console.log(this.warehouseId, this.startDate, this.endDate, this.interval)
       this.chartData = await this.getChartData(this.warehouseId, this.startDate, this.endDate, this.interval);
-      console.log(this.chartData)
     },
     async getChartData(warehouseId, startDate, endDate, interval) {
       if (warehouseId) {

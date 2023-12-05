@@ -100,6 +100,7 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         project.setStartDate(projectDTO.getStartDate());
         project.setEndDate(projectDTO.getEndDate());
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
+        project.setTeam(teamRepository.findById(projectDTO.getTeamId()).orElseThrow());
         return save(project);
     }
 

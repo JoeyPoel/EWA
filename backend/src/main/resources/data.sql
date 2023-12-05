@@ -183,7 +183,19 @@ VALUES ('Order 1', false, '2023-01-01', '2023-01-10', 1, 1),
        ('Order 15', false, '2023-09-28', '2023-10-08', 4, 15),
        ('Order 16', true, '2023-10-13', '2023-10-23', 4, 16),
        ('Order 17', false, '2023-10-28', '2023-11-07', 1, 17),
-       ('Order 18', true, '2023-11-12', '2023-11-22', 1, 18);
+       ('Order 18', true, '2023-11-12', '2023-11-22', 1, 18),
+       ('Order 19', false, '2023-12-03', '2023-12-13', 2, 19),
+       ('Order 20', true, '2024-01-20', '2024-01-30', 3, 20),
+       ('Order 21', false, '2023-12-18', '2023-12-28', 4, 21),
+       ('Order 22', true,  '2024-01-04', '2024-01-14', 1, 22),
+       ('Order 23', false, '2024-01-19', '2024-01-29', 2, 23),
+       ('Order 24', true,  '2024-02-03', '2024-02-13', 3, 24),
+       ('Order 25', false, '2024-02-18', '2024-02-28', 4, 25),
+       ('Order 26', true,  '2023-12-13', '2023-12-23', 4, 26),
+       ('Order 27', false, '2024-01-08', '2024-01-18', 1, 27),
+       ('Order 28', true,  '2024-01-13', '2024-01-23', 2, 28),
+       ('Order 29', false, '2024-02-08', '2024-02-18', 3, 29),
+       ('Order 30', true,  '2024-02-23', '2024-03-05', 4, 30);
 
 INSERT INTO Projects (name, description, location, client_name, client_email, client_phone, start_date, end_date, status,
                       team_id)
@@ -256,7 +268,47 @@ VALUES ('Energy InfraStructure', 'Revamping the energy infrastructure', 'Amsterd
        ('Recycling Campaign', 'Citywide recycling and waste management campaign', 'Alkmaar', 'Alkmaar City', 'cityAlkmaar@email.com', '375-374-3734',
         '2023-09-01', '2024-01-01', 'FINISHED', 5),
        ('Digital Governance', 'Implementing digital governance system', 'Gouda', 'Gouda Govt.', 'govtGouda@email.com', '387-386-3854',
-        '2023-11-01', '2024-01-05', 'FINISHED', 6);
+        '2023-11-01', '2024-01-05', 'FINISHED', 6),
+       ('Green Transport Initiative', 'Improving green transport methods', 'Amsterdam', 'Amsterdam Municipality', 'Municipality1@email.com', '388-389-3901',
+        '2024-01-01', '2024-04-15', 'IN_PROGRESS', 1),
+       ('Smart City Project', 'Upgrading city infrastructures with Smart Solutions', 'Rotterdam', 'Rotterdam City', 'CityRotterdam@email.com', '391-392-3932',
+        '2024-01-05', '2024-05-01', 'FINISHED', 2),
+       ('Digital Education', 'Implementing Digital Education in Schools', 'Eindhoven', 'Eindhoven City', 'cityEindhoven@email.com', '394-395-3963',
+        '2024-01-10', '2024-05-15', 'IN_PROGRESS', 3),
+       ('Tourism Promotion Campaign', 'Promoting Regional Tourism', 'Utrecht', 'Utrecht Govt.', 'GovtUtrecht@email.com', '397-398-3994',
+        '2024-01-15', '2024-05-20', 'IN_PROGRESS', 4),
+       ('Eco City Project', 'Transitioning towards an Eco-Friendly City', 'Groningen', 'Groningen City', 'CityGroningen@email.com', '400-401-4025',
+        '2024-01-20', '2024-05-25', 'FINISHED', 5),
+       ('Digital Economy', 'Encouraging the Digital Economy through various initiatives', 'The Hague', 'Hague City', 'CityHague@email.com', '403-404-4056',
+        '2024-01-25', '2024-05-30', 'IN_PROGRESS', 6),
+       ('Renewable Energy Project', 'Implementing Renewable Energy Solutions', 'Delft', 'Delft City', 'cityDelft@email.com', '406-407-4087',
+        '2024-01-30', '2024-06-05', 'IN_PROGRESS', 7),
+       ('Smart Agriculture', 'Modernizing Agriculture with Smart Techniques', 'Tilburg', 'Tilburg City', 'cityTilburg@email.com', '409-410-4118',
+        '2024-02-04', '2024-06-10', 'FINISHED', 8),
+       ('Smart Traffic Management', 'Upgrading Traffic Signals and Management', 'Nijmegen', 'Nijmegen Govt.', 'GovtNijmegen@email.com', '412-413-4149',
+        '2024-02-09', '2024-06-15', 'IN_PROGRESS', 9),
+       ('Environmental Awareness Campaign', 'Running an Environmental Awareness Campaign', 'Haarlem', 'Haarlem City', 'cityHaarlem@email.com', '415-416-4170',
+        '2024-02-14', '2024-06-20', 'IN_PROGRESS', 10),
+       ('Public Safety Measures', 'Enhancing Public Safety Measures', 'Dordrecht', 'Dordrecht City', 'CityDordrecht@email.com', '418-419-4201',
+        '2024-02-19', '2024-06-25', 'IN_PROGRESS', 11),
+       ('Heritage Site Restoration', 'Restoration and Preservation of Heritage sites', 'Amsterdam', 'Amsterdam City', 'cityAmsterdam1@email.com', '421-422-4232',
+        '2024-02-24', '2024-06-30', 'FINISHED', 12),
+       ('Public Healthcare Improvement', 'Upgrading Public Healthcare Facilities and Services', 'Enschede', 'Enschede Govt.', 'GovtEnschede@email.com', '424-425-4263',
+        '2024-02-29', '2024-07-05', 'IN_PROGRESS', 13),
+       ('Rural Development Project', 'Improving Infrastructure and Opportunities in Rural Areas', 'Leeuwarden', 'Leeuwarden City', 'CityLeeuwarden@email.com', '427-428-4294',
+        '2024-03-05', '2024-07-10', 'IN_PROGRESS', 1),
+       ('Free Public WiFi', 'Implementing Free Public WiFi in select city areas', 'Arnhem', 'Arnhem City', 'CityArnhem@email.com', '430-431-4325',
+        '2024-03-10', '2024-07-15', 'FINISHED', 2),
+       ('Public Library Digitalization', 'Digitalizing Public Libraries', 'Breda', 'Breda Govt.', 'GovtBreda@email.com', '433-434-4356',
+        '2024-03-15', '2024-07-20', 'IN_PROGRESS', 3),
+       ('Urban Housing Scheme', 'Initiating Affordable Urban Housing Projects', 'Spijkenisse', 'Spijkenisse City', 'CitySpijkenisse@email.com', '436-437-4387',
+        '2024-03-20', '2024-07-25', 'IN_PROGRESS', 4),
+       ('Riverfront Development', 'Developing and Beautifying the Riverfront area', 'Apeldoorn', 'Apeldoorn City', 'CityApeldoorn@email.com', '439-440-4418',
+        '2024-03-25', '2024-07-30', 'FINISHED', 5),
+       ('Public Transport Reform', 'Reforming Public Transport for better efficiency and reach', 'Venlo', 'Venlo Govt.', 'GovtVenlo@email.com', '442-443-4449',
+        '2024-03-30', '2024-08-04', 'IN_PROGRESS', 6),
+       ('Solar Energy Project', 'Implementing Solar Energy Projects and Schemes', 'Zaanstad', 'Zaanstad City', 'CityZaanstad@email.com', '445-446-4470',
+        '2024-04-04', '2024-08-09', 'IN_PROGRESS', 7);
 
 
 -- Generate Project transactions
@@ -303,7 +355,28 @@ SELECT 16, 15, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
 UNION ALL
 SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
-FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data;
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data
+UNION ALL
+SELECT 12, 1, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 3, 5, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 6, 10, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 7, 13, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 13, 14, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 16, 15, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data
+UNION ALL
+SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
+FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 19 AND 30) AS order_data;
 
 
 
