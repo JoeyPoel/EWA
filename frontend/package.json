@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "buildprod": "vue-cli-service build",
+    "builddev": "vue-cli-service build --mode development",
+    "start": "npx http-server -p ${PORT} ./dist",
     "lint": "vue-cli-service lint"
   },
 
