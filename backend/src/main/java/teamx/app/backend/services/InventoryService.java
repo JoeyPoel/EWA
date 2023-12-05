@@ -8,7 +8,9 @@ import teamx.app.backend.models.Product;
 import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.repositories.ProductRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents an InventoryService that provides operations related to managing inventory products.
@@ -19,6 +21,7 @@ import java.util.List;
 public class InventoryService {
     private final ProductRepository productRepository;
     private final TransactionService transactionService;
+    private final WarehouseService warehouseService;
 
     @Autowired
     public InventoryService(ProductRepository productRepository, TransactionService transactionService) {
@@ -57,5 +60,16 @@ public class InventoryService {
                 .stream()
                 .map(product -> mapToDTO(warehouseId, product))
                 .toList();
+    }
+
+    public Map<String, Integer> getAllStockLevelsByProduct(Long productId) {
+        Map<String, Integer> stockLevels = new HashMap<>();
+        warehouseService.findAll().stream()
+                .map(warehouse -> {
+                    int stockLevel = transactionService.findProductCurrentStock(warehouse.getId(), productId);
+                    return Map.entry(warehouse.getName(), stockLevel);
+                })
+                .forEach(entry -> stockLevels.put(entry.getKey(), entry.getValue()));
+        return stockLevels;
     }
 }

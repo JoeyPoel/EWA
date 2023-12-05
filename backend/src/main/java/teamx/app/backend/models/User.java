@@ -1,6 +1,5 @@
 package teamx.app.backend.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,13 +26,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonIgnore
     @ManyToOne()
     private Team team;
 
-    @JsonIgnore
-    @OneToMany
-    private List<Task> todoList;
+    @Transient
+    private Long teamId;
+
+    @PostLoad
+    void fillTransient() {
+        if (team != null) {
+            this.teamId = team.getId();
+        }
+    }
 
     @Override
     public String toString() {

@@ -46,6 +46,21 @@ public class AuthenthicationService {
         return null;
     }
 
+    public UserDTO generateResetPassToken(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+
+            String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(),
+                    existingUser.getRole().name());
+
+            return new UserDTO(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name(), jwtToken);
+
+        }
+
+        return null;
+    }
+
 
     private boolean passwordMatches(String storedPassword, String enteredPassword) {
         // Use the password encoder to check if entered password matches the stored hashed password

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.services.ProjectService;
 
@@ -91,5 +92,16 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ProjectDTO> deleteById(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.delete(id));
+    }
+
+    /**
+     * Retrieves a projects inventory from the database.
+        *
+        * @return a ResponseEntity object containing a list of InventoryProjectDTO objects.
+        */
+
+    @GetMapping("/inventory/{id}")
+    public ResponseEntity<List<InventoryProjectDTO>> getAllInventory(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.getProjectMaterials(id));
     }
 }

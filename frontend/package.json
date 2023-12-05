@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+
   "dependencies": {
     "@date-io/date-fns": "^2.17.0",
     "@popperjs/core": "^2.11.8",
@@ -20,6 +21,7 @@
     "vuetify": "^3.4.3",
     "webpack-plugin-vuetify": "^2.0.1"
   },
+
   "devDependencies": {
     "@babel/core": "^7.23.3",
     "@babel/eslint-parser": "^7.12.16",
@@ -32,6 +34,7 @@
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2"
   },
+
   "eslintConfig": {
     "root": true,
     "env": {
@@ -46,6 +49,7 @@
     },
     "rules": {}
   },
+
   "browserslist": [
     "> 1%",
     "last 2 versions",

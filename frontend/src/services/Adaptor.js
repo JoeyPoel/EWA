@@ -26,6 +26,11 @@ export class Adaptor {
      */
     async fetchJson(url, options = null) {
         let response = await fetch(url, options);
+
+        if (response.status === 204) {
+            return null; // For no content
+        }
+
         if (response.ok) {
             return await response.json();
         } else {

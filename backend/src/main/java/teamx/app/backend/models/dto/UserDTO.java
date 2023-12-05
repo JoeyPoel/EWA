@@ -1,4 +1,3 @@
-
 package teamx.app.backend.models.dto;
 
 import lombok.Data;

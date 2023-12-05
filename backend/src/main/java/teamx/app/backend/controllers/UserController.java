@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.User;
+
 import teamx.app.backend.services.UserService;
 
 import java.util.List;
@@ -25,10 +26,10 @@ public class UserController {
 // TODO: Return DTOs instead of entities
     private final UserService userService;
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         return ResponseEntity.ok(userService.login(user));
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
@@ -52,8 +53,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> add(@RequestBody User user) {
-        User createdUser = userService.add(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.ok(userService.add(user));
     }
 
     @PutMapping("/{id}")
@@ -65,4 +65,10 @@ public class UserController {
     public ResponseEntity<User> delete(@PathVariable Long id) {
         return ResponseEntity.ok(userService.delete(id));
     }
+
+    @PutMapping("/passReset")
+    public ResponseEntity<User> update(@RequestBody User userInfo) {
+        return ResponseEntity.ok(userService.resetPass(userInfo.getId(), userInfo.getPassword()));
+    }
+
 }

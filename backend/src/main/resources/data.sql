@@ -131,7 +131,8 @@ VALUES ('John Doe', 'admin@admin.com', 'admin', 'ADMIN', 1),
        ('Rosalind Franklin', 'rosalind.franklin@company.com', 'rosalindfranklinpassword', 'USER', null),
        ('Francis Crick', 'francis.crick@company.com', 'franciscrickpassword', 'USER', null),
        ('James Watson', 'james.watson@company.com', 'jameswatsonpassword', 'USER', null),
-       ('Maurice Wilkins', 'maurice.wilkins@company.com', 'mauricewilkinspassword', 'USER', null);
+       ('Maurice Wilkins', 'maurice.wilkins@company.com', 'mauricewilkinspassword', 'USER', null),
+       ('Johnny Magielse', 'johnnymihai33@gmail.com', 'johnny', 'ADMIN', null);
 
 INSERT INTO warehouse_product_category_capacities (capacity, minimum_stock_level, warehouse_id, product_category_id)
 VALUES
