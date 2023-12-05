@@ -110,7 +110,7 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = sessionStorage.getItem('token');
+    const isAuthenticated = localStorage.getItem('token');
     console.log('isAuthenticatedRouter:', isAuthenticated);
 
 
@@ -152,3 +152,4 @@ function checkRoleAccess(route, userRole) {
     // If the route does not have a 'roles' property, access is allowed
     return true;
 }
+
