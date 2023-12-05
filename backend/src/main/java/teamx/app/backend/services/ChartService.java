@@ -203,31 +203,56 @@ public class ChartService {
                 .count();
     }
 
-//    public ChartsDataDTO getProjectsBarByWeek(Long warehouseId, Date startDate, Date endDate) {
-//        List<Project> projects;
-//        if (warehouseId == null) {
-//            projects = projectService.findAllDateBetween(startDate, endDate);
-//        } else {
-//            projects = projectService.findAllByWarehouseIdAndDateBetween(warehouseId, startDate, endDate);
-//        }
-//        List<String> labels = new ArrayList<>();
-//        List<Integer> data = new ArrayList<>();
-//        Date date = startDate;
-//        while (date.before(endDate)) {
-//            labels.add(date.toString());
-//            data.add(0);
-//            date = new Date(date.getTime() + 604800000);
-//        }
-//        labels.add(endDate.toString());
-//        data.add(0);
-//        for (Project project : projects) {
-//            for (int i = 0; i < labels.size() - 1; i++) {
-//                if (project.getEndDate().after(Date.valueOf(labels.get(i))) && project.getEndDate().before(Date.valueOf(labels.get(i + 1)))) {
-//                    data.set(i, data.get(i) + 1);
-//                }
-//            }
-//        }
-//        DataSetDTO dataSetDTO = DataSetDTO.builder().label("Projects").data(data).build();
-//        return ChartsDataDTO.builder().labels(labels).datasets(List.of(dataSetDTO)).build();
-//    }
+    public ChartsDataDTO getProjectsBarByInterval(Long warehouseId, Date startDate, Date endDate, String interval) {
+        return switch (interval) {
+            case "month" -> getProjectsBarByMonth(warehouseId, startDate, endDate);
+            case "week" -> getProjectsBarByWeek(warehouseId, startDate, endDate);
+            case "day" -> getProjectsBarByDay(warehouseId, startDate, endDate);
+            default -> throw new IllegalArgumentException("Invalid interval: " + interval);
+        };
+    }
+
+    private ChartsDataDTO getProjectsBarByMonth(Long warehouseId, Date startDate, Date endDate) {
+        return getChartsData(warehouseId, startDate, endDate, "Projects", 2592000000L);
+    }
+
+    private ChartsDataDTO getProjectsBarByWeek(Long warehouseId, Date startDate, Date endDate) {
+        return getChartsData(warehouseId, startDate, endDate, "Projects", 604800000);
+    }
+
+    private ChartsDataDTO getProjectsBarByDay(Long warehouseId, Date startDate, Date endDate) {
+        return getChartsData(warehouseId, startDate, endDate, "Projects", 86400000);
+    }
+
+    private ChartsDataDTO getChartsData(Long warehouseId, Date startDate, Date endDate, String label, long duration) {
+        List<Project> projects = projectService.findProjectsByDateBetween(warehouseId, startDate, endDate);
+        List<String> labels = new ArrayList<>();
+        List<Integer> data = new ArrayList<>();
+
+        for (Date date = startDate; date.before(endDate); date = new Date(date.getTime() + duration)) {
+            labels.add(date.toString());
+            data.add(0);
+        }
+
+        labels.add(endDate.toString());
+        data.add(0);
+        setProjectsData(projects, labels, data);
+
+        DataSetDTO dataSetDTO = DataSetDTO.builder().label(label).data(data).build();
+        return ChartsDataDTO.builder().labels(labels).datasets(List.of(dataSetDTO)).build();
+    }
+
+    private void setProjectsData(List<Project> projects, List<String> labels, List<Integer> data) {
+        for (Project project : projects) {
+            for (int i = 0; i < labels.size() - 1; i++) {
+                if (isInDateRange(labels.get(i), labels.get(i + 1), project.getEndDate())) {
+                    data.set(i, data.get(i) + 1);
+                }
+            }
+        }
+    }
+
+    private boolean isInDateRange(String start, String end, Date target) {
+        return target.after(Date.valueOf(start)) && target.before(Date.valueOf(end));
+    }
 }

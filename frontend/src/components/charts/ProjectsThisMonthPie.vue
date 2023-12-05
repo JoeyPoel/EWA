@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="data">
-    <v-card title="Projects this Month" class="text-center">
+    <v-card title="Projects this Month" class="text-center elevation-2">
       <base-pie-chart :options="options" :charts-data="this.data"/>
     </v-card>
   </v-container>
@@ -25,7 +25,8 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+
     }
   },
   async mounted() {

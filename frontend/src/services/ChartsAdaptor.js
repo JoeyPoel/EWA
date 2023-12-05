@@ -140,9 +140,23 @@ export class ChartsAdaptor extends Adaptor {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"}
         }
-        const response = await this.fetchJson(this.resourceUrl +
+        return await this.fetchJson(this.resourceUrl +
             "/statistics/lifetime", options);
+    }
 
-        return response;
+    async asyncProjectsBarByIntervalAllWarehouses(startDate, endDate, interval) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        return await this.fetchJson(this.resourceUrl +
+            "/projects/bar/by-interval/warehouses?startDate=" + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
+    }
+
+    async asyncProjectsBarByInterval(warehouseId, startDate, endDate, interval) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        return await this.fetchJson(this.resourceUrl +
+            "/projects/bar/by-interval/warehouses/" + warehouseId + "?startDate=" + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
     }
 }

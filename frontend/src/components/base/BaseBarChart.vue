@@ -41,6 +41,12 @@ export default {
       data: null,
     }
   },
+  mounted(){
+    if (this.chartsData) {
+      this.data = this.chartsData;
+      this.setColor()
+    }
+  },
   watch: {
     chartsData: {
       handler() {

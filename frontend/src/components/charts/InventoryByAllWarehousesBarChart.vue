@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import BarChart from "@/components/base/BarChart.vue";
+import BarChart from "@/components/base/BaseBarChart.vue";
 
 export default {
   name: "InventoryByAllWarehousesBarChart",

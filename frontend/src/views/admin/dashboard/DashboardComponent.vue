@@ -1,13 +1,13 @@
 <template>
-  <v-row class="fill-height">
-    <v-col>
+  <v-row>
+    <v-col cols="12">
       <life-time-stats/>
     </v-col>
     <v-col cols="12" md="6">
       <projects-this-mont-pie-chart/>
     </v-col>
     <v-col cols="12" md="6">
-      <inventory-by-all-products-line-chart/>
+      <projects-bar/>
     </v-col>
     <v-col cols="12" md="6">
       <inventory-by-all-warehouses-bar-chart/>
@@ -30,7 +30,7 @@
 
 <script>
 import {
-  InventoryByAllProductsLineChart,
+  // InventoryByAllProductsLineChart,
   InventoryByAllWarehousesBarChart,
   InventoryByProductBarChart,
   // InventoryByWarehouseLineChart,
@@ -39,18 +39,20 @@ import {
   ProjectsThisMontPieChart
 } from "@/components/charts";
 import LifeTimeStats from "@/components/charts/LifeTimeStats.vue";
+import ProjectsBar from "@/components/charts/ProjectsBar.vue";
 // import ProjectsByWarehouseThisMonthPie from "@/components/charts/ProjectsByWarehouseThisMonthPie.vue";
 
 export default {
   components: {
     // ProjectsByWarehouseThisMonthPie,
-    InventoryByAllProductsLineChart,
+    // InventoryByAllProductsLineChart,
     InventoryByAllWarehousesBarChart,
     InventoryByProductBarChart,
     // InventoryByWarehouseLineChart,
     InventoryByProductLineChart,
     InventoryTotalStockBarChart,
     ProjectsThisMontPieChart,
+    ProjectsBar,
     LifeTimeStats
   },
   data() {
@@ -58,17 +60,6 @@ export default {
   },
   async mounted() {
   },
-  methods: {}
 }
 </script>
 
-<style scoped lang="sass">
-.match-height
-  display: flex
-  flex-wrap: wrap
-  margin: 0 -12px
-
-  > [class*="col"]
-    padding: 0 12px
-    margin-bottom: 24px
-</style>

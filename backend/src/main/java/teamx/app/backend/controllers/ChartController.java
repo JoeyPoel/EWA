@@ -74,6 +74,20 @@ public class ChartController {
         return ResponseEntity.ok(chartService.getProjectsPieByStatusThisMonth(null));
     }
 
+    @GetMapping("/projects/bar/by-interval/warehouses/{warehouseId}")
+    public ResponseEntity<ChartsDataDTO> projectsBarByInterval(
+            @PathVariable Long warehouseId, @RequestParam Date startDate, @RequestParam Date endDate,
+            @RequestParam String interval) {
+        return ResponseEntity.ok(chartService.getProjectsBarByInterval(warehouseId, startDate, endDate, interval));
+    }
+
+    @GetMapping("/projects/bar/by-interval/warehouses")
+    public ResponseEntity<ChartsDataDTO> projectsBarByIntervalAllWarehouses(
+            @RequestParam Date startDate, @RequestParam Date endDate,
+            @RequestParam String interval) {
+        return ResponseEntity.ok(chartService.getProjectsBarByInterval(null, startDate, endDate, interval));
+    }
+
     @GetMapping("/statistics/lifetime")
     public ResponseEntity<HashMap<String, Long>> getLifetimeStatistics() {
         return ResponseEntity.ok(chartService.getLifetimeStatistics());
