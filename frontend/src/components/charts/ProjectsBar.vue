@@ -38,14 +38,14 @@ export default {
   },
   data() {
     return {
-      interval: 'month',
+      interval: 'week',
       menu: false,
-      startDate: new Date (new Date().setMonth(new Date().getMonth() - 3)).toISOString().substring(0, 10),
+      startDate: new Date (new Date().setMonth(new Date().getMonth() - 2)).toISOString().substring(0, 10),
       endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().substring(0, 10),
       chartData: null,
       chartOptions: {
         responsive: true,
-        maintainAspectRatio: false
+        height: 450
       },
       intervalItems: [
         {title: 'Day', value: 'day'},
@@ -67,6 +67,11 @@ export default {
       val || this.updateChartData();
     },
     interval(val){
+      if (val){
+        this.updateChartData();
+      }
+    },
+    warehouseId(val){
       if (val){
         this.updateChartData();
       }

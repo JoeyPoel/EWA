@@ -1,65 +1,51 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <life-time-stats/>
+      <life-time-stats>
+        <template v-slot:warehouse>
+          <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id" label="Warehouse"
+                    outlined @change="updateChartData" icon="$warehouse"/>
+        </template>
+      </life-time-stats>
     </v-col>
     <v-col cols="12" md="6">
-      <projects-this-mont-pie-chart/>
+      <projects-bar :warehouse-id="this.warehouseId"/>
     </v-col>
     <v-col cols="12" md="6">
-      <projects-bar/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <inventory-by-all-warehouses-bar-chart/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <inventory-by-product-bar-chart/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <!--      <inventory-by-warehouse-line-chart/>-->
-      <inventory-by-all-warehouses-bar-chart/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <inventory-by-product-line-chart/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <inventory-total-stock-bar-chart/>
+      <inventory-line :warehouse-id="this.warehouseId"/>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import {
-  // InventoryByAllProductsLineChart,
-  InventoryByAllWarehousesBarChart,
-  InventoryByProductBarChart,
-  // InventoryByWarehouseLineChart,
-  InventoryByProductLineChart,
-  InventoryTotalStockBarChart,
-  ProjectsThisMontPieChart
-} from "@/components/charts";
 import LifeTimeStats from "@/components/charts/LifeTimeStats.vue";
 import ProjectsBar from "@/components/charts/ProjectsBar.vue";
-// import ProjectsByWarehouseThisMonthPie from "@/components/charts/ProjectsByWarehouseThisMonthPie.vue";
+import InventoryLine from "@/components/charts/InventoryLine.vue";
 
 export default {
   components: {
-    // ProjectsByWarehouseThisMonthPie,
-    // InventoryByAllProductsLineChart,
-    InventoryByAllWarehousesBarChart,
-    InventoryByProductBarChart,
-    // InventoryByWarehouseLineChart,
-    InventoryByProductLineChart,
-    InventoryTotalStockBarChart,
-    ProjectsThisMontPieChart,
     ProjectsBar,
+    InventoryLine,
     LifeTimeStats
   },
+  inject: ['warehousesService'],
   data() {
-    return {}
+    return {
+      warehouseId: null,
+      warehouses: [],
+    }
   },
   async mounted() {
+    this.warehouses = await this.warehousesService.asyncGetAll();
   },
+  methods: {
+    updateChartData() {
+      this.$refs.projectsBar.updateChartData();
+      this.$refs.inventoryLine.updateChartData();
+    }
+  }
 }
 </script>
+
+
 

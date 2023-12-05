@@ -92,7 +92,7 @@ public class TransactionService {
     }
 
     public List<Integer> findProductStockHistoryByInterval(Long warehouseId, Long productId, Date startDate,
-                                                           Date endDate) {
+                                                           Date endDate, long interval) {
         Warehouse warehouse = null;
         if (warehouseId != null) {
             warehouse = warehouseService.findById(warehouseId);
@@ -110,24 +110,9 @@ public class TransactionService {
                 .toList();
 
         List<Integer> stockHistory = new ArrayList<>();
-        int stockLevelAtStartDate = findProductStockAtDate(warehouseId, productId, startDate);
-        stockHistory.add(stockLevelAtStartDate);
-
-        int totalDays = (int) ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-
-        for (int i = 0; i < totalDays; i++) {
-            Date currentDate = new Date(startDate.getTime() + ((long) i * 1000 * 60 * 60 * 24));
-            if (transactionDates.contains(currentDate)) {
-                 stockLevelAtStartDate += productTransactions.stream()
-                        .filter(transaction -> transaction.getTransactionDate().equals(currentDate))
-                        .mapToInt(transaction -> transaction.isPositiveTransaction() ?
-                                transaction.getQuantity() :
-                                -transaction.getQuantity())
-                        .sum();
-            }
-            stockHistory.add(stockLevelAtStartDate);
+        for (Date date = startDate; date.before(endDate); date = new Date(date.getTime() + interval)) {
+            stockHistory.add(findProductStockAtDate(warehouseId, productId, date));
         }
-
         return stockHistory;
     }
 

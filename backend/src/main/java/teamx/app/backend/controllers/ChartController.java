@@ -9,6 +9,7 @@ import teamx.app.backend.services.ChartService;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -41,27 +42,21 @@ public class ChartController {
         return ResponseEntity.ok(chartService.inventoryBarByProduct(productId));
     }
 
-    @GetMapping("/inventories/line/stock-history/products")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByAllProducts(
-            @RequestParam Date startDate, @RequestParam Date endDate) {
-        return ResponseEntity.ok(chartService
-                .getStockHistoryByAllProducts(startDate, endDate));
+
+    @GetMapping("/inventories/line/by-interval/warehouses/{warehouseId}")
+    public ResponseEntity<ChartsDataDTO> inventoryLineByInterval(
+            @PathVariable Long warehouseId, @RequestParam List<Long> productIds, @RequestParam Date startDate,
+            @RequestParam Date endDate, @RequestParam String interval) {
+        return ResponseEntity.ok(chartService.getStockLineByInterval(warehouseId, productIds,
+                startDate, endDate, interval));
     }
 
-    @GetMapping("/inventories/line/stock-history/products/{productId}")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByWarehouse(
-            @PathVariable Long productId, @RequestParam Date startDate, @RequestParam Date endDate) {
-        return ResponseEntity.ok(chartService
-                .getStockHistoryByProduct(productId, startDate, endDate)
-        );
-    }
-
-    @GetMapping("/inventories/line/stock-history/warehouses/{warehouseId}")
-    public ResponseEntity<ChartsDataDTO> inventoryLineByProduct(
-            @PathVariable Long warehouseId, @RequestParam Date startDate, @RequestParam Date endDate) {
-        return ResponseEntity.ok(chartService
-                .getStockHistoryByWarehouse(warehouseId, startDate, endDate)
-        );
+    @GetMapping("/inventories/line/by-interval/warehouses")
+    public ResponseEntity<ChartsDataDTO> inventoryLineByIntervalAllWarehouses(
+            @RequestParam List<Long> productIds, @RequestParam Date startDate,
+            @RequestParam Date endDate, @RequestParam String interval) {
+        return ResponseEntity.ok(chartService.getStockLineByInterval(null, productIds,
+                startDate, endDate, interval));
     }
 
     @GetMapping("/projects/pie/by-status-this-month/warehouses/{warehouseId}")
@@ -92,4 +87,5 @@ public class ChartController {
     public ResponseEntity<HashMap<String, Long>> getLifetimeStatistics() {
         return ResponseEntity.ok(chartService.getLifetimeStatistics());
     }
+
 }

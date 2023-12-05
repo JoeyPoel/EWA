@@ -159,4 +159,23 @@ export class ChartsAdaptor extends Adaptor {
         return await this.fetchJson(this.resourceUrl +
             "/projects/bar/by-interval/warehouses/" + warehouseId + "?startDate=" + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
     }
+
+    async asyncInventoryLineByInterval(warehouseId, productIds, startDate, endDate, interval) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        return await this.fetchJson(this.resourceUrl +
+            "/inventories/line/by-interval/warehouses/" + warehouseId + "?productIds="
+            + productIds + "&startDate=" + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
+    }
+
+    async asyncInventoryLineByIntervalAllWarehouses(productIds, startDate, endDate, interval) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        return await this.fetchJson(this.resourceUrl +
+            "/inventories/line/by-interval/warehouses?productIds=" + productIds + "&startDate="
+            + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
+    }
+
 }

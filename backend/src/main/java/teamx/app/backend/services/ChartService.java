@@ -67,44 +67,6 @@ public class ChartService {
 
         return ChartsDataDTO.builder().labels(labels).datasets(List.of(dataSetDTO)).build();
     }
-
-    public ChartsDataDTO getStockHistoryByWarehouse(Long warehouseId, Date startDate, Date endDate) {
-        List<Long> productIds = productService.findAllActiveIds();
-        return productStockHistoryLine(warehouseId, productIds, startDate, endDate);
-    }
-
-    public ChartsDataDTO getStockHistoryByProduct(Long productId, Date startDate, Date endDate) {
-        List<Long> productIds = List.of(productId);
-        return productStockHistoryLine(null, productIds, startDate, endDate);
-    }
-
-    private ChartsDataDTO productStockHistoryLine(Long warehouseId, List<Long> productIds, Date startDate, Date endDate) {
-        List<String> labels = getProductNames(productIds);
-        if (labels.size() != productIds.size()) {
-            throw new ResourceNotFoundException("Could not find all product names" + " for product ids: " + productIds + " and warehouse id: " + warehouseId + "." + " Found " + labels.size() + " product names.");
-        }
-
-        List<List<Integer>> data = productIds.stream().map(productId -> transactionService.findProductStockHistoryByInterval(warehouseId, productId, startDate, endDate)).toList();
-
-        if (data.size() != productIds.size()) {
-            throw new ResourceNotFoundException("Could not find all product stock histories" + " for product ids: " + productIds + " and warehouse id: " + warehouseId + "." + " Found " + data.size() + " product stock histories.");
-        }
-
-        List<DataSetDTO> dataSets = productIds.stream().map(productId -> DataSetDTO.builder().label(productService.findDTOById(productId).getName()).data(data.get(productIds.indexOf(productId))).build()).toList();
-//TODO: remove logging
-        log.error("dataSets: " + dataSets);
-
-        List<String> chartLabels = new ArrayList<>();
-        Date date = startDate;
-        while (date.before(endDate)) {
-            chartLabels.add(date.toString());
-            date = new Date(date.getTime() + 86400000);
-        }
-        chartLabels.add(endDate.toString());
-
-        return ChartsDataDTO.builder().labels(chartLabels).datasets(dataSets).build();
-    }
-
     private String getWarehouseLabel(Long warehouseId) {
         return warehouseId == null ? "All warehouses" : warehouseService.findById(warehouseId).getName();
     }
@@ -128,12 +90,6 @@ public class ChartService {
 
         return ChartsDataDTO.builder().labels(List.of(productService.findById(productId).getName()))
                 .datasets(dataSets).build();
-    }
-
-    // TODO: This is a test method, remove or implement properly
-    public ChartsDataDTO getStockHistoryByAllProducts(Date startDate, Date endDate) {
-        List<Long> productIds = productService.findAllActiveIds();
-        return productStockHistoryLine(null, productIds, startDate, endDate);
     }
 
     public ChartsDataDTO projectPieByStatusAndDateBetween(Long warehouseId, Date startDate, Date endDate) {
@@ -176,6 +132,74 @@ public class ChartService {
         return map;
     }
 
+    public ChartsDataDTO getStockLineByInterval(Long warehouseId, List<Long> productIds, Date startDate, Date endDate,
+                                                String interval) {
+        return switch (interval) {
+            case "month" -> getStockLineByMonth(warehouseId, productIds, startDate, endDate);
+            case "week" -> getStockLineByWeek(warehouseId, productIds, startDate, endDate);
+            case "day" -> getStockLineByDay(warehouseId, productIds, startDate, endDate);
+            default -> throw new IllegalArgumentException("Invalid interval: " + interval);
+        };
+    }
+
+    private ChartsDataDTO getStockLineByWeek(Long warehouseId, List<Long> productIds, Date startDate, Date endDate) {
+        List<DataSetDTO> dataSets = productIds.stream()
+                .map(id -> getStockLineData(warehouseId, id, startDate, endDate, 604800000))
+                .toList();
+        List<String> labels = new ArrayList<>();
+        labels.add(startDate.toString());
+        for (Date date = startDate; date.before(endDate); date = new Date(date.getTime() + 604800000)) {
+            labels.add(date.toString());
+        }
+        labels.add(endDate.toString());
+        return ChartsDataDTO.builder()
+                .labels(labels)
+                .datasets(dataSets)
+                .build();
+    }
+
+    private ChartsDataDTO getStockLineByDay(Long warehouseId, List<Long> productIds, Date startDate, Date endDate) {
+        List<DataSetDTO> dataSets = productIds.stream()
+                .map(id -> getStockLineData(warehouseId, id, startDate, endDate, 86400000))
+                .toList();
+        List<String> labels = new ArrayList<>();
+        labels.add(startDate.toString());
+        for (Date date = startDate; date.before(endDate); date = new Date(date.getTime() + 86400000)) {
+            labels.add(date.toString());
+        }
+        labels.add(endDate.toString());
+        return ChartsDataDTO.builder()
+                .labels(labels)
+                .datasets(dataSets)
+                .build();
+    }
+
+    private ChartsDataDTO getStockLineByMonth(Long warehouseId, List<Long> productIds, Date startDate, Date endDate) {
+        List<DataSetDTO> dataSets = productIds.stream()
+                .map(id -> getStockLineData(warehouseId, id, startDate, endDate, 2592000000L))
+                .toList();
+        List<String> labels = new ArrayList<>();
+        labels.add(startDate.toString());
+        for (Date date = startDate; date.before(endDate); date = new Date(date.getTime() + 2592000000L)) {
+            labels.add(date.toString());
+        }
+        labels.add(endDate.toString());
+        return ChartsDataDTO.builder()
+                .labels(labels)
+                .datasets(dataSets)
+                .build();
+    }
+
+    private DataSetDTO getStockLineData(Long warehouseId, Long productId, Date startDate, Date endDate,
+                                        long interval) {
+        List<Integer> lineData = transactionService.findProductStockHistoryByInterval(warehouseId, productId,
+                startDate, endDate, interval);
+        return DataSetDTO.builder()
+                .label(productService.findById(productId).getName())
+                .data(lineData)
+                .build();
+    }
+
     private long lifetimeSolarPanelsInstalled(List<Project> projects) {
         return projects.stream()
                 .mapToLong(project -> project.getMaterials().stream()
@@ -213,18 +237,18 @@ public class ChartService {
     }
 
     private ChartsDataDTO getProjectsBarByMonth(Long warehouseId, Date startDate, Date endDate) {
-        return getChartsData(warehouseId, startDate, endDate, "Projects", 2592000000L);
+        return getProjectsBarData(warehouseId, startDate, endDate, "Projects", 2592000000L);
     }
 
     private ChartsDataDTO getProjectsBarByWeek(Long warehouseId, Date startDate, Date endDate) {
-        return getChartsData(warehouseId, startDate, endDate, "Projects", 604800000);
+        return getProjectsBarData(warehouseId, startDate, endDate, "Projects", 604800000);
     }
 
     private ChartsDataDTO getProjectsBarByDay(Long warehouseId, Date startDate, Date endDate) {
-        return getChartsData(warehouseId, startDate, endDate, "Projects", 86400000);
+        return getProjectsBarData(warehouseId, startDate, endDate, "Projects", 86400000);
     }
 
-    private ChartsDataDTO getChartsData(Long warehouseId, Date startDate, Date endDate, String label, long duration) {
+    private ChartsDataDTO getProjectsBarData(Long warehouseId, Date startDate, Date endDate, String label, long duration) {
         List<Project> projects = projectService.findProjectsByDateBetween(warehouseId, startDate, endDate);
         List<String> labels = new ArrayList<>();
         List<Integer> data = new ArrayList<>();

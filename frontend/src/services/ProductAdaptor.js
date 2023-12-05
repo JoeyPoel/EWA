@@ -33,6 +33,16 @@ export default class ProductAdaptor extends Adaptor {
         return response ? response.map(product => Product.fromJson(product)) : null;
     }
 
+    async asyncFindAllActive() {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/active", options);
+
+        return response ? response.map(product => Product.fromJson(product)) : null;
+    }
+
     /**
      * Adds a product asynchronously.
      *
