@@ -1,19 +1,24 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <life-time-stats>
-        <template v-slot:warehouse>
-          <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id" label="Warehouse"
-                    outlined @change="updateChartData" icon="$warehouse"/>
-        </template>
-      </life-time-stats>
+      <life-time-stats/>
     </v-col>
-    <v-col cols="12" md="6">
-      <projects-bar :warehouse-id="this.warehouseId"/>
-    </v-col>
-    <v-col cols="12" md="6">
-      <inventory-line :warehouse-id="this.warehouseId"/>
-    </v-col>
+    <v-row>
+      <v-col cols="12">
+        <v-row class="justify-center">
+          <v-col cols="6">
+            <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id" label="Warehouse"
+                      outlined @change="updateChartData" icon="$warehouse"/>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12" md="6">
+        <projects-bar ref="projectsBar" :warehouse-id="this.warehouseId"/>
+      </v-col>
+      <v-col cols="12" md="6">
+        <inventory-line ref="inventoryLine" :warehouse-id="this.warehouseId"/>
+      </v-col>
+    </v-row>
   </v-row>
 </template>
 
