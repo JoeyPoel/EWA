@@ -24,10 +24,11 @@ public class InventoryService {
     private final WarehouseService warehouseService;
 
     @Autowired
-    public InventoryService(ProductRepository productRepository, TransactionService transactionService) {
+    public InventoryService(ProductRepository productRepository, TransactionService transactionService, WarehouseService warehouseService) {
         this.productRepository = productRepository;
         this.transactionService = transactionService;
 
+        this.warehouseService = warehouseService;
     }
 
     public List<InventoryProductDTO> getAll() {

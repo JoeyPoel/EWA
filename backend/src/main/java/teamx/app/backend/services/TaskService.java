@@ -21,25 +21,25 @@ public class TaskService {
         this.projectService = projectService;
     }
 
-    public List<Task> findAllToDoTasks(Long userId) {
-        return userService.findById(userId).getTodoList();
-    }
-
-    public List<Task> findAllInProgressToDoTasks(Long userId) {
-        return userService.findById(userId)
-                .getTodoList()
-                .stream()
-                .filter(task -> task.getStatus().equals(Task.Status.IN_PROGRESS))
-                .toList();
-    }
-
-    public List<Task> findAllDoneToDoTasks(Long userId) {
-        return userService.findById(userId)
-                .getTodoList()
-                .stream()
-                .filter(task -> task.getStatus().equals(Task.Status.DONE))
-                .toList();
-    }
+//    public List<Task> findAllToDoTasks(Long userId) {
+//        return userService.findById(userId).getTodoList();
+//    }
+//
+//    public List<Task> findAllInProgressToDoTasks(Long userId) {
+//        return userService.findById(userId)
+//                .getTodoList()
+//                .stream()
+//                .filter(task -> task.getStatus().equals(Task.Status.IN_PROGRESS))
+//                .toList();
+//    }
+//
+//    public List<Task> findAllDoneToDoTasks(Long userId) {
+//        return userService.findById(userId)
+//                .getTodoList()
+//                .stream()
+//                .filter(task -> task.getStatus().equals(Task.Status.DONE))
+//                .toList();
+//    }
 
 //    public TaskDTO add(TaskDTO taskDTO) {
 //        Task task = new Task();

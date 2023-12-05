@@ -123,4 +123,12 @@ public class ProductService {
                 .map(this::mapToDTO)
                 .toList();
     }
+
+    public List<ProductDTO> findAllActive() {
+        List<Product> products = productRepository.findAllByTransactionsIsNotEmpty();
+        if (products.isEmpty()) {
+            throw new NoSuchElementException("No products found");
+        }
+        return mapToDTO(products);
+    }
 }

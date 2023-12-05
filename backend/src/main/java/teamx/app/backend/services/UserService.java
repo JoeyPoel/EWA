@@ -121,9 +121,9 @@ public class UserService {
         List<Order> orders = orderRepository.findAllByOrderedById(userId);
         User user = getById(userId);
 
-        userRepository.deleteById(id);
+        userRepository.deleteById(userId);
 
-        if (userRepository.existsById(id)) {
+        if (userRepository.existsById(userId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User could not be deleted");
         }
 

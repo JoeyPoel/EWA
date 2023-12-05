@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+        return ResponseEntity.ok(userService.getById(id));
     }
 
     @GetMapping("/team/{teamId}")

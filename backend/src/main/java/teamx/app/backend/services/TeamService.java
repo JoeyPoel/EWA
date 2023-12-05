@@ -3,6 +3,7 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Team;
+import teamx.app.backend.models.User;
 import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.repositories.TeamRepository;
 
@@ -47,20 +48,20 @@ public class TeamService {
 
     public TeamDTO add(TeamDTO teamDTO) {
         Team savedTeam = mapToEntity(teamDTO, new Team());
-        userService.setTeamById(teamDTO.getMembersIds(), savedTeam);
+        userService.setTeam(teamDTO.getMembersIds(), savedTeam);
         return mapToDTO(savedTeam);
     }
 
-    public TeamDTO update(Long teamId, TeamDTO teamDTO)  {
+    public TeamDTO update(Long teamId, TeamDTO teamDTO) {
         Team existingTeam = findById(teamId);
-        userService.setTeamById(teamDTO.getMembersIds(), existingTeam);
+        userService.setTeam(teamDTO.getMembersIds(), existingTeam);
         Team savedTeam = save(mapToEntity(teamDTO, existingTeam));
         return mapToDTO(savedTeam);
     }
 
     public TeamDTO delete(Long id) {
         Team existingTeam = findById(id);
-        userService.setTeamByUser(existingTeam.getMembers(), null);
+        userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
         projectService.setTeam(existingTeam.getProjects(), null);
         teamRepository.deleteById(id);
         return new TeamDTO(existingTeam);
@@ -77,7 +78,7 @@ public class TeamService {
             entity.setWarehouse(warehouseService.findById(dto.getWarehouseId()));
         }
         if (dto.getLeaderId() != null) {
-            entity.setLeader(userService.findById(dto.getLeaderId()));
+            entity.setLeader(userService.getById(dto.getLeaderId()));
         }
         return save(entity);
     }
