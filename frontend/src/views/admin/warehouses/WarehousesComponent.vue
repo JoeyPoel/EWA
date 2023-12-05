@@ -1,6 +1,11 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Warehouses">
+      <v-row>
+        <v-col>
+          <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined"/>
+        </v-col>
+      </v-row>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -12,8 +17,6 @@
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
-                <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined">
-                </v-text-field>
                 <v-spacer></v-spacer>
                 <v-btn class="mb-2" color="secundary" dark v-bind="props">New Warehouse</v-btn>
               </template>
@@ -169,7 +172,7 @@
               <v-card>
                 <v-tabs v-model="tab" bg-color="transparent">
                   <v-tab value="details">Details</v-tab>
-                  <v-tab value="capacity">Storage Capacity</v-tab>
+<!--                  <v-tab value="capacity">Storage Capacity</v-tab>-->
                   <v-tab value="teams">Teams</v-tab>
                   <v-tab value="projects">Projects</v-tab>
                   <v-tab value="transactions">Transactions</v-tab>
@@ -214,16 +217,16 @@
                         </v-col>
                       </v-row>
                     </v-window-item>
-                    <v-window-item value="capacity">
-                      <v-data-table
-                          :headers="warehouseDetailsCapacityHeaders"
-                          :items="warehouseProductCategoryCapacities"
-                          :search="warehouseCapacitySearch"
-                          :sort-by="['productCategoryName']"
-                          :items-per-page-options="detailTableItemsPerPageOptions"
-                          class="elevation-1">
-                      </v-data-table>
-                    </v-window-item>
+<!--                    <v-window-item value="capacity">-->
+<!--                      <v-data-table-->
+<!--                          :headers="warehouseDetailsCapacityHeaders"-->
+<!--                          :items="warehouseProductCategoryCapacities"-->
+<!--                          :search="warehouseCapacitySearch"-->
+<!--                          :sort-by="['productCategoryName']"-->
+<!--                          :items-per-page-options="detailTableItemsPerPageOptions"-->
+<!--                          class="elevation-1">-->
+<!--                      </v-data-table>-->
+<!--                    </v-window-item>-->
                     <v-window-item value="teams">
                       <v-data-table
                           :headers="warehouseTeamHeaders"
