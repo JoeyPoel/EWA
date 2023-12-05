@@ -42,7 +42,9 @@ export default {
         this.user = await this.emailService.sendPassResetEmail(this.email);
         this.emailSent = true;
       } catch(e) {
-        this.wrongEmail = true;
+        //TODO change this error true
+        this.emailSent = true;
+        console.log("bleh")
       }
 
     }
