@@ -293,16 +293,6 @@ UNION ALL
 SELECT 17, 16, order_date, warehouse_id, order_id, NULL, NULL, 'ORDER'
 FROM (SELECT id as order_id, order_date, warehouse_id FROM Orders WHERE id BETWEEN 1 AND 18) AS order_data;
 
--- Generate Tasks
-INSERT INTO Tasks (name, description, deadline, priority, status, project_id)
-SELECT 'Task 1', 'Description for Task 1', start_date, 'HIGH', 'TODO', project_id
-FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
-UNION ALL
-SELECT 'Task 2', 'Description for Task 2', start_date, 'MEDIUM', 'IN_PROGRESS', project_id
-FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data
-UNION ALL
-SELECT 'Task 3', 'Description for Task 3', start_date, 'LOW', 'DONE', project_id
-FROM (SELECT id as project_id, start_date FROM Projects WHERE id BETWEEN 1 AND 30) AS project_data;
 
 
 

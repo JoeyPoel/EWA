@@ -39,5 +39,10 @@ public class Team {
     @OneToMany
     @JoinColumn(name = "team_id")
     private List<User> members;
+
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "team_id")
+    private List<Project> projects;
 }
 

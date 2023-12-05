@@ -23,6 +23,7 @@ public class WarehouseService {
     private final CapacityRepository capacityRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
+
     @Autowired
     public WarehouseService(WarehouseRepository warehouseRepository, CapacityRepository capacityRepository,
                             ProductCategoryRepository productCategoryRepository) {

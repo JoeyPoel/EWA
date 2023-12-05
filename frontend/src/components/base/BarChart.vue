@@ -3,7 +3,6 @@
     <Chart type="bar" :data="this.data" :options="options"/>
   </v-container>
   <v-container v-else>
-    <h6>Loading...</h6>
     <v-progress-circular indeterminate size="64"/>
   </v-container>
 </template>

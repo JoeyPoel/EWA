@@ -90,6 +90,6 @@ public class ProjectController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ProjectDTO> deleteById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(projectService.delete(id));
+        return ResponseEntity.ok(projectService.delete(id));
     }
 }

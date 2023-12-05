@@ -91,8 +91,7 @@ public class TeamsController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(teamService.delete(id));
+        return ResponseEntity.ok(teamService.delete(id));
     }
 }
 

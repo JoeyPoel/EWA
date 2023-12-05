@@ -3,6 +3,7 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 
@@ -82,5 +83,10 @@ public class ProjectService {
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+    }
+
+    protected void setTeam(List<Project> projects, Team team) {
+        projects.forEach(project -> project.setTeam(team));
+        projectRepository.saveAll(projects);
     }
 }

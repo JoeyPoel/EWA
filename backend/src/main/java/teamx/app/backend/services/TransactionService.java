@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Product;
+import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.models.dto.TransactionDTO;
@@ -45,7 +46,6 @@ public class TransactionService {
                 )
                 .sum();
     }
-
 
     public List<TransactionDTO> findAllByProduct(@NonNull Long productId) {
         List<TransactionDTO> transactions = transactionRepository

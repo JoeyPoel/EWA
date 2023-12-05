@@ -15,11 +15,15 @@ public class TeamService {
     private final WarehouseService warehouseService;
     private final UserService userService;
 
+    private final ProjectService projectService;
+
     @Autowired
-    public TeamService(TeamRepository teamRepository, WarehouseService warehouseService, UserService userService) {
+    public TeamService(TeamRepository teamRepository, WarehouseService warehouseService, UserService userService,
+                       ProjectService projectService) {
         this.teamRepository = teamRepository;
         this.warehouseService = warehouseService;
         this.userService = userService;
+        this.projectService = projectService;
     }
 
     public List<TeamDTO> findAll() {
@@ -46,7 +50,7 @@ public class TeamService {
 
     public TeamDTO add(TeamDTO teamDTO) {
         Team savedTeam = mapToEntity(teamDTO, new Team());
-        userService.setTeam(teamDTO.getMembersIds(), savedTeam);
+        userService.setTeamById(teamDTO.getMembersIds(), savedTeam);
         return mapToDTO(savedTeam);
     }
 
@@ -56,9 +60,11 @@ public class TeamService {
     }
 
     public TeamDTO delete(Long id) {
-        TeamDTO existingTeam = findByIdDTO(id);
+        Team existingTeam = findById(id);
+        userService.setTeamByUser(existingTeam.getMembers(), null);
+        projectService.setTeam(existingTeam.getProjects(), null);
         teamRepository.deleteById(id);
-        return existingTeam;
+        return new TeamDTO(existingTeam);
     }
 
     public List<TeamDTO> findAllByWarehouseId(Long warehouseId) {
@@ -75,7 +81,7 @@ public class TeamService {
             entity.setWarehouse(warehouseService.findById(dto.getWarehouseId()));
         }
         if (dto.getLeaderId() != null) {
-            entity.setLeader(userService.getById(dto.getLeaderId()));
+            entity.setLeader(userService.findById(dto.getLeaderId()));
         }
         return save(entity);
     }

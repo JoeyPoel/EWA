@@ -66,7 +66,7 @@ public class UserService {
         return users;
     }
 
-    public User getById(Long id) {
+    public User findById(Long id) {
         return userRepository
                 .findById(id)
                 .orElseThrow(
@@ -87,7 +87,7 @@ public class UserService {
     }
 
     public User update(User user, Long id) {
-        User existingUser = getById(id);
+        User existingUser = findById(id);
 
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
@@ -99,7 +99,7 @@ public class UserService {
     }
 
     public User delete(Long id) {
-        User user = getById(id);
+        User user = findById(id);
 
         userRepository.deleteById(id);
 
@@ -131,10 +131,15 @@ public class UserService {
         return users;
     }
 
-    public List<User> setTeam(List<Long> membersIds, Team team) {
+    protected List<User> setTeamById(List<Long> membersIds, Team team) {
         validateInput(membersIds, team);
         List<User> users = getAllByIds(membersIds);
-        unsetUsersFromTeam(team, membersIds);
+        unsetUserIdsFromTeam(team, membersIds);
+        return setUserTeamAndSave(users, team);
+    }
+
+    protected List<User> setTeamByUser(List<User> users, Team team) {
+        unsetUsersFromTeam(team, users);
         return setUserTeamAndSave(users, team);
     }
 
@@ -147,10 +152,20 @@ public class UserService {
         }
     }
 
-    private void unsetUsersFromTeam(Team team, List<Long> membersIds) {
+    private void unsetUserIdsFromTeam(Team team, List<Long> membersIds) {
+        if (team == null) {
+            return;
+        }
         List<User> usersToUnset = userRepository.getAllByTeam_IdAndIdNotIn(team.getId(), membersIds);
-        usersToUnset.forEach(user -> user.setTeam(null));
-        userRepository.saveAll(usersToUnset);
+        unsetUsersFromTeam(team, usersToUnset);
+    }
+
+    private void unsetUsersFromTeam(Team team, List<User> users) {
+        if (team == null) {
+            return;
+        }
+        users.forEach(user -> user.setTeam(null));
+        userRepository.saveAll(users);
     }
 
     private List<User> setUserTeamAndSave(List<User> users, Team team) {
@@ -160,5 +175,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
         }
         return savedUsers;
+    }
+
+    public void removeTeam(Long userId) {
+
     }
 }

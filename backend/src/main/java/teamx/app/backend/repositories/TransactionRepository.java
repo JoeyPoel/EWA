@@ -20,6 +20,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> getAllByProductAndTransactionDateBetween(Product product, Date startDate, Date endDate);
 
-    List<Transaction> getAllByWarehouseAndProductAndTransactionDateBetween(Warehouse warehouse, Product product,
-                                                                           Date startDate, Date endDate);
+    List<Transaction> getAllByWarehouseAndProductAndTransactionDateBetween(
+            Warehouse warehouse, Product product, Date startDate, Date endDate);
 }

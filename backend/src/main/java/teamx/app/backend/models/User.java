@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * User entity
  * Represents a user
@@ -28,6 +30,10 @@ public class User {
     @JsonIgnore
     @ManyToOne()
     private Team team;
+
+    @JsonIgnore
+    @OneToMany
+    private List<Task> todoList;
 
     @Override
     public String toString() {

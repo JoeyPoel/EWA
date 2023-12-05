@@ -1,9 +1,7 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +18,12 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private int order;
     private String name;
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date deadline;
-
-    @Enumerated(EnumType.STRING)
-    private Priority priority;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -37,19 +32,11 @@ public class Task {
     @JsonIgnore
     private Project project;
 
-    @OneToMany
-    @JsonIgnore
-    private List<User> assignedTo;
-
     @ManyToOne
     @JsonIgnore
     private User personalTodoListOwner;
 
-    enum Priority {
-        LOW, MEDIUM, HIGH
-    }
-
-    enum Status {
+    public enum Status {
         TODO, IN_PROGRESS, DONE
     }
 }
