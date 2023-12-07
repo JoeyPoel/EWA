@@ -1,14 +1,12 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Products">
-
       <v-row>
         <v-col>
           <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
           </v-text-field>
         </v-col>
       </v-row>
-
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -17,7 +15,6 @@
           class="elevation-1"
           item-value="id">
         <template v-slot:top>
-
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">

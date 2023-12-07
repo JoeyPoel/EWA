@@ -67,6 +67,15 @@ const routes = [
         },
     },
     {
+        path: '/teams2',
+        name: 'Teams',
+        component: () => import('@/views/admin/teams/TeamsV2.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['USER', 'ADMIN'],
+        },
+    },
+    {
         path: '/log-in',
         name: 'Login',
         component: () => import('@/components/user/LoginComponent.vue'),
