@@ -7,12 +7,10 @@ import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.Warehouse;
 import teamx.app.backend.repositories.TransactionRepository;
-import teamx.app.backend.utils.DTO.TransactionDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * The TransactionService class is responsible for handling transaction-related operations.
@@ -46,32 +44,12 @@ public class TransactionService {
                 .sum();
     }
 
-    public List<TransactionDTO> findAllByProduct(@NonNull Long productId) {
-        List<TransactionDTO> transactions = transactionRepository
-                .getAllByProduct(productService.findById(productId))
-                .stream()
-                .map(Transaction::toDTO)
-                .toList();
-
-        if (transactions.isEmpty()) {
-            throw new NoSuchElementException("No transactions found for product with id " + productId);
-        }
-
-        return transactions;
+    public List<Transaction> findAllByProduct(@NonNull Long productId) {
+        return transactionRepository.getAllByProduct(productService.findById(productId));
     }
 
-    public List<TransactionDTO> findAllByWarehouse(@NonNull Long warehouseId) {
-        List<TransactionDTO> transactions = transactionRepository
-                .getAllByWarehouse(warehouseService.findById(warehouseId))
-                .stream()
-                .map(Transaction::toDTO)
-                .toList();
-
-        if (transactions.isEmpty()) {
-            throw new NoSuchElementException("No transactions found for warehouse with id " + warehouseId);
-        }
-
-        return transactions;
+    public List<Transaction> findAllByWarehouse(@NonNull Long warehouseId) {
+        return transactionRepository.getAllByWarehouse(warehouseService.findById(warehouseId));
     }
 
     public int findProductCurrentStock(Long warehouseId, Long productId) {

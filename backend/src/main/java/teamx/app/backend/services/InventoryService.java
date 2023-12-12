@@ -32,21 +32,21 @@ public class InventoryService {
         this.warehouseService = warehouseService;
     }
 
-    public List<InventoryProductDTO> getAll() {
+    public List<InventoryProductDTO> findAll() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "No products found"
             );
         }
-        return mapToDTO(null, products);
+        return toDTO(null, products);
     }
 
     public List<InventoryProductDTO> getByWarehouseId(Long warehouseId) {
-        return mapToDTO(warehouseId, productRepository.getAllByTransactions_Warehouse_Id(warehouseId));
+        return toDTO(warehouseId, productRepository.getAllByTransactions_Warehouse_Id(warehouseId));
     }
 
-    private InventoryProductDTO mapToDTO(Long warehouseId, Product product) {
+    private InventoryProductDTO toDTO(Long warehouseId, Product product) {
         return InventoryProductDTO.builder()
                 .productId(product.getId())
                 .name(product.getName())
@@ -57,10 +57,10 @@ public class InventoryService {
                 .build();
     }
 
-    private List<InventoryProductDTO> mapToDTO(Long warehouseId, List<Product> products) {
+    private List<InventoryProductDTO> toDTO(Long warehouseId, List<Product> products) {
         return products
                 .stream()
-                .map(product -> mapToDTO(warehouseId, product))
+                .map(product -> toDTO(warehouseId, product))
                 .toList();
     }
 

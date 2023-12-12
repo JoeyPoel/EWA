@@ -248,7 +248,8 @@ public class ChartService {
         return getProjectsBarData(warehouseId, startDate, endDate, "Projects", 86400000);
     }
 
-    private ChartsDataDTO getProjectsBarData(Long warehouseId, Date startDate, Date endDate, String label, long duration) {
+    private ChartsDataDTO getProjectsBarData(Long warehouseId, Date startDate, Date endDate, String label,
+                                             long duration) {
         List<Project> projects = projectService.findProjectsByDateBetween(warehouseId, startDate, endDate);
         List<String> labels = new ArrayList<>();
         List<Integer> data = new ArrayList<>();

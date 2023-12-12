@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.Project;
 import teamx.app.backend.services.ProjectService;
-import teamx.app.backend.utils.DTO.ProjectDTO;
 import teamx.app.backend.utils.DTO.InventoryProjectDTO;
+import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ProjectController {
      */
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAll() {
-        return ResponseEntity.ok(projectService.findAllDTO());
+        return ResponseEntity.ok(projectService.findAll().stream().map(Project::toDTO).toList());
     }
 
     /**
@@ -46,7 +47,7 @@ public class ProjectController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(projectService.findDTOById(id));
+        return ResponseEntity.ok(projectService.findById(id).toDTO());
     }
 
     /**
@@ -57,7 +58,11 @@ public class ProjectController {
      */
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<ProjectDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
-        return ResponseEntity.ok(projectService.findAllByWarehouseIdDTO(warehouseId));
+        return ResponseEntity.ok(
+                projectService.findAllByWarehouseId(warehouseId).stream()
+                        .map(Project::toDTO)
+                        .toList()
+        );
     }
 
     /**
@@ -68,7 +73,7 @@ public class ProjectController {
      */
     @PostMapping
     public ResponseEntity<ProjectDTO> add(@RequestBody ProjectDTO project) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.add(project));
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.add(project).toDTO());
     }
 
     /**
@@ -80,7 +85,7 @@ public class ProjectController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateById(@PathVariable Long id, @RequestBody ProjectDTO project) {
-        return ResponseEntity.ok(projectService.update(id, project));
+        return ResponseEntity.ok(projectService.update(id, project).toDTO());
     }
 
     /**
@@ -91,14 +96,14 @@ public class ProjectController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ProjectDTO> deleteById(@PathVariable Long id) {
-        return ResponseEntity.ok(projectService.delete(id));
+        return ResponseEntity.ok(projectService.delete(id).toDTO());
     }
 
     /**
      * Retrieves a projects inventory from the database.
-        *
-        * @return a ResponseEntity object containing a list of InventoryProjectDTO objects.
-        */
+     *
+     * @return a ResponseEntity object containing a list of InventoryProjectDTO objects.
+     */
 
     @GetMapping("/inventory/{id}")
     public ResponseEntity<List<InventoryProjectDTO>> getAllInventory(@PathVariable Long id) {

@@ -42,7 +42,7 @@ public class EmailController {
     @GetMapping("/filteredProjects")
     public List<Project> filterProjects() {
         try {
-            List<Project> allProjects = projectService.getAllProjects();
+            List<Project> allProjects = projectService.findAll();
 
             return allProjects.stream()
                     .filter(project -> {

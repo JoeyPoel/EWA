@@ -37,7 +37,8 @@ public class AuthenthicationService {
             User existingUser = userOptional.get();
 
             if (passwordMatches(existingUser.getPassword(), inputUser.getPassword())) {
-                String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name());
+                String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(),
+                        existingUser.getRole().name());
 
                 return UserDTO.builder()
                         .id(existingUser.getId())

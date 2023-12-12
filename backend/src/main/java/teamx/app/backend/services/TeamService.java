@@ -27,51 +27,42 @@ public class TeamService {
         this.projectService = projectService;
     }
 
-    public List<TeamDTO> findAll() {
-        List<Team> teams = teamRepository.findAll();
-        return teams.stream()
-                .map(Team::toDTO)
-                .toList();
+    public List<Team> findAll() {
+        return teamRepository.findAll();
     }
 
-    protected Team findById(Long id) {
+    public Team findById(Long id) {
         return teamRepository
                 .findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Team not found with id " + id));
-    }
-
-    public TeamDTO findByIdDTO(Long id) {
-        return findById(id).toDTO();
     }
 
     private Team save(Team team) {
         return teamRepository.save(team);
     }
 
-    public TeamDTO add(TeamDTO teamDTO) {
+    public Team add(TeamDTO teamDTO) {
         Team savedTeam = mapToEntity(teamDTO, new Team());
         userService.setTeam(teamDTO.getMembersIds(), savedTeam);
-        return savedTeam.toDTO();
+        return savedTeam;
     }
 
-    public TeamDTO update(Long teamId, TeamDTO teamDTO) {
+    public Team update(Long teamId, TeamDTO teamDTO) {
         Team existingTeam = findById(teamId);
         userService.setTeam(teamDTO.getMembersIds(), existingTeam);
-        Team savedTeam = save(mapToEntity(teamDTO, existingTeam));
-        return savedTeam.toDTO();
+        return save(mapToEntity(teamDTO, existingTeam));
     }
 
-    public TeamDTO delete(Long id) {
+    public Team delete(Long id) {
         Team existingTeam = findById(id);
         userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
         projectService.setTeam(existingTeam.getProjects(), null);
         teamRepository.deleteById(id);
-        return existingTeam.toDTO();
+        return existingTeam;
     }
 
-    public List<TeamDTO> findAllByWarehouseId(Long warehouseId) {
-        List<Team> teams = teamRepository.getAllByWarehouse_Id(warehouseId);
-        return teams.stream().map(Team::toDTO).toList();
+    public List<Team> findAllByWarehouseId(Long warehouseId) {
+        return teamRepository.getAllByWarehouse_Id(warehouseId);
     }
 
     private Team mapToEntity(TeamDTO dto, Team entity) {

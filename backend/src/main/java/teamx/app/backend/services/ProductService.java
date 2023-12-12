@@ -2,11 +2,11 @@ package teamx.app.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import teamx.app.backend.utils.DTO.ProductDTO;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
+import teamx.app.backend.utils.DTO.ProductDTO;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,12 +22,8 @@ public class ProductService {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    public List<ProductDTO> findAll() {
-        List<Product> products = productRepository.findAll();
-        if (products.isEmpty()) {
-            throw new NoSuchElementException("No products found");
-        }
-        return mapToDTO(products);
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public List<ProductCategory> findAllProductCategories() {
@@ -39,36 +35,29 @@ public class ProductService {
     }
 
     public Product findById(Long productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("Product not found with id " + productId));
-    }
-
-    public ProductDTO findDTOById(Long productId) {
-        return mapToDTO(findById(productId));
+        return productRepository.findById(productId).orElse(null);
     }
 
     private Product save(Product product) {
         return productRepository.save(product);
     }
 
-    public ProductDTO add(ProductDTO productDTO) {
-        Product product = mapToEntity(new Product(), productDTO);
-        return mapToDTO(product);
+    public Product add(ProductDTO productDTO) {
+        return mapToEntity(new Product(), productDTO);
     }
 
-    public ProductDTO update(Long productId, ProductDTO productDTO) {
+    public Product update(Long productId, ProductDTO productDTO) {
         if (!productId.equals(productDTO.getId())) throw new IllegalArgumentException("Product ID does not match");
-        Product product = mapToEntity(findById(productId), productDTO);
-        return mapToDTO(product);
+        return mapToEntity(findById(productId), productDTO);
     }
 
-    public ProductDTO delete(Long id) {
+    public Product delete(Long id) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
             return null;
         }
         productRepository.deleteById(id);
-        return mapToDTO(existingProduct);
+        return existingProduct;
     }
 
     protected List<Long> findAllActiveIds() {
@@ -101,28 +90,7 @@ public class ProductService {
         return save(product);
     }
 
-    private ProductDTO mapToDTO(Product product) {
-        return ProductDTO.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .categoryId(product.getCategory().getId())
-                .build();
-    }
-
-    private List<ProductDTO> mapToDTO(List<Product> products) {
-        return products
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
-    }
-
-    public List<ProductDTO> findAllActive() {
-        List<Product> products = productRepository.findAllByTransactionsIsNotEmpty();
-        if (products.isEmpty()) {
-            throw new NoSuchElementException("No products found");
-        }
-        return mapToDTO(products);
+    public List<Product> findAllActive() {
+        return productRepository.findAllByTransactionsIsNotEmpty();
     }
 }

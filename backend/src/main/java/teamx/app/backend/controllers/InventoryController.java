@@ -34,7 +34,7 @@ public class InventoryController {
      */
     @GetMapping
     public ResponseEntity<List<InventoryProductDTO>> getAll() {
-        return ResponseEntity.ok(inventoryService.getAll());
+        return ResponseEntity.ok(inventoryService.findAll());
     }
 
     /**

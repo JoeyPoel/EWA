@@ -12,7 +12,6 @@ import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,67 +25,39 @@ public class ProjectService {
         this.teamRepository = teamRepository;
     }
 
-    protected List<Project> findAll() {
+    public List<Project> findAll() {
         return projectRepository.findAll();
     }
 
-    public List<Project> getAllProjects() { // otherwise joeys code breaks
-        List<Project> projects = projectRepository.findAll();
-        if (projects.isEmpty()) {
-            return null;
-        }
-        return projects;
-    }
-
-
-    public List<ProjectDTO> findAllDTO() {
-        List<Project> projects = projectRepository.findAll();
-        if (projects.isEmpty()) {
-            throw new NoSuchElementException("No projects found");
-        }
-        return projects.stream()
-                .map(Project::toDTO)
-                .toList();
-    }
-
-    protected Project findById(Long projectID) {
-        return projectRepository.findById(projectID)
-                .orElseThrow(() -> new NoSuchElementException("Project not found with id " + projectID));
-    }
-
-    public ProjectDTO findDTOById(Long projectID) {
-        return findById(projectID).toDTO();
+    public Project findById(Long projectID) {
+        return projectRepository.findById(projectID).orElse(null);
     }
 
     private Project save(Project project) {
         return projectRepository.save(project);
     }
 
-    public ProjectDTO add(ProjectDTO projectDTO) {
-        Project project = mapToEntity(new Project(), projectDTO);
-        return project.toDTO();
+    public Project add(ProjectDTO projectDTO) {
+        return mapToEntity(new Project(), projectDTO);
     }
 
-    public ProjectDTO update(Long projectId, ProjectDTO newProjectData) {
+    public Project update(Long projectId, ProjectDTO newProjectData) {
         if (!projectId.equals(newProjectData.getId())) throw new IllegalArgumentException("Project ID does not match");
         Project project = findById(projectId);
         if (newProjectData.getTeamId() != null) {
             project.setTeam(teamRepository.findById(newProjectData.getTeamId()).orElseThrow());
         }
-        Project savedProject = mapToEntity(project, newProjectData);
-        return savedProject.toDTO();
+        return mapToEntity(project, newProjectData);
     }
 
-    public ProjectDTO delete(Long projectId) {
+    public Project delete(Long projectId) {
         Project deletedProject = findById(projectId);
         projectRepository.deleteById(projectId);
-        return deletedProject.toDTO();
+        return deletedProject;
     }
 
-    public List<ProjectDTO> findAllByWarehouseIdDTO(Long warehouseId) {
-        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId).stream()
-                .map(Project::toDTO)
-                .toList();
+    public List<Project> findAllByWarehouseId(Long warehouseId) {
+        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 
     private Project mapToEntity(Project project, ProjectDTO projectDTO) {
@@ -151,6 +122,4 @@ public class ProjectService {
         }
         return null;
     }
-
-
 }

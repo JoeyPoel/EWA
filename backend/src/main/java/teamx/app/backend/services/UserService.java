@@ -18,29 +18,11 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final OrderService orderService;
-
-
-
 
     @Autowired
-    public UserService(UserRepository userRepository, OrderRepository orderRepository, OrderService orderService) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
-        this.orderService = orderService;
-    }
-    public User login(User user) {
-        User foundUser = userRepository
-                .findByEmail(user.getEmail())
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-                );
-
-        if (!Objects.equals(foundUser.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
-        }
-
-        return foundUser;
     }
 
     public List<User> findByRole(User.Role role) {
@@ -60,14 +42,6 @@ public class UserService {
         }
 
         return users;
-    }
-
-    public User findByEmail(String email) {
-        return userRepository
-                .findByEmail(email)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-                );
     }
 
     public List<User> getAll() {

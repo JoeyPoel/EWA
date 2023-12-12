@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.services.TeamService;
 import teamx.app.backend.utils.DTO.TeamDTO;
 
@@ -33,8 +34,8 @@ public class TeamsController {
      * @return a ResponseEntity containing a list of TeamDTO representing all teams.
      */
     @GetMapping
-    public ResponseEntity<List<TeamDTO>> getAll() {
-        return ResponseEntity.ok(teamService.findAll());
+    public ResponseEntity<List<TeamDTO>> findAll() {
+        return ResponseEntity.ok(teamService.findAll().stream().map(Team::toDTO).toList());
     }
 
     /**
@@ -45,7 +46,7 @@ public class TeamsController {
      */
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<TeamDTO>> getAllByWarehouseId(@PathVariable Long warehouseId) {
-        return ResponseEntity.ok(teamService.findAllByWarehouseId(warehouseId));
+        return ResponseEntity.ok(teamService.findAllByWarehouseId(warehouseId).stream().map(Team::toDTO).toList());
     }
 
     /**
@@ -56,7 +57,7 @@ public class TeamsController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<TeamDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(teamService.findByIdDTO(id));
+        return ResponseEntity.ok(teamService.findById(id).toDTO());
     }
 
     /**
@@ -67,19 +68,19 @@ public class TeamsController {
      */
     @PostMapping
     public ResponseEntity<TeamDTO> add(@RequestBody TeamDTO team) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.add(team));
+        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.add(team).toDTO());
     }
 
     /**
      * Updates a team by its ID.
      *
-     * @param id the ID of the team to be updated
+     * @param id   the ID of the team to be updated
      * @param team the TeamDTO representing the updated team
      * @return a ResponseEntity containing the TeamDTO representing the updated team.
      */
     @PutMapping("/{id}")
     public ResponseEntity<TeamDTO> updateById(@PathVariable Long id, @RequestBody TeamDTO team) {
-        return ResponseEntity.ok(teamService.update(id, team));
+        return ResponseEntity.ok(teamService.update(id, team).toDTO());
     }
 
     /**
@@ -90,7 +91,7 @@ public class TeamsController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable Long id) {
-        return ResponseEntity.ok(teamService.delete(id));
+        return ResponseEntity.ok(teamService.delete(id).toDTO());
     }
 }
 
