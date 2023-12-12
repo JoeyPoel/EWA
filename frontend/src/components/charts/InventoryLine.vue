@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="chartData" fluid="true">
+  <v-container fluid="true">
     <v-card title="Inventory" class="text-center elevation-2 chart">
       <base-line-chart :options="chartOptions" :charts-data="chartData" />
       <v-card-actions>
@@ -7,22 +7,19 @@
           <v-row>
             <v-col cols="8">
               <v-row>
-                <v-text-field v-model="startDate" label="Start Date" type="date" @change="updateChartData"/>
-                <v-text-field v-model="endDate" label="End Date" type="date" @change="updateChartData"/>
+                <v-text-field v-model="startDate" label="Start Date" type="date"/>
+                <v-text-field v-model="endDate" label="End Date" type="date"/>
               </v-row>
             </v-col>
             <v-col cols="4">
               <v-row>
-                <v-select v-model="interval" :items="intervalItems" label="Interval" @change="updateChartData"/>
+                <v-select v-model="interval" :items="intervalItems" label="Interval"/>
               </v-row>
             </v-col>
           </v-row>
         </v-container>
       </v-card-actions>
     </v-card>
-  </v-container>
-  <v-container v-else>
-    <v-progress-circular indeterminate size="64"/>
   </v-container>
 </template>
 
@@ -70,16 +67,18 @@ export default {
     }
   },
   watch: {
-    chartData(val) {
-      if (val){
-        this.updateChartData();
-      }
+    warehouseId() {
+      this.updateChartData();
     },
-    interval(val){
-      if (val){
-        this.updateChartData();
-      }
+    startDate() {
+      this.updateChartData();
     },
+    endDate() {
+      this.updateChartData();
+    },
+    interval() {
+      this.updateChartData();
+    }
   },
   async mounted() {
     await this.loadProductIds();

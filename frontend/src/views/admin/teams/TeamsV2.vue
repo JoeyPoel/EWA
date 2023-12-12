@@ -1,34 +1,36 @@
 <template>
-  <base-card
-      class="mt-1"
-      color="secondary"
-      title="Teams">
-    <v-row>
-      <v-col cols="5">
-        <search-text-field :value="search" label="Search"/>
-      </v-col>
-      <v-col cols="5">
-        <v-select v-model="selectedWarehouse"
-                  :items="warehouses"
-                  item-title="name"
-                  item-value="id"
-                  label="Warehouse"
-        />
-      </v-col>
-      <v-col class="justify-content-center" cols="2">
-        <v-btn @click="reset">Reset</v-btn>
-      </v-col>
-    </v-row>
-    <DataTable :allowed-actions="['View', 'Edit', 'Delete']"
-               :dialog-open="dialog.open"
-               :dialog-title="dialogTitle"
-               :item-fields="dialog.fields"
-               :table-headers="headers"
-               :table-items="teams"
-    />
-    <BaseFormDialog :dialog-open="dialog.open" :dialog-title="dialogTitle" :item="dialog.item"
-                    :itemFields="dialog.fields" @dialog-closed="dialog.open = false" @save-item="saveItem"/>
-  </base-card>
+  <v-container fluid>
+    <base-card
+        class="mt-1"
+        color="secondary"
+        title="Teams">
+      <v-row>
+        <v-col cols="5">
+          <search-text-field :value="search" label="Search"/>
+        </v-col>
+        <v-col cols="5">
+          <v-select v-model="selectedWarehouse"
+                    :items="warehouses"
+                    item-title="name"
+                    item-value="id"
+                    label="Warehouse"
+          />
+        </v-col>
+        <v-col class="justify-content-center" cols="2">
+          <v-btn @click="reset">Reset</v-btn>
+        </v-col>
+      </v-row>
+      <DataTable :allowed-actions="['View', 'Edit', 'Delete']"
+                 :dialog-open="dialog.open"
+                 :dialog-title="dialogTitle"
+                 :item-fields="dialog.fields"
+                 :table-headers="headers"
+                 :table-items="teams"
+      />
+      <BaseFormDialog :dialog-open="dialog.open" :dialog-title="dialogTitle" :item="dialog.item"
+                      :itemFields="dialog.fields" @dialog-closed="dialog.open = false" @save-item="saveItem"/>
+    </base-card>
+  </v-container>
 </template>
 
 <script>

@@ -10,7 +10,7 @@
       </template>
       <template v-if="allowedActions > 0" v-slot:[`item.actions`]="{ item }">
         <v-btn v-for="(action, key) in actions" :key="key" :color="action.color" :title="action.title"
-               :to="action.to" v-model="item.index">
+               :to="action.to" v-model="item.index1">
           <v-icon>{{ action.icon }}</v-icon>
         </v-btn>
       </template>

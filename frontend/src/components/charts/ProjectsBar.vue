@@ -7,13 +7,13 @@
           <v-row>
             <v-col cols="8">
               <v-row>
-                <v-text-field v-model="startDate" label="Start Date" type="date" @change="updateChartData"/>
-                <v-text-field v-model="endDate" label="End Date" type="date" @change="updateChartData"/>
+                <v-text-field v-model="startDate" label="Start Date" type="date"/>
+                <v-text-field v-model="endDate" label="End Date" type="date"/>
               </v-row>
             </v-col>
             <v-col cols="4">
               <v-row>
-                <v-select v-model="interval" :items="intervalItems" label="Interval" @change="updateChartData"/>
+                <v-select v-model="interval" :items="intervalItems" label="Interval"/>
               </v-row>
             </v-col>
           </v-row>
@@ -35,6 +35,12 @@ export default {
   inject: ['chartsService'],
   components: {
     BaseBarChart
+  },
+  props: {
+    warehouseId: {
+      type: Number,
+      required: false
+    },
   },
   data() {
     return {
@@ -63,11 +69,6 @@ export default {
     }
   },
   watch: {
-    chartData(val) {
-      if(val){
-        this.updateChartData();
-      }
-    },
     interval(val){
       if (val){
         this.updateChartData();
@@ -78,6 +79,16 @@ export default {
         this.updateChartData();
       }
     },
+    startDate(val){
+      if (val){
+        this.updateChartData();
+      }
+    },
+    endDate(val){
+      if (val){
+        this.updateChartData();
+      }
+    }
   },
   mounted() {
     this.updateChartData();
@@ -93,12 +104,6 @@ export default {
         return await this.chartsService.asyncProjectsBarByIntervalAllWarehouses(startDate, endDate, interval)
       }
     }
-  },
-  props: {
-    warehouseId: {
-      type: Number,
-      required: false
-    },
   }
 }
 </script>
