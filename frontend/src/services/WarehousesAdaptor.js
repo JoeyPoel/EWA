@@ -20,7 +20,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @async
      * @returns {Promise<*>} The warehouses.
      */
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -37,7 +37,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @param {string} id - The ID of the warehouse.
      * @returns {Promise<*>} The warehouse.
      */
-    async asyncGetById(id) {
+    async asyncFindById(id) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -107,7 +107,7 @@ export default class WarehousesAdaptor extends Adaptor {
      * @return {Promise<Array<Capacity>|null>} - A Promise that resolves to an array of capacity objects, or null if
      * there is no response.
      */
-    async asyncGetCapacity(id) {
+    async asyncFindCapacity(id) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }

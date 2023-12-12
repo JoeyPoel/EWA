@@ -189,9 +189,9 @@ export default {
     },
     async selectedWarehouse(val) {
       if (val) {
-        this.teams = await this.teamsService.asyncGetAllByWarehouseId(val);
+        this.teams = await this.teamsService.asyncFindAllByWarehouseId(val);
       } else {
-        this.teams = await this.teamsService.asyncGetAll();
+        this.teams = await this.teamsService.asyncFindAll();
       }
     },
     'dialog.open': function (val) {
@@ -206,10 +206,10 @@ export default {
   methods: {
     async initialize() {
       this.teams = this.selectedWarehouse ?
-          await this.teamsService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
-          await this.teamsService.asyncGetAll();
-      this.warehouses = await this.warehousesService.asyncGetAll();
-      this.users = await this.usersService.asyncGetAll();
+          await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.teamsService.asyncFindAll();
+      this.warehouses = await this.warehousesService.asyncFindAll();
+      this.users = await this.usersService.asyncFindAll();
       this.assignSelectedTeam(new Team());
     },
 

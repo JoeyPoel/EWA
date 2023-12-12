@@ -185,9 +185,9 @@ export default {
 
     async selectedTeam(val) {
       if (val) {
-        this.users = await this.usersService.asyncGetAllByTeamId(val);
+        this.users = await this.usersService.asyncFindAllByTeamId(val);
       } else {
-        this.users = await this.usersService.asyncGetAll();
+        this.users = await this.usersService.asyncFindAll();
       }
     },
 
@@ -203,11 +203,11 @@ export default {
 
   methods: {
     async initialize() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = await this.teamsService.asyncFindAll();
       if (this.selectedTeam) {
-        this.users = await this.usersService.asyncGetAllByTeamId(this.selectedTeam);
+        this.users = await this.usersService.asyncFindAllByTeamId(this.selectedTeam);
       } else {
-        this.users = await this.usersService.asyncGetAll();
+        this.users = await this.usersService.asyncFindAll();
       }
       this.assignSelectedUser(new User());
     },
@@ -285,7 +285,7 @@ export default {
     async showDetails(user) {
 
       if (user.teamId) {
-        const team = await this.teamsService.asyncGetById(user.teamId);
+        const team = await this.teamsService.asyncFindById(user.teamId);
         console.log(team);
         user.teamName = team ? team.name : 'No team';
       } else {

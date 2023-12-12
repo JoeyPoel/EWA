@@ -254,12 +254,12 @@ export default {
     async loadTableData() {
       this.loading = true;
       this.serverItems = this.selectedWarehouse ?
-          await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
-          await this.inventoryService.asyncGetAll();
+          await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.inventoryService.asyncFindAll();
 
       this.transActionCategories = Transaction.getCategories;
 
-      this.products = await this.productsService.asyncGetAll().then(products => {
+      this.products = await this.productsService.asyncFindAll().then(products => {
         return products.map(product => {
           return {
             title: product.name,
@@ -268,7 +268,7 @@ export default {
         })
       })
 
-      this.warehouses = await this.warehousesService.asyncGetAll().then(warehouses => {
+      this.warehouses = await this.warehousesService.asyncFindAll().then(warehouses => {
         return warehouses.map(warehouse => {
           return {
             title: warehouse.name,
@@ -282,7 +282,7 @@ export default {
 
     async loadTransactionsData(productId) {
       this.transactionsLoading = true;
-      const serverData = await this.transactionsService.asyncGetAllByProductId(
+      const serverData = await this.transactionsService.asyncFindAllByProductId(
           productId)
 
       this.transactions = serverData.map(transaction => {

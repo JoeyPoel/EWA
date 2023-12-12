@@ -41,7 +41,7 @@ export default {
     }
   },
   async mounted() {
-    this.warehouses = await this.warehousesService.asyncGetAll();
+    this.warehouses = await this.warehousesService.asyncFindAll();
   },
   methods: {
     updateChartData() {

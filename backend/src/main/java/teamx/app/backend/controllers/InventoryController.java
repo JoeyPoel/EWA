@@ -53,5 +53,4 @@ public class InventoryController {
     public ResponseEntity<Map<String, Integer>> findAllStockLevelsByProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(inventoryService.getAllStockLevelsByProduct(productId));
     }
-
 }

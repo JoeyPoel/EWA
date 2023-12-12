@@ -258,11 +258,11 @@ export default {
     },
 
     async getTeams() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = await this.teamsService.asyncFindAll();
     },
 
     async getProjects() {
-      this.projects = await this.projectsService.asyncGetAll();
+      this.projects = await this.projectsService.asyncFindAll();
     },
 
     getStatusColor(project) {
@@ -330,7 +330,7 @@ export default {
 
     async loadInventory() {
       try {
-        this.projectProducts = await this.projectsService.asyncGetProjectProducts(this.selectedProject.id);
+        this.projectProducts = await this.projectsService.asyncFindProjectProducts(this.selectedProject.id);
         console.log(this.projectProducts);
       } catch (error) {
         console.error("Error fetching project products:", error);

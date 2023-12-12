@@ -18,7 +18,7 @@ export class InventoryAdaptor extends Adaptor {
      * @async
      * @return {Promise<Array<InventoryProduct>>} A promise that resolves with an array of InventoryProduct objects.
      */
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -36,12 +36,12 @@ export class InventoryAdaptor extends Adaptor {
      * @return {Promise<Array<InventoryProduct>>} - A Promise that resolves to an array of
      *     InventoryProduct instances.
      */
-    async asyncGetAllByWarehouseId(warehouseId) {
+    async asyncFindAllByWarehouseId(warehouseId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
         const response = await this.fetchJson(
-            this.resourceUrl + "/warehouse/" + warehouseId, options);
+            this.resourceUrl `/warehouse/${warehouseId}`, options);
         if (response) {
             return response.map(inventoryProduct => InventoryProduct.fromJson(inventoryProduct));
         }
@@ -54,7 +54,7 @@ export class InventoryAdaptor extends Adaptor {
      * @returns {Promise<Object>} - A Promise that resolves to an InventoryProduct instance.
      */
 
-    async asyncGetStockByProductId(productId) {
+    async asyncFindStockByProductId(productId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }

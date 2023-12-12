@@ -223,11 +223,11 @@ export default {
     },
 
     async getProducts() {
-      this.products = await this.productsService.asyncGetAll();
+      this.products = await this.productsService.asyncFindAll();
     },
 
     async getCategories() {
-      this.categories = await this.productsService.asyncGetAllCategories();
+      this.categories = await this.productsService.asyncFindAllCategories();
     },
 
     async saveNew() {
@@ -253,7 +253,7 @@ export default {
     },
 
     async fetchProductStockLevels(productId) {
-      const stockData = await this.inventoryService.asyncGetStockByProductId(productId);
+      const stockData = await this.inventoryService.asyncFindStockByProductId(productId);
       this.productStockLevels = Object.entries(stockData).map(([warehouseName, stockLevel]) => ({
         warehouseName,
         stockLevel

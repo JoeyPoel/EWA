@@ -6,7 +6,7 @@ export default class UserAdaptor extends Adaptor {
         super(URL);
     }
 
-    async asyncGetUser(user) {
+    async asyncFindUser(user) {
         const options = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -18,7 +18,7 @@ export default class UserAdaptor extends Adaptor {
         return response ? User.fromJson(response) : null;
     }
 
-    async asyncGetAllByTeamId(teamId) {
+    async asyncFindAllByTeamId(teamId) {
         const options = {
             method: "GET",
             headers: {"Content-Type": "application/json"},
@@ -29,7 +29,7 @@ export default class UserAdaptor extends Adaptor {
         return response ? response.map(user => User.fromJson(user)) : null;
     }
 
-    async asyncGetAllByNoTeam() {
+    async asyncFindAllByNoTeam() {
         const options = {
             method: "GET",
             headers: {"Content-Type": "application/json"},
@@ -49,7 +49,7 @@ export default class UserAdaptor extends Adaptor {
         return response ? User.fromJson(response) : null;
     }
 
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET",
             headers: {"Content-Type": "application/json"},

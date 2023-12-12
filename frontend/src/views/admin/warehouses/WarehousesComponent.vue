@@ -502,45 +502,45 @@ export default {
   },
   methods: {
     async loadWarehouses() {
-      this.warehouses = await this.warehousesService.asyncGetAll();
+      this.warehouses = await this.warehousesService.asyncFindAll();
     },
 
     async loadWarehouseDetails() {
-      this.selectedWarehouse = await this.warehousesService.asyncGetById(this.selectedWarehouse.id);
+      this.selectedWarehouse = await this.warehousesService.asyncFindById(this.selectedWarehouse.id);
     },
 
     async loadWarehouseCapacity() {
       this.warehouseProductCategoryCapacities =
-          await this.warehousesService.asyncGetCapacity(this.selectedWarehouse.id);
+          await this.warehousesService.asyncFindCapacity(this.selectedWarehouse.id);
     },
 
     async loadWarehouseTeams() {
-      this.warehouseTeams = await this.teamsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseTeams = await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
       for (const team of this.warehouseTeams) {
         if (team.leaderId !== null) {
           team.teamLeader = await this.usersService.asyncGetById(team.leaderId);
         }
         if (team.teamMembers !== null) {
-          team.teamMembers = await this.usersService.asyncGetAllByTeamId(team.id);
+          team.teamMembers = await this.usersService.asyncFindAllByTeamId(team.id);
         }
       }
       console.log(this.warehouseTeams);
     },
 
     async loadWarehouseProjects() {
-      this.warehouseProjects = await this.projectsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseProjects = await this.projectsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     async loadWarehouseTransactions() {
-      this.warehouseTransactions = await this.transactionsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseTransactions = await this.transactionsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     // async loadWarehouseOrders() {
-    //   this.warehouseOrders = await this.ordersService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+    //   this.warehouseOrders = await this.ordersService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     // },
 
     async loadWarehouseProducts() {
-      this.warehouseProducts = await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseProducts = await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     goToEditCapacity(capacity) {

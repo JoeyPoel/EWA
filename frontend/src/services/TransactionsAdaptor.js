@@ -13,7 +13,7 @@ export default class TransactionsAdaptor extends Adaptor {
      * @return {Promise<Transaction[] | null>} - A promise that resolves to an array of Transaction objects
      *                                           or null.
      */
-    async asyncGetAllByProductId(productId) {
+    async asyncFindAllByProductId(productId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -30,7 +30,7 @@ export default class TransactionsAdaptor extends Adaptor {
      * @returns {Promise<Array<Transaction> | null>} - A promise that resolves to an array of Transaction objects or
      *                                                 null.
      */
-    async asyncGetAllByWarehouseId(warehouseId) {
+    async asyncFindAllByWarehouseId(warehouseId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
