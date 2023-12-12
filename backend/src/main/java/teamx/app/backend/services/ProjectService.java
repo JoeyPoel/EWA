@@ -5,13 +5,12 @@ import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.Transaction;
-import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 import teamx.app.backend.repositories.TeamRepository;
+import teamx.app.backend.utils.DTO.InventoryProjectDTO;
+import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.sql.Date;
-import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -31,7 +30,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-public List<Project> getAllProjects() { // otherwise joeys code breaks
+    public List<Project> getAllProjects() { // otherwise joeys code breaks
         List<Project> projects = projectRepository.findAll();
         if (projects.isEmpty()) {
             return null;
@@ -45,7 +44,9 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         if (projects.isEmpty()) {
             throw new NoSuchElementException("No projects found");
         }
-        return mapToDTO(projects);
+        return projects.stream()
+                .map(Project::toDTO)
+                .toList();
     }
 
     protected Project findById(Long projectID) {
@@ -54,7 +55,7 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
     }
 
     public ProjectDTO findDTOById(Long projectID) {
-        return mapToDTO(findById(projectID));
+        return findById(projectID).toDTO();
     }
 
     private Project save(Project project) {
@@ -62,32 +63,30 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
     }
 
     public ProjectDTO add(ProjectDTO projectDTO) {
-        Project project = new Project();
-        return mapToDTO(mapToEntity(project, projectDTO));
+        Project project = mapToEntity(new Project(), projectDTO);
+        return project.toDTO();
     }
 
     public ProjectDTO update(Long projectId, ProjectDTO newProjectData) {
         if (!projectId.equals(newProjectData.getId())) throw new IllegalArgumentException("Project ID does not match");
         Project project = findById(projectId);
-        if (newProjectData.getTeamId() != null){
+        if (newProjectData.getTeamId() != null) {
             project.setTeam(teamRepository.findById(newProjectData.getTeamId()).orElseThrow());
         }
         Project savedProject = mapToEntity(project, newProjectData);
-        return mapToDTO(savedProject);
+        return savedProject.toDTO();
     }
 
     public ProjectDTO delete(Long projectId) {
         Project deletedProject = findById(projectId);
         projectRepository.deleteById(projectId);
-        return mapToDTO(deletedProject);
+        return deletedProject.toDTO();
     }
 
     public List<ProjectDTO> findAllByWarehouseIdDTO(Long warehouseId) {
-        return mapToDTO(projectRepository.getAllByTeam_Warehouse_Id(warehouseId));
-    }
-
-    public List<Project> findAllByWarehouseId(Long warehouseId) {
-        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId);
+        return projectRepository.getAllByTeam_Warehouse_Id(warehouseId).stream()
+                .map(Project::toDTO)
+                .toList();
     }
 
     private Project mapToEntity(Project project, ProjectDTO projectDTO) {
@@ -102,17 +101,6 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
         project.setTeam(teamRepository.findById(projectDTO.getTeamId()).orElseThrow());
         return save(project);
-    }
-
-    private ProjectDTO mapToDTO(Project project) {
-        return new ProjectDTO(project);
-    }
-
-    private List<ProjectDTO> mapToDTO(List<Project> projects) {
-        return projects
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
     }
 
     protected void setTeam(List<Project> projects, Team team) {
@@ -132,14 +120,6 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
                 projectRepository.findAllByStatusAndEndDateBetween(status, startDate, endDate) :
                 projectRepository.findAllByStatusAndTeam_Warehouse_IdAndEndDateBetween(
                         status, warehouseId, startDate, endDate);
-    }
-
-    public Collection<Object> findProjectsByStatus(Project.Status status) {
-        return projectRepository.findAllByStatus(status);
-    }
-
-    public Collection<Object> findProjectsByStatus(Project.Status status, Long warehouseId) {
-        return projectRepository.findAllByStatusAndTeam_Warehouse_Id(status, warehouseId);
     }
 
     private InventoryProjectDTO mapInventoryToDTO(Transaction transaction) {
@@ -169,7 +149,6 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
                     .map(this::mapInventoryToDTO)
                     .collect(Collectors.toList());
         }
-
         return null;
     }
 

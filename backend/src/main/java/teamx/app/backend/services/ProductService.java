@@ -2,9 +2,9 @@ package teamx.app.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import teamx.app.backend.utils.DTO.ProductDTO;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
-import teamx.app.backend.models.dto.ProductDTO;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
 
@@ -71,14 +71,6 @@ public class ProductService {
         return mapToDTO(existingProduct);
     }
 
-    protected List<Long> findAllIds() {
-        return productRepository
-                .findAll()
-                .stream()
-                .map(Product::getId)
-                .toList();
-    }
-
     protected List<Long> findAllActiveIds() {
         return productRepository
                 .findAllByTransactionsIsNotEmpty()
@@ -89,10 +81,6 @@ public class ProductService {
 
     protected List<Product> findAllByIds(List<Long> productIds) {
         return productRepository.findAllById(productIds);
-    }
-
-    protected List<Product> findAllByCategoryId(Long categoryId) {
-        return productRepository.findAllByCategory_Id(categoryId);
     }
 
     private Product mapToEntity(Product product, ProductDTO productDTO) {
@@ -114,7 +102,13 @@ public class ProductService {
     }
 
     private ProductDTO mapToDTO(Product product) {
-        return new ProductDTO(product);
+        return ProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .categoryId(product.getCategory().getId())
+                .build();
     }
 
     private List<ProductDTO> mapToDTO(List<Product> products) {

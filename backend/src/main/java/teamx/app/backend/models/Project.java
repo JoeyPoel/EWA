@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import teamx.app.backend.utils.DTO.ProjectDTO;
+import teamx.app.backend.utils.Model;
 
 import java.sql.Date;
 import java.util.List;
@@ -18,10 +21,11 @@ import java.util.List;
  * @see Team
  */
 @Data
+@Builder
 @Entity(name = "Projects")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
+public class Project implements Model<ProjectDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,6 +44,24 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Override
+    public ProjectDTO toDTO() {
+        return ProjectDTO.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .location(location)
+                .clientName(clientName)
+                .clientEmail(clientEmail)
+                .clientPhone(clientPhone)
+                .startDate(startDate)
+                .endDate(endDate)
+                .status(String.valueOf(status))
+                .teamId(team.getId())
+                .build();
+    }
+
     public enum Status {
         IN_PROGRESS,
         FINISHED

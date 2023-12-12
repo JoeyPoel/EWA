@@ -2,13 +2,12 @@ package teamx.app.backend.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import teamx.app.backend.utils.DTO.ChartsDataDTO;
+import teamx.app.backend.utils.DTO.DataSetDTO;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.models.Transaction;
-import teamx.app.backend.models.dto.charts.ChartsDataDTO;
-import teamx.app.backend.models.dto.charts.DataSetDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -67,6 +66,7 @@ public class ChartService {
 
         return ChartsDataDTO.builder().labels(labels).datasets(List.of(dataSetDTO)).build();
     }
+
     private String getWarehouseLabel(Long warehouseId) {
         return warehouseId == null ? "All warehouses" : warehouseService.findById(warehouseId).getName();
     }

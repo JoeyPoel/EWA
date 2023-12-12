@@ -3,7 +3,7 @@ package teamx.app.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamx.app.backend.models.dto.TransactionDTO;
+import teamx.app.backend.utils.DTO.TransactionDTO;
 import teamx.app.backend.services.TransactionService;
 
 import java.util.List;

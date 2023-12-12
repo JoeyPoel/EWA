@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.utils.DTO.CapacityDTO;
 import teamx.app.backend.models.Capacity;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Warehouse;
-import teamx.app.backend.models.dto.CapacityDTO;
 import teamx.app.backend.repositories.CapacityRepository;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.WarehouseRepository;
@@ -84,7 +84,7 @@ public class WarehouseService {
     public List<CapacityDTO> getCapacity(Long warehouseId) {
         setMissingCapacityCategories(warehouseId);
         List<Capacity> warehouseCapacity = capacityRepository.findAllByWarehouseId(warehouseId);
-        return warehouseCapacity.stream().map(CapacityDTO::new).toList();
+        return warehouseCapacity.stream().map(Capacity::toDTO).toList();
     }
 
     public void setMissingCapacityCategories(Long id) {
@@ -115,8 +115,9 @@ public class WarehouseService {
         if (warehouse == null) {
             return null;
         }
-        Capacity newCapacity = convertToCapacityEntity(capacity);
-        return new CapacityDTO(capacityRepository.save(newCapacity));
+        Capacity newCapacity = mapToCapacityEntity(capacity,
+                Objects.requireNonNull(capacityRepository.findById(capacity.getId()).orElse(null)));
+        return capacityRepository.save(newCapacity).toDTO();
     }
 
     public CapacityDTO updateCapacityById(Long id, CapacityDTO capacity) {
@@ -126,17 +127,13 @@ public class WarehouseService {
         }
         existingCapacity.setCapacity(capacity.getCapacity());
         existingCapacity.setMinimumStockLevel(capacity.getMinimumStockLevel());
-        return new CapacityDTO(capacityRepository.save(existingCapacity));
+        return capacityRepository.save(existingCapacity).toDTO();
     }
 
-    public Capacity convertToCapacityEntity(CapacityDTO dto) {
-        Capacity capacity = new Capacity();
-        capacity.setId(dto.getId());
-        capacity.setWarehouse(warehouseRepository.findById(dto.getWarehouseId()).orElse(null));
-        capacity.setProductCategory(productCategoryRepository.findById(dto.getCategoryId()).orElse(null));
-        capacity.setCapacity(dto.getCapacity());
-        capacity.setMinimumStockLevel(dto.getMinimumStockLevel());
-        return capacity;
+    public Capacity mapToCapacityEntity(CapacityDTO dto, Capacity entity) {
+        entity.setCapacity(dto.getCapacity());
+        entity.setMinimumStockLevel(dto.getMinimumStockLevel());
+        return entity;
     }
 
     private void validateInputs(Long id, Warehouse warehouse) {

@@ -1,12 +1,11 @@
 package teamx.app.backend.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.services.TeamService;
+import teamx.app.backend.utils.DTO.TeamDTO;
 
 import java.util.List;
 

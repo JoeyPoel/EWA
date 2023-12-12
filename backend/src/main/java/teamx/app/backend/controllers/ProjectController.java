@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.services.ProjectService;
+import teamx.app.backend.utils.DTO.ProjectDTO;
+import teamx.app.backend.utils.DTO.InventoryProjectDTO;
 
 import java.util.List;
 

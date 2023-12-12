@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import teamx.app.backend.utils.DTO.TransactionDTO;
+import teamx.app.backend.utils.Model;
 
 import java.sql.Date;
 
@@ -18,10 +21,11 @@ import java.sql.Date;
  * @see Warehouse
  */
 @Data
+@Builder
 @Entity(name = "Transactions")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+public class Transaction implements Model<TransactionDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -58,6 +62,22 @@ public class Transaction {
     }
 
     public enum Type {
-        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT, RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT,
+        RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
+    }
+
+    @Override
+    public TransactionDTO toDTO() {
+        return TransactionDTO.builder()
+                .id(id)
+                .quantity(quantity)
+                .transactionType(transactionType.toString())
+                .transactionDate(transactionDate)
+                .productId(product.getId())
+                .warehouseId(warehouse.getId())
+                .transferFromWarehouseId(transferFrom.getId())
+                .projectId(project.getId())
+                .orderId(order.getId())
+                .build();
     }
 }

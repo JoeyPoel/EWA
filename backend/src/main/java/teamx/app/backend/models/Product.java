@@ -1,12 +1,12 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import teamx.app.backend.utils.DTO.ProductDTO;
+import teamx.app.backend.utils.Model;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @Entity(name = "Products")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product implements Model<ProductDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +35,15 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Transaction> transactions;
+
+    @Override
+    public ProductDTO toDTO() {
+        return ProductDTO.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .price(price)
+                .categoryId(category.getId())
+                .build();
+    }
 }

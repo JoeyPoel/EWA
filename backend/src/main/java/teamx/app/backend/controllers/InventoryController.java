@@ -3,8 +3,9 @@ package teamx.app.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamx.app.backend.models.dto.InventoryProductDTO;
+import teamx.app.backend.utils.DTO.InventoryProductDTO;
 import teamx.app.backend.services.InventoryService;
+
 
 import java.util.List;
 import java.util.Map;

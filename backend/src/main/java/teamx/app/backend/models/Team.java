@@ -3,8 +3,11 @@ package teamx.app.backend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import teamx.app.backend.utils.DTO.TeamDTO;
+import teamx.app.backend.utils.Model;
 
 import java.util.List;
 
@@ -17,10 +20,11 @@ import java.util.List;
  * @see User
  */
 @Data
+@Builder
 @Entity(name = "Teams")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team {
+public class Team implements Model<TeamDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,5 +48,16 @@ public class Team {
     @OneToMany
     @JoinColumn(name = "team_id")
     private List<Project> projects;
+
+    @Override
+    public TeamDTO toDTO() {
+        return TeamDTO.builder()
+                .id(id)
+                .name(name)
+                .warehouseId(warehouse.getId())
+                .leaderId(leader.getId())
+                .membersIds(members.stream().map(User::getId).toList())
+                .build();
+    }
 }
 

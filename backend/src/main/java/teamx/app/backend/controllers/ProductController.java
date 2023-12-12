@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.ProductCategory;
-import teamx.app.backend.models.dto.ProductDTO;
 import teamx.app.backend.services.ProductService;
+import teamx.app.backend.utils.DTO.ProductDTO;
 
 import java.util.List;
 

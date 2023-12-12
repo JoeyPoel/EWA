@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.User;
-import teamx.app.backend.models.dto.UserDTO;
 import teamx.app.backend.services.AuthenthicationService;
+import teamx.app.backend.utils.DTO.UserDTO;
 
 /**
  * AuthenticationController handles authentication-related HTTP requests.
- *
  * This controller provides an endpoint for user login. It receives a User object
  * in the request body and attempts to authenticate the user.
  * Further implementation will be added

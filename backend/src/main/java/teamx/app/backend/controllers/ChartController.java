@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import teamx.app.backend.models.dto.charts.ChartsDataDTO;
+import teamx.app.backend.utils.DTO.ChartsDataDTO;
 import teamx.app.backend.services.ChartService;
 
 import java.sql.Date;

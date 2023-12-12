@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.Warehouse;
-import teamx.app.backend.models.dto.CapacityDTO;
 import teamx.app.backend.services.WarehouseService;
+import teamx.app.backend.utils.DTO.CapacityDTO;
 
 import java.util.List;
 
