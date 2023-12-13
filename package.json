@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@mdi/js": "^7.3.67",
-    "jwt-decode": "^4.0.0"
-  }
-}

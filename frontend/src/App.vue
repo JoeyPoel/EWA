@@ -55,7 +55,6 @@ export default {
       authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth"),
       chartsService: new ChartsAdaptor(CONFIG.BACKEND_URL + "/charts"),
       emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail")
-
     }
   },
 }
