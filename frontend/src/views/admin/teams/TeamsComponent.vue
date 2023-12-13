@@ -89,7 +89,7 @@
                             <v-list-item title="Warehouse" :subtitle="getWarehouseName(selectedTeam)"/>
                             <v-list-item title="Team Lead" :subtitle="getTeamLeadName(selectedTeam)"/>
                             <v-list-item title="Team Members">
-                              <v-list-item-subtitle v-for="member in users" :key="member.id">
+                              <v-list-item-subtitle v-for="member in selectedTeamUsers" :key="member.id">
                                 {{ member.name }}
                               </v-list-item-subtitle>
                             </v-list-item>
@@ -181,6 +181,12 @@ export default {
         details: 'Team Details',
       }
     },
+    selectedTeamUsers() {
+      if (this.selectedTeam && this.users.length > 0 && this.selectedTeam.membersIds !== undefined) {
+        return this.users.filter(user => this.selectedTeam.membersIds.includes(user.id));
+      }
+      return [];
+    }
   },
 
   watch: {

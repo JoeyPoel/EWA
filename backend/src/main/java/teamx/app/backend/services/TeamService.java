@@ -55,8 +55,8 @@ public class TeamService {
 
     public Team delete(Long id) {
         Team existingTeam = findById(id);
-        userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
-        projectService.setTeam(existingTeam.getProjects(), null);
+//        userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
+//        projectService.setTeam(existingTeam.getProjects(), null);
         teamRepository.deleteById(id);
         return existingTeam;
     }
