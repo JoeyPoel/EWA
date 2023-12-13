@@ -10,7 +10,7 @@
                     label="Warehouse"/>
         </v-col>
         <v-col class="justify-content-center" cols="2">
-          <v-btn @click="selectedWarehouse = null; search = ''">Reset</v-btn>
+          <v-btn @click="selectedWarehouse = null; search = ''" color="secondary">Reset</v-btn>
         </v-col>
       </v-row>
       <v-data-table
