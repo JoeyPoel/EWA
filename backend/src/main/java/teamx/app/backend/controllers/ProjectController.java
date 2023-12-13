@@ -109,4 +109,9 @@ public class ProjectController {
     public ResponseEntity<List<InventoryProjectDTO>> getAllInventory(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectMaterials(id));
     }
+
+    @GetMapping("/team/{id}")
+    public ResponseEntity<List<ProjectDTO>> getAllByTeamId(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.findAllByTeamId(id).stream().map(Project::toDTO).toList());
+    }
 }
