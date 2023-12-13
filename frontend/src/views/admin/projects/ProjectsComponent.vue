@@ -182,7 +182,6 @@
           </v-toolbar>
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <!--          TODO: change text color-->
           <v-chip :color="getStatusColor(item)" :text="getStatusDisplayName(item.status)">
           </v-chip>
         </template>
@@ -303,13 +302,14 @@ export default {
       switch (project.status) {
         case "IN_PROGRESS":
           return "blue";
-        case "FINISHED":
+        case "FINISHED" || "DONE":
           return "green";
+        case "TODO":
+          return "red";
         default:
           return "grey";
       }
     },
-
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },

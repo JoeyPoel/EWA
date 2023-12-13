@@ -76,6 +76,11 @@
                             :sort-by="['order']"
                             :expand-on-click="true"
                             class="elevation-1">
+                          <template v-slot:[`item.status`]="{ item }">
+                            <v-chip :color="getStatusColor(item)">
+                              {{ getTaskStatusDisplayName(item.status) }}
+                            </v-chip>
+                          </template>
                         </v-data-table>
                       </v-container>
                     </v-window-item>
@@ -134,7 +139,7 @@ export default {
         {title: "Name", value: "name"},
         {title: "Description", value: "description"},
         {title: "Deadline", value: "deadline"},
-        {title: "Status", value: "status", key: "displayName"},
+        {title: "Status", value: "status"},
         {title: "Assigned To", value: "personalTodoListOwnerName"},
       ],
       projectTaskSearch: "",
@@ -231,8 +236,10 @@ export default {
       switch (project.status) {
         case "IN_PROGRESS":
           return "blue";
-        case "FINISHED":
+        case "FINISHED" || "DONE":
           return "green";
+        case "TODO":
+          return "red";
         default:
           return "grey";
       }
@@ -242,7 +249,9 @@ export default {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
-    getTaskStatusName(status) {
+    getTaskStatusDisplayName(status) {
+      console.log(status);
+      console.log(Task.statusList.find(s => s.value === status)?.displayName);
       return Task.statusList.find(s => s.value === status)?.displayName;
     },
 
