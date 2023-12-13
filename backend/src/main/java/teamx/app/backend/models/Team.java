@@ -54,9 +54,9 @@ public class Team implements Model<TeamDTO> {
         return TeamDTO.builder()
                 .id(id)
                 .name(name)
-                .warehouseId(warehouse.getId())
-                .leaderId(leader.getId())
-                .membersIds(members.stream().map(User::getId).toList())
+                .warehouseId(warehouse != null ? warehouse.getId() : null)
+                .leaderId(leader != null ? leader.getId() : null)
+                .membersIds(members.isEmpty() ? null : members.stream().map(User::getId).toList())
                 .build();
     }
 }

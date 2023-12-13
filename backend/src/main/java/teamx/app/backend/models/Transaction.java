@@ -50,11 +50,11 @@ public class Transaction implements Model<TransactionDTO> {
     private Warehouse transferFrom;
     @ManyToOne
     @JsonIgnore
-    private Order order;
+    private InventoryOrder inventoryOrder;
 
 
     public boolean isPositiveTransaction() {
-        return this.getTransactionType() == Type.ORDER ||
+        return this.getTransactionType() == Type.INVENTORY_ORDER ||
                 (this.getTransactionType() == Type.ADJUSTMENT ||
                         this.getTransactionType() == Type.RETURN ||
                         this.getTransactionType() == Type.OTHER)
@@ -62,7 +62,7 @@ public class Transaction implements Model<TransactionDTO> {
     }
 
     public enum Type {
-        ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT,
+        INVENTORY_ORDER, PROJECT_MATERIAL, TRANSFER, ADJUSTMENT,
         RETURN, DAMAGED, LOST, EXTRA_MATERIAL_FOR_PROJECT, OTHER
     }
 
@@ -73,11 +73,11 @@ public class Transaction implements Model<TransactionDTO> {
                 .quantity(quantity)
                 .transactionType(transactionType.toString())
                 .transactionDate(transactionDate)
-                .productId(product.getId())
-                .warehouseId(warehouse.getId())
-                .transferFromWarehouseId(transferFrom.getId())
-                .projectId(project.getId())
-                .orderId(order.getId())
+                .productId(product != null ? product.getId() : null)
+                .warehouseId(warehouse != null ? warehouse.getId() : null)
+                .transferFromWarehouseId(transferFrom != null ? transferFrom.getId() : null)
+                .projectId(project != null ? project.getId() : null)
+                .orderId(inventoryOrder != null ? inventoryOrder.getId() : null)
                 .build();
     }
 }

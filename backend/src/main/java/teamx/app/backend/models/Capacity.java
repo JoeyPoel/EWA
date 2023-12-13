@@ -35,9 +35,9 @@ public class Capacity implements Model<CapacityDTO>{
                 .id(id)
                 .capacity(capacity)
                 .minimumStockLevel(minimumStockLevel)
-                .warehouseId(warehouse.getId())
-                .categoryId(productCategory.getId())
-                .categoryName(productCategory.getName())
+                .warehouseId(warehouse != null ? warehouse.getId() : null)
+                .categoryId(productCategory != null ? productCategory.getId() : null)
+                .categoryName(productCategory != null ? productCategory.getName() : null)
                 .build();
     }
 }

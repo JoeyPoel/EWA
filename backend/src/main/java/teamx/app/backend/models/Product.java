@@ -43,7 +43,7 @@ public class Product implements Model<ProductDTO> {
                 .name(name)
                 .description(description)
                 .price(price)
-                .categoryId(category.getId())
+                .categoryId(category != null ? category.getId() : null)
                 .build();
     }
 }

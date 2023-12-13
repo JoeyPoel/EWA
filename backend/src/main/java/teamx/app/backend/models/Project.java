@@ -58,7 +58,7 @@ public class Project implements Model<ProjectDTO> {
                 .startDate(startDate)
                 .endDate(endDate)
                 .status(String.valueOf(status))
-                .teamId(team.getId())
+                .teamId(team != null ? team.getId() : null)
                 .build();
     }
 

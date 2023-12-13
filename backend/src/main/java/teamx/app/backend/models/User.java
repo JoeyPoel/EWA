@@ -35,15 +35,15 @@ public class User implements Model<UserDTO> {
     @ManyToOne()
     private Team team;
 
-    @Transient
-    private Long teamId;
-
-    @PostLoad
-    void fillTransient() {
-        if (team != null) {
-            this.teamId = team.getId();
-        }
-    }
+//    @Transient
+//    private Long teamId;
+//
+//    @PostLoad
+//    void fillTransient() {
+//        if (team != null) {
+//            this.teamId = team.getId();
+//        }
+//    }
 
     @Override
     public String toString() {

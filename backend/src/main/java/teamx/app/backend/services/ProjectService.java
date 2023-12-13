@@ -52,7 +52,7 @@ public class ProjectService {
 
     public Project delete(Long projectId) {
         Project deletedProject = findById(projectId);
-        projectRepository.deleteById(projectId);
+        projectRepository.delete(deletedProject);
         return deletedProject;
     }
 

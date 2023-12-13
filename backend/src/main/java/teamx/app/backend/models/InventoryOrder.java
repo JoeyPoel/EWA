@@ -15,17 +15,18 @@ import java.sql.Date;
 import java.util.List;
 
 /**
- * Order entity
- * Represents an order of products
+ * InventoryOrder entity
+ * Represents an inventoryOrder of products
  *
  * @author Junior Javier Brito Perez
  */
 @Data
 @Builder
-@Entity(name = "Orders")
+@Entity(name = "InventoryOrders")
+@Table(name = "INVENTORYORDERS")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order implements Model<OrderDTO> {
+public class InventoryOrder implements Model<OrderDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,7 +47,7 @@ public class Order implements Model<OrderDTO> {
     @JsonIgnore
     private User orderedBy;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "inventoryOrder")
     @JsonIgnore
     private List<Transaction> transactions;
 
@@ -62,7 +63,7 @@ public class Order implements Model<OrderDTO> {
                 .orderDate(orderDate)
                 .deliveryDate(deliveryDate)
                 .warehouseId(warehouse.getId())
-                .ProjectId(transactions.get(0).getProject().getId())
+                .ProjectId(transactions.get(0).getProject() != null ? transactions.get(0).getProject().getId() : null)
                 .userId(orderedBy.getId())
                 .build();
     }

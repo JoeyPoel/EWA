@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Order;
+import teamx.app.backend.models.InventoryOrder;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.OrderRepository;
 import teamx.app.backend.repositories.UserRepository;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
@@ -91,14 +90,14 @@ public class UserService {
 
     @Transactional
     public User delete(Long userId) {
-        // Retrieve all orders related to the user
-        List<Order> orders = orderRepository.findAllByOrderedById(userId);
+        // Retrieve all inventoryOrders related to the user
+        List<InventoryOrder> inventoryOrders = orderRepository.findAllByOrderedById(userId);
         User user = getById(userId);
 
-        // Remove the user from all orders related to the user
-        for (Order order : orders) {
-            order.setOrderedBy(null);
-            orderRepository.save(order);
+        // Remove the user from all inventoryOrders related to the user
+        for (InventoryOrder inventoryOrder : inventoryOrders) {
+            inventoryOrder.setOrderedBy(null);
+            orderRepository.save(inventoryOrder);
         }
         
         userRepository.deleteById(userId);

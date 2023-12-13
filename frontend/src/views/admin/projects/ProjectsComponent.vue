@@ -168,7 +168,7 @@
           </v-chip>
         </template>
         <template v-slot:[`item.teamName`]="{ item }">
-          {{ this.teams.find(t => t.id === item.teamId)?.name }}
+          {{ teams.find(t => t.id === item.teamId)?.name }}
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon @click="seeDetails(item)">$info</v-icon>
@@ -229,22 +229,6 @@ export default {
   },
 
   watch: {
-    dialogNew(val) {
-      val || this.close();
-    },
-    dialogEdit(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.close();
-    },
-    async dialogDetail(val) {
-      if (!val) {
-        this.close();
-        return;
-      }
-      await this.loadInventory();
-    },
   },
 
   async created() {
@@ -259,6 +243,7 @@ export default {
 
     async getTeams() {
       this.teams = await this.teamsService.asyncFindAll();
+      console.log(this.teams)
     },
 
     async getProjects() {
@@ -323,9 +308,10 @@ export default {
       await this.getProjects();
     },
 
-    seeDetails(project) {
+    async seeDetails(project) {
       this.assignSelectedProject(project);
       this.dialogDetail = true;
+      await this.loadInventory();
     },
 
     async loadInventory() {
