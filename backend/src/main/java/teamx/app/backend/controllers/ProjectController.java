@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.dto.InventoryProjectDTO;
+import teamx.app.backend.models.dto.ProjectDTO;
+import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.services.ProjectService;
 import teamx.app.backend.utils.DTO.InventoryProjectDTO;
@@ -113,5 +116,16 @@ public class ProjectController {
     @GetMapping("/team/{id}")
     public ResponseEntity<List<ProjectDTO>> getAllByTeamId(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.findAllByTeamId(id).stream().map(Project::toDTO).toList());
+    }
+
+    /**
+     * Retrieves a projects inventory from the database.
+        *
+        * @return a ResponseEntity object containing a list of InventoryProjectDTO objects.
+        */
+
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<List<TaskDTO>> getAllTasks(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.getProjectTasks(id));
     }
 }

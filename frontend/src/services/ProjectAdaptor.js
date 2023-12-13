@@ -1,6 +1,7 @@
 import {Adaptor} from "@/services/Adaptor";
 import {Project} from "@/models/Project";
 import {InventoryProject} from "@/models/InventoryProject";
+import {Task} from "@/models/Task";
 
 
 /**
@@ -120,6 +121,15 @@ export default class ProjectAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/inventory" + "/" + id, options)
         return response ? response.map(inventoryProject => InventoryProject.fromJson(inventoryProject)) : null;
+    }
+
+    async asyncGetProjectTasks(id) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/tasks" + "/" + id, options)
+        return response ? response.map(task => Task.fromJson(task)) : null;
     }
 
     async asyncFindAllByTeamId(id) {

@@ -310,6 +310,32 @@ values ('energy infrastructure', 'revamping the energy infrastructure', 'amsterd
        ('solar energy project', 'implementing solar energy projects and schemes', 'zaanstad', 'zaanstad city', 'cityzaanstad@email.com', '445-446-4470',
         '2024-04-04', '2024-08-09', 'IN_PROGRESS', 7);
 
+-- Tasks
+INSERT INTO Tasks (task_order, name, description, deadline, status, project_id, personaltodolistowner_id) VALUES
+-- User 1 tasks
+(1, 'Task 1', 'This task involves the initial planning phase of the project', '2023-07-01', 'TODO', 1, 1),
+(2, 'Task 2', 'This task is about the design and architecture of the project', '2023-07-02', 'IN_PROGRESS', 1, 1),
+(3, 'Task 3', 'This task is about the implementation of the project', '2023-07-03', 'DONE', 2, 1),
+-- User 2 tasks
+(4, 'Task 4', 'This task involves the testing phase of the project', '2023-07-04', 'TODO', 2, 2),
+(5, 'Task 5', 'This task is about the deployment of the project', '2023-07-05', 'IN_PROGRESS', 3, 2),
+(6, 'Task 6', 'This task is about the maintenance of the project', '2023-07-06', 'DONE', 3, 2),
+-- User 3 tasks
+(7, 'Task 7', 'This task involves gathering requirements for the project', '2023-07-07', 'TODO', 4, 3),
+(8, 'Task 8', 'This task is about the feasibility study of the project', '2023-07-08', 'IN_PROGRESS', 4, 3),
+(9, 'Task 9', 'This task is about the risk analysis of the project', '2023-07-09', 'DONE', 5, 3),
+-- User 4 tasks
+(10, 'Task 10', 'This task involves the initial planning phase of the project', '2023-07-10', 'TODO', 5, 4),
+(11, 'Task 11', 'This task is about the design and architecture of the project', '2023-07-11', 'IN_PROGRESS', 5, 4),
+(12, 'Task 12', 'This task is about the implementation of the project', '2023-07-12', 'DONE', 6, 4),
+-- User 5 tasks
+(13, 'Task 13', 'This task involves the testing phase of the project', '2023-07-13', 'TODO', 6, 5),
+(14, 'Task 14', 'This task is about the deployment of the project', '2023-07-14', 'IN_PROGRESS', 7, 5),
+(15, 'Task 15', 'This task is about the maintenance of the project', '2023-07-15', 'DONE', 7, 5),
+-- User 6 tasks
+(16, 'Task 16', 'This task involves gathering requirements for the project', '2023-07-16', 'TODO', 8, 6),
+(17, 'Task 17', 'This task is about the feasibility study of the project', '2023-07-17', 'IN_PROGRESS', 8, 6),
+(18, 'Task 18', 'This task is about the risk analysis of the project', '2023-07-18', 'DONE', 9, 6);
 
 -- generate project transactions
 insert into transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, inventory_order_id, transaction_type)
