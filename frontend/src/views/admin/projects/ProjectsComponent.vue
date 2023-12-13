@@ -157,7 +157,8 @@
                             :expand-on-click="true"
                             class="elevation-1">
                           <template v-slot:[`item.status`]="{ item }">
-                            <v-chip :value="getTaskStatusDisplayName(item.status)">
+                            <v-chip :color="getStatusColor(item)">
+                              {{ getTaskStatusDisplayName(item.status) }}
                             </v-chip>
                           </template>
                         </v-data-table>
@@ -314,6 +315,8 @@ export default {
     },
 
     getTaskStatusDisplayName(status) {
+      console.log(status);
+      console.log(Task.statusList.find(s => s.value === status)?.displayName);
       return Task.statusList.find(s => s.value === status)?.displayName;
     },
 
