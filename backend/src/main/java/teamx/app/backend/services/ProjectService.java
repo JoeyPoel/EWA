@@ -8,6 +8,7 @@ import teamx.app.backend.models.Team;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.models.dto.ProjectDTO;
+import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 import teamx.app.backend.repositories.TeamRepository;
 
@@ -162,13 +163,18 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         return dto;
     }
 
-    private InventoryProjectDTO mapTasksToDTO(Task task) {
-        InventoryProjectDTO dto = new InventoryProjectDTO();
+    private TaskDTO mapTasksToDTO(Task task) {
+
+TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
-        dto.setTaskName(task.getName());
-        dto.setTaskDescription(task.getDescription());
-        dto.setTaskDeadline(String.valueOf(task.getDeadline()));
-        dto.setTaskStatus(task.getStatus().name());
+        dto.setOrder(task.getTaskOrder());
+        dto.setName(task.getName());
+        dto.setDescription(task.getDescription());
+        dto.setDeadline(task.getDeadline().toString());
+        dto.setStatus(String.valueOf(task.getStatus()));
+        dto.setProjectId(task.getProject().getId());
+        dto.setPersonalTodoListOwnerId(task.getPersonalTodoListOwner().getId());
+        dto.setPersonalTodoListOwnerName(task.getPersonalTodoListOwner().getName());
         return dto;
     }
 
@@ -185,7 +191,7 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         return null;
     }
 
-    public List<InventoryProjectDTO> getProjectTasks(Long projectId) {
+    public List<TaskDTO> getProjectTasks(Long projectId) {
         Project project = projectRepository.findById(projectId).orElse(null);
 
             if (project != null) {

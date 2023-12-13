@@ -21,15 +21,17 @@ public class TaskDTO {
     private String status;
     private Long projectId;
     private Long personalTodoListOwnerId;
+    private String personalTodoListOwnerName;
 
     public TaskDTO(Task task){
         this.id = task.getId();
-        this.order = task.getOrder();
+        this.order = task.getTaskOrder();
         this.name = task.getName();
         this.description = task.getDescription();
         this.deadline = task.getDeadline().toString();
         this.status = String.valueOf(task.getStatus());
         this.projectId = task.getProject().getId();
         this.personalTodoListOwnerId = task.getPersonalTodoListOwner().getId();
+        this.personalTodoListOwnerName = task.getPersonalTodoListOwner().getName();
     }
 }

@@ -18,7 +18,10 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int order;
+
+    @Column(name = "task_order")
+    private int taskOrder;
+
     private String name;
     private String description;
 
@@ -34,6 +37,7 @@ public class Task {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "personaltodolistowner_id")
     private User personalTodoListOwner;
 
     public enum Status {

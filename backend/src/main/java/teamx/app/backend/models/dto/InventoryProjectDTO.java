@@ -16,11 +16,4 @@ public class InventoryProjectDTO {
     private String warehouseName;
     private String transactionType;
     private Date transactionDate;
-
-    // Task Fields
-    private String taskName;
-    private String taskDescription;
-    private String taskDeadline;
-    private String taskStatus;
-    private Long userId;
 }

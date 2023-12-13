@@ -98,6 +98,7 @@
                 <v-tabs v-model="tab" bg-color="transparent">
                   <v-tab value="details">Project Detail</v-tab>
                   <v-tab value="materials">Project Materials</v-tab>
+                  <v-tab value="tasks">Project Tasks</v-tab>
                 </v-tabs>
                 <v-card-text>
                   <v-window v-model="tab">
@@ -145,6 +146,23 @@
                         </v-data-table>
                       </v-container>
                     </v-window-item>
+                    <v-window-item value="tasks">
+                      <v-container>
+                        <v-data-table
+                            :headers="projectTaskHeaders"
+                            :items="projectTasks"
+                            :items-per-page-options="[5, 10]"
+                            :search="projectTaskSearch"
+                            :sort-by="['order']"
+                            :expand-on-click="true"
+                            class="elevation-1">
+                          <template v-slot:[`item.status`]="{ item }">
+                            <v-chip :value="getTaskStatusDisplayName(item.status)">
+                            </v-chip>
+                          </template>
+                        </v-data-table>
+                      </v-container>
+                    </v-window-item>
                   </v-window>
                 </v-card-text>
               </v-card>
@@ -184,6 +202,7 @@
 <script>
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
+import {Task} from "@/models/Task";
 
 export default {
   // TODO: Fix date format for new and edit
@@ -212,6 +231,15 @@ export default {
         {title: "Warehouse", value: "warehouseName"},],
       projectProductSearch: "",
       projectProducts: [],
+      projectTaskHeaders: [
+        {title: "Name", value: "name"},
+        {title: "Description", value: "description"},
+        {title: "Deadline", value: "deadline"},
+        {title: "Status", value: "status"},
+        {title: "Assigned To", value: "personalTodoListOwnerName"},
+      ],
+      projectTaskSearch: "",
+      projectTasks: [],
       projects: [],
       teams: [],
       selectedProject: new Project(),
@@ -243,7 +271,7 @@ export default {
         this.close();
         return;
       }
-      await this.loadInventory();
+      await this.loadProjectData();
     },
   },
 
@@ -255,6 +283,11 @@ export default {
     async initialize() {
       await this.getProjects();
       await this.getTeams();
+    },
+
+    async loadProjectData() {
+      await this.loadInventory();
+      await this.loadTasks();
     },
 
     async getTeams() {
@@ -278,6 +311,10 @@ export default {
 
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
+    },
+
+    getTaskStatusDisplayName(status) {
+      return Task.statusList.find(s => s.value === status)?.displayName;
     },
 
     newProject() {
@@ -334,6 +371,15 @@ export default {
         console.log(this.projectProducts);
       } catch (error) {
         console.error("Error fetching project products:", error);
+      }
+    },
+
+    async loadTasks() {
+      try {
+        this.projectTasks = await this.projectsService.asyncGetProjectTasks(this.selectedProject.id);
+        console.log(this.projectTasks);
+      } catch (error) {
+        console.error("Error fetching project tasks:", error);
       }
     },
 
