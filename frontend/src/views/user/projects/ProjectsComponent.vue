@@ -18,6 +18,7 @@
                 <v-tabs v-model="tab" bg-color="transparent">
                   <v-tab value="details">Project Detail</v-tab>
                   <v-tab value="materials">Project Materials</v-tab>
+                  <v-tab value="tasks">Project Tasks</v-tab>
                 </v-tabs>
                 <v-card-text>
                   <v-window v-model="tab">
@@ -65,6 +66,23 @@
                         </v-data-table>
                       </v-container>
                     </v-window-item>
+                    <v-window-item value="tasks">
+                      <v-container>
+                        <v-data-table
+                            :headers="projectTaskHeaders"
+                            :items="projectTasks"
+                            :items-per-page-options="[5, 10]"
+                            :search="projectTaskSearch"
+                            :sort-by="['order']"
+                            class="elevation-1">
+                          <template v-slot:[`item.status`]="{ item }">
+                            <v-chip :color="getStatusColor(item)">
+                              {{ getTaskStatusDisplayName(item.status) }}
+                            </v-chip>
+                          </template>
+                        </v-data-table>
+                      </v-container>
+                    </v-window-item>
                   </v-window>
                 </v-card-text>
               </v-card>
@@ -91,9 +109,9 @@
 
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
-// import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
+import {Task} from "@/models/Task";
 export default {
-  // TODO Add Team Authenthicatio to this view
   name: "ProjectsComponent.vue",
   computed: {
     Project() {
@@ -101,7 +119,7 @@ export default {
     }
   },
   components: {BaseCard},
-  inject: ["projectsService", "teamsService"],
+  inject: ["projectsService", "teamsService","usersService"],
   data() {
     return {
       headers: [
@@ -115,11 +133,22 @@ export default {
       projectProductHeaders: [
         {title: "Name", value: "productName"},
         {title: "Quantity", value: "quantity"},
-        {title: "Warehouse", value: "warehouseName"},],
+       // {title: "Warehouse", value: "warehouseName"},
+        ],
+      projectTaskHeaders: [
+        {title: "Name", value: "name"},
+        {title: "Description", value: "description"},
+        {title: "Deadline", value: "deadline"},
+        {title: "Status", value: "status"},
+        {title: "Assigned To", value: "personalTodoListOwnerName"},
+      ],
+      projectTaskSearch: "",
       projectProductSearch: "",
       projectProducts: [],
+      projectTasks: [],
       projects: [],
       teams: [],
+      users: [],
       selectedProject: new Project(),
       search: "",
       tab: "",
@@ -140,14 +169,8 @@ export default {
         this.close();
         return;
       }
-      await this.loadInventory();
-    },
-    async dialogEdit(val) {
-      if (!val) {
-        this.close();
-        return;
-      }
-      await this.loadInventory();
+      await this.loadProjectData();
+
     },
   },
 
@@ -158,16 +181,21 @@ export default {
       await this.getProjects();
     },
 
+    async loadProjectData() {
+      await this.loadInventory();
+      await this.loadTasks();
+    },
+
     async getTeams() {
       this.teams = await this.teamsService.asyncGetAll();
       console.log(this.teams);
     },
 
     async getUserIdFromToken() {
-      const isAuthenticated = sessionStorage.getItem("token");
+      const isAuthenticated = localStorage.getItem("token");
       if (isAuthenticated) {
-        // const decodedToken = jwtDecode(isAuthenticated);
-        // this.userId = decodedToken.id;
+        const decodedToken = jwtDecode(isAuthenticated);
+        this.userId = decodedToken.id;
       }
     },
 
@@ -195,12 +223,23 @@ export default {
       }
     },
 
+    async loadTasks() {
+      try {
+        this.projectTasks = await this.projectsService.asyncGetProjectTasks(this.selectedProject.id);
+        console.log(this.projectTasks);
+      } catch (error) {
+        console.error("Error fetching project tasks:", error);
+      }
+    },
+
     getStatusColor(project) {
       switch (project.status) {
         case "IN_PROGRESS":
           return "blue";
-        case "FINISHED":
+        case "FINISHED" || "DONE":
           return "green";
+        case "TODO":
+          return "red";
         default:
           return "grey";
       }
@@ -210,15 +249,18 @@ export default {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
+    getTaskStatusDisplayName(status) {
+      console.log(status);
+      console.log(Task.statusList.find(s => s.value === status)?.displayName);
+      return Task.statusList.find(s => s.value === status)?.displayName;
+    },
+
     assignSelectedProject(project) {
       this.selectedProject = Object.assign(new Project(), project);
     },
 
     seeDetails(project) {
-      console.log(project)
       this.assignSelectedProject(project);
-      console.log(this.selectedProject);
-      console.log(this.editedProject);
       this.dialogDetail = true;
     },
 

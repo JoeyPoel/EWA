@@ -85,7 +85,7 @@ export default class UserAdaptor extends Adaptor {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(user)
         }
 
-        let response = await this.fetchJson(this.resourceUrl + "/" +  id, options);
+        let response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
         return response ? User.fromJson(response) : null;
     }
@@ -101,6 +101,18 @@ export default class UserAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/passReset", options);
 
+        return response ? User.fromJson(response) : null;
+    }
+
+    async asyncGetUserInfo(id) {
+        const options = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const response = await this.fetchJson(this.resourceUrl + id, options);
         return response ? User.fromJson(response) : null;
     }
 }

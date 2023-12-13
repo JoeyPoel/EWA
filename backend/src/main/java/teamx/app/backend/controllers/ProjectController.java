@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.models.dto.ProjectDTO;
+import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.services.ProjectService;
 
 import java.util.List;
@@ -103,5 +104,16 @@ public class ProjectController {
     @GetMapping("/inventory/{id}")
     public ResponseEntity<List<InventoryProjectDTO>> getAllInventory(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectMaterials(id));
+    }
+
+    /**
+     * Retrieves a projects inventory from the database.
+        *
+        * @return a ResponseEntity object containing a list of InventoryProjectDTO objects.
+        */
+
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<List<TaskDTO>> getAllTasks(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.getProjectTasks(id));
     }
 }

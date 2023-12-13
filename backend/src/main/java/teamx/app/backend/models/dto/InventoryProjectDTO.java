@@ -8,6 +8,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class InventoryProjectDTO {
+
+    // Product Fields
     private Long id;
     private int quantity;
     private String ProductName;
