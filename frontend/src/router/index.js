@@ -68,7 +68,7 @@ const routes = [
     },
     {
         path: '/teams2',
-        name: 'Teams',
+        name: 'Teams2',
         component: () => import('@/views/admin/teams/TeamsV2.vue'),
         meta: {
             requiresAuth: true,

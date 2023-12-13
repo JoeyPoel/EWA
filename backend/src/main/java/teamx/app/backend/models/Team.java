@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import teamx.app.backend.utils.DTO.TeamDTO;
 import teamx.app.backend.utils.Model;
 
@@ -41,11 +43,13 @@ public class Team implements Model<TeamDTO> {
 
     @JsonIgnore
     @OneToMany
+    @Fetch(value = FetchMode.JOIN)
     @JoinColumn(name = "team_id")
     private List<User> members;
 
     @JsonIgnore
     @OneToMany
+    @Fetch(value = FetchMode.JOIN)
     @JoinColumn(name = "team_id")
     private List<Project> projects;
 

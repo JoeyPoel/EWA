@@ -116,12 +116,12 @@
           </v-toolbar>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small class="mr-2" @click="showDetails(item)">$info</v-icon>
-          <v-icon small class="mr-2" @click="showEdit(item)">$edit</v-icon>
-          <v-icon small @click="showDelete(item)">$delete</v-icon>
+          <v-icon @click="showDetails(item)">$info</v-icon>
+          <v-icon @click="showEdit(item)">$edit</v-icon>
+          <v-icon @click="showDelete(item)">$delete</v-icon>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
+          <v-btn color="secondary" @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
     </base-card>
@@ -194,8 +194,18 @@ export default {
         this.teams = await this.teamsService.asyncFindAll();
       }
     },
-    'dialog.open': function (val) {
-      val || this.close();
+    // 'dialog.open': function (val) {
+    //   if (!val) {
+    //     this.$router.push('/admin/teams');
+    //   }else {
+    //     this.$router.push('/admin/teams/' + this.dialog.type + '/' + this.selectedTeam.id);
+    //   }
+    // },
+    selectedTeam(val) {
+      if (val) {
+        return val;
+      }
+      return null;
     }
   },
 
@@ -219,7 +229,8 @@ export default {
     },
 
     async deleteConfirm() {
-      console.log(await this.teamsService.asyncDeleteById(this.editedTeam.id))
+      console.log(this.editedTeam.id)
+      console.log(await this.teamsService.asyncDeleteById(this.editedTeam['id']))
       await this.close();
     },
 
@@ -262,6 +273,11 @@ export default {
     },
 
     showDelete(team) {
+      console.log(JSON.stringify(team))
+      console.log(team['id'])
+      for (let i = 0; i < this.teams.length; i++) {
+        console.log(this.teams[i])
+      }
       this.openDialog('delete', team);
     },
 
@@ -270,8 +286,8 @@ export default {
     },
 
     assignSelectedTeam(team) {
-      this.selectedTeam = Object.assign({}, team);
-      this.editedTeam = Object.assign({}, team);
+      this.selectedTeam = Object.assign(new Team(), team);
+      this.editedTeam = Object.assign(new Team(), team);
     },
   }
 }
