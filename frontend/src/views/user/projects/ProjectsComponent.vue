@@ -74,7 +74,6 @@
                             :items-per-page-options="[5, 10]"
                             :search="projectTaskSearch"
                             :sort-by="['order']"
-                            :expand-on-click="true"
                             class="elevation-1">
                           <template v-slot:[`item.status`]="{ item }">
                             <v-chip :color="getStatusColor(item)">
@@ -134,7 +133,8 @@ export default {
       projectProductHeaders: [
         {title: "Name", value: "productName"},
         {title: "Quantity", value: "quantity"},
-        {title: "Warehouse", value: "warehouseName"},],
+       // {title: "Warehouse", value: "warehouseName"},
+        ],
       projectTaskHeaders: [
         {title: "Name", value: "name"},
         {title: "Description", value: "description"},

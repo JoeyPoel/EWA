@@ -154,7 +154,6 @@
                             :items-per-page-options="[5, 10]"
                             :search="projectTaskSearch"
                             :sort-by="['order']"
-                            :expand-on-click="true"
                             class="elevation-1">
                           <template v-slot:[`item.status`]="{ item }">
                             <v-chip :color="getStatusColor(item)">
