@@ -9,7 +9,7 @@
           <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
                     label="Warehouse"/>
         </v-col>
-        <v-col cols="2" class="justify-content-center">
+        <v-col class="justify-content-center" cols="2">
           <v-btn @click="selectedWarehouse = null; search = ''">Reset</v-btn>
         </v-col>
       </v-row>
@@ -31,7 +31,7 @@
           <v-toolbar flat>
             <v-dialog v-model="dialog.open" max-width="800px">
               <template v-slot:activator="{ props }">
-                <v-btn color="secondary" dark class="mb-2" v-bind="props" @click="showNew">
+                <v-btn class="mb-2" color="secondary" dark v-bind="props" @click="showNew">
                   New Team
                 </v-btn>
               </template>
@@ -65,11 +65,11 @@
                           <v-select
                               v-model="editedTeam.membersIds"
                               :items="users"
+                              chips
                               item-title="name"
                               item-value="id"
                               label="Team Members"
                               multiple
-                              chips
                           />
                         </v-row>
                       </v-col>
@@ -79,15 +79,15 @@
                     </template>
                     <template v-else-if="dialog.type === 'details'">
                       <v-tabs v-model="detailTab" bg-color="transparent">
-                        <v-tab value="details">Product Detail</v-tab>
+                        <v-tab value="details">Details</v-tab>
                         <v-tab value="projects">Projects</v-tab>
                       </v-tabs>
                       <v-window v-model="detailTab">
                         <v-window-item value="details">
                           <v-list>
-                            <v-list-item title="Name" :subtitle="selectedTeam.name"/>
-                            <v-list-item title="Warehouse" :subtitle="getWarehouseName(selectedTeam)"/>
-                            <v-list-item title="Team Lead" :subtitle="getTeamLeadName(selectedTeam)"/>
+                            <v-list-item :subtitle="selectedTeam.name" title="Name"/>
+                            <v-list-item :subtitle="getWarehouseName(selectedTeam)" title="Warehouse"/>
+                            <v-list-item :subtitle="getTeamLeadName(selectedTeam)" title="Team Lead"/>
                             <v-list-item title="Team Members">
                               <v-list-item-subtitle v-for="member in selectedTeamUsers" :key="member.id">
                                 {{ member.name }}
@@ -97,7 +97,19 @@
                         </v-window-item>
                         <v-window-item value="projects">
                           <v-container>
-                            <h1>In development</h1>
+                            <v-card>
+                              <v-card-text>
+                                <v-data-table
+                                    :headers="projectHeaders"
+                                    :items="selectedTeamProjects"
+                                    class="elevation-1"
+                                    item-value="name">
+                                  <template v-slot:[`item.warehouseName`]="{ item }">
+                                    {{ getWarehouseName(item) }}
+                                  </template>
+                                </v-data-table>
+                              </v-card-text>
+                            </v-card>
                           </v-container>
                         </v-window-item>
                       </v-window>
@@ -134,7 +146,7 @@ import {Team} from "@/models/Team";
 
 export default {
   name: "TeamsComponent",
-  inject: ['teamsService', 'warehousesService', 'usersService'],
+  inject: ['teamsService', 'warehousesService', 'usersService', 'projectsService'],
   components: {
     BaseCard,
   },
@@ -149,6 +161,7 @@ export default {
       searchTerm: "",
       detailTab: 'details',
       selectedTeam: null,
+      selectedTeamProjects: [],
       team: null,
       dialog: {
         type: null,
@@ -167,6 +180,14 @@ export default {
         {title: 'Team Lead', value: 'teamLeadName'},
         {title: 'Actions', value: 'actions', sortable: false},
       ],
+      projectHeaders: [
+        {title: 'ID', value: 'id'},
+        {title: 'Location', value: 'location'},
+        {title: 'Start Date', value: 'startDate'},
+        {title: 'End Date', value: 'endDate'},
+        {title: 'Status', value: 'status'},
+      ],
+
       search: '',
       itemsPerPage: 10,
     }
@@ -270,8 +291,9 @@ export default {
       return '';
     },
 
-    showDetails(team) {
+    async showDetails(team) {
       this.openDialog('details', team);
+      this.selectedTeamProjects = await this.projectsService.asyncFindAllByTeamId(team.id);
     },
 
     showEdit(team) {

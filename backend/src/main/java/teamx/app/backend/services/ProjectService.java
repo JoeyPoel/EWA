@@ -11,6 +11,7 @@ import teamx.app.backend.utils.DTO.InventoryProjectDTO;
 import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,5 +122,9 @@ public class ProjectService {
                     .collect(Collectors.toList());
         }
         return null;
+    }
+
+    public List<Project> findAllByTeamId(Long id) {
+        return projectRepository.findAllByTeam_Id(id);
     }
 }

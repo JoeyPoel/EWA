@@ -3,6 +3,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import teamx.app.backend.models.Project;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByTeam_Warehouse_IdAndEndDateBetween(Long warehouseId, Date startDate, Date endDate);
 
     List<Project> findAllByEndDateBetween(Date startDate, Date endDate);
+
+    List<Project> findAllByTeam_Id(Long id);
 }

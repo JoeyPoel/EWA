@@ -121,4 +121,13 @@ export default class ProjectAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/inventory" + "/" + id, options)
         return response ? response.map(inventoryProject => InventoryProject.fromJson(inventoryProject)) : null;
     }
+
+    async asyncFindAllByTeamId(id) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/team/" + id, options)
+        return response ? response.map(project => Project.fromJson(project)) : null;
+    }
 }
