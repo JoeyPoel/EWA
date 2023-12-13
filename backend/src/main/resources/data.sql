@@ -310,6 +310,18 @@ VALUES ('Energy InfraStructure', 'Revamping the energy infrastructure', 'Amsterd
        ('Solar Energy Project', 'Implementing Solar Energy Projects and Schemes', 'Zaanstad', 'Zaanstad City', 'CityZaanstad@email.com', '445-446-4470',
         '2024-04-04', '2024-08-09', 'IN_PROGRESS', 7);
 
+INSERT INTO Task (order, name, description, deadline, status, project_id, personalTodoListOwner_id)
+VALUES (1, 'Task 1', 'This is task 1', '2023-07-01', 'TODO', 1, 1),
+       (2, 'Task 2', 'This is task 2', '2023-07-02', 'IN_PROGRESS', 1, 2),
+       (3, 'Task 3', 'This is task 3', '2023-07-03', 'DONE', 2, 3),
+       (4, 'Task 4', 'This is task 4', '2023-07-04', 'TODO', 2, 4),
+       (5, 'Task 5', 'This is task 5', '2023-07-05', 'IN_PROGRESS', 3, 5),
+       (6, 'Task 6', 'This is task 6', '2023-07-06', 'DONE', 3, 6),
+       (7, 'Task 7', 'This is task 7', '2023-07-07', 'TODO', 4, 7),
+       (8, 'Task 8', 'This is task 8', '2023-07-08', 'IN_PROGRESS', 4, 8),
+       (9, 'Task 9', 'This is task 9', '2023-07-09', 'DONE', 5, 9),
+       (10, 'Task 10', 'This is task 10', '2023-07-10', 'TODO', 5, 10);
+
 
 -- Generate Project transactions
 INSERT INTO Transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, order_id, transaction_type)

@@ -91,6 +91,7 @@
 
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
+import {jwtDecode} from "jwt-decode";
 // import {jwtDecode} from "jwt-decode";
 export default {
   // TODO Add Team Authenthicatio to this view
@@ -164,10 +165,10 @@ export default {
     },
 
     async getUserIdFromToken() {
-      const isAuthenticated = sessionStorage.getItem("token");
+      const isAuthenticated = localStorage.getItem("token");
       if (isAuthenticated) {
-        // const decodedToken = jwtDecode(isAuthenticated);
-        // this.userId = decodedToken.id;
+        const decodedToken = jwtDecode(isAuthenticated);
+        this.userId = decodedToken.id;
       }
     },
 

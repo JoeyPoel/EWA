@@ -3,6 +3,7 @@ package teamx.app.backend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.Task;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
@@ -149,6 +150,7 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         dto.setTransactionType(transaction.getTransactionType().name());
         dto.setTransactionDate(transaction.getTransactionDate());
 
+
         if (transaction.getProduct() != null) {
             dto.setProductName(transaction.getProduct().getName());
         }
@@ -157,6 +159,16 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
             dto.setWarehouseName(transaction.getWarehouse().getName());
         }
 
+        return dto;
+    }
+
+    private InventoryProjectDTO mapTasksToDTO(Task task) {
+        InventoryProjectDTO dto = new InventoryProjectDTO();
+        dto.setId(task.getId());
+        dto.setTaskName(task.getName());
+        dto.setTaskDescription(task.getDescription());
+        dto.setTaskDeadline(String.valueOf(task.getDeadline()));
+        dto.setTaskStatus(task.getStatus().name());
         return dto;
     }
 
@@ -170,6 +182,18 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
                     .collect(Collectors.toList());
         }
 
+        return null;
+    }
+
+    public List<InventoryProjectDTO> getProjectTasks(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElse(null);
+
+            if (project != null) {
+            return project.getTasks()
+                    .stream()
+                    .map(this::mapTasksToDTO)
+                    .collect(Collectors.toList());
+            }
         return null;
     }
 
