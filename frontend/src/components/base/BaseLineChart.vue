@@ -1,27 +1,20 @@
 <template>
-  <v-container v-if="data">
-    <ChartLine :data="this.data" :options="options"/>
+  <v-container v-if="data" :fluid="true">
+    <v-card>
+      <v-card-text>
+        <ChartLine :data="this.data" :options="options"/>
+      </v-card-text>
+    </v-card>
   </v-container>
-  <v-container v-else>
-    <h6>Loading...</h6>
-    <v-progress-circular indeterminate size="64"/>
-  </v-container>
+  <no-data-component v-else/>
 </template>
 
 
 <script>
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
+import {CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js'
 import {Line as ChartLine} from 'vue-chartjs'
 import {ChartsData} from "@/models/charts/ChartsData";
+import NoDataComponent from "@/components/charts/NoDataComponent.vue";
 
 ChartJS.register(
     CategoryScale,
@@ -36,6 +29,7 @@ ChartJS.register(
 export default {
   name: "LineChart",
   components: {
+    NoDataComponent,
     ChartLine
   },
   props: {

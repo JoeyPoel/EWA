@@ -1,13 +1,12 @@
 package teamx.app.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import teamx.app.backend.models.User;
-import teamx.app.backend.models.dto.UserDTO;
-import teamx.app.backend.models.JWToken;
-import teamx.app.backend.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import org.springframework.stereotype.Service;
+import teamx.app.backend.utils.DTO.UserDTO;
+import teamx.app.backend.models.JWToken;
+import teamx.app.backend.models.User;
+import teamx.app.backend.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -15,8 +14,8 @@ import java.util.Optional;
 public class AuthenthicationService {
 
     private final UserRepository userRepository;
-    private JWToken jwtTokenGenerator;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final JWToken jwtTokenGenerator;
 
     @Autowired
     public AuthenthicationService(UserRepository userRepository, JWToken jwtTokenGenerator) {
@@ -29,7 +28,7 @@ public class AuthenthicationService {
      *
      * @param inputUser The User object containing login credentials.
      * @return UserDTO with user details and JWT token on successful authentication,
-     *         null otherwise.
+     * null otherwise.
      */
     public UserDTO authenticateUser(User inputUser) {
         Optional<User> userOptional = userRepository.findByEmail(inputUser.getEmail());
@@ -38,9 +37,15 @@ public class AuthenthicationService {
             User existingUser = userOptional.get();
 
             if (passwordMatches(existingUser.getPassword(), inputUser.getPassword())) {
-                String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name());
+                String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(),
+                        existingUser.getRole().name());
 
-                return new UserDTO(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name(), jwtToken);
+                return UserDTO.builder()
+                        .id(existingUser.getId())
+                        .email(existingUser.getEmail())
+                        .role(existingUser.getRole().name())
+                        .jwtToken(jwtToken)
+                        .build();
             }
         }
         return null;
@@ -54,8 +59,12 @@ public class AuthenthicationService {
             String jwtToken = jwtTokenGenerator.generateToken(existingUser.getId(), existingUser.getEmail(),
                     existingUser.getRole().name());
 
-            return new UserDTO(existingUser.getId(), existingUser.getEmail(), existingUser.getRole().name(), jwtToken);
-
+            return UserDTO.builder()
+                    .id(existingUser.getId())
+                    .email(existingUser.getEmail())
+                    .role(existingUser.getRole().name())
+                    .jwtToken(jwtToken)
+                    .build();
         }
 
         return null;

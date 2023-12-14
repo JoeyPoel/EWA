@@ -1,7 +1,7 @@
 <template>
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
-    <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+    <v-main class="px-16">
       <router-view/>
     </v-main>
   </v-layout>

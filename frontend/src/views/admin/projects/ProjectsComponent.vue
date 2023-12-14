@@ -1,8 +1,8 @@
 <template>
 <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Projects">
-      <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
-      </v-text-field>
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -202,6 +202,7 @@
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Task} from "@/models/Task";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   // TODO: Fix date format for new and edit
@@ -211,8 +212,8 @@ export default {
       return Project
     }
   },
-  components: {BaseCard},
-  inject: ['projectsService', 'teamsService'],
+  components: {dataFilter, BaseCard},
+  inject: ['projectsService', 'teamsService', "warehousesService"],
   data() {
     return {
       headers: [
@@ -240,9 +241,11 @@ export default {
       projectTaskSearch: "",
       projectTasks: [],
       projects: [],
+      warehouses: [],
       teams: [],
       selectedProject: new Project(),
       editedProject: new Project(),
+      selectedWarehouse: null,
       search: "",
       tab: "",
       itemsPerPage: 10,
@@ -256,21 +259,13 @@ export default {
   },
 
   watch: {
-    dialogNew(val) {
-      val || this.close();
+    selectedWarehouse() {
+      this.getProjects();
     },
-    dialogEdit(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.close();
-    },
-    async dialogDetail(val) {
-      if (!val) {
-        this.close();
-        return;
+    search(val) {
+      if (val) {
+        return true;
       }
-      await this.loadProjectData();
     },
   },
 
@@ -282,6 +277,11 @@ export default {
     async initialize() {
       await this.getProjects();
       await this.getTeams();
+      await this.getWarehouses();
+    },
+
+    async getWarehouses() {
+      this.warehouses = await this.warehousesService.asyncFindAll();
     },
 
     async loadProjectData() {
@@ -290,11 +290,13 @@ export default {
     },
 
     async getTeams() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = await this.teamsService.asyncFindAll();
     },
 
     async getProjects() {
-      this.projects = await this.projectsService.asyncGetAll();
+      this.projects = this.selectedWarehouse ?
+          await this.projectsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.projectsService.asyncFindAll();
     },
 
     getStatusColor(project) {
@@ -309,6 +311,7 @@ export default {
           return "grey";
       }
     },
+
     getStatusDisplayName(status) {
       return Project.statusList.find(s => s.value === status)?.displayName;
     },
@@ -342,13 +345,9 @@ export default {
       if (!this.isValidProject()) {
         return;
       }
+      console.log(this.editedProject);
       await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
       this.close();
-    },
-
-    setDateFormats() {
-      this.editedProject.startDate = this.editedProject.startDate.toISOString().slice(0, 10);
-      this.editedProject.endDate = this.editedProject.endDate.toISOString().slice(0, 10);
     },
 
     deleteProject(project) {
@@ -362,14 +361,16 @@ export default {
       await this.getProjects();
     },
 
-    seeDetails(project) {
+    async seeDetails(project) {
       this.assignSelectedProject(project);
       this.dialogDetail = true;
+      await this.loadInventory();
+      await this.loadProjectData();
     },
 
     async loadInventory() {
       try {
-        this.projectProducts = await this.projectsService.asyncGetProjectProducts(this.selectedProject.id);
+        this.projectProducts = await this.projectsService.asyncFindProjectProducts(this.selectedProject.id);
         console.log(this.projectProducts);
       } catch (error) {
         console.error("Error fetching project products:", error);

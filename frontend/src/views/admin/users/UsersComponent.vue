@@ -1,23 +1,8 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Users">
-      <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
-      <v-row class="d-flex align-center">
-        <v-col class="flex-grow-1">
-          <v-select
-              v-model="selectedTeam"
-              :items="teams"
-              item-title="name"
-              item-value="id"
-              label="Teams"
-              prepend-inner-icon="$team"
-          />
-        </v-col>
-        <v-col cols="auto" v-if="selectedTeam">
-          <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
-        </v-col>
-      </v-row>
-
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-team="true" @team="selectedTeam = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -126,11 +111,12 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {User} from "@/models/User";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "UsersComponent",
   inject: ['teamsService', 'usersService'],
-  components: {BaseCard},
+  components: {dataFilter, BaseCard},
   data() {
     return {
       teams: [],
@@ -185,9 +171,9 @@ export default {
 
     async selectedTeam(val) {
       if (val) {
-        this.users = await this.usersService.asyncGetAllByTeamId(val);
+        this.users = await this.usersService.asyncFindAllByTeamId(val);
       } else {
-        this.users = await this.usersService.asyncGetAll();
+        this.users = await this.usersService.asyncFindAll();
       }
     },
 
@@ -203,11 +189,11 @@ export default {
 
   methods: {
     async initialize() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = await this.teamsService.asyncFindAll();
       if (this.selectedTeam) {
-        this.users = await this.usersService.asyncGetAllByTeamId(this.selectedTeam);
+        this.users = await this.usersService.asyncFindAllByTeamId(this.selectedTeam);
       } else {
-        this.users = await this.usersService.asyncGetAll();
+        this.users = await this.usersService.asyncFindAll();
       }
       this.assignSelectedUser(new User());
     },
@@ -285,7 +271,7 @@ export default {
     async showDetails(user) {
 
       if (user.teamId) {
-        const team = await this.teamsService.asyncGetById(user.teamId);
+        const team = await this.teamsService.asyncFindById(user.teamId);
         console.log(team);
         user.teamName = team ? team.name : 'No team';
       } else {

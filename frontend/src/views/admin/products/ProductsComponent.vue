@@ -1,14 +1,11 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Products">
-
       <v-row>
         <v-col>
-          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
-          </v-text-field>
+          <data-filter :search="search" :can-search="true" @input="search = $event"/>
         </v-col>
       </v-row>
-
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -17,7 +14,6 @@
           class="elevation-1"
           item-value="id">
         <template v-slot:top>
-
           <v-toolbar flat>
             <v-dialog v-model="dialogNew" max-width="800px">
               <template v-slot:activator="{ props }">
@@ -161,11 +157,13 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Product} from "@/models/Product";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "ProductsComponent",
   inject: ['productsService', 'inventoryService'],
   components: {
+    dataFilter,
     BaseCard,
   },
   data() {
@@ -226,11 +224,11 @@ export default {
     },
 
     async getProducts() {
-      this.products = await this.productsService.asyncGetAll();
+      this.products = await this.productsService.asyncFindAll();
     },
 
     async getCategories() {
-      this.categories = await this.productsService.asyncGetAllCategories();
+      this.categories = await this.productsService.asyncFindAllCategories();
     },
 
     async saveNew() {
@@ -256,7 +254,7 @@ export default {
     },
 
     async fetchProductStockLevels(productId) {
-      const stockData = await this.inventoryService.asyncGetStockByProductId(productId);
+      const stockData = await this.inventoryService.asyncFindStockByProductId(productId);
       this.productStockLevels = Object.entries(stockData).map(([warehouseName, stockLevel]) => ({
         warehouseName,
         stockLevel

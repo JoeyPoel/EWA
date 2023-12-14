@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import teamx.app.backend.models.Product;
-import teamx.app.backend.models.dto.InventoryProductDTO;
 import teamx.app.backend.repositories.ProductRepository;
+import teamx.app.backend.utils.DTO.InventoryProductDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,42 +24,43 @@ public class InventoryService {
     private final WarehouseService warehouseService;
 
     @Autowired
-    public InventoryService(ProductRepository productRepository, TransactionService transactionService, WarehouseService warehouseService) {
+    public InventoryService(ProductRepository productRepository, TransactionService transactionService,
+                            WarehouseService warehouseService) {
         this.productRepository = productRepository;
         this.transactionService = transactionService;
 
         this.warehouseService = warehouseService;
     }
 
-    public List<InventoryProductDTO> getAll() {
+    public List<InventoryProductDTO> findAll() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "No products found"
             );
         }
-        return mapToDTO(null, products);
+        return toDTO(null, products);
     }
 
     public List<InventoryProductDTO> getByWarehouseId(Long warehouseId) {
-        return mapToDTO(warehouseId, productRepository.getAllByTransactions_Warehouse_Id(warehouseId));
+        return toDTO(warehouseId, productRepository.getAllByTransactions_Warehouse_Id(warehouseId));
     }
 
-    private InventoryProductDTO mapToDTO(Long warehouseId, Product product) {
-        InventoryProductDTO inventoryProductDTO = new InventoryProductDTO();
-        inventoryProductDTO.setProductId(product.getId());
-        inventoryProductDTO.setName(product.getName());
-        inventoryProductDTO.setDescription(product.getDescription());
-        inventoryProductDTO.setPrice(product.getPrice());
-        inventoryProductDTO.setQuantity(transactionService.findProductCurrentStock(warehouseId, product.getId()));
-        inventoryProductDTO.setWarehouseId(warehouseId);
-        return inventoryProductDTO;
+    private InventoryProductDTO toDTO(Long warehouseId, Product product) {
+        return InventoryProductDTO.builder()
+                .productId(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .quantity(transactionService.findProductCurrentStock(warehouseId, product.getId()))
+                .warehouseId(warehouseId)
+                .build();
     }
 
-    private List<InventoryProductDTO> mapToDTO(Long warehouseId, List<Product> products) {
+    private List<InventoryProductDTO> toDTO(Long warehouseId, List<Product> products) {
         return products
                 .stream()
-                .map(product -> mapToDTO(warehouseId, product))
+                .map(product -> toDTO(warehouseId, product))
                 .toList();
     }
 

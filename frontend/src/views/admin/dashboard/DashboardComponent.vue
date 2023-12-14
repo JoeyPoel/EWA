@@ -1,16 +1,14 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <life-time-stats/>
-    </v-col>
     <v-row>
       <v-col cols="12">
-        <v-row class="justify-center">
-          <v-col cols="6">
-            <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id" label="Warehouse"
-                      outlined @change="updateChartData" icon="$warehouse"/>
-          </v-col>
-        </v-row>
+        <life-time-stats ref="lifeTimeStats" :warehouse-id="this.warehouseId">
+          <template v-slot:warehouse>
+            <v-col cols="12">
+              <data-filter :can-sort-by-warehouse="true" @warehouse="this.warehouseId = $event"/>
+            </v-col>
+          </template>
+        </life-time-stats>
       </v-col>
       <v-col cols="12" md="6">
         <projects-bar ref="projectsBar" :warehouse-id="this.warehouseId"/>
@@ -26,9 +24,11 @@
 import LifeTimeStats from "@/components/charts/LifeTimeStats.vue";
 import ProjectsBar from "@/components/charts/ProjectsBar.vue";
 import InventoryLine from "@/components/charts/InventoryLine.vue";
+import DataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   components: {
+    DataFilter,
     ProjectsBar,
     InventoryLine,
     LifeTimeStats
@@ -41,7 +41,8 @@ export default {
     }
   },
   async mounted() {
-    this.warehouses = await this.warehousesService.asyncGetAll();
+    this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses.unshift({id: null, name: 'All warehouses'});
   },
   methods: {
     updateChartData() {

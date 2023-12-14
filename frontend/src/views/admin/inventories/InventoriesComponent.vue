@@ -1,24 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Inventories">
-      <v-row>
-        <v-col>
-          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
-          </v-text-field>
-        </v-col>
-        <v-col>
-          <v-select v-model="selectedWarehouse" :items="warehouses" label="Warehouse" variant="outlined"
-                    @change="loadTableData">
-            <template #prepend-inner>
-              <v-icon color="grey"> $warehouse</v-icon>
-            </template>
-            <template v-slot:prepend-item>
-              <v-list-item title="All warehouses" @click="selectedWarehouse = null; loadTableData()">
-              </v-list-item>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
           :search="search" class="elevation-1" item-value="name">
         <template v-slot:top>
@@ -170,6 +154,7 @@
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Transaction} from "@/models/Transaction";
 import {Order} from "@/models/Order";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "InventoryComponent",
@@ -225,6 +210,7 @@ export default {
     }
   },
   components: {
+    dataFilter,
     BaseCard
   },
 
@@ -254,12 +240,12 @@ export default {
     async loadTableData() {
       this.loading = true;
       this.serverItems = this.selectedWarehouse ?
-          await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse) :
-          await this.inventoryService.asyncGetAll();
+          await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.inventoryService.asyncFindAll();
 
       this.transActionCategories = Transaction.getCategories;
 
-      this.products = await this.productsService.asyncGetAll().then(products => {
+      this.products = await this.productsService.asyncFindAll().then(products => {
         return products.map(product => {
           return {
             title: product.name,
@@ -268,21 +254,13 @@ export default {
         })
       })
 
-      this.warehouses = await this.warehousesService.asyncGetAll().then(warehouses => {
-        return warehouses.map(warehouse => {
-          return {
-            title: warehouse.name,
-            value: warehouse.id
-          }
-        })
-      })
-
+      this.warehouses = await this.warehousesService.asyncFindAll();
       this.loading = false;
     },
 
     async loadTransactionsData(productId) {
       this.transactionsLoading = true;
-      const serverData = await this.transactionsService.asyncGetAllByProductId(
+      const serverData = await this.transactionsService.asyncFindAllByProductId(
           productId)
 
       this.transactions = serverData.map(transaction => {

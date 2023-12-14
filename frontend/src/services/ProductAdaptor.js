@@ -23,7 +23,7 @@ export default class ProductAdaptor extends Adaptor {
      * @returns {Promise<Array<Product> | null>} - An array of Product objects if successful, or null if there wa an
      * error.
      */
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -117,7 +117,7 @@ export default class ProductAdaptor extends Adaptor {
      *
      * @returns {Promise<ProductCategory[]>} - A promise that resolves to an array of product categories.
      */
-    async asyncGetAllCategories() {
+    async asyncFindAllCategories() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }

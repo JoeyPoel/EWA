@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import teamx.app.backend.utils.DTO.CapacityDTO;
 import teamx.app.backend.models.Capacity;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Warehouse;
-import teamx.app.backend.models.dto.CapacityDTO;
 import teamx.app.backend.repositories.CapacityRepository;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.WarehouseRepository;
@@ -79,64 +79,6 @@ public class WarehouseService {
 
         warehouseRepository.deleteById(warehouseId);
         return existingWarehouse;
-    }
-
-    public List<CapacityDTO> getCapacity(Long warehouseId) {
-        setMissingCapacityCategories(warehouseId);
-        List<Capacity> warehouseCapacity = capacityRepository.findAllByWarehouseId(warehouseId);
-        return warehouseCapacity.stream().map(CapacityDTO::new).toList();
-    }
-
-    public void setMissingCapacityCategories(Long id) {
-        List<ProductCategory> productCategories = productCategoryRepository.findAll();
-        List<Capacity> warehouseCapacity = capacityRepository.findAllByWarehouseId(id);
-
-        for (Capacity capacity : warehouseCapacity) {
-            productCategories.removeIf(productCategory -> Objects.equals(productCategory.getId(),
-                    capacity.getProductCategory().getId()));
-        }
-
-        List<Capacity> missingWarehouseCapacity = new ArrayList<>();
-
-        for (ProductCategory productCategory : productCategories) {
-            Capacity capacity = new Capacity();
-            capacity.setProductCategory(productCategory);
-            capacity.setCapacity(0);
-            capacity.setMinimumStockLevel(0);
-            capacity.setWarehouse(warehouseRepository.findById(id).orElse(null));
-            missingWarehouseCapacity.add(capacity);
-        }
-
-        capacityRepository.saveAll(missingWarehouseCapacity);
-    }
-
-    public CapacityDTO addCapacity(Long id, CapacityDTO capacity) {
-        Warehouse warehouse = warehouseRepository.findById(id).orElse(null);
-        if (warehouse == null) {
-            return null;
-        }
-        Capacity newCapacity = convertToCapacityEntity(capacity);
-        return new CapacityDTO(capacityRepository.save(newCapacity));
-    }
-
-    public CapacityDTO updateCapacityById(Long id, CapacityDTO capacity) {
-        Capacity existingCapacity = capacityRepository.findById(id).orElse(null);
-        if (existingCapacity == null || capacity == null || !Objects.equals(capacity.getId(), id)) {
-            return null;
-        }
-        existingCapacity.setCapacity(capacity.getCapacity());
-        existingCapacity.setMinimumStockLevel(capacity.getMinimumStockLevel());
-        return new CapacityDTO(capacityRepository.save(existingCapacity));
-    }
-
-    public Capacity convertToCapacityEntity(CapacityDTO dto) {
-        Capacity capacity = new Capacity();
-        capacity.setId(dto.getId());
-        capacity.setWarehouse(warehouseRepository.findById(dto.getWarehouseId()).orElse(null));
-        capacity.setProductCategory(productCategoryRepository.findById(dto.getCategoryId()).orElse(null));
-        capacity.setCapacity(dto.getCapacity());
-        capacity.setMinimumStockLevel(dto.getMinimumStockLevel());
-        return capacity;
     }
 
     private void validateInputs(Long id, Warehouse warehouse) {

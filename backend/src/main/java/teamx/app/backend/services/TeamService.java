@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
-import teamx.app.backend.models.dto.TeamDTO;
 import teamx.app.backend.repositories.TeamRepository;
+import teamx.app.backend.utils.DTO.TeamDTO;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,49 +27,42 @@ public class TeamService {
         this.projectService = projectService;
     }
 
-    public List<TeamDTO> findAll() {
-        List<Team> teams = teamRepository.findAll();
-        return mapToDTO(teams);
+    public List<Team> findAll() {
+        return teamRepository.findAll();
     }
 
-    protected Team findById(Long id) {
+    public Team findById(Long id) {
         return teamRepository
                 .findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Team not found with id " + id));
-    }
-
-    public TeamDTO findByIdDTO(Long id) {
-        return mapToDTO(findById(id));
     }
 
     private Team save(Team team) {
         return teamRepository.save(team);
     }
 
-    public TeamDTO add(TeamDTO teamDTO) {
+    public Team add(TeamDTO teamDTO) {
         Team savedTeam = mapToEntity(teamDTO, new Team());
         userService.setTeam(teamDTO.getMembersIds(), savedTeam);
-        return mapToDTO(savedTeam);
+        return savedTeam;
     }
 
-    public TeamDTO update(Long teamId, TeamDTO teamDTO) {
+    public Team update(Long teamId, TeamDTO teamDTO) {
         Team existingTeam = findById(teamId);
         userService.setTeam(teamDTO.getMembersIds(), existingTeam);
-        Team savedTeam = save(mapToEntity(teamDTO, existingTeam));
-        return mapToDTO(savedTeam);
+        return save(mapToEntity(teamDTO, existingTeam));
     }
 
-    public TeamDTO delete(Long id) {
+    public Team delete(Long id) {
         Team existingTeam = findById(id);
-        userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
-        projectService.setTeam(existingTeam.getProjects(), null);
+//        userService.setTeam(existingTeam.getMembers().stream().map(User::getId).toList(), null);
+//        projectService.setTeam(existingTeam.getProjects(), null);
         teamRepository.deleteById(id);
-        return new TeamDTO(existingTeam);
+        return existingTeam;
     }
 
-    public List<TeamDTO> findAllByWarehouseId(Long warehouseId) {
-        List<Team> teams = teamRepository.getAllByWarehouse_Id(warehouseId);
-        return mapToDTO(teams);
+    public List<Team> findAllByWarehouseId(Long warehouseId) {
+        return teamRepository.getAllByWarehouse_Id(warehouseId);
     }
 
     private Team mapToEntity(TeamDTO dto, Team entity) {
@@ -81,13 +74,5 @@ public class TeamService {
             entity.setLeader(userService.getById(dto.getLeaderId()));
         }
         return save(entity);
-    }
-
-    private TeamDTO mapToDTO(Team entity) {
-        return new TeamDTO(entity);
-    }
-
-    private List<TeamDTO> mapToDTO(List<Team> entities) {
-        return entities.stream().map(TeamDTO::new).toList();
     }
 }

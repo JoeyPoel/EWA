@@ -2,13 +2,13 @@ package teamx.app.backend.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import teamx.app.backend.models.Warehouse;
+import teamx.app.backend.utils.DTO.ChartsDataDTO;
+import teamx.app.backend.utils.DTO.DataSetDTO;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.models.Transaction;
-import teamx.app.backend.models.dto.charts.ChartsDataDTO;
-import teamx.app.backend.models.dto.charts.DataSetDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ public class ChartService {
 
         return ChartsDataDTO.builder().labels(labels).datasets(List.of(dataSetDTO)).build();
     }
+
     private String getWarehouseLabel(Long warehouseId) {
         return warehouseId == null ? "All warehouses" : warehouseService.findById(warehouseId).getName();
     }
@@ -248,7 +249,8 @@ public class ChartService {
         return getProjectsBarData(warehouseId, startDate, endDate, "Projects", 86400000);
     }
 
-    private ChartsDataDTO getProjectsBarData(Long warehouseId, Date startDate, Date endDate, String label, long duration) {
+    private ChartsDataDTO getProjectsBarData(Long warehouseId, Date startDate, Date endDate, String label,
+                                             long duration) {
         List<Project> projects = projectService.findProjectsByDateBetween(warehouseId, startDate, endDate);
         List<String> labels = new ArrayList<>();
         List<Integer> data = new ArrayList<>();
@@ -278,5 +280,19 @@ public class ChartService {
 
     private boolean isInDateRange(String start, String end, Date target) {
         return target.after(Date.valueOf(start)) && target.before(Date.valueOf(end));
+    }
+
+    public HashMap<String, Long> getLifetimeStatisticsByWarehouse(Long warehouseId) {
+        List<Project> projects = projectService.findAllByWarehouseId(warehouseId);
+        HashMap<String, Long> map = new HashMap<>();
+        map.put("totalProjects", (long) projects.size());
+        map.put("totalFinishedProjects", lifetimeCompletedProjects(projects));
+        map.put("totalMaterialsUsed", lifetimeMaterialsQuantityUsed(projects));
+        map.put("totalSolarPanelsInstalled", lifetimeSolarPanelsInstalled(projects));
+        map.put("totalEmployees", (long) userService.getAllByWarehouseId(warehouseId).size());
+        map.put("totalTeams", (long) teamService.findAllByWarehouseId(warehouseId).size());
+        map.put("totalProductCost", lifetimeProductCost(projects));
+        map.put("totalOrders", orderService.totalOrdersByWarehouse(warehouseId));
+        return map;
     }
 }

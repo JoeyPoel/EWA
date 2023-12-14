@@ -5,42 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import teamx.app.backend.models.Order;
+import teamx.app.backend.models.InventoryOrder;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.OrderRepository;
 import teamx.app.backend.repositories.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final OrderService orderService;
-
-
-
 
     @Autowired
-    public UserService(UserRepository userRepository, OrderRepository orderRepository, OrderService orderService) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
-        this.orderService = orderService;
-    }
-    public User login(User user) {
-        User foundUser = userRepository
-                .findByEmail(user.getEmail())
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-                );
-
-        if (!Objects.equals(foundUser.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
-        }
-
-        return foundUser;
     }
 
     public List<User> findByRole(User.Role role) {
@@ -60,14 +42,6 @@ public class UserService {
         }
 
         return users;
-    }
-
-    public User findByEmail(String email) {
-        return userRepository
-                .findByEmail(email)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-                );
     }
 
     public List<User> getAll() {
@@ -117,14 +91,14 @@ public class UserService {
 
     @Transactional
     public User delete(Long userId) {
-        // Retrieve all orders related to the user
-        List<Order> orders = orderRepository.findAllByOrderedById(userId);
+        // Retrieve all inventoryOrders related to the user
+        List<InventoryOrder> inventoryOrders = orderRepository.findAllByOrderedById(userId);
         User user = getById(userId);
 
-        // Remove the user from all orders related to the user
-        for (Order order : orders) {
-            order.setOrderedBy(null);
-            orderRepository.save(order);
+        // Remove the user from all inventoryOrders related to the user
+        for (InventoryOrder inventoryOrder : inventoryOrders) {
+            inventoryOrder.setOrderedBy(null);
+            orderRepository.save(inventoryOrder);
         }
         
         userRepository.deleteById(userId);
@@ -186,5 +160,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
         }
         return savedUsers;
+    }
+
+    public Collection<Object> getAllByWarehouseId(Long warehouseId) {
+        return userRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 }

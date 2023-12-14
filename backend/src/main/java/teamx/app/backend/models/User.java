@@ -1,10 +1,13 @@
 package teamx.app.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import teamx.app.backend.utils.DTO.UserDTO;
+import teamx.app.backend.utils.Model;
 
-import java.util.List;
 
 /**
  * User entity
@@ -14,8 +17,11 @@ import java.util.List;
  * @see Team
  */
 @Data
+@Builder
 @Entity(name = "Users")
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements Model<UserDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,15 +35,15 @@ public class User {
     @ManyToOne()
     private Team team;
 
-    @Transient
-    private Long teamId;
-
-    @PostLoad
-    void fillTransient() {
-        if (team != null) {
-            this.teamId = team.getId();
-        }
-    }
+//    @Transient
+//    private Long teamId;
+//
+//    @PostLoad
+//    void fillTransient() {
+//        if (team != null) {
+//            this.teamId = team.getId();
+//        }
+//    }
 
     @Override
     public String toString() {
@@ -48,6 +54,29 @@ public class User {
                 ", role=" + role +
                 ", team=" + (team != null ? team.getId() : null) +
                 '}';
+    }
+
+    @Override
+    public UserDTO toDTO() {
+        return UserDTO.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .role(String.valueOf(role))
+                .teamId(team != null ? team.getId() : null)
+                .jwtToken(null)
+                .build();
+    }
+
+    public UserDTO toDTO(String jwtToken) {
+        return UserDTO.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .role(String.valueOf(role))
+                .teamId(team != null ? team.getId() : null)
+                .jwtToken(jwtToken)
+                .build();
     }
 
     public enum Role {

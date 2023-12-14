@@ -21,7 +21,7 @@ export default class TeamsAdaptor extends Adaptor {
      * @async
      * @returns {Promise<*>} The teams.
      */
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -38,7 +38,7 @@ export default class TeamsAdaptor extends Adaptor {
      * @param {string} id - The ID of the team.
      * @returns {Promise<*>} The warehouse.
      */
-    async asyncGetById(id) {
+    async asyncFindById(id) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -55,7 +55,7 @@ export default class TeamsAdaptor extends Adaptor {
      * @returns {Promise<Array<Team>|null>} - A promise that resolves to an array of Team objects or null if no teams
      * are found.
      */
-    async asyncGetAllByWarehouseId(warehouseId) {
+    async asyncFindAllByWarehouseId(warehouseId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }

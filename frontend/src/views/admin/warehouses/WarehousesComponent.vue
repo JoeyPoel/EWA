@@ -1,11 +1,7 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Warehouses">
-      <v-row>
-        <v-col>
-          <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined"/>
-        </v-col>
-      </v-row>
+      <data-filter :search="search" :can-search="true" @input="search = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -64,13 +60,7 @@
             </v-dialog>
             <v-dialog v-model="dialogEdit" max-width="800px">
               <v-card>
-                <v-tabs v-model="tab" bg-color="transparent">
-                  <v-tab value="details">Details</v-tab>
-                  <v-tab value="capacity">Storage Capacity</v-tab>
-                </v-tabs>
                 <v-card-text>
-                  <v-window v-model="tab">
-                    <v-window-item value="details">
                       <v-form>
                         <v-col>
                           <v-row>
@@ -101,59 +91,11 @@
                           </v-row>
                         </v-col>
                       </v-form>
-                    </v-window-item>
-                    <v-window-item value="capacity">
-                      <v-data-table
-                          :headers="warehouseCapacityHeaders"
-                          :items="warehouseProductCategoryCapacities"
-                          :search="warehouseCapacitySearch"
-                          class="elevation-1">
-                        <template v-slot:top>
-                          <v-toolbar flat>
-                            <v-toolbar-title>Warehouse Capacity By Product Category</v-toolbar-title>
-                            <v-dialog v-model="dialogEditCapacity" max-width="800px">
-                              <v-card>
-                                <v-card-title><span class="text-h5"> Edit Capacity</span></v-card-title>
-                                <v-card-text>
-                                  <v-container>
-                                    <v-row>
-                                      <v-form>
-                                        <v-col>
-                                          <v-row>
-                                            <span class="text-h6">Category Name</span>
-                                            <span class="text-h6">{{
-                                                editedWarehouseCapacityObject.productCategoryName
-                                              }}</span>
-                                          </v-row>
-                                          <v-row>
-                                            <v-text-field v-model="editedWarehouseCapacityObject.minimumStockLevel"
-                                                          label="Minimum Stock Level" type="number"></v-text-field>
-                                          </v-row>
-                                          <v-row>
-                                            <v-text-field v-model="editedWarehouseCapacityObject.capacity"
-                                                          label="Capacity"
-                                                          type="number"></v-text-field>
-                                          </v-row>
-                                        </v-col>
-                                      </v-form>
-                                    </v-row>
-                                  </v-container>
-                                </v-card-text>
-                              </v-card>
-                            </v-dialog>
-                          </v-toolbar>
-                        </template>
-                        <template v-slot:[`item.actions`]="{ capacity }">
-                          <v-icon class="me-2" size="small" @click="editCapacity(capacity)">$edit</v-icon>
-                        </template>
-                      </v-data-table>
-                    </v-window-item>
-                  </v-window>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue-darken-1" variant="text" @click="close">Cancel</v-btn>
-                  <v-btn color="blue-darken-1" variant="text" @click="saveCapacity">Save</v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="saveEdited">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -172,7 +114,6 @@
               <v-card>
                 <v-tabs v-model="tab" bg-color="transparent">
                   <v-tab value="details">Details</v-tab>
-<!--                  <v-tab value="capacity">Storage Capacity</v-tab>-->
                   <v-tab value="teams">Teams</v-tab>
                   <v-tab value="projects">Projects</v-tab>
                   <v-tab value="transactions">Transactions</v-tab>
@@ -217,16 +158,6 @@
                         </v-col>
                       </v-row>
                     </v-window-item>
-<!--                    <v-window-item value="capacity">-->
-<!--                      <v-data-table-->
-<!--                          :headers="warehouseDetailsCapacityHeaders"-->
-<!--                          :items="warehouseProductCategoryCapacities"-->
-<!--                          :search="warehouseCapacitySearch"-->
-<!--                          :sort-by="['productCategoryName']"-->
-<!--                          :items-per-page-options="detailTableItemsPerPageOptions"-->
-<!--                          class="elevation-1">-->
-<!--                      </v-data-table>-->
-<!--                    </v-window-item>-->
                     <v-window-item value="teams">
                       <v-data-table
                           :headers="warehouseTeamHeaders"
@@ -370,11 +301,11 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Warehouse} from "@/models/Warehouse";
-import {Capacity} from "@/models/Capacity";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "WarehousesComponent",
-  components: {BaseCard},
+  components: {dataFilter, BaseCard},
   inject: ["warehousesService", "inventoryService", "usersService", "transactionsService", "teamsService",
     "projectsService"],
   data() {
@@ -392,28 +323,15 @@ export default {
         {title: "Contact Name", value: "contactName"},
         {title: "Actions", value: "actions", sortable: false}
       ],
-      warehouseCapacityHeaders: [
-        {title: "Category Name", value: "categoryName"},
-        {title: "Minimum Stock Level", value: "minimumStockLevel"},
-        {title: "Capacity", value: "capacity"},
-        {title: "Actions", value: "actions", sortable: false}
-      ],
-      warehouseDetailsCapacityHeaders: [
-        {title: "Category Name", value: "productCategoryName"},
-        {title: "Minimum Stock Level", value: "minimumStockLevel"},
-        {title: "Capacity", value: "capacity"},
-      ],
       warehouseTeamHeaders: [
         {title: "Team Name", value: "name"},
         {title: "Team size", value: "membersIds.length"},
         //   TODO: add team size. Show teammembers in a dropdown
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       warehouseTeamMembersHeaders: [
         {title: "Name", value: "name"},
         {title: "Email", value: "email"},
         {title: "Role", value: "role"},
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       warehouseProjectHeaders: [
         {title: "Project Name", value: "name"},
@@ -421,39 +339,31 @@ export default {
         {title: "Start Date", value: "startDate"},
         {title: "End Date", value: "endDate"},
         {title: "Status", value: "status"},
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       warehouseTransactionHeaders: [
         {title: "Date", value: "transactionDate"},
         {title: "Product ID", value: "productId"},
         {title: "Quantity", value: "quantity"},
         {title: "Transaction Type", value: "transactionType"},
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       warehouseOrderHeaders: [
         {title: "Date", value: "date"},
         {title: "Product Name", value: "productName"},
         {title: "Quantity", value: "quantity"},
         {title: "Order Status", value: "orderStatus"},
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       warehouseProductHeaders: [
         {title: "Product Name", value: "name"},
         {title: "Quantity", value: "quantity"},
-        // {title: "Actions", value: "actions", sortable: false}
       ],
       selectedWarehouse: new Warehouse(),
       editedWarehouse: new Warehouse(),
-      editedWarehouseCapacityObject: new Capacity(),
       defaultItem: new Warehouse(),
-      defaultCapacityItem: new Capacity(),
-      warehouseProductCategoryCapacities: [],
       warehouseTeams: [],
       warehouseProjects: [],
       warehouseTransactions: [],
       warehouseOrders: [],
       warehouseProducts: [],
-      warehouseCapacitySearch: "",
       warehouseTeamSearch: "",
       warehouseProjectSearch: "",
       warehouseTransactionSearch: "",
@@ -464,7 +374,6 @@ export default {
       itemsPerPage: 10,
       warehouses: [],
       editedIndex: -1,
-      editedCapacityIndex: -1,
       editedTeamIndex: -1,
     }
   },
@@ -474,11 +383,10 @@ export default {
     },
     async dialogEdit(val) {
       if (!val) {
-        this.close();
+        await this.close();
         return;
       }
       await this.loadWarehouseDetails();
-      await this.loadWarehouseCapacity();
     },
     dialogDelete(val) {
       val || this.close();
@@ -489,7 +397,6 @@ export default {
         return;
       }
       await this.loadWarehouseDetails();
-      await this.loadWarehouseCapacity();
       await this.loadWarehouseTeams();
       await this.loadWarehouseProjects();
       await this.loadWarehouseTransactions();
@@ -502,73 +409,38 @@ export default {
   },
   methods: {
     async loadWarehouses() {
-      this.warehouses = await this.warehousesService.asyncGetAll();
+      this.warehouses = await this.warehousesService.asyncFindAll();
     },
 
     async loadWarehouseDetails() {
-      this.selectedWarehouse = await this.warehousesService.asyncGetById(this.selectedWarehouse.id);
+      this.selectedWarehouse = await this.warehousesService.asyncFindById(this.selectedWarehouse.id);
     },
-
-    async loadWarehouseCapacity() {
-      this.warehouseProductCategoryCapacities =
-          await this.warehousesService.asyncGetCapacity(this.selectedWarehouse.id);
-    },
-
     async loadWarehouseTeams() {
-      this.warehouseTeams = await this.teamsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseTeams = await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
       for (const team of this.warehouseTeams) {
         if (team.leaderId !== null) {
           team.teamLeader = await this.usersService.asyncGetById(team.leaderId);
         }
         if (team.teamMembers !== null) {
-          team.teamMembers = await this.usersService.asyncGetAllByTeamId(team.id);
+          team.teamMembers = await this.usersService.asyncFindAllByTeamId(team.id);
         }
       }
-      console.log(this.warehouseTeams);
     },
 
     async loadWarehouseProjects() {
-      this.warehouseProjects = await this.projectsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseProjects = await this.projectsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     async loadWarehouseTransactions() {
-      this.warehouseTransactions = await this.transactionsService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+      this.warehouseTransactions = await this.transactionsService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     // async loadWarehouseOrders() {
-    //   this.warehouseOrders = await this.ordersService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
+    //   this.warehouseOrders = await this.ordersService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     // },
 
     async loadWarehouseProducts() {
-      this.warehouseProducts = await this.inventoryService.asyncGetAllByWarehouseId(this.selectedWarehouse.id);
-    },
-
-    goToEditCapacity(capacity) {
-      console.log("(Yet to implement) Now editing capacity: " + capacity.id);
-    },
-
-    goToEditTeam(team) {
-      console.log("(Yet to implement) Now editing team: " + team.id);
-    },
-
-    goToEditProject(project) {
-      console.log("(Yet to implement) Now editing project: " + project.id);
-    },
-
-    goToEditTransaction(transaction) {
-      console.log("(Yet to implement) Now editing transaction: " + transaction.id);
-    },
-
-    goToEditOrder(order) {
-      console.log("(Yet to implement) Now editing order: " + order.id);
-    },
-
-    goToEditProduct(product) {
-      console.log("(Yet to implement) Now editing product: " + product.id);
-    },
-
-    goToEditTeamMember(teamMember) {
-      console.log("(Yet to implement) Now editing team member: " + teamMember.id);
+      this.warehouseProducts = await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse.id);
     },
 
     initialize() {
@@ -586,19 +458,16 @@ export default {
       this.dialogEdit = true;
     },
 
-    async editCapacity(item) {
-      this.editedCapacityIndex = this.warehouseProductCategoryCapacities.indexOf(item);
-      await this.warehousesService.asyncUpdateCapacityById(this.editedWarehouseCapacityObject.id,
-          this.editedWarehouseCapacityObject);
-
-      this.editedWarehouseCapacityObject = Object.assign({}, item);
+    async saveEdited() {
+      await this.warehousesService.asyncUpdate(this.selectedWarehouse.id, this.editedWarehouse);
+      await this.close();
     },
+
     async close() {
       this.dialogNew = false;
       this.dialogEdit = false;
       this.dialogDelete = false;
       this.editedIndex = -1;
-      this.editedCapacityIndex = -1;
       this.editedTeamIndex = -1;
       this.editedWarehouse = new Warehouse();
       this.selectedWarehouse = new Warehouse();
@@ -618,14 +487,6 @@ export default {
       await this.warehousesService.asyncAdd(this.editedWarehouse);
       this.close();
     },
-    saveCapacity() {
-      if (this.editedCapacityIndex > -1) {
-        Object.assign(this.warehouseProductCategoryCapacities[this.editedCapacityIndex], this.editedWarehouseCapacityObject);
-      } else {
-        this.warehouseProductCategoryCapacities.push(this.editedWarehouseCapacityObject);
-      }
-      this.close();
-    }
   },
 }
 

@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
-import teamx.app.backend.models.dto.ProductDTO;
 import teamx.app.backend.services.ProductService;
+import teamx.app.backend.utils.DTO.ProductDTO;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAll() {
-        return ResponseEntity.ok(productService.findAll());
+        return ResponseEntity.ok(productService.findAll().stream().map(Product::toDTO).toList());
     }
 
     /**
@@ -46,7 +47,7 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO product) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.add(product));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.add(product).toDTO());
     }
 
 
@@ -58,7 +59,7 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.findDTOById(id));
+        return ResponseEntity.ok(productService.findById(id).toDTO());
     }
 
     /**
@@ -70,7 +71,7 @@ public class ProductController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateById(@PathVariable Long id, @RequestBody ProductDTO newProductData) {
-        return ResponseEntity.ok(productService.update(id, newProductData));
+        return ResponseEntity.ok(productService.update(id, newProductData).toDTO());
     }
 
     /**
@@ -81,7 +82,7 @@ public class ProductController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> deleteById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.delete(id));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.delete(id).toDTO());
     }
 
     /**
@@ -96,6 +97,6 @@ public class ProductController {
 
     @GetMapping("/active")
     public ResponseEntity<List<ProductDTO>> getAllActive() {
-        return ResponseEntity.ok(productService.findAllActive());
+        return ResponseEntity.ok(productService.findAllActive().stream().map(Product::toDTO).toList());
     }
 }

@@ -7,15 +7,13 @@ import teamx.app.backend.models.Task;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 import teamx.app.backend.repositories.TeamRepository;
+import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.sql.Date;
-import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,63 +27,35 @@ public class ProjectService {
         this.teamRepository = teamRepository;
     }
 
-    protected List<Project> findAll() {
+    public List<Project> findAll() {
         return projectRepository.findAll();
     }
 
-public List<Project> getAllProjects() { // otherwise joeys code breaks
-        List<Project> projects = projectRepository.findAll();
-        if (projects.isEmpty()) {
-            return null;
-        }
-        return projects;
-    }
-
-
-    public List<ProjectDTO> findAllDTO() {
-        List<Project> projects = projectRepository.findAll();
-        if (projects.isEmpty()) {
-            throw new NoSuchElementException("No projects found");
-        }
-        return mapToDTO(projects);
-    }
-
-    protected Project findById(Long projectID) {
-        return projectRepository.findById(projectID)
-                .orElseThrow(() -> new NoSuchElementException("Project not found with id " + projectID));
-    }
-
-    public ProjectDTO findDTOById(Long projectID) {
-        return mapToDTO(findById(projectID));
+    public Project findById(Long projectID) {
+        return projectRepository.findById(projectID).orElse(null);
     }
 
     private Project save(Project project) {
         return projectRepository.save(project);
     }
 
-    public ProjectDTO add(ProjectDTO projectDTO) {
-        Project project = new Project();
-        return mapToDTO(mapToEntity(project, projectDTO));
+    public Project add(ProjectDTO projectDTO) {
+        return mapToEntity(new Project(), projectDTO);
     }
 
-    public ProjectDTO update(Long projectId, ProjectDTO newProjectData) {
+    public Project update(Long projectId, ProjectDTO newProjectData) {
         if (!projectId.equals(newProjectData.getId())) throw new IllegalArgumentException("Project ID does not match");
         Project project = findById(projectId);
-        if (newProjectData.getTeamId() != null){
+        if (newProjectData.getTeamId() != null) {
             project.setTeam(teamRepository.findById(newProjectData.getTeamId()).orElseThrow());
         }
-        Project savedProject = mapToEntity(project, newProjectData);
-        return mapToDTO(savedProject);
+        return mapToEntity(project, newProjectData);
     }
 
-    public ProjectDTO delete(Long projectId) {
+    public Project delete(Long projectId) {
         Project deletedProject = findById(projectId);
-        projectRepository.deleteById(projectId);
-        return mapToDTO(deletedProject);
-    }
-
-    public List<ProjectDTO> findAllByWarehouseIdDTO(Long warehouseId) {
-        return mapToDTO(projectRepository.getAllByTeam_Warehouse_Id(warehouseId));
+        projectRepository.delete(deletedProject);
+        return deletedProject;
     }
 
     public List<Project> findAllByWarehouseId(Long warehouseId) {
@@ -99,22 +69,11 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
         project.setClientName(projectDTO.getClientName());
         project.setClientEmail(projectDTO.getClientEmail());
         project.setClientPhone(projectDTO.getClientPhone());
-        project.setStartDate(projectDTO.getStartDate());
-        project.setEndDate(projectDTO.getEndDate());
+        project.setStartDate(Date.valueOf(projectDTO.getStartDate().toLocalDate().plusDays(1)));
+        project.setEndDate(Date.valueOf(projectDTO.getEndDate().toLocalDate().plusDays(1)));
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
         project.setTeam(teamRepository.findById(projectDTO.getTeamId()).orElseThrow());
         return save(project);
-    }
-
-    private ProjectDTO mapToDTO(Project project) {
-        return new ProjectDTO(project);
-    }
-
-    private List<ProjectDTO> mapToDTO(List<Project> projects) {
-        return projects
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
     }
 
     protected void setTeam(List<Project> projects, Team team) {
@@ -136,21 +95,12 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
                         status, warehouseId, startDate, endDate);
     }
 
-    public Collection<Object> findProjectsByStatus(Project.Status status) {
-        return projectRepository.findAllByStatus(status);
-    }
-
-    public Collection<Object> findProjectsByStatus(Project.Status status, Long warehouseId) {
-        return projectRepository.findAllByStatusAndTeam_Warehouse_Id(status, warehouseId);
-    }
-
     private InventoryProjectDTO mapInventoryToDTO(Transaction transaction) {
         InventoryProjectDTO dto = new InventoryProjectDTO();
         dto.setId(transaction.getId());
         dto.setQuantity(transaction.getQuantity());
         dto.setTransactionType(transaction.getTransactionType().name());
         dto.setTransactionDate(transaction.getTransactionDate());
-
 
         if (transaction.getProduct() != null) {
             dto.setProductName(transaction.getProduct().getName());
@@ -164,8 +114,7 @@ public List<Project> getAllProjects() { // otherwise joeys code breaks
     }
 
     private TaskDTO mapTasksToDTO(Task task) {
-
-TaskDTO dto = new TaskDTO();
+        TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
         dto.setOrder(task.getTaskOrder());
         dto.setName(task.getName());
@@ -194,14 +143,16 @@ TaskDTO dto = new TaskDTO();
     public List<TaskDTO> getProjectTasks(Long projectId) {
         Project project = projectRepository.findById(projectId).orElse(null);
 
-            if (project != null) {
+        if (project != null) {
             return project.getTasks()
                     .stream()
                     .map(this::mapTasksToDTO)
                     .collect(Collectors.toList());
-            }
+        }
         return null;
     }
 
-
+    public List<Project> findAllByTeamId(Long id) {
+        return projectRepository.findAllByTeam_Id(id);
+    }
 }

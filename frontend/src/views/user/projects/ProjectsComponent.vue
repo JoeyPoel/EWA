@@ -187,7 +187,7 @@ export default {
     },
 
     async getTeams() {
-      this.teams = await this.teamsService.asyncGetAll();
+      this.teams = await this.teamsService.asyncFindAll();
       console.log(this.teams);
     },
 
@@ -203,7 +203,7 @@ export default {
       try {
         const userTeams = this.teams.filter(team => team.membersIds.includes(this.userId));
 
-        const allProjects = await this.projectsService.asyncGetAll();
+        const allProjects = await this.projectsService.asyncFindAll();
         this.projects = allProjects.filter(project => {
           return userTeams.some(team => team.id === project.teamId);
         });
@@ -216,7 +216,7 @@ export default {
 
     async loadInventory() {
       try {
-        this.projectProducts = await this.projectsService.asyncGetProjectProducts(this.selectedProject.id);
+        this.projectProducts = await this.projectsService.asyncFindProjectProducts(this.selectedProject.id);
         console.log(this.projectProducts);
       } catch (error) {
         console.error("Error fetching project products:", error);

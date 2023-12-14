@@ -1,11 +1,9 @@
 package teamx.app.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.User;
-
 import teamx.app.backend.services.UserService;
 
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-// TODO: Return DTOs instead of entities
+    // TODO: Return DTO instead of entities
     private final UserService userService;
 
     /*@PostMapping("/login")

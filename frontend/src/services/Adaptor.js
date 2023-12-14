@@ -38,4 +38,24 @@ export class Adaptor {
             return null;
         }
     }
+
+    static transformDataForItemFields(data, fields) {
+        let transformedData = {};
+        for (let field of fields) {
+            let value = data[field.name];
+            if (value === undefined) {
+                value = field.value;
+            }
+            transformedData[field.name] = {
+                type: field.type,
+                value: value,
+                disabled: field.disabled || false,
+                label: field.label || "",
+                rules: field.rules || [],
+                items: field.items || [],
+            };
+        }
+
+        return transformedData;
+    }
 }

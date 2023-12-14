@@ -24,7 +24,7 @@ export default class ProjectAdaptor extends Adaptor {
      *
      * @async
      */
-    async asyncGetAll() {
+    async asyncFindAll() {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -38,7 +38,7 @@ export default class ProjectAdaptor extends Adaptor {
      * @param {string} id - The ID of the project to retrieve.
      * @returns {Promise<Project|null>} A promise that resolves to the project if found, or null if not found.
      */
-    async asyncGetById(id) {
+    async asyncFindById(id) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -74,7 +74,8 @@ export default class ProjectAdaptor extends Adaptor {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
-        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
+        const response = await this.fetchJson(`${this.resourceUrl}/${id}`, options);
+
 
         return response ? Project.fromJson(response) : null;
     }
@@ -104,7 +105,7 @@ export default class ProjectAdaptor extends Adaptor {
      * @return {Promise<Project[]|null>} A promise that resolves to an array of projects mapped from the response JSON,
      * or null if response is falsy.
      */
-    async asyncGetAllByWarehouseId(warehouseId) {
+    async asyncFindAllByWarehouseId(warehouseId) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -114,7 +115,7 @@ export default class ProjectAdaptor extends Adaptor {
         return response ? response.map(project => Project.fromJson(project)) : null;
     }
 
-    async asyncGetProjectProducts(id) {
+    async asyncFindProjectProducts(id) {
         const options = {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
@@ -130,5 +131,14 @@ export default class ProjectAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/tasks" + "/" + id, options)
         return response ? response.map(task => Task.fromJson(task)) : null;
+    }
+
+    async asyncFindAllByTeamId(id) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"},
+        }
+
+        const response = await this.fetchJson(this.resourceUrl + "/team/" + id, options)
+        return response ? response.map(project => Project.fromJson(project)) : null;
     }
 }
