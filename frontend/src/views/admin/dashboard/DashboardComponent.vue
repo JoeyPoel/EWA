@@ -5,8 +5,7 @@
         <life-time-stats ref="lifeTimeStats" :warehouse-id="this.warehouseId">
           <template v-slot:warehouse>
             <v-col cols="12">
-                  <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id"
-                            label="Warehouse" outlined @change="updateChartData" icon="$warehouse"/>
+              <data-filter :can-sort-by-warehouse="true" @warehouse="this.warehouseId = $event"/>
             </v-col>
           </template>
         </life-time-stats>
@@ -25,9 +24,11 @@
 import LifeTimeStats from "@/components/charts/LifeTimeStats.vue";
 import ProjectsBar from "@/components/charts/ProjectsBar.vue";
 import InventoryLine from "@/components/charts/InventoryLine.vue";
+import DataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   components: {
+    DataFilter,
     ProjectsBar,
     InventoryLine,
     LifeTimeStats
@@ -41,6 +42,7 @@ export default {
   },
   async mounted() {
     this.warehouses = await this.warehousesService.asyncFindAll();
+    this.warehouses.unshift({id: null, name: 'All warehouses'});
   },
   methods: {
     updateChartData() {

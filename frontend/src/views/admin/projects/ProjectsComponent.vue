@@ -1,8 +1,8 @@
 <template>
 <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Projects">
-      <search-text-field :search="search" :warehouseId="selectedWarehouse" :warehouses="warehouses"
-                         @input="search = $event" @warehouse="selectedWarehouse = $event"/>
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -202,7 +202,7 @@
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Task} from "@/models/Task";
-import SearchTextField from "@/components/SearchTextField.vue";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   // TODO: Fix date format for new and edit
@@ -212,7 +212,7 @@ export default {
       return Project
     }
   },
-  components: {SearchTextField, BaseCard},
+  components: {dataFilter, BaseCard},
   inject: ['projectsService', 'teamsService', "warehousesService"],
   data() {
     return {

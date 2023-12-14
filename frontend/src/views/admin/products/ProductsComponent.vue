@@ -3,8 +3,7 @@
     <base-card class="mt-1" color="secondary" title="Products">
       <v-row>
         <v-col>
-          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
-          </v-text-field>
+          <data-filter :search="search" :can-search="true" @input="search = $event"/>
         </v-col>
       </v-row>
       <v-data-table
@@ -158,11 +157,13 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Product} from "@/models/Product";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "ProductsComponent",
   inject: ['productsService', 'inventoryService'],
   components: {
+    dataFilter,
     BaseCard,
   },
   data() {

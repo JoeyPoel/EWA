@@ -1,23 +1,8 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Users">
-      <v-text-field v-model="search" label="Search User" prepend-inner-icon="$search" variant="outlined"/>
-      <v-row class="d-flex align-center">
-        <v-col class="flex-grow-1">
-          <v-select
-              v-model="selectedTeam"
-              :items="teams"
-              item-title="name"
-              item-value="id"
-              label="Teams"
-              prepend-inner-icon="$team"
-          />
-        </v-col>
-        <v-col cols="auto" v-if="selectedTeam">
-          <v-btn color="secondary" dark class="mb-2" @click="unselectTeam">Unselect Team</v-btn>
-        </v-col>
-      </v-row>
-
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-team="true" @team="selectedTeam = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -126,11 +111,12 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {User} from "@/models/User";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "UsersComponent",
   inject: ['teamsService', 'usersService'],
-  components: {BaseCard},
+  components: {dataFilter, BaseCard},
   data() {
     return {
       teams: [],

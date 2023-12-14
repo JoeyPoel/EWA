@@ -6,7 +6,7 @@
         title="Teams">
       <v-row>
         <v-col cols="5">
-          <search-text-field :value="search" label="Search"/>
+          <data-filter :value="search" label="Search"/>
         </v-col>
         <v-col cols="5">
           <v-select v-model="selectedWarehouse"
@@ -37,7 +37,7 @@
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
 import BaseFormDialog from '@/components/BaseFormDialog';
-import SearchTextField from "@/components/SearchTextField.vue";
+import dataFilter from "@/components/DataFilterComponent.vue";
 import DataTable from "@/components/DataTable.vue";
 
 export default {
@@ -45,7 +45,7 @@ export default {
   inject: ['teamsService', 'warehousesService', 'usersService'],
   components: {
     DataTable,
-    SearchTextField,
+    dataFilter,
     BaseCard,
     BaseFormDialog
   },

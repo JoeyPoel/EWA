@@ -1,8 +1,8 @@
 <template>
   <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Teams">
-      <SearchTextField :search="search" label="Search" :warehouses="warehouses"
-                       @warehouse="selectedWarehouse = $event" @input="search = $event"/>
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -133,13 +133,13 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
-import SearchTextField from "@/components/SearchTextField.vue";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "TeamsComponent",
   inject: ['teamsService', 'warehousesService', 'usersService', 'projectsService'],
   components: {
-    SearchTextField,
+    dataFilter,
     BaseCard,
   },
   data() {

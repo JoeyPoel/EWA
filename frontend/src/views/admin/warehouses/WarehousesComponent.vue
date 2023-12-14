@@ -1,11 +1,7 @@
 <template>
   <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Warehouses">
-      <v-row>
-        <v-col>
-          <v-text-field v-model="search" label="Search Warehouse" prepend-inner-icon="$search" variant="outlined"/>
-        </v-col>
-      </v-row>
+      <data-filter :search="search" :can-search="true" @input="search = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -305,10 +301,11 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Warehouse} from "@/models/Warehouse";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "WarehousesComponent",
-  components: {BaseCard},
+  components: {dataFilter, BaseCard},
   inject: ["warehousesService", "inventoryService", "usersService", "transactionsService", "teamsService",
     "projectsService"],
   data() {

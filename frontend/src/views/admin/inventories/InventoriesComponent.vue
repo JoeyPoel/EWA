@@ -1,8 +1,8 @@
 <template>
   <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Inventories">
-      <search-text-field :search="search" :warehouseId="selectedWarehouse" :warehouses="warehouses"
-                         @input="search = $event" @warehouse="selectedWarehouse = $event"></search-text-field>
+      <data-filter :search="search" :can-search="true" @input="search = $event"
+                   :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
           :search="search" class="elevation-1" item-value="name">
         <template v-slot:top>
@@ -154,7 +154,7 @@
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Transaction} from "@/models/Transaction";
 import {Order} from "@/models/Order";
-import SearchTextField from "@/components/SearchTextField.vue";
+import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "InventoryComponent",
@@ -210,7 +210,7 @@ export default {
     }
   },
   components: {
-    SearchTextField,
+    dataFilter,
     BaseCard
   },
 
