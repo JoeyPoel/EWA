@@ -1,24 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Inventories">
-      <v-row>
-        <v-col>
-          <v-text-field v-model="search" label="Search product" prepend-inner-icon="$search" variant="outlined">
-          </v-text-field>
-        </v-col>
-        <v-col>
-          <v-select v-model="selectedWarehouse" :items="warehouses" label="Warehouse" variant="outlined"
-                    @change="loadTableData">
-            <template #prepend-inner>
-              <v-icon color="grey"> $warehouse</v-icon>
-            </template>
-            <template v-slot:prepend-item>
-              <v-list-item title="All warehouses" @click="selectedWarehouse = null; loadTableData()">
-              </v-list-item>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
+      <search-text-field :search="search" :warehouseId="selectedWarehouse" :warehouses="warehouses"
+                         @input="search = $event" @warehouse="selectedWarehouse = $event"></search-text-field>
       <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
           :search="search" class="elevation-1" item-value="name">
         <template v-slot:top>
@@ -170,6 +154,7 @@
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Transaction} from "@/models/Transaction";
 import {Order} from "@/models/Order";
+import SearchTextField from "@/components/SearchTextField.vue";
 
 export default {
   name: "InventoryComponent",
@@ -225,6 +210,7 @@ export default {
     }
   },
   components: {
+    SearchTextField,
     BaseCard
   },
 
@@ -268,15 +254,7 @@ export default {
         })
       })
 
-      this.warehouses = await this.warehousesService.asyncFindAll().then(warehouses => {
-        return warehouses.map(warehouse => {
-          return {
-            title: warehouse.name,
-            value: warehouse.id
-          }
-        })
-      })
-
+      this.warehouses = await this.warehousesService.asyncFindAll();
       this.loading = false;
     },
 

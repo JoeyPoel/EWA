@@ -41,7 +41,7 @@ export class InventoryAdaptor extends Adaptor {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
         const response = await this.fetchJson(
-            this.resourceUrl `/warehouse/${warehouseId}`, options);
+            `${this.resourceUrl}/warehouse/${warehouseId}`, options);
         if (response) {
             return response.map(inventoryProduct => InventoryProduct.fromJson(inventoryProduct));
         }
@@ -59,7 +59,7 @@ export class InventoryAdaptor extends Adaptor {
             method: "GET", headers: {"Content-Type": "application/json"},
         }
         const response = await this.fetchJson(
-            this.resourceUrl + `/product/${productId}/warehouses`, options);
+            `${this.resourceUrl}/product/${productId}/warehouses`, options);
         if (response) {
             return response;
         }

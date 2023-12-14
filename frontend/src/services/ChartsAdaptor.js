@@ -141,4 +141,10 @@ export class ChartsAdaptor extends Adaptor {
             + startDate + "&endDate=" + endDate + "&interval=" + interval, options);
     }
 
+    async asyncLifetimeStatistics(warehouseId) {
+        const options = {
+            method: "GET", headers: {"Content-Type": "application/json"}
+        }
+        return await this.fetchJson(`${this.resourceUrl}/statistics/lifetime/warehouses/${warehouseId}`, options);
+    }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<InventoryOrder, Long> {
     List<InventoryOrder> findAllByOrderedById(Long userId);
 
+    Long countByWarehouseId(Long warehouseId);
 }

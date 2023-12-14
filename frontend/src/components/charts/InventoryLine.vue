@@ -49,7 +49,7 @@ export default {
       chartData: null,
       chartOptions: {
         responsive: true,
-        height: 450
+        height: 650
       },
       intervalItems: [
         {title: 'Day', value: 'day'},

@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="chartData">
+  <v-container :fluid="true">
     <v-card title="Projects" class="text-center elevation-2">
       <base-bar-chart :options="chartOptions" :charts-data="chartData"/>
       <v-card-actions>
@@ -20,9 +20,6 @@
         </v-container>
       </v-card-actions>
     </v-card>
-  </v-container>
-  <v-container v-else>
-    <v-progress-circular indeterminate size="64"/>
   </v-container>
 </template>
 

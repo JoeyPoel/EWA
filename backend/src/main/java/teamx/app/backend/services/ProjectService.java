@@ -7,15 +7,12 @@ import teamx.app.backend.models.Task;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.repositories.ProjectRepository;
 import teamx.app.backend.repositories.TeamRepository;
-import teamx.app.backend.utils.DTO.InventoryProjectDTO;
 import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,8 +114,7 @@ public class ProjectService {
     }
 
     private TaskDTO mapTasksToDTO(Task task) {
-
-TaskDTO dto = new TaskDTO();
+        TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
         dto.setOrder(task.getTaskOrder());
         dto.setName(task.getName());
@@ -147,12 +143,12 @@ TaskDTO dto = new TaskDTO();
     public List<TaskDTO> getProjectTasks(Long projectId) {
         Project project = projectRepository.findById(projectId).orElse(null);
 
-            if (project != null) {
+        if (project != null) {
             return project.getTasks()
                     .stream()
                     .map(this::mapTasksToDTO)
                     .collect(Collectors.toList());
-            }
+        }
         return null;
     }
 

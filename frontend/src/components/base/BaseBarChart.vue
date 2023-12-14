@@ -1,29 +1,25 @@
 <template>
-  <v-container v-if="data">
-    <Chart type="bar" :data="this.data" :options="options"/>
+  <v-container v-if="data" :fluid="true">
+    <v-card>
+      <v-card-text>
+        <Chart :data="this.data" :options="options" type="bar"/>
+      </v-card-text>
+    </v-card>
   </v-container>
-  <v-container v-else>
-    <v-progress-circular indeterminate size="64"/>
-  </v-container>
+  <no-data-component v-else/>
 </template>
 
 <script>
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
-} from 'chart.js'
+import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from 'chart.js'
 import {Chart,} from 'vue-chartjs'
+import NoDataComponent from "@/components/charts/NoDataComponent.vue";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default {
   name: 'App',
   components: {
+    NoDataComponent,
     Chart
   },
   props: {
@@ -41,7 +37,7 @@ export default {
       data: null,
     }
   },
-  mounted(){
+  mounted() {
     if (this.chartsData) {
       this.data = this.chartsData;
       this.setColor()

@@ -1,8 +1,8 @@
 <template>
 <v-container fluid>
     <base-card class="mt-1" color="secondary" title="Projects">
-      <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
-      </v-text-field>
+      <search-text-field :search="search" :warehouseId="selectedWarehouse" :warehouses="warehouses"
+                         @input="search = $event" @warehouse="selectedWarehouse = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -202,6 +202,7 @@
 import {Project} from "@/models/Project.js";
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Task} from "@/models/Task";
+import SearchTextField from "@/components/SearchTextField.vue";
 
 export default {
   // TODO: Fix date format for new and edit
@@ -211,8 +212,8 @@ export default {
       return Project
     }
   },
-  components: {BaseCard},
-  inject: ['projectsService', 'teamsService'],
+  components: {SearchTextField, BaseCard},
+  inject: ['projectsService', 'teamsService', "warehousesService"],
   data() {
     return {
       headers: [
@@ -240,9 +241,11 @@ export default {
       projectTaskSearch: "",
       projectTasks: [],
       projects: [],
+      warehouses: [],
       teams: [],
       selectedProject: new Project(),
       editedProject: new Project(),
+      selectedWarehouse: null,
       search: "",
       tab: "",
       itemsPerPage: 10,
@@ -256,6 +259,14 @@ export default {
   },
 
   watch: {
+    selectedWarehouse() {
+      this.getProjects();
+    },
+    search(val) {
+      if (val) {
+        return true;
+      }
+    },
   },
 
   async created() {
@@ -266,6 +277,11 @@ export default {
     async initialize() {
       await this.getProjects();
       await this.getTeams();
+      await this.getWarehouses();
+    },
+
+    async getWarehouses() {
+      this.warehouses = await this.warehousesService.asyncFindAll();
     },
 
     async loadProjectData() {
@@ -275,11 +291,12 @@ export default {
 
     async getTeams() {
       this.teams = await this.teamsService.asyncFindAll();
-      console.log(this.teams)
     },
 
     async getProjects() {
-      this.projects = await this.projectsService.asyncFindAll();
+      this.projects = this.selectedWarehouse ?
+          await this.projectsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.projectsService.asyncFindAll();
     },
 
     getStatusColor(project) {

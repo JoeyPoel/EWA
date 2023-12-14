@@ -88,4 +88,8 @@ public class ChartController {
         return ResponseEntity.ok(chartService.getLifetimeStatistics());
     }
 
+    @GetMapping("/statistics/lifetime/warehouses/{warehouseId}")
+    public ResponseEntity<HashMap<String, Long>> getLifetimeStatisticsByWarehouse(@PathVariable Long warehouseId) {
+        return ResponseEntity.ok(chartService.getLifetimeStatisticsByWarehouse(warehouseId));
+    }
 }

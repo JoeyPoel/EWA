@@ -1,18 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Teams">
-      <v-row>
-        <v-col cols="5">
-          <v-text-field v-model="search" label="Search Team" prepend-inner-icon="$search" variant="outlined"/>
-        </v-col>
-        <v-col cols="5">
-          <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
-                    label="Warehouse"/>
-        </v-col>
-        <v-col class="justify-content-center" cols="2">
-          <v-btn @click="selectedWarehouse = null; search = ''" color="secondary">Reset</v-btn>
-        </v-col>
-      </v-row>
+      <SearchTextField v-model="search" label="Search" :warehouses="warehouses"
+                       @warehouse="selectedWarehouse = $event" @input="search = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
           :headers="headers"
@@ -143,11 +133,13 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
+import SearchTextField from "@/components/SearchTextField.vue";
 
 export default {
   name: "TeamsComponent",
   inject: ['teamsService', 'warehousesService', 'usersService', 'projectsService'],
   components: {
+    SearchTextField,
     BaseCard,
   },
   data() {

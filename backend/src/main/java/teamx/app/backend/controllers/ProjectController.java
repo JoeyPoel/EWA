@@ -5,11 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.models.dto.ProjectDTO;
 import teamx.app.backend.models.dto.TaskDTO;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.services.ProjectService;
-import teamx.app.backend.utils.DTO.InventoryProjectDTO;
 import teamx.app.backend.utils.DTO.ProjectDTO;
 
 import java.util.List;

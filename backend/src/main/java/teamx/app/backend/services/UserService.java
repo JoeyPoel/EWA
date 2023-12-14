@@ -11,6 +11,7 @@ import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.OrderRepository;
 import teamx.app.backend.repositories.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -159,5 +160,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Users could not be set to team");
         }
         return savedUsers;
+    }
+
+    public Collection<Object> getAllByWarehouseId(Long warehouseId) {
+        return userRepository.getAllByTeam_Warehouse_Id(warehouseId);
     }
 }

@@ -17,4 +17,8 @@ public class OrderService {
     protected Long totalOrders() {
         return orderRepository.count();
     }
+
+    public Long totalOrdersByWarehouse(Long warehouseId) {
+        return orderRepository.countByWarehouseId(warehouseId);
+    }
 }
