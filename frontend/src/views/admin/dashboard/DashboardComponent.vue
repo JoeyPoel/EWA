@@ -5,10 +5,8 @@
         <life-time-stats ref="lifeTimeStats" :warehouse-id="this.warehouseId">
           <template v-slot:warehouse>
             <v-col cols="12">
-              <v-row class="justify-center">
-                  <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id" label="Warehouse"
-                            outlined @change="updateChartData" icon="$warehouse"/>
-              </v-row>
+                  <v-select v-model="warehouseId" :items="warehouses" item-title="name" item-value="id"
+                            label="Warehouse" outlined @change="updateChartData" icon="$warehouse"/>
             </v-col>
           </template>
         </life-time-stats>
