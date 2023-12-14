@@ -1,7 +1,7 @@
 <template>
   <v-container :fluid="true">
     <base-card class="mt-1" color="secondary" title="Teams">
-      <SearchTextField v-model="search" label="Search" :warehouses="warehouses"
+      <SearchTextField :search="search" label="Search" :warehouses="warehouses"
                        @warehouse="selectedWarehouse = $event" @input="search = $event"/>
       <v-data-table
           v-model:items-per-page="itemsPerPage"
