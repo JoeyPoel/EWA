@@ -69,8 +69,8 @@ public class ProjectService {
         project.setClientName(projectDTO.getClientName());
         project.setClientEmail(projectDTO.getClientEmail());
         project.setClientPhone(projectDTO.getClientPhone());
-        project.setStartDate(projectDTO.getStartDate());
-        project.setEndDate(projectDTO.getEndDate());
+        project.setStartDate(Date.valueOf(projectDTO.getStartDate().toLocalDate().plusDays(1)));
+        project.setEndDate(Date.valueOf(projectDTO.getEndDate().toLocalDate().plusDays(1)));
         project.setStatus(Project.Status.valueOf(projectDTO.getStatus()));
         project.setTeam(teamRepository.findById(projectDTO.getTeamId()).orElseThrow());
         return save(project);

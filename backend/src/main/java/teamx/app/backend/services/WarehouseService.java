@@ -81,61 +81,6 @@ public class WarehouseService {
         return existingWarehouse;
     }
 
-    public List<CapacityDTO> getCapacity(Long warehouseId) {
-        setMissingCapacityCategories(warehouseId);
-        List<Capacity> warehouseCapacity = capacityRepository.findAllByWarehouseId(warehouseId);
-        return warehouseCapacity.stream().map(Capacity::toDTO).toList();
-    }
-
-    public void setMissingCapacityCategories(Long id) {
-        List<ProductCategory> productCategories = productCategoryRepository.findAll();
-        List<Capacity> warehouseCapacity = capacityRepository.findAllByWarehouseId(id);
-
-        for (Capacity capacity : warehouseCapacity) {
-            productCategories.removeIf(productCategory -> Objects.equals(productCategory.getId(),
-                    capacity.getProductCategory().getId()));
-        }
-
-        List<Capacity> missingWarehouseCapacity = new ArrayList<>();
-
-        for (ProductCategory productCategory : productCategories) {
-            Capacity capacity = new Capacity();
-            capacity.setProductCategory(productCategory);
-            capacity.setCapacity(0);
-            capacity.setMinimumStockLevel(0);
-            capacity.setWarehouse(warehouseRepository.findById(id).orElse(null));
-            missingWarehouseCapacity.add(capacity);
-        }
-
-        capacityRepository.saveAll(missingWarehouseCapacity);
-    }
-
-    public CapacityDTO addCapacity(Long id, CapacityDTO capacity) {
-        Warehouse warehouse = warehouseRepository.findById(id).orElse(null);
-        if (warehouse == null) {
-            return null;
-        }
-        Capacity newCapacity = mapToCapacityEntity(capacity,
-                Objects.requireNonNull(capacityRepository.findById(capacity.getId()).orElse(null)));
-        return capacityRepository.save(newCapacity).toDTO();
-    }
-
-    public CapacityDTO updateCapacityById(Long id, CapacityDTO capacity) {
-        Capacity existingCapacity = capacityRepository.findById(id).orElse(null);
-        if (existingCapacity == null || capacity == null || !Objects.equals(capacity.getId(), id)) {
-            return null;
-        }
-        existingCapacity.setCapacity(capacity.getCapacity());
-        existingCapacity.setMinimumStockLevel(capacity.getMinimumStockLevel());
-        return capacityRepository.save(existingCapacity).toDTO();
-    }
-
-    public Capacity mapToCapacityEntity(CapacityDTO dto, Capacity entity) {
-        entity.setCapacity(dto.getCapacity());
-        entity.setMinimumStockLevel(dto.getMinimumStockLevel());
-        return entity;
-    }
-
     private void validateInputs(Long id, Warehouse warehouse) {
         if (warehouse == null) {
             throw new NullPointerException("Warehouse is null");

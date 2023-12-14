@@ -1,6 +1,5 @@
 import {Adaptor} from "./Adaptor.js";
 import {Warehouse} from "@/models/Warehouse.js";
-import {Capacity} from "@/models/Capacity";
 
 /**
  * Adaptor for the warehouses REST API.
@@ -98,61 +97,5 @@ export default class WarehousesAdaptor extends Adaptor {
         const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
 
         return response ? Warehouse.fromJson(response) : null;
-    }
-
-    /**
-     * Retrieves the capacity information for the specified ID asynchronously.
-     *
-     * @param {number|string} id - The ID of the resource.
-     * @return {Promise<Array<Capacity>|null>} - A Promise that resolves to an array of capacity objects, or null if
-     * there is no response.
-     */
-    async asyncFindCapacity(id) {
-        const options = {
-            method: "GET", headers: {"Content-Type": "application/json"},
-        }
-
-        const response = await this.fetchJson(this.resourceUrl + "/" + id + "/capacity", options);
-
-        return response ? response.map(capacity => Capacity.fromJson(capacity)) : null;
-    }
-
-    /**
-     * Adds warehouse capacity by warehouse id.
-     *
-     * @param {string} id - The id of the warehouse.
-     * @param {object} warehouseProductCategoryCapacity - The warehouse product category capacity.
-     * @returns {object} - The capacity after adding the warehouse capacity.
-     */
-    async asyncAddCapacityByWarehouseId(id, warehouseProductCategoryCapacity) {
-        const options = {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(warehouseProductCategoryCapacity)
-        }
-
-        const response = await this.fetchJson(this.resourceUrl + "/addWarehouseCapacityByWarehouseId/" + id,
-            options);
-
-        return response ? Capacity.fromJson(response) : null;
-    }
-
-    /**
-     * Updates warehouse capacity by ID asynchronously.
-     *
-     * @param {string} id - The ID of the warehouse.
-     * @param {object} warehouseProductCategoryCapacity - The new warehouse capacity information.
-     * @return {Promise<Capacity|null>} - A promise that resolves to the updated warehouse capacity as a Capacity object
-     * , or null if the update failed.
-     */
-    async asyncUpdateCapacityById(id, warehouseProductCategoryCapacity) {
-        const options = {
-            method: "PUT", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(warehouseProductCategoryCapacity)
-        }
-
-        const response = await this.fetchJson(
-            this.resourceUrl + "/updateWarehouseCapacityById/" + id, options);
-
-        return response ? Capacity.fromJson(response) : null;
     }
 }
