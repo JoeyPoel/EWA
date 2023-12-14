@@ -74,7 +74,8 @@ export default class ProjectAdaptor extends Adaptor {
         const options = {
             method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(project)
         }
-        const response = await this.fetchJson(this.resourceUrl + "/" + id, options);
+        const response = await this.fetchJson(`${this.resourceUrl}/${id}`, options);
+
 
         return response ? Project.fromJson(response) : null;
     }

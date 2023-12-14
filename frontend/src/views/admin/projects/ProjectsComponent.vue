@@ -345,13 +345,9 @@ export default {
       if (!this.isValidProject()) {
         return;
       }
+      console.log(this.editedProject);
       await this.projectsService.asyncUpdate(this.editedProject.id, this.editedProject);
       this.close();
-    },
-
-    setDateFormats() {
-      this.editedProject.startDate = this.editedProject.startDate.toISOString().slice(0, 10);
-      this.editedProject.endDate = this.editedProject.endDate.toISOString().slice(0, 10);
     },
 
     deleteProject(project) {
