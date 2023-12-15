@@ -1,25 +1,11 @@
 <template>
-  <v-container fluid>
+  <v-container :fluid>
     <base-card
         class="mt-1"
         color="secondary"
         title="Teams">
-      <v-row>
-        <v-col cols="5">
-          <data-filter :value="search" label="Search"/>
-        </v-col>
-        <v-col cols="5">
-          <v-select v-model="selectedWarehouse"
-                    :items="warehouses"
-                    item-title="name"
-                    item-value="id"
-                    label="Warehouse"
-          />
-        </v-col>
-        <v-col class="justify-content-center" cols="2">
-          <v-btn @click="reset">Reset</v-btn>
-        </v-col>
-      </v-row>
+      <data-filter :can-search="true" :can-sort-by-warehouse="true" :search="search"
+                   @input="search = $event" @warehouse="selectedWarehouse = $event"/>
       <DataTable :allowed-actions="['View', 'Edit', 'Delete']"
                  :dialog-open="dialog.open"
                  :dialog-title="dialogTitle"
@@ -96,23 +82,10 @@ export default {
         'Delete': 'Delete Team'
       },
       headers: [
-        {
-          text: 'Name',
-          value: 'name'
-        },
-        {
-          text: 'Warehouse',
-          value: 'warehouseName'
-        },
-        {
-          text: 'Team Lead',
-          value: 'teamLeadName'
-        },
-        {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false
-        }
+        {title: 'Name', value: 'name'},
+        {title: 'Warehouse', value: 'warehouseName'},
+        {title: 'Team Lead', value: 'teamLeadName'},
+        {title: 'Actions', sortable: false}
       ]
     }
   },
@@ -157,13 +130,36 @@ export default {
 
   methods: {
     async initialize() {
-      this.teams = this.selectedWarehouse ?
-          await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
-          await this.teamsService.asyncFindAll();
       this.warehouses = await this.warehousesService.asyncFindAll();
       this.users = await this.usersService.asyncFindAll();
+      this.teams = await this.getTeams();
+
       this.dialog.fields[1].items = this.warehouses;
       this.dialog.fields[2].items = this.users;
+    },
+    async getTeams() {
+      let teams = this.selectedWarehouse ?
+          await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
+          await this.teamsService.asyncFindAll();
+      return teams.map(team => {
+        return {
+          ...team,
+          warehouseName: this.mapWarehouseName(team.warehouseId),
+          teamLeadName: this.mapTeamLeadName(team.leaderId)
+        }
+      })
+    },
+    mapWarehouseName(warehouseId) {
+      const warehouse = this.warehouses.find(warehouse => warehouse.id === warehouseId);
+      if (warehouse) {
+        return warehouse.name;
+      }
+    },
+    mapTeamLeadName(teamLeadId) {
+      const teamLead = this.users.find(user => user.id === teamLeadId);
+      if (teamLead) {
+        return teamLead.name;
+      }
     },
     async actionClicked(action) {
       switch (action.action) {

@@ -9,24 +9,30 @@
       <template v-slot:top>
       </template>
       <template v-if="allowedActions > 0" v-slot:[`item.actions`]="{ item }">
-        <v-btn v-for="(action, key) in actions" :key="key" :color="action.color" :title="action.title"
-               :to="action.to" v-model="item.index1">
+        <v-btn v-for="(action, key) in actions" :key="key" v-model="item.index" :color="action.color"
+               :title="action.title" :to="action.to" @click="selectedItem = item">
           <v-icon>{{ action.icon }}</v-icon>
         </v-btn>
       </template>
     </v-data-table>
-    <DialogComponent :open="dialogOpen" :title="dialogTitle" @close="handleClose">
-      <template v-slot:content>
-      </template>
-    </DialogComponent>
+    <dialog-component v-if="allowedActions && selectedItem && allowedActions.length > 0" :dialog="dialogConfig"
+                      :item="selectedItem" :item-fields="itemFields" :detail-tabs="detailDialogTabs"/>
   </div>
 </template>
 <script>
-import dialogComponent from './DialogComponent.vue';
+
+
+import BaseFormDialog from "@/components/BaseFormDialog.vue";
+import {all} from "core-js/internals/document-all";
 
 export default {
+  computed: {
+    all() {
+      return all
+    }
+  },
   components: {
-    dialogComponent
+    dialogComponent: BaseFormDialog
   },
   props: {
     tableHeaders: {
@@ -60,24 +66,33 @@ export default {
     allowedActions: {
       type: Array,
       required: true
+    },
+    dialogConfig: {
+      type: Object,
+      required: true
+    },
+    detailDialogTabs: {
+      type: Array,
+      required: false
     }
   },
   data() {
     return {
-      actions: []
+      actions: [],
+      selectedItem: null,
     };
   },
   created() {
     this.actions = this.allowedActions.map(action => {
       switch (action) {
         case 'View':
-          return {to: '/view', color: 'primary', icon: 'mdi-eye', title: 'View'};
+          return {to: '/details', color: 'primary', icon: 'mdi-eye', title: 'Details'};
         case 'Edit':
           return {to: '/edit', color: 'primary', icon: 'mdi-pencil', title: 'Edit'};
         case 'Delete':
           return {to: '/delete', color: 'error', icon: 'mdi-delete', title: 'Delete'};
         default:
-          return {to: '/view', color: 'primary', icon: 'mdi-eye', title: 'View'};
+          return {to: '', color: 'error', icon: 'mdi-eye', title: 'Unknown action'};
       }
     });
   },

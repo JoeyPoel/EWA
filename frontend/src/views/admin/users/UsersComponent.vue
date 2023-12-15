@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container :fluid>
     <base-card class="mt-1" color="secondary" title="Users">
       <data-filter :search="search" :can-search="true" @input="search = $event"
                    :can-sort-by-team="true" @team="selectedTeam = $event"/>
@@ -12,7 +12,7 @@
           item-value="id"
       >
         <template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar :flat>
             <v-dialog v-model="dialog.open" max-width="800px">
               <template v-slot:activator="{ props }">
                 <v-spacer></v-spacer>
@@ -20,7 +20,7 @@
                   New User</v-btn>
               </template>
               <v-card>
-                <v-card-title><h5>{{ dialogTitle[dialog.type] }}</h5></v-card-title>
+                <v-card-title><h5>{{ title[dialog.type] }}</h5></v-card-title>
                 <v-card-text>
                   <v-form>
                     <v-container>

@@ -17,20 +17,16 @@
 </template>
 
 <script>
-import ItemField from './ItemField.vue'
+import ItemField from '../ItemField.vue'
 
 export default {
-  name: "ItemForm",
+  name: "baseItemForm",
   components: {
     ItemField
   },
   props: {
     item: {
       type: Object,
-      required: true
-    },
-    actions:{
-      type: Array,
       required: true
     },
     itemFields: {
