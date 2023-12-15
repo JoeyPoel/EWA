@@ -13,16 +13,16 @@
           <template v-if="dialog.type === 'details'">
             <v-tabs v-model="detailTabsTitle">
               <v-tab value="details" title="Details"/>
-              <div v-for="(tab, index) in detailTabs" :key="index">
+              <div v-for="(tab, index) in dialog.detailTabs" :key="index">
                 <v-tab :value="tab.name" :title="tab.title"/>
               </div>
             </v-tabs>
             <v-window v-model="detailTabsTitle">
               <v-window-item value="details">
-                <base-item-form :item-fields="itemFields" :item="item"/>
+                <base-item-form :item-fields="dialog.itemFields" :item="item"/>
               </v-window-item>
-              <div v-for="(tab, index) in detailTabs" :key="index">
-                <v-window-item :value="tab.name">
+              <div v-for="(tab, index) in dialog.detailTabs" :key="index">
+                <v-window-item :value="tab.title">
                   <component :is="tab.component" :item="item"/>
                 </v-window-item>
               </div>
@@ -61,14 +61,6 @@ export default {
     item: {
       type: Object,
       required: true
-    },
-    itemFields: {
-      type: Array,
-      required: true
-    },
-    detailTabs: {
-      type: Array,
-      required: false
     },
   },
   data() {

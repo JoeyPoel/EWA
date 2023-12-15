@@ -1,20 +1,12 @@
 <template>
-  <v-container :fluid>
+  <v-container :fluid="true">
     <base-card
         class="mt-1"
         color="secondary"
         title="Teams">
-      <data-filter :can-search="true" :can-sort-by-warehouse="true" :search="search"
-                   @input="search = $event" @warehouse="selectedWarehouse = $event"/>
-      <DataTable :allowed-actions="['View', 'Edit', 'Delete']"
-                 :dialog-open="dialog.open"
-                 :dialog-title="dialogTitle"
-                 :item-fields="dialog.fields"
-                 :table-headers="headers"
-                 :table-items="teams"
-      />
-      <BaseFormDialog :dialog-open="dialog.open" :dialog-title="dialogTitle" :item="dialog.item"
-                      :itemFields="dialog.fields" @dialog-closed="dialog.open = false" @save-item="saveItem"/>
+      <data-filter :can-search="true" :can-sort-by-warehouse="true" :search="table.searchTerm"
+                   @input="table.searchTerm = $event" @warehouse="selectedWarehouse = $event"/>
+      <DataTable :dialog-config="dialog" :table-config="table" @select="this.dialog.item = $event"/>
     </base-card>
   </v-container>
 </template>
@@ -22,7 +14,6 @@
 <script>
 import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
-import BaseFormDialog from '@/components/BaseFormDialog';
 import dataFilter from "@/components/DataFilterComponent.vue";
 import DataTable from "@/components/DataTable.vue";
 
@@ -33,7 +24,6 @@ export default {
     DataTable,
     dataFilter,
     BaseCard,
-    BaseFormDialog
   },
   data() {
     return {
@@ -41,52 +31,32 @@ export default {
       warehouses: [],
       users: [],
       selectedWarehouse: null,
-      search: '',
-      itemsPerPage: 10,
+      table:{
+        headers: [
+          {title: 'Name', value: 'name'},
+          {title: 'Warehouse', value: 'warehouseName'},
+          {title: 'Team Lead', value: 'teamLeadName'},
+          {title: 'Actions', sortable: false}
+        ],
+        items: this.teams,
+        itemsPerPage: 10,
+        searchTerm: '',
+        allowedActions: ['View', 'Edit', 'Delete', 'New']
+      },
       dialog: {
         open: false,
+        action: null,
         item: new Team(),
-        fields: [
-          {
-            name: 'name',
-            label: 'Name',
-            type: 'text',
-            rules: [
-              v => !!v || 'Name is required'
-            ]
-          },
-          {
-            name: 'warehouseId',
-            label: 'Warehouse',
-            type: 'select',
-            items: [],
-            rules: [
-              v => !!v || 'Warehouse is required'
-            ]
-          },
-          {
-            name: 'leaderId',
-            label: 'Team Lead',
-            type: 'select',
-            items: [],
-            rules: [
-              v => !!v || 'Team Lead is required'
-            ]
-          }
+        itemFields: [
+          {name: 'name', label: 'Name', type: 'text', required: true},
+          {name: 'warehouseId', label: 'Warehouse', type: 'select', required: true, items: []},
+          {name: 'leaderId', label: 'Team Lead', type: 'select', required: true, items: []},
+          {name: 'members', label: 'Team Members', type: 'selectMultiple', required: false, items: []}
+        ],
+        detailTabs: [
+          // {title: 'Team Members', component: 'TeamMembersComponent'}
         ]
       },
-      dialogTitle: '',
-      dialogTitleOptions: {
-        'New': 'New Team',
-        'Edit': 'Edit Team',
-        'Delete': 'Delete Team'
-      },
-      headers: [
-        {title: 'Name', value: 'name'},
-        {title: 'Warehouse', value: 'warehouseName'},
-        {title: 'Team Lead', value: 'teamLeadName'},
-        {title: 'Actions', sortable: false}
-      ]
     }
   },
 
@@ -134,8 +104,9 @@ export default {
       this.users = await this.usersService.asyncFindAll();
       this.teams = await this.getTeams();
 
-      this.dialog.fields[1].items = this.warehouses;
-      this.dialog.fields[2].items = this.users;
+      this.dialog.itemFields[1].items = this.warehouses;
+      this.dialog.itemFields[2].items = this.users;
+      this.dialog.itemFields[3].items = this.users;
     },
     async getTeams() {
       let teams = this.selectedWarehouse ?

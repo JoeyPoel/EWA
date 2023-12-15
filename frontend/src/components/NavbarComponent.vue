@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer v-if="!$route.meta.hideNavbar" class="bg-white bg-custom"
-                       :expand-on-hover="true" rail="50px" :permanent="true">
+                       :expand-on-hover="true" :rail="true" :permanent="true">
     <v-list>
       <router-link to="/dashboard">
         <v-list-item prepend-icon="">
