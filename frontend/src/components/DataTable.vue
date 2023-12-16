@@ -11,12 +11,13 @@
           <template v-slot:top>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
-            <v-icon v-for="(action, key) in table.allowedActions" :key="key" @click="handleSelect(item)">
+            <v-icon v-for="(action, key) in table.allowedActions" :key="key" @click="handleAction(action, item)">
               {{action.icon}}
             </v-icon>
           </template>
         </v-data-table>
-        <dialog-component v-if="showDialog" :max-width="dialogMaxWidth" :dialog="dialog" :item="dialog.item"/>
+        <dialog-component :item-fields="dialog.itemFields" :open="dialog.open" :title="dialog.title"
+                          :item="dialog.item" :max-width="dialog.maxWidth"/>
       </v-card-text>
     </v-card>
   </div>
@@ -34,35 +35,10 @@ export default {
     tableConfig: {
       type: Object,
       required: true,
-      // headers: [{title: 'Name', value: 'name'}],
-      // items: [{id: 1, name: 'example'}],
-      // itemsPerPage: 10,
-      // searchTerm: '',
-      // allowedActions: ['View', 'Edit', 'Delete', 'New']
     },
     dialogConfig: {
       type: Object,
       required: true,
-      //   dialogConfig example:
-      //   {
-      //     title: 'example',
-      //     open: false,
-      //     itemFields: [
-      //       {
-      //         name: 'name',
-      //         label: 'Name',
-      //         type: 'text',
-      //         rules: [
-      //           v => !!v || 'Name is required'
-      //         ],
-      //         disabled: false
-      //       }
-      //     ],
-      //     detailTabs: [
-      //       {
-      //         title: 'Details',
-      //         component: 'user-details',
-      //       },
     }
   },
   data() {
@@ -76,36 +52,17 @@ export default {
       },
       dialog: {
         open: false,
-        action: null,
-        item: null,
+        title: '',
+        item: {},
         itemFields: [],
         detailTabs: [],
+        maxWidth: '800px',
       },
     };
   },
   computed: {
     showDialog() {
-      if (this.dialogConfig === undefined) {
-        console.log('dialogConfig is undefined');
-        return false;
-      }
-      if (!this.dialogConfig.open) {
-        console.log('dialogConfig.open is false');
-        return false;
-      }
-      if(!this.tableConfig.allowedActions){
-        console.log('tableConfig.allowedActions is undefined');
-        return false;
-      }
-      if (!this.tableConfig.allowedActions.length > 0){
-        console.log('tableConfig.allowedActions is empty');
-        return false;
-      }
-      if (!this.actions.length > 0){
-        console.log('actions is empty');
-        return false;
-      }
-      return true;
+      return this.dialog.open;
     },
     dialogMaxWidth() {
       return this.dialogConfig.maxWidth ? this.dialogConfig.maxWidth : '800px';
@@ -114,11 +71,11 @@ export default {
   watch: {
     dialogConfig: {
       handler: function (newVal) {
-        this.dialog.open = newVal.open;
-        this.dialog.action = newVal.action;
+        this.dialog.title = newVal.title;
         this.dialog.item = newVal.item;
         this.dialog.itemFields = newVal.itemFields;
         this.dialog.detailTabs = newVal.detailTabs;
+        this.dialog.open = newVal.open;
       },
       deep: true
     },
@@ -157,9 +114,8 @@ export default {
     handleClose() {
       this.$emit('close');
     },
-    handleSelect(item) {
-      console.log(`selected item in DataTable: ${JSON.stringify(item)}`);
-      this.$emit('select', item);
+    handleAction(action, item) {
+      this.$emit('action', {action: action, item: item});
     },
   },
 };

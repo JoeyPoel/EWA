@@ -7,7 +7,7 @@ import {
     mdiAccountCircleOutline,
     mdiAccountOutline,
     mdiArchiveOutline,
-    mdiCancel,
+    mdiCancel, mdiClose,
     mdiCogOutline,
     mdiContentSaveOutline,
     mdiCrowd,
@@ -88,7 +88,8 @@ export default createVuetify({
             link: mdiLink,
             link_plus: mdiLinkPlus,
             open_in_new: mdiOpenInNew,
-            new: mdiPlus
+            new: mdiPlus,
+            close: mdiClose
         },
         sets: {
             mdi

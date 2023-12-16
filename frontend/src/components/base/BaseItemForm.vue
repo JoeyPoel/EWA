@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <v-container>
     <v-form>
-      <v-container>
-        <v-row>
-          <ItemField v-for="(field, index) in itemFields" :key="index"
-                     :field="field" @input-change="(value) => handleInputChange(index, value)"/>
-        </v-row>
-        <v-row>
-          <v-btn color="primary" @click="clearForm">Clear</v-btn>
-          <v-btn :disabled="!changed" color="primary" @click="resetForm">Reset</v-btn>
-          <v-btn :disabled="!changed" color="primary" @click="saveForm">Save</v-btn>
-        </v-row>
-      </v-container>
+      <v-row>
+        <ItemField v-for="(field, index) in itemFields" :key="index" :type="field.type" :label="field.label"
+                   :rules="field.rules" :disabled="allDisabled || field.disabled" :field-name="field.name"
+                   :item="item[field.name]"
+                   :items="field.items" @input-change="(value) => handleInputChange(index, value)" />
+      </v-row>
+      <v-row>
+        <v-btn color="primary" @click="clearForm">Clear</v-btn>
+        <v-btn :disabled="!changed" color="primary" @click="resetForm">Reset</v-btn>
+        <v-btn :disabled="!changed" color="primary" @click="saveForm">Save</v-btn>
+      </v-row>
     </v-form>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -32,6 +32,11 @@ export default {
     itemFields: {
       type: Array,
       required: true
+    },
+    allDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {

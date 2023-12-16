@@ -1,37 +1,42 @@
 <template>
-  <v-dialog v-model="openDialog" :max-width="maxWidth">
+  <v-dialog v-model="isOpen" :max-width="maxWidth">
     <v-card>
       <v-card-title>
-        <span class="headline">{{ dialogType }}</span>
-        <v-spacer></v-spacer>
-        <v-btn icon @click="closeDialog">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <v-row>
+          <v-col cols="10">
+            <h5>{{ title }}</h5>
+          </v-col>
+          <v-col cols="2">
+            <v-btn icon @click="closeDialog">
+              <v-icon>$close</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-card-text>
         <v-container>
-          <template v-if="dialogType === 'Details'">
+          <template v-if="title === 'Details'">
             <v-tabs v-model="detailTabsTitle">
-              <v-tab value="Details" title="Details"/>
+              <v-tab value="Details" text="Details"/>
               <div v-for="(tab, index) in detailTabs" :key="index">
                 <v-tab :value="tab.name" :title="tab.title"/>
               </div>
             </v-tabs>
             <v-window v-model="detailTabsTitle">
               <v-window-item value="Details">
-                <base-item-form :item-fields="itemFields" :item="item"/>
+                <base-item-form :item-fields="itemFields" :item="itemCopy" :allDisabled="true"/>
               </v-window-item>
               <div v-for="(tab, index) in detailTabs" :key="index">
                 <v-window-item :value="tab.title">
-                  <component :is="tab.component" :item="item"/>
+                  <component :is="tab.component" :item="itemCopy"/>
                 </v-window-item>
               </div>
             </v-window>
           </template>
-          <template v-if="dialogType === 'New' || dialogType === 'Edit'">
-            <base-item-form :item-fields="itemFields" :item="item"/>
+          <template v-if="title === 'New' || title === 'Edit'">
+            <base-item-form :item-fields="itemFields" :item="itemCopy"/>
           </template>
-          <template v-else-if="dialogType === 'Delete'">
+          <template v-else-if="title === 'Delete'">
             <span>Are you sure you want to delete this item?</span>
           </template>
         </v-container>
@@ -50,43 +55,44 @@ export default {
     // ItemForm,
   },
   props: {
-    dialog: {
+    open: {
+      type: Boolean,
+      required: true
+    },
+    item:{
       type: Object,
       required: true
+    },
+    title:{
+      type: String,
+      required: true
+    },
+    itemFields: {
+      type: Array,
+      required: true
+    },
+    detailTabs: {
+      type: Array,
+      required: false
     },
     maxWidth: {
       type: String,
       default: '800px'
     },
-    item: {
-      type: Object,
-      required: true
-    },
   },
   data() {
     return {
+      detailTabsTitle: 'Details',
+      itemCopy: {},
+      isOpen: false
     }
   },
-  computed: {
-    itemFields() {
-      return this.dialog.itemFields;
+  watch:{
+    item(){
+      this.itemCopy = Object.assign({}, this.item);
     },
-    detailTabs() {
-      return this.dialog.detailTabs;
-    },
-    dialogType() {
-      return this.dialog.type;
-    },
-    openDialog() {
-      return this.dialog.open;
-    },
-    detailTabsTitle: {
-      get() {
-        return this.detailTabs[0].name;
-      },
-      set(val) {
-        this.detailTabsTitle = val;
-      }
+    open(){
+      this.isOpen = this.open;
     }
   },
   methods: {

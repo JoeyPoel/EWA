@@ -6,7 +6,8 @@
         title="Teams">
       <data-filter :can-search="true" :can-sort-by-warehouse="true" :search="table.searchTerm"
                    @input="table.searchTerm = $event" @warehouse="selectedWarehouse = $event"/>
-      <DataTable :dialog-config="dialog" :table-config="table" @select="handleSelect"/>
+      <DataTable :dialog-config="dialog" :table-config="table" @close="handleClose"
+                 @action="handleDialogAction(true, $event.action, $event.item)" />
     </base-card>
   </v-container>
 </template>
@@ -49,13 +50,13 @@ export default {
       },
       dialog: {
         open: false,
-        action: null,
+        title: '',
         item: new Team(),
         itemFields: [
           {name: 'name', label: 'Name', type: 'text', required: true},
           {name: 'warehouseId', label: 'Warehouse', type: 'select', required: true, items: []},
           {name: 'leaderId', label: 'Team Lead', type: 'select', required: true, items: []},
-          {name: 'members', label: 'Team Members', type: 'selectMultiple', required: false, items: []}
+          {name: 'membersIds', label: 'Team Members', type: 'selectMultiple', required: false, items: []}
         ],
         detailTabs: [
           // {title: 'Team Members', component: 'TeamMembersComponent'}
@@ -71,8 +72,8 @@ export default {
 
   methods: {
     async initialize() {
-      this.warehouses = await this.warehousesService.asyncFindAll();
-      this.users = await this.usersService.asyncFindAll();
+      this.warehouses = await this.getWarehouses();
+      this.users = await this.getUsers();
       this.table.items = await this.getTeams();
 
       this.dialog.itemFields[1].items = this.warehouses;
@@ -91,6 +92,24 @@ export default {
         }
       })
     },
+    async getWarehouses() {
+      let data = await this.warehousesService.asyncFindAll();
+      return data.map(warehouse => {
+        return {
+          id: warehouse.id,
+          name: warehouse.name
+        }
+      })
+    },
+    async getUsers() {
+      let data = await this.usersService.asyncFindAll();
+      return data.map(user => {
+        return {
+          id: user.id,
+          name: user.name
+        }
+      });
+    },
     mapWarehouseName(warehouseId) {
       const warehouse = this.warehouses.find(warehouse => warehouse.id === warehouseId);
       if (warehouse) {
@@ -103,13 +122,14 @@ export default {
         return teamLead.name;
       }
     },
-    async handleSelect(item) {
-      console.log(`dialog in handleSelect Teams2 ${JSON.stringify(this.dialog)}`);
-      this.dialog.open = true;
+    handleDialogAction(open,action, item) {
+      this.dialog.title = action.action;
       this.dialog.item = item;
-      console.log(this.dialog.item);
-      console.log(this.dialog.item);
-      console.log(this.dialog.open);
+      this.dialog.open = open;
+    },
+    async handleClose() {
+      this.handleDialogAction(false, null, new Team());
+      this.table.items = await this.getTeams();
     },
   }
 }
