@@ -123,11 +123,9 @@ export default {
       }
     },
     handleDialogAction(open,action, item) {
-      console.log(open, action, item)
       this.dialog.title = action.action;
       this.dialog.item = item;
       this.dialog.open = open;
-      console.log(this.dialog.open)
     },
     async handleClose() {
       this.handleDialogAction(false, null, new Team());

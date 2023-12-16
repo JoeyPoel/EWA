@@ -24,17 +24,17 @@
             </v-tabs>
             <v-window v-model="detailTabsTitle">
               <v-window-item value="Details">
-                <base-item-form :item-fields="itemFields" :item="itemCopy" :allDisabled="true"/>
+                <base-item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
               <div v-for="(tab, index) in detailTabs" :key="index">
                 <v-window-item :value="tab.title">
-                  <component :is="tab.component" :item="itemCopy"/>
+                  <component :is="tab.component" :item="item"/>
                 </v-window-item>
               </div>
             </v-window>
           </template>
           <template v-if="title === 'New' || title === 'Edit'">
-            <base-item-form :item-fields="itemFields" :item="itemCopy"/>
+            <base-item-form :item-fields="itemFields" :item="item"/>
           </template>
           <template v-else-if="title === 'Delete'">
             <span>Are you sure you want to delete this item?</span>
@@ -83,33 +83,17 @@ export default {
   data() {
     return {
       detailTabsTitle: 'Details',
-      itemCopy: {}
-
     }
-  },
-  watch:{
-    item(){
-      this.itemCopy = Object.assign({}, this.item);
-    },
   },
   computed: {
-    isOpen:{
-      get() {
-        return open;
-      },
-      set(value) {
-        console.log('set open', value);
-        this.$emit('update:open', value);
-      }
-    }
+    isOpen(){
+      return this.open;
+    },
   },
   methods: {
     closeDialog() {
       this.$emit('close');
     },
-    // handleSave(item) {
-    //   this.$emit('save-item', item);
-    // }
   }
 }
 </script>

@@ -2,10 +2,10 @@
   <v-container>
     <v-form>
       <v-row>
-        <ItemField v-for="(field, index) in itemFields" :key="index" :type="field.type" :label="field.label"
-                   :rules="field.rules" :disabled="allDisabled || field.disabled" :field-name="field.name"
-                   :item="item[field.name]"
-                   :items="field.items" @input-change="(value) => handleInputChange(index, value)" />
+        <ItemField v-for="field in itemFields" :key="field.name" :type="field.type" :label="field.label"
+                   :rules="field.rules" :disabled="allDisabled || field.disabled" :fieldName="field.name"
+                   :item="itemCopy" :items="field.items"
+                   @input-change="handleInputChange($event)" />
       </v-row>
       <v-row>
         <v-btn color="primary" @click="clearForm">Clear</v-btn>
@@ -50,8 +50,10 @@ export default {
     }
   },
   methods: {
-    handleInputChange(index, value) {
-      this.itemCopy[this.itemFields[index].name] = value;
+    handleInputChange(event) {
+      this.itemCopy[event.field] = event.value;
+      console.log(`BaseItemForm: ${event.field} changed to ${event.value}`);
+      this.$emit('input-change', event.field, event.value);
     },
     clearForm() {
       this.itemCopy = {};
