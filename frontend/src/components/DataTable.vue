@@ -12,12 +12,13 @@
           </template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon v-for="(action, key) in table.allowedActions" :key="key" @click="handleAction(action, item)">
-              {{action.icon}}
+              {{ action.icon }}
             </v-icon>
           </template>
         </v-data-table>
-        <dialog-component :item-fields="dialog.itemFields" :open="dialog.open" :title="dialog.title"
-                          :item="dialog.item" :max-width="dialog.maxWidth"/>
+        <dialog-component v-if="dialog.open" :item="dialog.item" :item-fields="dialog.itemFields"
+                          :max-width="dialog.maxWidth" :open="dialog.open" :title="dialog.title"
+                          @close="dialog.open = false"/>
       </v-card-text>
     </v-card>
   </div>
@@ -60,14 +61,6 @@ export default {
       },
     };
   },
-  computed: {
-    showDialog() {
-      return this.dialog.open;
-    },
-    dialogMaxWidth() {
-      return this.dialogConfig.maxWidth ? this.dialogConfig.maxWidth : '800px';
-    },
-  },
   watch: {
     dialogConfig: {
       handler: function (newVal) {
@@ -88,8 +81,8 @@ export default {
         this.table.allowedActions = newVal.allowedActions;
       },
       deep: true
+    },
   },
-},
   created() {
 
     this.actions = [...this.tableConfig.allowedActions];

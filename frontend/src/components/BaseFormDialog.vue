@@ -83,21 +83,29 @@ export default {
   data() {
     return {
       detailTabsTitle: 'Details',
-      itemCopy: {},
-      isOpen: false
+      itemCopy: {}
+
     }
   },
   watch:{
     item(){
       this.itemCopy = Object.assign({}, this.item);
     },
-    open(){
-      this.isOpen = this.open;
+  },
+  computed: {
+    isOpen:{
+      get() {
+        return open;
+      },
+      set(value) {
+        console.log('set open', value);
+        this.$emit('update:open', value);
+      }
     }
   },
   methods: {
     closeDialog() {
-      this.$emit('dialog-closed');
+      this.$emit('close');
     },
     // handleSave(item) {
     //   this.$emit('save-item', item);
