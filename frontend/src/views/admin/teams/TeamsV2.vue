@@ -104,9 +104,12 @@ export default {
       }
     },
     async handleSelect(item) {
-      console.log(item);
-      this.dialog.item = item;
+      console.log(`dialog in handleSelect Teams2 ${JSON.stringify(this.dialog)}`);
       this.dialog.open = true;
+      this.dialog.item = item;
+      console.log(this.dialog.item);
+      console.log(this.dialog.item);
+      console.log(this.dialog.open);
     },
   }
 }
