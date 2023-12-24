@@ -106,6 +106,12 @@
         </template>
       </v-data-table>
     </base-card>
+    <v-snackbar v-model="snackbar.show">
+      {{ snackbar.message }}
+      <v-btn color="info" text @click="snackbar.show = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 <script>
@@ -137,6 +143,10 @@ export default {
         name: null,
         role: null,
         email: null,
+      },
+      snackbar: {
+        show: false,
+        message: '',
       },
       roles: [
         {role: 'ADMIN'},
@@ -202,28 +212,44 @@ export default {
       this.selectedTeam = null;
     },
 
+    generatePassword(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    },
+
     async saveNew() {
       // Validate the form fields (add additional validation as needed)
       if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
-        alert("Please fill in all fields.");
+        this.snackbar.message = "Please fill in all fields.";
+        this.snackbar.show = true;
         return;
       }
 
       //Find the selected team in the teams array
       const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
 
+      const password = this.generatePassword(10); // Generate a random password of length 10
+
       const userToSave = {
         name: this.editedUser.name,
         email: this.editedUser.email,
         role: this.editedUser.role,
-        team: selectedTeam
+        team: selectedTeam,
+        password: password,
       };
 
       const savedUser = await this.usersService.asyncSave(userToSave);
       if (savedUser) {
+        this.snackbar.message = `User created successfully. The generated password is: ${password}`;
+        this.snackbar.show = true;
         await this.close();
       } else {
-        alert("Failed to create user. Please try again.");
+        this.snackbar.message = "Failed to create user. Please try again.";
+        this.snackbar.show = true;
       }
     },
 
