@@ -208,10 +208,6 @@ export default {
       this.assignSelectedUser(new User());
     },
 
-    unselectTeam() {
-      this.selectedTeam = null;
-    },
-
     generatePassword(length) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let result = '';
@@ -222,13 +218,27 @@ export default {
     },
 
     async saveNew() {
-      // Validate the form fields (add additional validation as needed)
-      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
-        this.snackbar.message = "Please fill in all fields.";
-        this.snackbar.show = true;
+      // Validate the form fields
+      if (!this.editedUser.name || this.editedUser.name.length < 3) {
+        alert("Name must be at least 3 characters.");
         return;
       }
 
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!this.editedUser.email || !emailRegex.test(this.editedUser.email)) {
+        alert("Please enter a valid email.");
+        return;
+      }
+
+      if (!this.editedUser.role) {
+        alert("Please select a role.");
+        return;
+      }
+
+      if (!this.editedUser.team) {
+        alert("Please select a team.");
+        return;
+      }
       //Find the selected team in the teams array
       const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
 
@@ -259,9 +269,25 @@ export default {
     },
 
     async saveEdited() {
-      // Validate the form fields (add additional validation as needed)
-      if (!this.editedUser.name || !this.editedUser.email || !this.editedUser.role || !this.editedUser.team) {
-        alert("Please fill in all fields.");
+      // Validate the form fields
+      if (!this.editedUser.name || this.editedUser.name.length < 3) {
+        alert("Name must be at least 3 characters.");
+        return;
+      }
+
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!this.editedUser.email || !emailRegex.test(this.editedUser.email)) {
+        alert("Please enter a valid email.");
+        return;
+      }
+
+      if (!this.editedUser.role) {
+        alert("Please select a role.");
+        return;
+      }
+
+      if (!this.editedUser.team) {
+        alert("Please select a team.");
         return;
       }
 
