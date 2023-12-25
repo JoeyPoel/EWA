@@ -31,7 +31,7 @@ build-frontend:
     - when: always
 
 build-backend:
-  image: docker:cli
+  image: maven:3.8.4-openjdk-17
   stage: build-backend
   tags:
     - hva
@@ -39,8 +39,9 @@ build-backend:
     - docker:dind
   before_script:
     - cd backend
-    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+    - mvn package
   script:
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
     - docker build --pull -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f Dockerfile .
     - docker push "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG"
     - |
