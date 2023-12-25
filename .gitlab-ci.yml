@@ -41,10 +41,9 @@ build-frontend:
   artifacts:
     paths:
       - frontend/dist/
-  only:
-    changes:
-      - frontend/**/*
   rules:
+    - changes:
+        - frontend/**/*
     - if: $CI_COMMIT_BRANCH == "46-jayden"
       exists:
         - $FRONTEND_DOCKERFILE
@@ -65,10 +64,9 @@ build-backend:
         docker tag "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-be:latest"
         docker push "solar3ewa/ewa-boolets-be:latest"
       fi
-  only:
-    changes:
-      - backend/**/*
   rules:
+    - changes:
+        - backend/**/*
     - if: $CI_COMMIT_BRANCH == "46-jayden"
       exists:
         - $BACKEND_DOCKERFILE
