@@ -32,8 +32,7 @@ build-frontend:
   rules:
 #    - changes:
 #        - frontend/**/*
-    - if: $CI_COMMIT_BRANCH == "46-jayden"
-      exists:
+      - exists:
         - $FRONTEND_DOCKERFILE
 
 build-backend:
@@ -55,6 +54,5 @@ build-backend:
   rules:
 #    - changes:
 #        - backend/**/*
-    - if: $CI_COMMIT_BRANCH == "46-jayden"
-      exists:
+      - exists:
         - $BACKEND_DOCKERFILE
