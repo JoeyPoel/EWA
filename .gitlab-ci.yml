@@ -32,7 +32,7 @@ build-frontend:
 
 build-backend:
   image: maven:3.6.3-jdk-11
-  stage: package-backend
+  stage: build-backend
   tags:
     - hva
   services:
