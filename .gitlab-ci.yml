@@ -10,6 +10,8 @@ variables:
 build-frontend:
   image: node:latest
   stage: build-frontend
+  tags:
+    - hva
   cache:
     paths:
       - frontend/node_modules/
@@ -35,6 +37,8 @@ build-frontend:
 build-backend:
   image: docker:cli
   stage: build-backend
+  tags:
+    - hva
   services:
     - docker:dind
   before_script:
