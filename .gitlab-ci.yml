@@ -10,28 +10,65 @@
 # This template uses one generic job with conditional builds
 # for the default branch and all other (MR) branches.
 
-docker-build:
-  # Use the official docker image.
-  image: docker:cli
-  stage: build
-  services:
-    - docker:dind
-  variables:
-    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+stages:
+  - test
+  - build-frontend
+  - build-backend
+
+variables:
+  FRONTEND_DOCKERFILE: frontend/Dockerfile
+  BACKEND_DOCKERFILE: backend/Dockerfile
+
+build-frontend:
+  image: node:latest
+  stage: build-frontend
+  cache:
+    paths:
+      - frontend/node_modules/
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  # All branches are tagged with $DOCKER_IMAGE_NAME (defaults to commit ref slug)
-  # Default branch is also tagged with `latest`
+    - cd frontend
+    - npm ci
+    - npm run buildprod
   script:
-    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME"
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+    - docker build --pull -t "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" -f $FRONTEND_DOCKERFILE .
+    - docker push "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
-        docker push "$CI_REGISTRY_IMAGE:latest"
+        docker tag "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-fe:latest"
+        docker push "solar3ewa/ewa-boolets-fe:latest"
       fi
-  # Run this job in a branch where a Dockerfile exists
+  artifacts:
+    paths:
+      - frontend/dist/
+  only:
+    changes:
+      - frontend/**/*
   rules:
-    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "46-jayden"
       exists:
-        - Dockerfile
+        - $FRONTEND_DOCKERFILE
+
+build-backend:
+  image: docker:cli
+  stage: build-backend
+  services:
+    - docker:dind
+  before_script:
+    - cd backend
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+  script:
+    - docker build --pull -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f $BACKEND_DOCKERFILE .
+    - docker push "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG"
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        docker tag "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-be:latest"
+        docker push "solar3ewa/ewa-boolets-be:latest"
+      fi
+  only:
+    changes:
+      - backend/**/*
+  rules:
+    - if: $CI_COMMIT_BRANCH == "46-jayden"
+      exists:
+        - $BACKEND_DOCKERFILE
