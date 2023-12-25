@@ -11,13 +11,25 @@ test-backend:
   script:
     - cd backend
     - mvn test
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/*.xml
-        - target/failsafe-reports/*.xml
   rules:
     - when: always
+
+test-frontend:
+  image: node:latest
+  stage: test
+  tags:
+    - hva
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm install
+    - npm run test
+  rules:
+    - when: always
+
 
 build-fe:
   image: node:latest
