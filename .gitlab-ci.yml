@@ -31,23 +31,22 @@ build-frontend:
     - when: always
 
 build-backend:
-  image: maven:3.8.4-openjdk-17
-  stage: build-backend
+  image: maven:3.6.3-jdk-11
+  stage: package-backend
   tags:
     - hva
   services:
     - docker:dind
-  before_script:
-    - cd backend
-    - mvn package
   script:
+    - cd backend
+    - mvn clean package -DskipTests
     - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
-    - docker build --pull -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f Dockerfile .
-    - docker push "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG"
+    - docker build -t solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG -f Dockerfile .
+    - docker push solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        docker tag "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-be:latest"
-        docker push "solar3ewa/ewa-boolets-be:latest"
+        docker tag solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG solar3ewa/ewa-boolets-be:latest
+        docker push solar3ewa/ewa-boolets-be:latest
       fi
   rules:
     - when: always
