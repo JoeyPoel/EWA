@@ -3,10 +3,6 @@ stages:
   - build-frontend
   - build-backend
 
-variables:
-  FRONTEND_DOCKERFILE: frontend/Dockerfile
-  BACKEND_DOCKERFILE: backend/Dockerfile
-
 build-frontend:
   image: node:latest
   stage: build-frontend
@@ -17,11 +13,11 @@ build-frontend:
       - frontend/node_modules/
   before_script:
     - cd frontend
-    - npm ci
+    - npm install
     - npm run buildprod
   script:
     - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
-    - docker build --pull -t "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" -f $FRONTEND_DOCKERFILE .
+    - docker build --pull -t "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" -f Dockerfile .
     - docker push "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
@@ -45,7 +41,7 @@ build-backend:
     - cd backend
     - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
   script:
-    - docker build --pull -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f $BACKEND_DOCKERFILE .
+    - docker build --pull -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f Dockerfile .
     - docker push "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
