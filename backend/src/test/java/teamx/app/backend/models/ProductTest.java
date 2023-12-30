@@ -1,61 +1,74 @@
 package teamx.app.backend.models;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import teamx.app.backend.models.Product;
-import teamx.app.backend.repositories.ProductRepository;
+import teamx.app.backend.utils.DTO;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class ProductTest {
+class ProductTest {
+    private Product product;
+    private ProductCategory category;
 
-    @Autowired
-    private ProductRepository productRepository;
+    @BeforeEach
+    void setUp() {
+        category = ProductCategory.builder()
+                .id(1L)
+                .name("TestCategory")
+                .description("Test Category Description")
+                .build();
 
-    @Test
-    public void testCreateProduct() {
-        System.out.println("Test create product");
-        Product product = new Product();
+        product = new Product();
+        product.setId(1L);
         product.setName("Test Product");
+        product.setDescription("A sample product description");
         product.setPrice(100.0);
-
-        productRepository.save(product);
-
-        Product foundProduct = productRepository.findById(product.getId()).orElse(null);
-        assertEquals(product.getName(), foundProduct.getName());
-        assertEquals(product.getPrice(), foundProduct.getPrice());
+        product.setCategory(category);
     }
 
     @Test
-    public void testCreateTwoProducts() {
-        // Create first product
-        Product product1 = new Product();
-        product1.setName("Test Product 1");
-        product1.setPrice(100.0);
-        productRepository.save(product1);
+    void testProductDTO() {
+        Long expectedId = 1L;
+        String expectedName = "Test Product";
+        String expectedDescription = "A sample product description";
+        Double expectedPrice = 100.0;
+        Long expectedCategoryId = 2L;
 
-        // Create second product
-        Product product2 = new Product();
-        product2.setName("Test Product 2");
-        product2.setPrice(200.0);
-        productRepository.save(product2);
+        DTO.ProductDTO productDTO = DTO.ProductDTO.builder()
+                .id(expectedId)
+                .name(expectedName)
+                .description(expectedDescription)
+                .price(expectedPrice)
+                .categoryId(expectedCategoryId)
+                .build();
 
-        // Retrieve and compare the products
-        Product foundProduct1 = productRepository.findById(product1.getId()).orElse(null);
-        Product foundProduct2 = productRepository.findById(product2.getId()).orElse(null);
+        assertEquals(expectedId, productDTO.getId());
+        assertEquals(expectedName, productDTO.getName());
+        assertEquals(expectedDescription, productDTO.getDescription());
+        assertEquals(expectedPrice, productDTO.getPrice());
+        assertEquals(expectedCategoryId, productDTO.getCategoryId());
+    }
 
-        // Assert that the products are not the same
-        assertNotEquals(foundProduct1.getId(), foundProduct2.getId());
-        assertNotEquals(foundProduct1.getName(), foundProduct2.getName());
-        assertNotEquals(foundProduct1.getPrice(), foundProduct2.getPrice());
+    @Test
+    void testProductGettersAndSetters() {
+        assertEquals(1L, product.getId());
+        assertEquals("Test Product", product.getName());
+        assertEquals("A sample product description", product.getDescription());
+        assertEquals(100.0, product.getPrice());
+        assertEquals(category, product.getCategory());
+    }
 
-        // Assert that the retrieved products match the original products
-        assertEquals(product1.getName(), foundProduct1.getName());
-        assertEquals(product1.getPrice(), foundProduct1.getPrice());
-        assertEquals(product2.getName(), foundProduct2.getName());
-        assertEquals(product2.getPrice(), foundProduct2.getPrice());
+    @Test
+    void testToDTO() {
+        DTO.ProductDTO dto = product.toDTO();
+
+        assertNotNull(dto);
+        assertEquals(product.getId(), dto.getId());
+        assertEquals(product.getName(), dto.getName());
+        assertEquals(product.getDescription(), dto.getDescription());
+        assertEquals(product.getPrice(), dto.getPrice());
+        assertEquals(product.getCategory().getId(), dto.getCategoryId());
     }
 }
