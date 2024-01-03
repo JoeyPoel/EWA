@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import teamx.app.backend.controllers.EmailController;
 import teamx.app.backend.models.Project;
+import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.services.EmailService;
 import teamx.app.backend.services.ProjectService;
 import teamx.app.backend.services.UserService;
@@ -17,6 +18,7 @@ import teamx.app.backend.services.UserService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -87,5 +89,35 @@ class EmailControllerTests {
         mockMvc.perform(post("/mail/sendProjectEmail"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("No projects are still in progress."));
+    }
+
+    @Test
+    void sendProductEmail_WithProductsNeedingCare() throws Exception {
+        // Creating a sample product that needs care
+        InventoryProjectDTO product = new InventoryProjectDTO(
+                123L, 5, "Sample Product", "Warehouse A", "Inbound", new Date()
+        );
+
+        List<InventoryProjectDTO> products = Arrays.asList(product);
+
+        // TODO Mocking the scenario with products that need care
+
+
+        // Perform the POST request to send product reminder emails
+        mockMvc.perform(post("/mail/sendProductEmail"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void sendProductEmail_NoProductsNeedingCare() throws Exception {
+        // Mocking the scenario with no products needing care
+        List<InventoryProjectDTO> products = new ArrayList<>();
+
+        // TODO Mocking the scenario with no products that need care
+
+        // Perform the POST request to send product reminder emails
+        mockMvc.perform(post("/mail/sendProductEmail"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("No products need care."));
     }
 }

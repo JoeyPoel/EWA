@@ -2,14 +2,14 @@ package teamx.app.backend.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import teamx.app.backend.models.Product;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.models.User;
+import teamx.app.backend.models.dto.InventoryProjectDTO;
 import teamx.app.backend.models.dto.MailRequest;
-import teamx.app.backend.models.dto.MailResponse;
 import teamx.app.backend.utils.DTO.UserDTO;
 import teamx.app.backend.services.AuthenthicationService;
 import teamx.app.backend.services.EmailService;
@@ -44,25 +44,6 @@ public class EmailController {
         this.projectService = projectService;
         this.userService = userService;
         this.authenthicationService = authenthicationService;
-    }
-
-    @GetMapping("/filteredProjects")
-    public List<Project> filterProjects() {
-        try {
-            List<Project> allProjects = projectService.findAll();
-
-            return allProjects.stream()
-                    .filter(project -> {
-                        LocalDate projectDate = project.getStartDate().toLocalDate();
-                        LocalDate dateOneWeekFromNow = LocalDate.now().plusWeeks(1);
-                        return projectDate != null &&
-                                !projectDate.isBefore(dateOneWeekFromNow) &&
-                                project.getStatus() == Project.Status.IN_PROGRESS;
-                    })
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PostMapping("/sendPassResetEmail")
@@ -123,26 +104,84 @@ public class EmailController {
     String subject = "We wanted to update you on the progress of our ongoing projects. The following details highlight the current status:";
 
         for (User admin : admins) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("tableRows", tableRows);
-        model.put("columnNames", columnNames);
-        model.put("subject", subject);
-        model.put("Name", admin.getName());
-        model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+            Map<String, Object> model = new HashMap<>();
+            model.put("tableRows", tableRows);
+            model.put("columnNames", columnNames);
+            model.put("subject", subject);
+            model.put("Name", admin.getName());
+            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
 
-        MailRequest request = new MailRequest();
-        request.setTo("Joeywognum@gmail.com"); // FOR TESTING
+            MailRequest request = new MailRequest();
+            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
 //        request.setTo(admin.getEmail());
-        request.setName(admin.getName());
-        request.setFrom("pathoftheredpill@gmail.com");
-        request.setSubject(subject);
+            request.setName(admin.getName());
+            request.setFrom("pathoftheredpill@gmail.com");
+            request.setSubject(subject);
 
-        try {
-            emailService.sendEmail(request, model);
-        } catch (Exception e) {
-            // Handle exception if needed
+            try {
+                emailService.sendEmail(request, model);
+            } catch (Exception e) {
+                // Log the exception for further analysis or debugging
+                logger.error("An error occurred while sending an email: {}", e.getMessage());
+            }
         }
-    }
         return ResponseEntity.ok("Project reminder emails sent to admins.");
-}
+    }
+
+    @Scheduled(cron = "0 0 12 * * ?")
+    @PostMapping("/sendProductEmail")
+    public ResponseEntity<String> sendProductEmail() {
+        // TODO Get all products that need care
+        //TESTING
+        // Create a sample product using a constructor
+        InventoryProjectDTO productThatNeedsCare = new InventoryProjectDTO(
+                123L, 5, "Sample Product", "Warehouse A", "Inbound", new Date()
+        );
+        // Add the sample product to the list of filtered products
+        List<InventoryProjectDTO> filteredProducts = new ArrayList<>();
+        filteredProducts.add(productThatNeedsCare);
+
+        if (filteredProducts.isEmpty()) {
+            return ResponseEntity.ok("No products need care.");
+        }
+
+        List<String> tableRows = filteredProducts.stream()
+                .map(product -> String.join(",",
+                        product.getWarehouseName(), String.valueOf(product.getId()), product.getProductName(), String.valueOf(product.getQuantity())
+                ))
+                .collect(Collectors.toList());
+
+
+
+        List<String> columnNames = List.of(
+                "Warehouse", "Id", "Product", "Quantity"
+        );
+
+        List<User> admins = userService.findByRole(User.Role.ADMIN);
+        String subject = "We wanted to update you on stock that is critically low, the following products need care:";
+
+        for (User admin : admins) {
+            Map<String, Object> model = new HashMap<>();
+            model.put("tableRows", tableRows);
+            model.put("columnNames", columnNames);
+            model.put("subject", subject);
+            model.put("Name", admin.getName());
+            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+
+            MailRequest request = new MailRequest();
+            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
+//        request.setTo(admin.getEmail());
+            request.setName(admin.getName());
+            request.setFrom("pathoftheredpill@gmail.com");
+            request.setSubject(subject);
+
+            try {
+                emailService.sendEmail(request, model);
+            } catch (Exception e) {
+                // Log the exception for further analysis or debugging
+                logger.error("An error occurred while sending an email: {}", e.getMessage());
+            }
+        }
+        return ResponseEntity.ok("Product reminder emails sent to admins.");
+    }
 }
