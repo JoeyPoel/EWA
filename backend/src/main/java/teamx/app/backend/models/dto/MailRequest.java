@@ -1,6 +1,10 @@
 package teamx.app.backend.models.dto;
 import lombok.Data;
-
+/**
+ * DTO fro mail requests
+ *
+ * @author Joey van der Poel
+ */
 @Data
 public class MailRequest {
 

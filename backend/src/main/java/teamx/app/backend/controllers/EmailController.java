@@ -20,6 +20,11 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for email
+ *
+ * @author Joey van der Poel
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/mail")

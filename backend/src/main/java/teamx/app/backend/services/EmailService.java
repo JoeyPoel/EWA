@@ -16,6 +16,11 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Email service
+ *
+ * @author Joey van der Poel
+ */
 @Service
 public class EmailService {
 

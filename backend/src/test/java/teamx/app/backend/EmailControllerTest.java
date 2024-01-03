@@ -24,6 +24,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Tests for email
+ *
+ * @author Joey van der Poel
+ */
 @ExtendWith(MockitoExtension.class)
 class EmailControllerTests {
 
