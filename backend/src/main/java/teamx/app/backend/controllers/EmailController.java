@@ -98,7 +98,7 @@ public class EmailController {
         filteredProjects.sort(Comparator.comparing(Project::getStartDate));
 
         if (filteredProjects.isEmpty()) {
-            return ResponseEntity.ok("No projects are still pending in the upcoming week.");
+            return ResponseEntity.ok("No projects are still in progress.");
         }
 
         List<String> tableRows = filteredProjects.stream()
