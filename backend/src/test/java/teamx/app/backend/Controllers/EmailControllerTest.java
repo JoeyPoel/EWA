@@ -1,4 +1,4 @@
-package teamx.app.backend;
+package teamx.app.backend.Controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

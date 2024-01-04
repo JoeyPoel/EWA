@@ -32,22 +32,6 @@ public class EmailService {
     @Autowired
     private Configuration config;
 
-    public void sendEmail(String to, String subject, String body) {
-        try {
-            MimeMessage message = emailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(fromEmail);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, true);
-
-            emailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException("Failed to send email: " + e.getMessage(), e);
-        }
-    }
-
-
     public MailResponse sendEmail(MailRequest request, Map<String, Object> model) {
         MailResponse response = new MailResponse();
         MimeMessage message = emailSender.createMimeMessage();
@@ -62,14 +46,14 @@ public class EmailService {
             helper.setTo(request.getTo());
             helper.setText(html, true);
             helper.setSubject(request.getSubject());
-            helper.setFrom(request.getFrom());
+            helper.setFrom(fromEmail);
             emailSender.send(message);
 
             response.setMessage("mail send to : " + request.getTo());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {
-            response.setMessage("Mail Sending failure : "+e.getMessage());
+            response.setMessage("Mail Sending failure : "+ e.getMessage());
             response.setStatus(Boolean.FALSE);
         }
 

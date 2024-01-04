@@ -5,9 +5,12 @@
                 <tr>
                     <td align="center" style="padding: 40px;">
                         <img src="${dynamicImageUrl}" alt="Dynamic Image" width="300" height="auto" style="max-width: 100%;">
-                        <h1 style="font-size: 28px; color: #5a2e18; margin-bottom: 20px; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);">Dear ${Name},</h1>
+                        <h1 style="font-size: 28px; color: #5a2e18; margin-bottom: 20px; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);">Dear ${name},</h1>
                         <p style="font-size: 16px; color: #5a2e18; line-height: 1.6; padding: 0 20px; border-left: 4px solid #5a2e18;">
-                        ${subject}
+                        ${content}
+                        </p>
+                        <p style="font-size: 16px; line-height: 1.6; padding: 0 20px; border-left: 4px solid #5a2e18;">
+                            ${[passwordResetLink]}
                         </p>
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px; border-collapse: collapse; border: 1px solid #e0e0e0;">
                             <thead>

@@ -47,29 +47,34 @@ public class EmailController {
     }
 
     @PostMapping("/sendPassResetEmail")
-    public void sendPassResetEmail(@RequestBody UserDTO user) {
+    public ResponseEntity<String> sendPassResetEmail(@RequestBody UserDTO user) {
         UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
         if (foundUser != null) {
-            String link = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
+            String passwordResetLink = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
 
             String subject = "Password reset request";
             String content = "Please click this link underneath to reset your password for the solar sedum website";
 
-            // TODO change to Dear username
-            StringBuilder emailBody = new StringBuilder();
-            emailBody.append("<h2 style=\"margin-bottom: 15px;\">Dear ").append("user").append(",</h2>");
-            emailBody.append("<h3 style=\"margin-bottom: 20px;\">").append(content).append("</h3>");
-            emailBody.append("<h4 style=\"margin-bottom: 20px;\">").append(link).append("</h4>");
+            Map<String, Object> model = new HashMap<>();
+            model.put("content", content);
+            model.put("passwordResetLink", passwordResetLink);
+            model.put("name", user.getName());
+            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+
+            MailRequest request = new MailRequest();
+//            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
+            request.setTo(user.getEmail());
+            request.setName(user.getName());
+            request.setSubject(subject);
 
             try {
-                emailService.sendEmail(user.getEmail(), subject, emailBody.toString());
+                emailService.sendEmail(request, model);
             } catch (Exception e) {
-                logger.error("Failed to send email to user", e);
+                // Log the exception for further analysis or debugging
+                logger.error("An error occurred while sending an email: {}", e.getMessage());
             }
-        } else {
-            // TODO make a better error return
-            logger.error("Failed to send email to user");
         }
+        return ResponseEntity.ok("Password Reset Email sent.");
     }
 
     @Scheduled(cron = "0 0 12 * * ?")
@@ -101,21 +106,21 @@ public class EmailController {
     );
 
     List<User> admins = userService.findByRole(User.Role.ADMIN);
-    String subject = "We wanted to update you on the progress of our ongoing projects. The following details highlight the current status:";
+        String subject = "Some projects are still in progress";
+        String content = "We wanted to update you on the progress of our ongoing projects. The following details highlight the current status:";
 
         for (User admin : admins) {
             Map<String, Object> model = new HashMap<>();
             model.put("tableRows", tableRows);
             model.put("columnNames", columnNames);
-            model.put("subject", subject);
-            model.put("Name", admin.getName());
+            model.put("content", content);
+            model.put("name", admin.getName());
             model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
 
             MailRequest request = new MailRequest();
             request.setTo("Joeywognum@gmail.com"); // FOR TESTING
 //        request.setTo(admin.getEmail());
             request.setName(admin.getName());
-            request.setFrom("pathoftheredpill@gmail.com");
             request.setSubject(subject);
 
             try {
@@ -158,21 +163,21 @@ public class EmailController {
         );
 
         List<User> admins = userService.findByRole(User.Role.ADMIN);
-        String subject = "We wanted to update you on stock that is critically low, the following products need care:";
+        String subject = "Some stock is critically low";
+        String content = "We wanted to update you on stock that is critically low, the following products need care:";
 
         for (User admin : admins) {
             Map<String, Object> model = new HashMap<>();
             model.put("tableRows", tableRows);
             model.put("columnNames", columnNames);
-            model.put("subject", subject);
-            model.put("Name", admin.getName());
+            model.put("content", content);
+            model.put("name", admin.getName());
             model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
 
             MailRequest request = new MailRequest();
             request.setTo("Joeywognum@gmail.com"); // FOR TESTING
 //        request.setTo(admin.getEmail());
             request.setName(admin.getName());
-            request.setFrom("pathoftheredpill@gmail.com");
             request.setSubject(subject);
 
             try {
