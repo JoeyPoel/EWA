@@ -67,8 +67,9 @@ public class EmailController {
             request.setName(user.getName());
             request.setSubject(subject);
 
+            String templateFileName = "email-template-password-reset.ftl";
             try {
-                emailService.sendEmail(request, model);
+                emailService.sendEmail(request, model, templateFileName);
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
                 logger.error("An error occurred while sending an email: {}", e.getMessage());
@@ -123,8 +124,9 @@ public class EmailController {
             request.setName(admin.getName());
             request.setSubject(subject);
 
+            String templateFileName = "email-template-with-table.ftl";
             try {
-                emailService.sendEmail(request, model);
+                emailService.sendEmail(request, model, templateFileName);
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
                 logger.error("An error occurred while sending an email: {}", e.getMessage());
@@ -180,8 +182,9 @@ public class EmailController {
             request.setName(admin.getName());
             request.setSubject(subject);
 
+            String templateFileName = "email-template-with-table.ftl";
             try {
-                emailService.sendEmail(request, model);
+                emailService.sendEmail(request, model, templateFileName);
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
                 logger.error("An error occurred while sending an email: {}", e.getMessage());
