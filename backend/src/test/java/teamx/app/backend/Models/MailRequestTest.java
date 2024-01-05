@@ -1,9 +1,11 @@
 package teamx.app.backend.Models;
 
 import org.junit.jupiter.api.Test;
-import teamx.app.backend.models.dto.MailRequest;
+import teamx.app.backend.utils.DTO;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 /**
  * Tests fro mail request
  *
@@ -13,7 +15,7 @@ public class MailRequestTest {
 
     @Test
     void testMailRequestGettersAndSetters() {
-        MailRequest mailRequest = new MailRequest();
+        DTO.MailRequest mailRequest = new DTO.MailRequest();
         mailRequest.setName("John Doe");
         mailRequest.setTo("recipient@example.com");
         mailRequest.setFrom("sender@example.com");
@@ -27,13 +29,13 @@ public class MailRequestTest {
 
     @Test
     void testMailRequestEquality() {
-        MailRequest mailRequest1 = new MailRequest();
+        DTO.MailRequest mailRequest1 = new DTO.MailRequest();
         mailRequest1.setName("John Doe");
         mailRequest1.setTo("recipient@example.com");
         mailRequest1.setFrom("sender@example.com");
         mailRequest1.setSubject("Test Subject");
 
-        MailRequest mailRequest2 = new MailRequest();
+        DTO.MailRequest mailRequest2 = new DTO.MailRequest();
         mailRequest2.setName("John Doe");
         mailRequest2.setTo("recipient@example.com");
         mailRequest2.setFrom("sender@example.com");
@@ -45,13 +47,13 @@ public class MailRequestTest {
 
     @Test
     void testMailRequestNotEqual() {
-        MailRequest mailRequest1 = new MailRequest();
+        DTO.MailRequest mailRequest1 = new DTO.MailRequest();
         mailRequest1.setName("John Doe");
         mailRequest1.setTo("recipient1@example.com");
         mailRequest1.setFrom("sender@example.com");
         mailRequest1.setSubject("Test Subject");
 
-        MailRequest mailRequest2 = new MailRequest();
+        DTO.MailRequest mailRequest2 = new DTO.MailRequest();
         mailRequest2.setName("John Doe");
         mailRequest2.setTo("recipient2@example.com");
         mailRequest2.setFrom("sender@example.com");

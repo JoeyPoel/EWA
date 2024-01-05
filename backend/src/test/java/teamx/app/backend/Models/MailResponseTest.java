@@ -1,9 +1,10 @@
 package teamx.app.backend.Models;
 
 import org.junit.jupiter.api.Test;
-import teamx.app.backend.models.dto.MailResponse;
+import teamx.app.backend.utils.DTO;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Tests fro mail response
  *
@@ -13,7 +14,7 @@ public class MailResponseTest {
 
     @Test
     void testMailResponseGettersAndSetters() {
-        MailResponse mailResponse = new MailResponse();
+        DTO.MailResponse mailResponse = new DTO.MailResponse();
         mailResponse.setMessage("Mail sent successfully");
         mailResponse.setStatus(true);
 
@@ -23,8 +24,8 @@ public class MailResponseTest {
 
     @Test
     void testMailResponseEquality() {
-        MailResponse mailResponse1 = new MailResponse("Success", true);
-        MailResponse mailResponse2 = new MailResponse("Success", true);
+        DTO.MailResponse mailResponse1 = new DTO.MailResponse("Success", true);
+        DTO.MailResponse mailResponse2 = new DTO.MailResponse("Success", true);
 
         assertEquals(mailResponse1, mailResponse2);
         assertEquals(mailResponse1.hashCode(), mailResponse2.hashCode());
@@ -32,8 +33,8 @@ public class MailResponseTest {
 
     @Test
     void testMailResponseNotEqual() {
-        MailResponse mailResponse1 = new MailResponse("Success", true);
-        MailResponse mailResponse2 = new MailResponse("Failed", false);
+        DTO.MailResponse mailResponse1 = new DTO.MailResponse("Success", true);
+        DTO.MailResponse mailResponse2 = new DTO.MailResponse("Failed", false);
 
         assertNotEquals(mailResponse1, mailResponse2);
     }

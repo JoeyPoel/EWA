@@ -43,7 +43,8 @@ export default {
         this.emailSent = true;
       } catch(e) {
         //TODO change this error true
-        this.emailSent = true;
+        this.wrongEmail = true;
+        console.log(e)
         console.log("bleh")
       }
 

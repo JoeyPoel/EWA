@@ -41,7 +41,7 @@ public class WarehouseService {
         return warehouses;
     }
 
-    protected List<Long> findAllIds() {
+    public List<Long> findAllIds() {
         return findAll()
                 .stream()
                 .map(Warehouse::getId)

@@ -7,14 +7,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-import teamx.app.backend.models.dto.MailRequest;
-import teamx.app.backend.models.dto.MailResponse;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import teamx.app.backend.utils.DTO;
 
 /**
  * Email service
@@ -32,8 +32,8 @@ public class EmailService {
     @Autowired
     private Configuration config;
 
-    public MailResponse sendEmail(MailRequest request, Map<String, Object> model,String templateFileName) {
-        MailResponse response = new MailResponse();
+    public DTO.MailResponse sendEmail(DTO.MailRequest request, Map<String, Object> model, String templateFileName) {
+        DTO.MailResponse response = new DTO.MailResponse();
         MimeMessage message = emailSender.createMimeMessage();
         try {
             // set mediaType
