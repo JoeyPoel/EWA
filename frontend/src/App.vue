@@ -1,7 +1,7 @@
 <template>
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
-    <v-main class="px-16">
+    <v-main v-bind:class="getClass()">
       <router-view/>
     </v-main>
   </v-layout>
@@ -40,6 +40,13 @@ export default {
       link.rel = 'shortcut icon';
       link.href = href;
       document.getElementsByTagName('head')[0].appendChild(link);
+    },
+    getClass() {
+      if (!this.$route.meta.hideNavbar) {
+        return {
+          'px-16': 1 // css class
+        }
+      }
     }
   },
   provide() {
