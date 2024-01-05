@@ -54,7 +54,6 @@ public class EmailController {
         UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
         if (foundUser != null) {
             String passwordResetLink = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
-
             String subject = "Password reset request";
             String content = "Please click this link underneath to reset your password for the solar sedum website";
 
@@ -65,8 +64,8 @@ public class EmailController {
             model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
 
             DTO.MailRequest request = new DTO.MailRequest();
-//            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
-            request.setTo(user.getEmail());
+            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
+//            request.setTo(user.getEmail());
             request.setName(user.getEmail().split("@")[0]); // Set name as everything before @ on the email address
             request.setSubject(subject);
 

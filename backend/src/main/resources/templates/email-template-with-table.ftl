@@ -13,13 +13,13 @@
                             <thead>
                             <tr style="background-color: #c5ce2c; color: #5a2e18; font-size: 14px;">
                                 <#list columnNames as columnName>
-                                    <th style="padding: 10px; border-bottom: 1px solid #ffffff;">${columnName}</th>
+                                    <th style="padding: 10px; border-bottom: 1px solid #ffffff; text-align: center;">${columnName}</th>
                                 </#list>
                             </tr>
                             </thead>
                             <tbody>
                             <#list tableRows as row>
-                                <tr style="border-bottom: 1px solid #e0e0e0; font-size: 14px;">
+                                <tr style="border-bottom: 1px solid #e0e0e0; font-size: 14px; text-align: center;">
                                     <#list row?split(",") as cell>
                                         <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">${cell}</td>
                                     </#list>

@@ -9,8 +9,8 @@
                         <p style="font-size: 16px; color: #5a2e18; line-height: 1.6; padding: 0 20px; border-left: 4px solid #5a2e18;">
                         ${content}
                         </p>
-                        <p style="font-size: 16px; line-height: 1.6; padding: 0 20px; border-left: 4px solid #5a2e18;">
-                            ${[passwordResetLink]}
+                        <p style="font-size: 16px; line-height: 1.6; padding: 0 20px;">
+                            ${passwordResetLink}
                         </p>
                         <p style="font-size: 16px; color: #333333; line-height: 1.6; margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 4px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);">
                             If you need any further information or have any questions, feel free to contact us. We appreciate your continued support.
