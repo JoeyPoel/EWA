@@ -15,7 +15,7 @@
         </v-col>
         <v-col cols="1" >
           <v-row class="align-items-center justify-content-center" style="height: 70%; margin: 0">
-            <v-btn @click="reset">Reset</v-btn>
+            <v-btn @click="reset" rounded="sm">Reset</v-btn>
           </v-row>
         </v-col>
       </v-row>
@@ -26,7 +26,7 @@
   name: 'dataFilter',
   inject: ['warehousesService', 'teamsService'],
   props: {
-    search: {
+    warehouse: {
       required: false,
     },
     canSearch: {
@@ -62,11 +62,13 @@
     }
   },
   watch: {
-    search() {
-      this.$emit('input', this.searchValue);
+    searchValue() {
+      console.log("search")
+      console.log(this.searchValue)
+      this.$emit('filterChange', this.searchValue);
     },
     selectedWarehouse() {
-      this.$emit('warehouse', this.selectedWarehouse);
+      this.$emit('warehouseChange', this.selectedWarehouse);
     },
     selectedTeam() {
       this.$emit('team', this.selectedTeam);

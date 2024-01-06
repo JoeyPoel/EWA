@@ -18,7 +18,7 @@
         </v-data-table>
         <dialog-component v-if="dialog.open" :item="dialog.item" :item-fields="dialog.itemFields"
                           :max-width="dialog.maxWidth" :open="dialog.open" :title="dialog.title"
-                          @close="dialog.open = false"/>
+                          @close="dialog.open = false" :detail-tabs="dialog.detailTabs"/>
       </v-card-text>
     </v-card>
   </div>
@@ -84,7 +84,6 @@ export default {
     },
   },
   created() {
-
     this.actions = [...this.tableConfig.allowedActions];
     if (this.actions.length > 0) {
       this.actions.map(action => {

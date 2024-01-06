@@ -4,8 +4,8 @@
         class="mt-1"
         color="secondary"
         title="Teams">
-      <data-filter :can-search="true" :can-sort-by-warehouse="true" :search="table.searchTerm"
-                   @input="table.searchTerm = $event" @warehouse="selectedWarehouse = $event"/>
+      <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
+                   @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
       <DataTable :dialog-config="dialog" :table-config="table" @close="handleClose"
                  @action="handleDialogAction(true, $event.action, $event.item)" />
     </base-card>
@@ -17,6 +17,7 @@ import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
 import dataFilter from "@/components/DataFilterComponent.vue";
 import DataTable from "@/components/DataTable.vue";
+import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
 
 export default {
   name: "TeamsComponent",
@@ -45,7 +46,6 @@ export default {
         allowedActions: [
           {action: 'Details', icon: '$info', color: 'primary'},
           {action: 'Edit', icon: '$edit', color: 'primary'},
-          {action: 'Delete', icon: '$delete', color: 'error'},
         ]
       },
       dialog: {
@@ -59,15 +59,23 @@ export default {
           {name: 'membersIds', label: 'Team Members', type: 'selectMultiple', required: false, items: []}
         ],
         detailTabs: [
-          // {title: 'Team Members', component: 'TeamMembersComponent'}
+          {title: 'Projects', component: TeamProjectsTable}
         ]
       },
     }
   },
 
-
   async created() {
     await this.initialize();
+  },
+
+  watch: {
+    selectedWarehouse: {
+      handler: async function () {
+        this.table.items = await this.getTeams();
+      },
+      deep: true
+    },
   },
 
   methods: {

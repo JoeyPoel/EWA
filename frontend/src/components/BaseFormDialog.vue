@@ -1,10 +1,9 @@
 <template>
   <v-dialog v-model="isOpen" :max-width="maxWidth">
     <v-card>
-      <v-card-title>
+      <v-card-text>
         <v-row>
           <v-col cols="10">
-            <h5>{{ title }}</h5>
           </v-col>
           <v-col cols="2">
             <v-btn icon @click="closeDialog">
@@ -12,32 +11,23 @@
             </v-btn>
           </v-col>
         </v-row>
-      </v-card-title>
-      <v-card-text>
         <v-container>
           <template v-if="title === 'Details'">
             <v-tabs v-model="detailTabsTitle">
               <v-tab value="Details" text="Details"/>
-              <div v-for="(tab, index) in detailTabs" :key="index">
-                <v-tab :value="tab.name" :title="tab.title"/>
-              </div>
+              <v-tab v-for="tab in detailTabs" :key="tab.title" :value="tab.title" :text="tab.title"/>
             </v-tabs>
             <v-window v-model="detailTabsTitle">
               <v-window-item value="Details">
                 <base-item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
-              <div v-for="(tab, index) in detailTabs" :key="index">
-                <v-window-item :value="tab.title">
-                  <component :is="tab.component" :item="item"/>
-                </v-window-item>
-              </div>
+              <v-window-item v-for="tab in detailTabs" :key="tab.title" :value="tab.title">
+                <component :is="tab.component" :item="item"/>
+              </v-window-item>
             </v-window>
           </template>
           <template v-if="title === 'New' || title === 'Edit'">
             <base-item-form :item-fields="itemFields" :item="item"/>
-          </template>
-          <template v-else-if="title === 'Delete'">
-            <span>Are you sure you want to delete this item?</span>
           </template>
         </v-container>
       </v-card-text>
@@ -51,7 +41,7 @@ import BaseItemForm from "@/components/base/BaseItemForm.vue";
 export default {
   name: 'BaseFormDialog',
   components: {
-    BaseItemForm
+    BaseItemForm,
     // ItemForm,
   },
   props: {
@@ -83,12 +73,22 @@ export default {
   data() {
     return {
       detailTabsTitle: 'Details',
+      dialog: false
     }
   },
+  mounted() {
+    console.log(`BaseFormDialog: open changed to ${this.open}`);
+    this.dialog = this.open;
+  },
   computed: {
-    isOpen(){
-      return this.open;
-    },
+    isOpen: {
+      get() {
+        return this.open;
+      },
+      set() {
+       this.closeDialog();
+      }
+    }
   },
   methods: {
     closeDialog() {

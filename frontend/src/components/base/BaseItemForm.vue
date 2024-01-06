@@ -7,10 +7,19 @@
                    :item="itemCopy" :items="field.items"
                    @input-change="handleInputChange($event)" />
       </v-row>
-      <v-row>
-        <v-btn color="primary" @click="clearForm">Clear</v-btn>
-        <v-btn :disabled="!changed" color="primary" @click="resetForm">Reset</v-btn>
-        <v-btn :disabled="!changed" color="primary" @click="saveForm">Save</v-btn>
+      <v-row v-if="!allDisabled">
+        <v-col cols="12" sm="6">
+          <v-btn color="primary" @click="clearForm" :block="true" rounded="sm">Clear</v-btn>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-btn :disabled="!changed" color="primary" @click="resetForm" :block="true" rounded="sm">Reset</v-btn>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-btn :disabled="!changed" color="primary" @click="saveForm" :block="true" rounded="sm">Save</v-btn>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-btn color="primary-darken-1" @click="deleteForm" :block="true" rounded="sm">Delete</v-btn>
+        </v-col>
       </v-row>
     </v-form>
   </v-container>
@@ -63,6 +72,9 @@ export default {
     },
     saveForm() {
       this.$emit('save', this.itemCopy);
+    },
+    deleteForm() {
+      this.$emit('delete', this.itemCopy);
     }
   }
 }
