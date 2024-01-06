@@ -52,8 +52,8 @@ class EmailControllerTests {
 
     @Test
     void sendProjectEmail_WithInProgressProjects() throws Exception {
-        when(projectService.findProjectsByStatusAndDateBetween(
-                Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
+        lenient().when(projectService.findProjectsByStatusAndDateBetween(
+                        Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
                 .thenReturn(Collections.singletonList(createSampleProject()));
 
         mockMvc.perform(post("/mail/sendProjectEmail"))
@@ -62,8 +62,8 @@ class EmailControllerTests {
 
     @Test
     void sendProjectEmail_NoInProgressProjects() throws Exception {
-        when(projectService.findProjectsByStatusAndDateBetween(
-                Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
+        lenient().when(projectService.findProjectsByStatusAndDateBetween(
+                        Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
                 .thenReturn(Collections.emptyList());
 
         mockMvc.perform(post("/mail/sendProjectEmail"))
