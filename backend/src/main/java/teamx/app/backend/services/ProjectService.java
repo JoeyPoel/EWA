@@ -87,7 +87,7 @@ public class ProjectService {
                 projectRepository.findAllByTeam_Warehouse_IdAndEndDateBetween(warehouseId, startDate, endDate);
     }
 
-    protected List<Project> findProjectsByStatusAndDateBetween
+    public List<Project> findProjectsByStatusAndDateBetween
             (Project.Status status, Long warehouseId, Date startDate, Date endDate) {
         return warehouseId == null ?
                 projectRepository.findAllByStatusAndEndDateBetween(status, startDate, endDate) :
