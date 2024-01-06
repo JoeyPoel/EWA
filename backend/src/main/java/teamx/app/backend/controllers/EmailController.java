@@ -3,6 +3,7 @@ package teamx.app.backend.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import teamx.app.backend.services.*;
 import teamx.app.backend.utils.DTO;
 import teamx.app.backend.utils.DTO.UserDTO;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,27 +29,15 @@ public class EmailController {
     //    TODO Emails over: Status project, Wachtwoord vergeten, Product negatief stock
     private static final Logger logger = LoggerFactory.getLogger(EmailController.class);
     private final EmailService emailService;
-    private final ProjectService projectService;
     private final UserService userService;
     private final AuthenthicationService authenthicationService;
     private final WarehouseService warehouseService;
-    private final TransactionService transactionService;
-    private final InventoryService inventoryService;
-    private final CapacityService capacityService;
-    private final ProductService productService;
     @Autowired
-    public EmailController(EmailService emailService, ProjectService projectService,
-                           UserService userService, AuthenthicationService authenthicationService, WarehouseService warehouseService, TransactionService transactionService, InventoryService inventoryService, CapacityService capacityService, ProductService productService) {
+    public EmailController(EmailService emailService, UserService userService, AuthenthicationService authenthicationService, WarehouseService warehouseService) {
         this.emailService = emailService;
-        this.projectService = projectService;
         this.userService = userService;
         this.authenthicationService = authenthicationService;
         this.warehouseService = warehouseService;
-        this.transactionService = transactionService;
-        this.inventoryService = inventoryService;
-
-        this.capacityService = capacityService;
-        this.productService = productService;
     }
 
     @PostMapping("/sendPassResetEmail")
@@ -61,10 +49,12 @@ public class EmailController {
             String content = "Please click this link underneath to reset your password for the solar sedum website";
 
             Map<String, Object> model = new HashMap<>();
-            model.put("content", content);
-            model.put("passwordResetLink", passwordResetLink);
-            model.put("name", user.getEmail().split("@")[0]); // Set name as everything before @ on the email address
-            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+            model.putAll(Map.of(
+                    "content", content,
+                    "passwordResetLink", passwordResetLink,
+                    "name", user.getEmail().split("@")[0], // Set name as everything before @ on the email address
+                    "dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png"
+            ));
 
             DTO.MailRequest request = new DTO.MailRequest();
             request.setTo("Joeywognum@gmail.com"); // FOR TESTING
@@ -78,16 +68,17 @@ public class EmailController {
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
                 logger.error("An error occurred while sending an email: {}", e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
             }
             return ResponseEntity.ok("Password Reset Email sent.");
         }
-        return ResponseEntity.ok("Found user was null!");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Found user was null!");
     }
 
     @Scheduled(cron = "0 0 12 * * ?")
     @PostMapping("/sendProjectEmail")
     public ResponseEntity<String> sendProjectEmail() {
-        List<Project> filteredProjects = findAllProjectsThatAreStillInProgress();
+        List<Project> filteredProjects = emailService.findAllProjectsThatAreStillInProgress();
 
         if (filteredProjects.isEmpty()) return ResponseEntity.ok("No projects are still in progress.");
 
@@ -109,11 +100,13 @@ public class EmailController {
 
         for (User admin : admins) {
             Map<String, Object> model = new HashMap<>();
-            model.put("tableRows", tableRows);
-            model.put("columnNames", columnNames);
-            model.put("content", content);
-            model.put("name", admin.getName());
-            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+            model.putAll(Map.of(
+                    "tableRows", tableRows,
+                    "columnNames", columnNames,
+                    "content", content,
+                    "name", admin.getName(),
+                    "dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png"
+            ));
 
             DTO.MailRequest request = new DTO.MailRequest();
             request.setTo("Joeywognum@gmail.com"); // FOR TESTING
@@ -126,7 +119,7 @@ public class EmailController {
                 emailService.sendEmail(request, model, templateFileName);
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
-                logger.error("An error occurred while sending an email: {}", e.getMessage());
+                logger.error("Failed to send email to admin: {}. Error: {}", admin.getEmail(), e.getMessage());
             }
         }
         return ResponseEntity.ok("Project reminder emails sent to admins.");
@@ -135,7 +128,7 @@ public class EmailController {
     @Scheduled(cron = "0 0 12 * * ?")
     @PostMapping("/sendProductEmail")
     public ResponseEntity<String> sendProductEmail() {
-        List<DTO.InventoryProductDTO> filteredProducts = findAllProductsThatNeedCare();
+        List<DTO.InventoryProductDTO> filteredProducts = emailService.findAllProductsThatNeedCare();
 
         if (filteredProducts.isEmpty()) return ResponseEntity.ok("No products need care.");
 
@@ -157,11 +150,13 @@ public class EmailController {
 
         for (User admin : admins) {
             Map<String, Object> model = new HashMap<>();
-            model.put("tableRows", tableRows);
-            model.put("columnNames", columnNames);
-            model.put("content", content);
-            model.put("name", admin.getName());
-            model.put("dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png");
+            model.putAll(Map.of(
+                    "tableRows", tableRows,
+                    "columnNames", columnNames,
+                    "content", content,
+                    "name", admin.getName(),
+                    "dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png"
+            ));
 
             DTO.MailRequest request = new DTO.MailRequest();
             request.setTo("Joeywognum@gmail.com"); // FOR TESTING
@@ -174,54 +169,9 @@ public class EmailController {
                 emailService.sendEmail(request, model, templateFileName);
             } catch (Exception e) {
                 // Log the exception for further analysis or debugging
-                logger.error("An error occurred while sending an email: {}", e.getMessage());
+                logger.error("Failed to send email to admin: {}. Error: {}", admin.getEmail(), e.getMessage());
             }
         }
         return ResponseEntity.ok("Product reminder emails sent to admins.");
-    }
-
-    private List<DTO.InventoryProductDTO> findAllProductsThatNeedCare() {
-        List<DTO.InventoryProductDTO> allInventoryProducts = new ArrayList<>();
-        List<Long> warehouseIds = warehouseService.findAllIds();
-
-        for (Long warehouseId : warehouseIds) {
-            List<DTO.InventoryProductDTO> inventoryProductDTOSPerWarehouse = inventoryService.getByWarehouseId(warehouseId);
-
-            // Update the quantity in each InventoryProductDTO using findProductCurrentStock
-            inventoryProductDTOSPerWarehouse
-                    .forEach(inventoryProduct->
-                            inventoryProduct.setQuantity(
-                                    transactionService.findProductCurrentStock(
-                                            inventoryProduct.getWarehouseId(), inventoryProduct.getProductId())));
-
-            allInventoryProducts.addAll(inventoryProductDTOSPerWarehouse);
-        }
-
-        // Filter products based on current stock level less than minimum stock level
-        return allInventoryProducts.stream()
-                .filter(inventoryProductDTO -> {
-                    // Find the corresponding CapacityDTO for the current product and warehouse
-                    List<DTO.CapacityDTO> capacities = capacityService.getAllCapacities();
-                    DTO.CapacityDTO capacity = capacities.stream()
-                            .filter(c -> c.getCategoryId().equals(productService.findById(inventoryProductDTO.getProductId()).getCategory().getId())
-                                    && c.getWarehouseId().equals(inventoryProductDTO.getWarehouseId()))
-                            .findFirst().orElse(null);
-
-                    // Check if capacity found and compare the quantity with the minimum stock level
-                    return capacity != null && inventoryProductDTO.getQuantity() <= capacity.getMinimumStockLevel();
-                })
-                .collect(Collectors.toList());
-    }
-
-    private List<Project> findAllProjectsThatAreStillInProgress() {
-        java.sql.Date beginningOfTime = java.sql.Date.valueOf("1970-01-01");
-        java.sql.Date oneWeekFromNow = java.sql.Date.valueOf(LocalDate.now().plusWeeks(1));
-
-        List<Project> filteredProjects = projectService.findProjectsByStatusAndDateBetween(
-                Project.Status.IN_PROGRESS, null, beginningOfTime, oneWeekFromNow
-        );
-        filteredProjects.sort(Comparator.comparing(Project::getStartDate));
-
-        return filteredProjects; // Return the filtered list
     }
 }

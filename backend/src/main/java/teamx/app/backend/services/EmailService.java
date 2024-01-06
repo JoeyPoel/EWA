@@ -10,10 +10,17 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import teamx.app.backend.models.Project;
 import teamx.app.backend.utils.DTO;
 
 /**
@@ -31,6 +38,21 @@ public class EmailService {
     private JavaMailSender emailSender;
     @Autowired
     private Configuration config;
+
+    private final WarehouseService warehouseService;
+    private final ProductService productService;
+    private final TransactionService transactionService;
+    private final InventoryService inventoryService;
+    private final ProjectService projectService;
+    private final CapacityService capacityService;
+    public EmailService(WarehouseService warehouseService, ProductService productService, TransactionService transactionService, InventoryService inventoryService, ProjectService projectService, CapacityService capacityService) {
+        this.warehouseService = warehouseService;
+        this.productService = productService;
+        this.transactionService = transactionService;
+        this.inventoryService = inventoryService;
+        this.projectService = projectService;
+        this.capacityService = capacityService;
+    }
 
     public DTO.MailResponse sendEmail(DTO.MailRequest request, Map<String, Object> model, String templateFileName) {
         DTO.MailResponse response = new DTO.MailResponse();
@@ -58,6 +80,51 @@ public class EmailService {
         }
 
         return response;
+    }
+
+    public List<DTO.InventoryProductDTO> findAllProductsThatNeedCare() {
+        List<DTO.InventoryProductDTO> allInventoryProducts = new ArrayList<>();
+        List<Long> warehouseIds = warehouseService.findAllIds();
+
+        for (Long warehouseId : warehouseIds) {
+            List<DTO.InventoryProductDTO> inventoryProductDTOSPerWarehouse = inventoryService.getByWarehouseId(warehouseId);
+
+            // Update the quantity in each InventoryProductDTO using findProductCurrentStock
+            inventoryProductDTOSPerWarehouse
+                    .forEach(inventoryProduct->
+                            inventoryProduct.setQuantity(
+                                    transactionService.findProductCurrentStock(
+                                            inventoryProduct.getWarehouseId(), inventoryProduct.getProductId())));
+
+            allInventoryProducts.addAll(inventoryProductDTOSPerWarehouse);
+        }
+
+        // Filter products based on current stock level less than minimum stock level
+        return allInventoryProducts.stream()
+                .filter(inventoryProductDTO -> {
+                    // Find the corresponding CapacityDTO for the current product and warehouse
+                    List<DTO.CapacityDTO> capacities = capacityService.getAllCapacities();
+                    DTO.CapacityDTO capacity = capacities.stream()
+                            .filter(c -> c.getCategoryId().equals(productService.findById(inventoryProductDTO.getProductId()).getCategory().getId())
+                                    && c.getWarehouseId().equals(inventoryProductDTO.getWarehouseId()))
+                            .findFirst().orElse(null);
+
+                    // Check if capacity found and compare the quantity with the minimum stock level
+                    return capacity != null && inventoryProductDTO.getQuantity() <= capacity.getMinimumStockLevel();
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Project> findAllProjectsThatAreStillInProgress() {
+        java.sql.Date beginningOfTime = java.sql.Date.valueOf("1970-01-01");
+        java.sql.Date oneWeekFromNow = java.sql.Date.valueOf(LocalDate.now().plusWeeks(1));
+
+        List<Project> filteredProjects = projectService.findProjectsByStatusAndDateBetween(
+                Project.Status.IN_PROGRESS, null, beginningOfTime, oneWeekFromNow
+        );
+        filteredProjects.sort(Comparator.comparing(Project::getStartDate));
+
+        return filteredProjects; // Return the filtered list
     }
 }
 
