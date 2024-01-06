@@ -35,10 +35,11 @@ public class EmailController {
     private final WarehouseService warehouseService;
     private final TransactionService transactionService;
     private final InventoryService inventoryService;
-
+    private final CapacityService capacityService;
+    private final ProductService productService;
     @Autowired
     public EmailController(EmailService emailService, ProjectService projectService,
-                           UserService userService, AuthenthicationService authenthicationService, WarehouseService warehouseService, TransactionService transactionService, InventoryService inventoryService) {
+                           UserService userService, AuthenthicationService authenthicationService, WarehouseService warehouseService, TransactionService transactionService, InventoryService inventoryService, CapacityService capacityService, ProductService productService) {
         this.emailService = emailService;
         this.projectService = projectService;
         this.userService = userService;
@@ -47,6 +48,8 @@ public class EmailController {
         this.transactionService = transactionService;
         this.inventoryService = inventoryService;
 
+        this.capacityService = capacityService;
+        this.productService = productService;
     }
 
     @PostMapping("/sendPassResetEmail")
@@ -196,10 +199,19 @@ public class EmailController {
 
         // Filter products based on current stock level less than minimum stock level
         return allInventoryProducts.stream()
-                .filter(inventoryProductDTO -> inventoryProductDTO.getQuantity() <= 10) // TODO REPLACE WITH ACUTAL MINIMUM STOCK LEVEL
+                .filter(inventoryProductDTO -> {
+                    // Find the corresponding CapacityDTO for the current product and warehouse
+                    List<DTO.CapacityDTO> capacities = capacityService.getAllCapacities();
+                    DTO.CapacityDTO capacity = capacities.stream()
+                            .filter(c -> c.getCategoryId().equals(productService.findById(inventoryProductDTO.getProductId()).getCategory().getId())
+                                    && c.getWarehouseId().equals(inventoryProductDTO.getWarehouseId()))
+                            .findFirst().orElse(null);
+
+                    // Check if capacity found and compare the quantity with the minimum stock level
+                    return capacity != null && inventoryProductDTO.getQuantity() <= capacity.getMinimumStockLevel();
+                })
                 .collect(Collectors.toList());
     }
-
 
     private List<Project> findAllProjectsThatAreStillInProgress() {
         java.sql.Date beginningOfTime = java.sql.Date.valueOf("1970-01-01");

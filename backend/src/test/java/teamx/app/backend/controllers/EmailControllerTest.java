@@ -108,11 +108,11 @@ class EmailControllerTests {
 
     private DTO.InventoryProductDTO createSampleInventoryProductWithLowQuantity() {
         // Creating a sample product with a low quantity (less than the threshold)
-        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 5);
+        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, -1);
     }
 
     private DTO.InventoryProductDTO createSampleInventoryProductWithHighQuantity() {
         // Creating a sample product with a high quantity (greater than the threshold)
-        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 150);
+        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 99999999);
     }
 }
