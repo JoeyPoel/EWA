@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/mail")
 public class EmailController {
 
-    //    TODO Emails over: Status project, Wachtwoord vergeten, Product negatief stock
     private static final Logger logger = LoggerFactory.getLogger(EmailController.class);
     private final EmailService emailService;
     private final UserService userService;
@@ -57,8 +56,7 @@ public class EmailController {
             ));
 
             DTO.MailRequest request = new DTO.MailRequest();
-            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
-//            request.setTo(user.getEmail());
+            request.setTo(user.getEmail());
             request.setName(user.getEmail().split("@")[0]); // Set name as everything before @ on the email address
             request.setSubject(subject);
 
@@ -109,8 +107,7 @@ public class EmailController {
             ));
 
             DTO.MailRequest request = new DTO.MailRequest();
-            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
-    //        request.setTo(admin.getEmail());
+            request.setTo(admin.getEmail());
             request.setName(admin.getName());
             request.setSubject(subject);
 
@@ -159,8 +156,7 @@ public class EmailController {
             ));
 
             DTO.MailRequest request = new DTO.MailRequest();
-            request.setTo("Joeywognum@gmail.com"); // FOR TESTING
-//        request.setTo(admin.getEmail());
+            request.setTo(admin.getEmail());
             request.setName(admin.getName());
             request.setSubject(subject);
 
