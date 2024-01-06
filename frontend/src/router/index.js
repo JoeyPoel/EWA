@@ -111,6 +111,16 @@ const routes = [
             roles: ['USER'],
         }
     },
+    {
+        path: '/error',
+        name: 'Error',
+        component: () => import('@/components/ErrorComponent.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['USER', 'ADMIN'],
+            noPadding: true
+        },
+    },
 ];
 
 export const router = createRouter({
