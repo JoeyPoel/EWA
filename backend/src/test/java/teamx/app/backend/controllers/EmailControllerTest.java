@@ -1,4 +1,4 @@
-package teamx.app.backend.Controllers;
+package teamx.app.backend.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,27 +10,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import teamx.app.backend.controllers.EmailController;
 import teamx.app.backend.models.Project;
-import teamx.app.backend.models.dto.InventoryProjectDTO;
-import teamx.app.backend.services.EmailService;
-import teamx.app.backend.services.ProjectService;
-import teamx.app.backend.services.UserService;
+import teamx.app.backend.services.*;
+import teamx.app.backend.utils.DTO;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Tests for email
- *
- * @author Joey van der Poel
- */
 @ExtendWith(MockitoExtension.class)
 class EmailControllerTests {
 
@@ -43,6 +34,12 @@ class EmailControllerTests {
     private ProjectService projectService;
 
     @Mock
+    private InventoryService inventoryService;
+
+    @Mock
+    private WarehouseService warehouseService;
+
+    @Mock
     private UserService userService;
 
     @InjectMocks
@@ -53,39 +50,22 @@ class EmailControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(emailController).build();
     }
 
-
     @Test
     void sendProjectEmail_WithInProgressProjects() throws Exception {
-        // Creating sample projects
-        Project project1 = new Project();
-        project1.setName("Energy Infrastructure");
-        project1.setStatus(Project.Status.IN_PROGRESS);
-        project1.setStartDate(java.sql.Date.valueOf("2000-01-01"));
-        project1.setEndDate(java.sql.Date.valueOf("2000-02-01"));
-
-
-        List<Project> projects = Arrays.asList(project1); // Add the created sample project(s) here
-
-        // Mocking the scenario with projects in progress
         when(projectService.findProjectsByStatusAndDateBetween(
                 Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
-                .thenReturn(projects);
+                .thenReturn(Collections.singletonList(createSampleProject()));
 
-        // Perform the POST request to send project reminder emails
         mockMvc.perform(post("/mail/sendProjectEmail"))
                 .andExpect(status().isOk());
     }
 
-
     @Test
     void sendProjectEmail_NoInProgressProjects() throws Exception {
-        // Mocking the scenario with no projects in progress
-        List<Project> projects = new ArrayList<>();
         when(projectService.findProjectsByStatusAndDateBetween(
                 Project.Status.IN_PROGRESS, null, java.sql.Date.valueOf("1970-01-01"), java.sql.Date.valueOf(LocalDate.now().plusWeeks(1))))
-                .thenReturn(projects);
+                .thenReturn(Collections.emptyList());
 
-        // Perform the POST request to send project reminder emails
         mockMvc.perform(post("/mail/sendProjectEmail"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("No projects are still in progress."));
@@ -93,31 +73,46 @@ class EmailControllerTests {
 
     @Test
     void sendProductEmail_WithProductsNeedingCare() throws Exception {
-        // Creating a sample product that needs care
-        InventoryProjectDTO product = new InventoryProjectDTO(
-                123L, 5, "Sample Product", "Warehouse A", "Inbound", new Date()
-        );
+        DTO.InventoryProductDTO productNeedingCare = createSampleInventoryProductWithLowQuantity();
+        when(inventoryService.getByWarehouseId(any()))
+                .thenReturn(Collections.singletonList(productNeedingCare));
+        lenient().when(inventoryService.getByWarehouseId(any())) // Using lenient() to ignore unnecessary stubbing warning
+                .thenReturn(Collections.singletonList(productNeedingCare));
 
-        List<InventoryProjectDTO> products = Arrays.asList(product);
-
-        // TODO Mocking the scenario with products that need care
-
-
-        // Perform the POST request to send product reminder emails
         mockMvc.perform(post("/mail/sendProductEmail"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void sendProductEmail_NoProductsNeedingCare() throws Exception {
-        // Mocking the scenario with no products needing care
-        List<InventoryProjectDTO> products = new ArrayList<>();
+        DTO.InventoryProductDTO productWithHighQuantity = createSampleInventoryProductWithHighQuantity();
+        when(inventoryService.getByWarehouseId(any()))
+                .thenReturn(Collections.singletonList(productWithHighQuantity));
+        lenient().when(inventoryService.getByWarehouseId(any())) // Using lenient() to ignore unnecessary stubbing warning
+                .thenReturn(Collections.singletonList(productWithHighQuantity));
 
-        // TODO Mocking the scenario with no products that need care
-
-        // Perform the POST request to send product reminder emails
         mockMvc.perform(post("/mail/sendProductEmail"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("No products need care."));
+    }
+
+
+    private Project createSampleProject() {
+        Project project = new Project();
+        project.setName("Energy Infrastructure");
+        project.setStatus(Project.Status.IN_PROGRESS);
+        project.setStartDate(java.sql.Date.valueOf("2000-01-01"));
+        project.setEndDate(java.sql.Date.valueOf("2000-02-01"));
+        return project;
+    }
+
+    private DTO.InventoryProductDTO createSampleInventoryProductWithLowQuantity() {
+        // Creating a sample product with a low quantity (less than the threshold)
+        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 5);
+    }
+
+    private DTO.InventoryProductDTO createSampleInventoryProductWithHighQuantity() {
+        // Creating a sample product with a high quantity (greater than the threshold)
+        return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 150);
     }
 }
