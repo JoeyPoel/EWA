@@ -22,7 +22,7 @@
                 <base-item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
               <v-window-item v-for="tab in detailTabs" :key="tab.title" :value="tab.title">
-                <component :is="tab.component.toString()" :item="item"/>
+                <component :is="tab.component" :item="item"/>
               </v-window-item>
             </v-window>
           </template>

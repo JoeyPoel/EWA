@@ -1,10 +1,7 @@
 <template>
   <v-card :class="classes" class="pa-3" v-bind="$attrs">
     <div class="d-flex grow flex-wrap">
-      <v-avatar v-if="avatar" class="mx-auto avatar elevation-6" color="grey" size="128">
-        <v-img :src="avatar"/>
-      </v-avatar>
-      <v-sheet v-else :class="{'pa-7': !$slots.image}" :color="color" :max-height="icon ? 90 : undefined"
+      <v-sheet :class="{'pa-7': !$slots.image}" :color="color" :max-height="icon ? 90 : undefined"
                :width="icon ? 'auto' : '100%'" class="text-start heading mb-n6" dark elevation="6">
         <slot v-if="$slots.heading" name="heading"/>
         <slot v-else-if="$slots.image" name="image"/>
@@ -34,10 +31,6 @@ export default {
   name: 'BaseCard',
 
   props: {
-    avatar: {
-      type: String,
-      default: '',
-    },
     color: {
       type: String,
       default: 'success',

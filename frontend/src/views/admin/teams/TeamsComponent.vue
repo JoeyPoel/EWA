@@ -1,6 +1,6 @@
 <template>
   <v-container :fluid="true">
-    <base-card class="mt-1" color="secondary" title="Teams">
+    <base-card class="mt-1" color="primary" title="Teams">
       <data-filter :search="search" :can-search="true" @input="search = $event"
                    :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table

@@ -1,9 +1,6 @@
 <template>
   <v-container :fluid="true">
-    <base-card
-        class="mt-1"
-        color="secondary"
-        title="Teams">
+    <base-card class="mt-1 font-weight-bold" color="secondary" title="Teams">
       <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
                    @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
       <DataTable :dialog-config="dialog" :table-config="table" @close="handleClose"
