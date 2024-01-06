@@ -7,7 +7,7 @@
       <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
                    @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
       <DataTable :dialog-config="dialog" :table-config="table" @close="handleClose"
-                 @action="handleDialogAction(true, $event.action, $event.item)" />
+                 @action="handleDialogAction(true, $event.action, $event.item)"/>
     </base-card>
   </v-container>
 </template>
@@ -17,7 +17,6 @@ import BaseCard from "@/components/base/BaseCard.vue";
 import {Team} from "@/models/Team";
 import dataFilter from "@/components/DataFilterComponent.vue";
 import DataTable from "@/components/DataTable.vue";
-import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
 
 export default {
   name: "TeamsComponent",
@@ -59,7 +58,7 @@ export default {
           {name: 'membersIds', label: 'Team Members', type: 'selectMultiple', required: false, items: []}
         ],
         detailTabs: [
-          {title: 'Projects', component: TeamProjectsTable}
+          {title: 'Projects', component: 'TeamProjectsTable'},
         ]
       },
     }

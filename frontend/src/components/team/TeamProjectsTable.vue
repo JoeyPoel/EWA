@@ -1,24 +1,18 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-text>
-        <v-data-table
-            :headers="projectHeaders"
-            :items="projects"
-            class="elevation-1"
-            item-value="name">
-          <template v-slot:[`item.warehouseName`]="{ item }">
-            {{ getWarehouseName(item) }}
-          </template>
-        </v-data-table>
-      </v-card-text>
-    </v-card>
-  </v-container>
+  <v-data-table
+      :headers="projectHeaders"
+      :items="projects"
+      class="elevation-1"
+      item-value="name">
+    <template v-slot:[`item.warehouseName`]="{ item }">
+      {{ getWarehouseName(item) }}
+    </template>
+  </v-data-table>
 </template>
 
 <script>
 export default {
-  name: "TeamProjectsTable",
+  name: 'TeamProjectsTable',
   inject: ['projectsService', 'warehousesService'],
   props: {
     item: {
@@ -29,16 +23,19 @@ export default {
   data() {
     return {
       projectHeaders: [
-        {text: 'Name', value: 'name'},
-        {text: 'Warehouse', value: 'warehouseName'},
-        {text: 'Actions', value: 'actions', sortable: false},
+        {title: 'ID', value: 'id'},
+        {title: 'Location', value: 'location'},
+        {title: 'Start Date', value: 'startDate'},
+        {title: 'End Date', value: 'endDate'},
+        {title: 'Status', value: 'status'},
       ],
-      projects: null,
-      warehouses: null
+      projects: [],
+      warehouses: []
     }
   },
   async mounted() {
-    this.projects = await this.projectsService.asyncFindAllByTeamId(this.team.id);
+    console.log(`TeamProjectsTable: item changed to ${this.item}`);
+    this.projects = await this.projectsService.asyncFindAllByTeamId(this.item.id);
     this.warehouses = await this.warehousesService.asyncFindAll();
   },
   methods: {

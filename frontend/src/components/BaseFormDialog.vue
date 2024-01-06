@@ -22,7 +22,7 @@
                 <base-item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
               <v-window-item v-for="tab in detailTabs" :key="tab.title" :value="tab.title">
-                <component :is="tab.component" :item="item"/>
+                <component :is="tab.component.toString()" :item="item"/>
               </v-window-item>
             </v-window>
           </template>
@@ -37,11 +37,13 @@
 <script>
 
 import BaseItemForm from "@/components/base/BaseItemForm.vue";
+import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
 
 export default {
   name: 'BaseFormDialog',
   components: {
     BaseItemForm,
+    TeamProjectsTable,
     // ItemForm,
   },
   props: {
@@ -73,7 +75,8 @@ export default {
   data() {
     return {
       detailTabsTitle: 'Details',
-      dialog: false
+      dialog: false,
+      teamProjects: TeamProjectsTable,
     }
   },
   mounted() {

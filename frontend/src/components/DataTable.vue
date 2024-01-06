@@ -16,9 +16,10 @@
             </v-icon>
           </template>
         </v-data-table>
-        <dialog-component v-if="dialog.open" :item="dialog.item" :item-fields="dialog.itemFields"
-                          :max-width="dialog.maxWidth" :open="dialog.open" :title="dialog.title"
-                          @close="dialog.open = false" :detail-tabs="dialog.detailTabs"/>
+        <dialog-component v-if="dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
+                          :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
+                          :title="dialog.title" @close="dialog.open = false">
+        </dialog-component>
       </v-card-text>
     </v-card>
   </div>
