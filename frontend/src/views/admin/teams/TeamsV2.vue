@@ -36,9 +36,9 @@ export default {
       table: {
         entityName: 'Team',
         headers: [
-          {title: 'Name', value: 'name'},
-          {title: 'Warehouse', value: 'warehouseName'},
-          {title: 'Team Lead', value: 'teamLeadName'},
+          {title: 'Name', value: 'name', key: 'name'},
+          {title: 'Warehouse', value: 'warehouseName', key: 'warehouseName'},
+          {title: 'Team Lead', value: 'teamLeadName', key:  'teamLeadName'},
           {title: 'Actions', value: 'actions', sortable: false}
         ],
         items: this.teams,

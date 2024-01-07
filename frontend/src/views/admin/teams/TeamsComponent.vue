@@ -9,8 +9,7 @@
           :items="teams"
           :search="search"
           class="elevation-1"
-          item-value="id"
-      >
+          item-value="id">
         <template v-slot:[`item.warehouseName`]="{ item }">
           {{ getWarehouseName(item) }}
         </template>

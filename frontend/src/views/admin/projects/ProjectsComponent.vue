@@ -181,8 +181,7 @@
           </v-toolbar>
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <v-chip :color="getStatusColor(item)" :text="getStatusDisplayName(item.status)">
-          </v-chip>
+          <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
         </template>
         <template v-slot:[`item.teamName`]="{ item }">
           {{ this.teams.find(t => t.id === item.teamId)?.name }}
@@ -296,23 +295,6 @@ export default {
       this.projects = this.selectedWarehouse ?
           await this.projectsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
           await this.projectsService.asyncFindAll();
-    },
-
-    getStatusColor(project) {
-      switch (project.status) {
-        case "IN_PROGRESS":
-          return "blue";
-        case "FINISHED" || "DONE":
-          return "green";
-        case "TODO":
-          return "red";
-        default:
-          return "grey";
-      }
-    },
-
-    getStatusDisplayName(status) {
-      return Project.statusList.find(s => s.value === status)?.displayName;
     },
 
     getTaskStatusDisplayName(status) {

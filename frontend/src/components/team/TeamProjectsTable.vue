@@ -9,19 +9,29 @@
         <template v-slot:[`item.warehouseName`]="{ item }">
           {{ getWarehouseName(item) }}
         </template>
+        <template v-slot:[`item.status`]="{ item }">
+          <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>
 </template>
 
 <script>
+import {Project} from "@/models/Project";
+
 export default {
   name: 'TeamProjectsTable',
+  computed: {
+    Project() {
+      return Project
+    }
+  },
   inject: ['projectsService', 'warehousesService'],
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -48,7 +58,7 @@ export default {
         return this.warehouses.find(warehouse => warehouse.id === team.warehouseId).name;
       }
       return '';
-    },
+    }
   }
 }
 </script>
