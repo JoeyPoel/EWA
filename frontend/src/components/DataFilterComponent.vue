@@ -1,27 +1,26 @@
 <template>
       <v-row :no-gutters="true">
-        <v-col cols="12" sm="11">
-            <v-row>
-              <v-col v-if="canSearch" cols="12" :sm="columWidth" align-self="end">
+        <v-col cols="10" sm="11">
+            <v-row :no-gutters="true">
+              <v-col v-if="canSearch" cols="12" :sm="columWidth" class="align-self-center px-sm-2">
                 <v-text-field v-model="searchValue" label="Search" prepend-inner-icon="$search" variant="outlined"/>
               </v-col>
-              <v-col v-if="canSortByWarehouse" cols="12" :sm="columWidth" class="align-self-center">
+              <v-col v-if="canSortByWarehouse" cols="12" :sm="columWidth" class="align-self-center px-sm-2">
                 <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
                           label="Warehouse"
                           prepend-inner-icon="$warehouse" variant="outlined"/>
               </v-col>
-              <v-col v-if="canSortByTeam" cols="12" :sm="columWidth">
+              <v-col v-if="canSortByTeam" cols="12" :sm="columWidth" class="align-self-center px-sm-2">
                 <v-select v-model="selectedTeam" :items="teams" item-title="name" item-value="id" label="Team"
                           prepend-inner-icon="$team" variant="outlined"/>
               </v-col>
             </v-row>
         </v-col>
-        <v-col cols="12" sm="1" class="mt-1">
+        <v-col cols="2" sm="1" class="p-1 mt-11 mt-sm-0">
           <v-row :no-gutters="true" justify="center">
               <v-btn :disabled="!searchValue && !selectedWarehouse && !selectedTeam" color="secondary" icon="$restore"
                      rounded="sm" variant="outlined" @click="reset"/>
           </v-row>
-
         </v-col>
       </v-row>
 </template>
