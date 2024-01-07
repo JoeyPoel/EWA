@@ -4,10 +4,13 @@
       <v-card-title class="bg-secondary text-center">
         <h3 class="fs-1">Teams</h3>
       </v-card-title>
-      <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
-                   @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
       <DataTable :dialog-config="dialog" :table-config="table" @action="handleDialogAction(true, $event.action, $event.item)"
-                 @delete="handleDelete" @save="handleSave"/>
+                 @delete="handleDelete" @save="handleSave">
+        <template v-slot:filter>
+          <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
+                       @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
+        </template>
+      </DataTable>
     </v-card>
   </v-container>
 </template>

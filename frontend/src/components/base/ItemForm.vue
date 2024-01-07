@@ -26,10 +26,11 @@
           </v-dialog>
         </v-col>
         <v-col :sm="isNewItem ? 6 : 4" cols="12">
-          <v-btn :block="true" :disabled="!changed" color="primary" rounded="sm" text="Reset" @click="resetForm"/>
+          <v-btn :block="true" :disabled="!changed" :color="isNewItem ? 'secondary' : 'primary'" rounded="sm"
+                 text="Reset" @click="resetForm"/>
         </v-col>
         <v-col :sm="isNewItem ? 6 : 4" cols="12">
-          <v-btn :block="true" :color="isNewItem ? 'secondary' : 'primary'" :disabled="!changed" rounded="sm"
+          <v-btn :block="true" color="primary" :disabled="!changed" rounded="sm"
                  text="Save" @click="save"/>
         </v-col>
       </v-row>
@@ -50,13 +51,6 @@ export default {
       type: Object,
       required: true
     },
-    baseObject: {
-      type: Object,
-      required: false,
-      default: () => {
-        return {}
-      }
-    },
     itemFields: {
       type: Array,
       required: true
@@ -74,7 +68,7 @@ export default {
   },
   data() {
     return {
-      itemCopy: Object.assign({}, this.isNewItem ? this.baseObject : this.item),
+      itemCopy: Object.assign({}, this.item),
       dialog: false
     }
   },

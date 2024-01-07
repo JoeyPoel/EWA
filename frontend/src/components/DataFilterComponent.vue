@@ -1,13 +1,11 @@
 <template>
-  <v-card>
-    <v-container>
-      <v-row>
-        <v-col cols="12" sm="10">
+      <v-row :no-gutters="true">
+        <v-col cols="12" sm="11">
             <v-row>
-              <v-col v-if="canSearch" cols="12" :sm="columWidth">
+              <v-col v-if="canSearch" cols="12" :sm="columWidth" align-self="end">
                 <v-text-field v-model="searchValue" label="Search" prepend-inner-icon="$search" variant="outlined"/>
               </v-col>
-              <v-col v-if="canSortByWarehouse" cols="12" :sm="columWidth">
+              <v-col v-if="canSortByWarehouse" cols="12" :sm="columWidth" class="align-self-center">
                 <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
                           label="Warehouse"
                           prepend-inner-icon="$warehouse" variant="outlined"/>
@@ -18,13 +16,14 @@
               </v-col>
             </v-row>
         </v-col>
-        <v-col cols="12" sm="2" class="align-self-sm-start mt-md-1">
-          <v-btn :disabled="!searchValue && !selectedWarehouse && !selectedTeam" color="secondary" icon="$restore"
-                 rounded="sm" @click="reset" :block="true"/>
+        <v-col cols="12" sm="1" class="mt-1">
+          <v-row :no-gutters="true" justify="center">
+              <v-btn :disabled="!searchValue && !selectedWarehouse && !selectedTeam" color="secondary" icon="$restore"
+                     rounded="sm" variant="outlined" @click="reset"/>
+          </v-row>
+
         </v-col>
       </v-row>
-    </v-container>
-  </v-card>
 </template>
 <script> export default {
   name: 'dataFilter',

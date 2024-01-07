@@ -3,14 +3,18 @@
     <v-data-table :headers="table.headers" :items="table.items" :itemsPerPage="table.itemsPerPage"
                   :search="table.searchTerm">
       <template v-slot:top>
-        <v-toolbar v-if="tableConfig.canAdd">
-          <v-spacer/>
-          <v-col cols="12" md="4" sm="6">
-            <v-btn :block="true" color="secondary" rounded="sm" variant="elevated" @click="openNewItemDialog">
-              New {{ tableConfig.entityName }}
-            </v-btn>
-          </v-col>
-        </v-toolbar>
+          <v-container :fluid="true">
+            <v-row :no-gutters="true">
+              <v-col cols="12" md="10">
+                <slot name="filter"/>
+              </v-col>
+              <v-col align-self="start" class="mt-2" cols="12" md="2">
+                <v-btn :block="true" color="primary" rounded="sm" variant="elevated" @click="openNewItemDialog">
+                  New {{ tableConfig.entityName }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
       </template>
       <template v-if="tableConfig.actions" v-slot:[`item.actions`]="{ item }">
         <v-icon v-for="(action, key) in tableConfig.actions" :key="key" @click="handleAction(action, item)">
@@ -20,7 +24,7 @@
     </v-data-table>
     <dialog-component v-if="dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
                       :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
-                      :title="dialog.title" @close="handleClose" @save="handleSave" @delete="handleDelete"/>
+                      :title="dialog.title" @close="handleClose" @delete="handleDelete" @save="handleSave"/>
   </v-card>
 </template>
 
@@ -93,6 +97,7 @@ export default {
     },
     openNewItemDialog() {
       this.dialog.title = "New";
+      this.dialog.item = Object.assign({}, this.dialogConfig.baseObject);
       this.dialog.open = true;
     },
     handleSave(item) {
