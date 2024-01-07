@@ -17,7 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Controller for email
+ * Controller for managing email functionalities.
+ * Handles endpoints related to sending emails for password reset, project updates, and product alerts.
  *
  * @author Joey van der Poel
  */
@@ -39,6 +40,11 @@ public class EmailController {
         this.warehouseService = warehouseService;
     }
 
+    /**
+     * Endpoint for sending a password reset email.
+     * @param user UserDTO object containing user email.
+     * @return ResponseEntity indicating the success or failure of sending the email.
+     */
     @PostMapping("/sendPassResetEmail")
     public ResponseEntity<String> sendPassResetEmail(@RequestBody UserDTO user) {
         UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
@@ -73,6 +79,11 @@ public class EmailController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Found user was null!");
     }
 
+    /**
+     * Scheduled task to send project update emails daily at 12 PM.
+     * Fetches ongoing projects and sends an update to the administrators.
+     * @return ResponseEntity indicating the success or failure of sending the email.
+     */
     @Scheduled(cron = "0 0 12 * * ?")
     @PostMapping("/sendProjectEmail")
     public ResponseEntity<String> sendProjectEmail() {
@@ -122,6 +133,11 @@ public class EmailController {
         return ResponseEntity.ok("Project reminder emails sent to admins.");
     }
 
+    /**
+     * Scheduled task to send product alert emails daily at 12 PM.
+     * Fetches products that need care and sends an alert to the administrators.
+     * @return ResponseEntity indicating the success or failure of sending the email.
+     */
     @Scheduled(cron = "0 0 12 * * ?")
     @PostMapping("/sendProductEmail")
     public ResponseEntity<String> sendProductEmail() {

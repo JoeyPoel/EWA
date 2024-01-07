@@ -23,12 +23,17 @@ export default class TeamsAdaptor extends Adaptor {
      */
     async asyncFindAll() {
         const options = {
-            method: "GET", headers: {"Content-Type": "application/json"},
-        }
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        };
 
         const response = await this.fetchJson(this.resourceUrl, options);
 
-        return response ? response.map(team => Team.fromJson(team)) : null;
+        if (Array.isArray(response)) {
+            return response.map(team => Team.fromJson(team));
+        } else {
+            return []; // Return an empty array when no teams are retrieved
+        }
     }
 
     /**
@@ -62,7 +67,11 @@ export default class TeamsAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/warehouse/" + warehouseId, options);
 
-        return response ? response.map(team => Team.fromJson(team)) : null;
+        if (Array.isArray(response)) {
+            return response.map(team => Team.fromJson(team));
+        } else {
+            return []; // Return an empty array when no teams are retrieved
+        }
     }
 
     /**

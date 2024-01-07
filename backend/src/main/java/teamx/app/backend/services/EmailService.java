@@ -24,8 +24,8 @@ import teamx.app.backend.models.Project;
 import teamx.app.backend.utils.DTO;
 
 /**
- * Email service
- *
+ * Service handling email operations such as sending emails and retrieving data for email notifications.
+ * Manages email sending functionality and data retrieval for product and project alerts.
  * @author Joey van der Poel
  */
 @Service
@@ -54,6 +54,13 @@ public class EmailService {
         this.capacityService = capacityService;
     }
 
+    /**
+     * Sends an email using the provided details.
+     * @param request DTO.MailRequest object containing email details.
+     * @param model Map<String, Object> containing data for the email template.
+     * @param templateFileName String specifying the name of the email template.
+     * @return DTO.MailResponse indicating the status of the email sending process.
+     */
     public DTO.MailResponse sendEmail(DTO.MailRequest request, Map<String, Object> model, String templateFileName) {
         DTO.MailResponse response = new DTO.MailResponse();
         MimeMessage message = emailSender.createMimeMessage();
@@ -82,6 +89,10 @@ public class EmailService {
         return response;
     }
 
+    /**
+     * Retrieves a list of inventory products that require attention due to critically low stock levels.
+     * @return List of DTO.InventoryProductDTO containing products needing attention.
+     */
     public List<DTO.InventoryProductDTO> findAllProductsThatNeedCare() {
         List<DTO.InventoryProductDTO> allInventoryProducts = new ArrayList<>();
         List<Long> warehouseIds = warehouseService.findAllIds();
@@ -115,6 +126,10 @@ public class EmailService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a list of projects that are still in progress and due within the next week.
+     * @return List of Project containing ongoing projects due within the next week.
+     */
     public List<Project> findAllProjectsThatAreStillInProgress() {
         java.sql.Date beginningOfTime = java.sql.Date.valueOf("1970-01-01");
         java.sql.Date oneWeekFromNow = java.sql.Date.valueOf(LocalDate.now().plusWeeks(1));

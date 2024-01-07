@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import teamx.app.backend.controllers.EmailController;
@@ -107,12 +108,12 @@ class EmailControllerTests {
     }
 
     private DTO.InventoryProductDTO createSampleInventoryProductWithLowQuantity() {
-        // Creating a sample product with a low quantity (less than the threshold)
+        // Creating a sample product with a low quantity (less than the minimum stock)
         return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, -1);
     }
 
     private DTO.InventoryProductDTO createSampleInventoryProductWithHighQuantity() {
-        // Creating a sample product with a high quantity (greater than the threshold)
+        // Creating a sample product with a high quantity (greater than the minimum stock)
         return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 99999999);
     }
 }

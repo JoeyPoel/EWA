@@ -22,15 +22,6 @@ class TeamServiceTests {
     @Mock
     private TeamRepository teamRepository;
 
-    @Mock
-    private WarehouseService warehouseService;
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private ProjectService projectService;
-
     @InjectMocks
     private TeamService teamService;
 
@@ -71,8 +62,8 @@ class TeamServiceTests {
     @Test
     void testFindAll_ReturnsListOfTeams() {
         // Arrange
-        List<Team> mockTeams = Arrays.asList(new Team(/* Populate with necessary fields */),
-                new Team(/* Populate with necessary fields */));
+        List<Team> mockTeams = Arrays.asList(new Team(),
+                new Team());
         when(teamRepository.findAll()).thenReturn(mockTeams);
 
         // Act
@@ -89,8 +80,8 @@ class TeamServiceTests {
     void testFindAllByWarehouseId_ReturnsListOfTeamsByWarehouseId() {
         // Arrange
         Long warehouseId = 1L;
-        List<Team> mockTeams = Arrays.asList(new Team(/* Populate with necessary fields */),
-                new Team(/* Populate with necessary fields */));
+        List<Team> mockTeams = Arrays.asList(new Team(),
+                new Team());
         when(teamRepository.getAllByWarehouse_Id(warehouseId)).thenReturn(mockTeams);
 
         // Act
