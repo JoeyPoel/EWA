@@ -25,7 +25,7 @@
 
 <script>
 
-import BaseBarChart from "@/components/base/BaseBarChart.vue";
+import BaseBarChart from "@/components/charts/base/BarChart.vue";
 
 export default {
   name: "ProjectsBar",

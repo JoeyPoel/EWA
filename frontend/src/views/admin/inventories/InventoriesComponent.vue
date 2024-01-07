@@ -151,7 +151,6 @@
 </template>
 
 <script>
-import BaseCard from "@/components/base/BaseCard.vue";
 import {Transaction} from "@/models/Transaction";
 import {Order} from "@/models/Order";
 import dataFilter from "@/components/DataFilterComponent.vue";
@@ -211,7 +210,6 @@ export default {
   },
   components: {
     dataFilter,
-    BaseCard
   },
 
   async mounted() {

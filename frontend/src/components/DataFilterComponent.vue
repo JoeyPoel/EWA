@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-container>
-      <v-row align="center">
+      <v-row>
         <v-col cols="12" sm="10">
             <v-row>
               <v-col v-if="canSearch" cols="12" :sm="columWidth">

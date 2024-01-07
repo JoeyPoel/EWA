@@ -1,13 +1,17 @@
 <template>
-  <v-data-table
-      :headers="projectHeaders"
-      :items="projects"
-      class="elevation-1"
-      item-value="name">
-    <template v-slot:[`item.warehouseName`]="{ item }">
-      {{ getWarehouseName(item) }}
-    </template>
-  </v-data-table>
+  <v-container>
+    <v-card>
+      <v-data-table
+          :headers="projectHeaders"
+          :items="projects"
+          class="elevation-3"
+          item-value="name">
+        <template v-slot:[`item.warehouseName`]="{ item }">
+          {{ getWarehouseName(item) }}
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 
 <script>

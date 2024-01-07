@@ -3,12 +3,9 @@
     <v-card>
       <v-card-text>
         <v-row>
-          <v-col cols="10">
-          </v-col>
+          <v-col cols="10"/>
           <v-col cols="2">
-            <v-btn icon @click="closeDialog">
-              <v-icon>$close</v-icon>
-            </v-btn>
+            <v-btn @click="closeDialog" icon="$close" color="secondary" class="float-right"/>
           </v-col>
         </v-row>
         <v-container>
@@ -19,7 +16,7 @@
             </v-tabs>
             <v-window v-model="detailTabsTitle">
               <v-window-item value="Details">
-                <base-item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
+                <item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
               <v-window-item v-for="tab in detailTabs" :key="tab.title" :value="tab.title">
                 <component :is="tab.component" :item="item"/>
@@ -27,7 +24,8 @@
             </v-window>
           </template>
           <template v-if="title === 'New' || title === 'Edit'">
-            <base-item-form :item-fields="itemFields" :item="item"/>
+            <item-form :item-fields="itemFields" :item="item" :is-new-item="title === 'New'" @save="handleSave"
+                       @delete="handleDelete"/>
           </template>
         </v-container>
       </v-card-text>
@@ -36,15 +34,14 @@
 </template>
 <script>
 
-import BaseItemForm from "@/components/base/BaseItemForm.vue";
+import ItemForm from "@/components/base/ItemForm.vue";
 import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
 
 export default {
-  name: 'BaseFormDialog',
+  name: 'FormDialog',
   components: {
-    BaseItemForm,
+    ItemForm,
     TeamProjectsTable,
-    // ItemForm,
   },
   props: {
     open: {
@@ -80,7 +77,6 @@ export default {
     }
   },
   mounted() {
-    console.log(`BaseFormDialog: open changed to ${this.open}`);
     this.dialog = this.open;
   },
   computed: {
@@ -97,6 +93,13 @@ export default {
     closeDialog() {
       this.$emit('close');
     },
+    handleSave(item) {
+      this.$emit('save', item);
+      this.closeDialog();
+    },
+    handleDelete(item) {
+      this.$emit('delete', item);
+    }
   }
 }
 </script>

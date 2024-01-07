@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <base-card class="mt-1" color="secondary" title="Products">
+    <v-card class="mt-1" color="secondary" title="Products">
       <v-row>
         <v-col>
           <data-filter :search="search" :can-search="true" @input="search = $event"/>
@@ -150,12 +150,11 @@
           <v-btn color="secondary" @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
-    </base-card>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import BaseCard from "@/components/base/BaseCard.vue";
 import {Product} from "@/models/Product";
 import dataFilter from "@/components/DataFilterComponent.vue";
 
@@ -163,8 +162,7 @@ export default {
   name: "ProductsComponent",
   inject: ['productsService', 'inventoryService'],
   components: {
-    dataFilter,
-    BaseCard,
+    dataFilter
   },
   data() {
     return {

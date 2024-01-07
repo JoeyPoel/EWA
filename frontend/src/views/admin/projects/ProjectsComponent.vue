@@ -1,6 +1,6 @@
 <template>
 <v-container fluid>
-    <base-card class="mt-1" color="secondary" title="Projects">
+    <v-card class="mt-1" color="secondary" title="Projects">
       <data-filter :search="search" :can-search="true" @input="search = $event"
                    :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table
@@ -193,14 +193,13 @@
           <v-icon @click="deleteProject(item)">$delete</v-icon>
         </template>
       </v-data-table>
-    </base-card>
+    </v-card>
   </v-container>
 
 </template>
 
 <script>
 import {Project} from "@/models/Project.js";
-import BaseCard from "@/components/base/BaseCard.vue";
 import {Task} from "@/models/Task";
 import dataFilter from "@/components/DataFilterComponent.vue";
 
@@ -212,7 +211,7 @@ export default {
       return Project
     }
   },
-  components: {dataFilter, BaseCard},
+  components: {dataFilter},
   inject: ['projectsService', 'teamsService', "warehousesService"],
   data() {
     return {

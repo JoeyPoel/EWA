@@ -4,7 +4,7 @@
                   v-model="ItemCopy"
                   :label="label"
                   :rules="rules"
-                  @input="onInputChange"/>
+                  @update:model-value="onInputChange"/>
     <v-select v-else-if="type === 'select'"
               v-model="ItemCopy"
               :label="label"
@@ -23,10 +23,6 @@
               :multiple="true"
               :chips="true"
               @update:model-value="onInputChange"/>
-    <v-checkbox v-else-if="type === 'checkbox'"
-                v-model="ItemCopy"
-                :label="label"
-                :rules="rules"/>
   </v-col>
   <v-col v-else cols="12" md="6">
     <v-card v-if="type === 'text'" :subtitle="label" class="pa-2">{{ ItemCopy }}</v-card>
@@ -87,13 +83,14 @@ export default {
     }
   },
   methods: {
+    textInput(value) {
+      this.onInputChange(value.data);
+    },
     onInputChange(value) {
       const changes = {
         field: this.fieldName,
         value: value
       };
-      console.log(changes)
-      console.log(`ItemField: ${this.fieldName} changed to ${value}`);
       this.$emit('input-change', changes);
     },
   }

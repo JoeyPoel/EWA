@@ -1,6 +1,6 @@
 <template>
   <v-container :fluid="true">
-    <base-card class="mt-1" color="secondary" title="Users">
+    <v-card class="mt-1" color="secondary" title="Users">
       <data-filter :search="search" :can-search="true" @input="search = $event"
                    :can-sort-by-team="true" @team="selectedTeam = $event"/>
       <v-data-table
@@ -105,18 +105,17 @@
           <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
-    </base-card>
+    </v-card>
   </v-container>
 </template>
 <script>
-import BaseCard from "@/components/base/BaseCard.vue";
 import {User} from "@/models/User";
 import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "UsersComponent",
   inject: ['teamsService', 'usersService'],
-  components: {dataFilter, BaseCard},
+  components: {dataFilter},
   data() {
     return {
       teams: [],

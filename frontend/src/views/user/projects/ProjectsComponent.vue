@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <base-card class="mt-1" color="secondary" title="Projects">
+    <v-card class="mt-1" color="secondary" title="Projects">
         <v-text-field v-model="search" label="Search Project" prepend-inner-icon="$search" variant="outlined">
         </v-text-field>
         <v-spacer></v-spacer>
@@ -100,7 +100,7 @@
           <v-icon @click="seeDetails(item)">$info</v-icon>
         </template>
       </v-data-table>
-    </base-card>
+    </v-card>
   </v-container>
 
 </template>
@@ -108,7 +108,6 @@
 <script>
 
 import {Project} from "@/models/Project.js";
-import BaseCard from "@/components/base/BaseCard.vue";
 import {jwtDecode} from "jwt-decode";
 import {Task} from "@/models/Task";
 export default {
@@ -118,7 +117,6 @@ export default {
       return Project
     }
   },
-  components: {BaseCard},
   inject: ["projectsService", "teamsService","usersService"],
   data() {
     return {

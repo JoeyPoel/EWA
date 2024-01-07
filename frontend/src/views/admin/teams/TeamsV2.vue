@@ -1,19 +1,21 @@
 <template>
   <v-container :fluid="true">
-    <base-card class="mt-1 font-weight-bold" color="secondary" title="Teams">
+    <v-card class="mt-1 font-weight-bold">
+      <v-card-title class="bg-secondary text-center">
+        <h3 class="fs-1">Teams</h3>
+      </v-card-title>
       <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
                    @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
-      <DataTable :dialog-config="dialog" :table-config="table" @close="handleClose"
-                 @action="handleDialogAction(true, $event.action, $event.item)"/>
-    </base-card>
+      <DataTable :dialog-config="dialog" :table-config="table" @action="handleDialogAction(true, $event.action, $event.item)"
+                 @delete="handleDelete" @save="handleSave"/>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import BaseCard from "@/components/base/BaseCard.vue";
-import {Team} from "@/models/Team";
 import dataFilter from "@/components/DataFilterComponent.vue";
-import DataTable from "@/components/DataTable.vue";
+import DataTable from "@/components/base/DataTable.vue";
+import {Team} from "@/models/Team";
 
 export default {
   name: "TeamsComponent",
@@ -21,7 +23,6 @@ export default {
   components: {
     DataTable,
     dataFilter,
-    BaseCard,
   },
   data() {
     return {
@@ -29,25 +30,28 @@ export default {
       warehouses: [],
       users: [],
       selectedWarehouse: null,
-      table:{
+      table: {
+        entityName: 'Team',
         headers: [
           {title: 'Name', value: 'name'},
           {title: 'Warehouse', value: 'warehouseName'},
           {title: 'Team Lead', value: 'teamLeadName'},
-          {title: 'Actions', value:'actions', sortable: false}
+          {title: 'Actions', value: 'actions', sortable: false}
         ],
         items: this.teams,
         itemsPerPage: 10,
         searchTerm: '',
-        allowedActions: [
+        actions: [
           {action: 'Details', icon: '$info', color: 'primary'},
           {action: 'Edit', icon: '$edit', color: 'primary'},
-        ]
+        ],
+        canAdd: true,
       },
       dialog: {
         open: false,
         title: '',
-        item: new Team(),
+        item: {},
+        baseObject: new Team(),
         itemFields: [
           {name: 'name', label: 'Name', type: 'text', required: true},
           {name: 'warehouseId', label: 'Warehouse', type: 'select', required: true, items: []},
@@ -126,15 +130,30 @@ export default {
         return teamLead.name;
       }
     },
-    handleDialogAction(open,action, item) {
+    handleDialogAction(open, action, item) {
       this.dialog.title = action.action;
       this.dialog.item = item;
       this.dialog.open = open;
     },
-    async handleClose() {
-      this.handleDialogAction(false, null, new Team());
-      this.table.items = await this.getTeams();
+    async handleSave(item) {
+      if (item.id !== undefined) {
+        await this.teamsService.asyncUpdate(item.id, item);
+      } else {
+        await this.teamsService.asyncAdd(item);
+      }
+      await this.initialize();
     },
+    async handleDelete(item) {
+      const deletedItem = await this.teamsService.asyncDeleteById(item.id)
+      if (deletedItem) {
+        this.dialog.item = {};
+        this.dialog.open = false;
+        await this.initialize();
+      } else {
+        console.error("Failed to delete item")
+      }
+    },
+
   }
 }
 </script>

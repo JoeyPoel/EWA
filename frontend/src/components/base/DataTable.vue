@@ -1,0 +1,109 @@
+<template>
+  <v-card>
+    <v-data-table :headers="table.headers" :items="table.items" :itemsPerPage="table.itemsPerPage"
+                  :search="table.searchTerm">
+      <template v-slot:top>
+        <v-toolbar v-if="tableConfig.canAdd">
+          <v-spacer/>
+          <v-col cols="12" md="4" sm="6">
+            <v-btn :block="true" color="secondary" rounded="sm" variant="elevated" @click="openNewItemDialog">
+              New {{ tableConfig.entityName }}
+            </v-btn>
+          </v-col>
+        </v-toolbar>
+      </template>
+      <template v-if="tableConfig.actions" v-slot:[`item.actions`]="{ item }">
+        <v-icon v-for="(action, key) in tableConfig.actions" :key="key" @click="handleAction(action, item)">
+          {{ action.icon }}
+        </v-icon>
+      </template>
+    </v-data-table>
+    <dialog-component v-if="dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
+                      :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
+                      :title="dialog.title" @close="handleClose" @save="handleSave" @delete="handleDelete"/>
+  </v-card>
+</template>
+
+<script>
+import FormDialog from "@/components/base/FormDialog.vue";
+
+export default {
+  components: {
+    dialogComponent: FormDialog
+  },
+  props: {
+    tableConfig: {
+      type: Object,
+      required: true,
+    },
+    dialogConfig: {
+      type: Object,
+      required: true,
+    }
+  },
+  data() {
+    return {
+      table: {
+        headers: [],
+        items: [],
+        itemsPerPage: 10,
+        searchTerm: '',
+        actions: [],
+      },
+      dialog: {
+        open: false,
+        title: '',
+        item: {},
+        itemFields: [],
+        detailTabs: [],
+        maxWidth: '800px',
+      },
+    };
+  },
+  watch: {
+    dialogConfig: {
+      handler: function (newVal) {
+        this.dialog.title = newVal.title;
+        this.dialog.item = newVal.item;
+        this.dialog.itemFields = newVal.itemFields;
+        this.dialog.detailTabs = newVal.detailTabs;
+        this.dialog.open = newVal.open;
+      },
+      deep: true
+    },
+    tableConfig: {
+      handler: function (newVal) {
+        this.table.headers = newVal.headers;
+        this.table.items = newVal.items;
+        this.table.itemsPerPage = newVal.itemsPerPage;
+        this.table.searchTerm = newVal.searchTerm;
+        this.table.aActions = newVal.actions;
+      },
+      deep: true
+    },
+  },
+  created() {
+    this.actions = [...this.tableConfig.actions];
+  },
+  mounted() {
+  },
+  methods: {
+    handleAction(action, item) {
+      this.$emit('action', {action: action, item: item});
+    },
+    openNewItemDialog() {
+      this.dialog.title = "New";
+      this.dialog.open = true;
+    },
+    handleSave(item) {
+      this.$emit('save', item);
+    },
+    handleDelete(item) {
+      this.$emit('delete', item);
+    },
+    handleClose() {
+      this.dialog.open = false;
+    }
+  },
+};
+</script>
