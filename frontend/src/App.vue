@@ -1,7 +1,7 @@
 <template>
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
-    <v-main class="px-16">
+    <v-main v-bind:class="getClass()">
       <router-view/>
     </v-main>
   </v-layout>
@@ -21,6 +21,7 @@ import TransactionsAdaptor from "@/services/TransactionsAdaptor";
 import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
 import {ChartsAdaptor} from "@/services/ChartsAdaptor";
 import EmailAdaptor from "@/services/EmailAdaptor";
+import {FetchInterceptor} from "./services/FetchInterceptor";
 
 import logo from "@/assets/console.png";
 
@@ -29,9 +30,20 @@ export default {
   components: {
     NavbarComponent
   },
+  data() {
+    return {
+      theFetchInterceptor: null,
+    };
+  },
   mounted() {
     document.title = 'Solar Console';
     this.setFavicon(logo);
+    this.theFetchInterceptor = new FetchInterceptor(this.$router);
+  },
+  beforeUnmount() {
+    if (this.theFetchInterceptor) {
+      this.theFetchInterceptor.unregister();
+    }
   },
   methods: {
     setFavicon(href) {
@@ -40,6 +52,13 @@ export default {
       link.rel = 'shortcut icon';
       link.href = href;
       document.getElementsByTagName('head')[0].appendChild(link);
+    },
+    getClass() {
+      if (!this.$route.meta.hideNavbar && !this.$route.meta.noPadding) {
+        return {
+          'px-16': 1
+        }
+      }
     }
   },
   provide() {
@@ -52,7 +71,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
-      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth"),
+      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth", this.$router),
       chartsService: new ChartsAdaptor(CONFIG.BACKEND_URL + "/charts"),
       emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail")
     }
@@ -72,6 +91,14 @@ export default {
   --gradient-color-end: rgba(255, 255, 255, 1);
 
   --button-color: rgba(232, 241, 82, .5);
+}
+
+body {
+  background: linear-gradient(90deg,
+  var(--gradient-color-start) 0%,
+  var(--gradient-color-middle) 25%,
+  var(--gradient-color-almost-end) 75%,
+  var(--gradient-color-end) 100%);
 }
 
 .btn-primary, .btn-success {

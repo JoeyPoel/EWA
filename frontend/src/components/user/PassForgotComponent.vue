@@ -42,8 +42,7 @@ export default {
         this.user = await this.emailService.sendPassResetEmail(this.email);
         this.emailSent = true;
       } catch(e) {
-        //TODO change this error true
-        this.emailSent = true;
+        //TODO change this error
         console.log("bleh")
       }
 
