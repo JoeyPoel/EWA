@@ -1,5 +1,5 @@
 <template>
-  <v-card :class="classes" class="pa-3" v-bind="$attrs">
+  <v-card class="pa-3" v-bind="$attrs">
     <div class="d-flex grow flex-wrap">
       <v-sheet :class="{'pa-7': !$slots.image}" :color="color" :max-height="icon ? 90 : undefined"
                :width="icon ? 'auto' : '100%'" class="text-start heading mb-n6" dark elevation="6">
@@ -52,24 +52,10 @@ export default {
       default: '',
     },
   },
-
-  computed: {
-    classes() {
-      return (this.avatar ? 'avatar ' : '') + (this.hasHeading ? 'heading' : '') ;
-    },
-    hasHeading() {
-      return Boolean(this.$slots.heading || this.title || this.icon)
-    }
-  },
 }
 </script>
 
 <style>
-.avatar {
-  position: relative;
-  top: -64px;
-  margin-bottom: -32px;
-}
 .heading {
   position: relative;
   top: -40px;

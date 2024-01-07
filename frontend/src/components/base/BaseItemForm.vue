@@ -9,16 +9,31 @@
       </v-row>
       <v-row v-if="!allDisabled">
         <v-col cols="12" sm="6">
-          <v-btn color="primary" @click="clearForm" :block="true" rounded="sm">Clear</v-btn>
+          <v-btn text="Clear" color="primary" @click="clearForm" :block="true" rounded="sm"/>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-btn :disabled="!changed" color="primary" @click="resetForm" :block="true" rounded="sm">Reset</v-btn>
+          <v-btn text="Reset" :disabled="!changed" color="primary" @click="resetForm" :block="true" rounded="sm"/>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-btn :disabled="!changed" color="primary" @click="saveForm" :block="true" rounded="sm">Save</v-btn>
+          <v-btn text="Save" :disabled="!changed" color="primary" @click="saveForm" :block="true" rounded="sm"/>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-btn color="primary-darken-1" @click="deleteForm" :block="true" rounded="sm">Delete</v-btn>
+          <v-btn text="Delete" color="secondary" :disabled="!canDelete" @click="confirmDelete" :block="true"
+                 rounded="sm"/>
+          <v-dialog v-model="dialog" max-width="500px">
+            <v-card title="Delete" text="Are you sure you want to delete this item?" class="text-center">
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-btn text="Delete" color="secondary" @click="deleteForm" rounded="sm" :block="true"/>
+                  </v-col>
+                  <v-col>
+                    <v-btn text="Cancel" color="primary" @click="dialog = false" rounded="sm" :block="true"/>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
     </v-form>
@@ -51,6 +66,7 @@ export default {
   data() {
     return {
       itemCopy: Object.assign({}, this.item),
+      dialog: false
     }
   },
   computed: {
@@ -73,8 +89,16 @@ export default {
     saveForm() {
       this.$emit('save', this.itemCopy);
     },
+    confirmDelete() {
+      this.dialog = true
+    },
     deleteForm() {
+      this.dialog = false
       this.$emit('delete', this.itemCopy);
+    },
+    canDelete() {
+    //   TODO: implement. Check data integrity.
+      return true;
     }
   }
 }

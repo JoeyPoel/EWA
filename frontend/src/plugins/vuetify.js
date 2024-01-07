@@ -15,7 +15,7 @@ import {
     mdiLogout,
     mdiMagnify,
     mdiNut, mdiOpenInNew,
-    mdiPencilOutline, mdiPlus,
+    mdiPencilOutline, mdiPlus, mdiRestore,
     mdiSolarPowerVariantOutline,
     mdiTrashCanOutline,
     mdiViewDashboardOutline,
@@ -44,9 +44,9 @@ const solarSedumDarkTheme = {
         background: '#333333',
         surface: '#424242',
         primary: '#c7d02c',
-        'primary-darken-1': '#572700',
-        secondary: '#ffffff',
-        'secondary-darken-1': '#bfbfbf',
+        'primary-darken-1': '#b1b452',
+        secondary: '#572700',
+        'secondary-darken-1': '#4e2300',
         error: '#B00020',
         info: '#2196F3',
         success: '#4CAF50',
@@ -89,7 +89,8 @@ export default createVuetify({
             link_plus: mdiLinkPlus,
             open_in_new: mdiOpenInNew,
             new: mdiPlus,
-            close: mdiClose
+            close: mdiClose,
+            restore: mdiRestore
         },
         sets: {
             mdi
