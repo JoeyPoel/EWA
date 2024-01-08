@@ -67,6 +67,15 @@ const routes = [
         }
     },
     {
+        path: '/users2',
+        name: 'Users2',
+        component: () => import('@/views/admin/users/UsersV2.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['ADMIN'],
+        }
+    },
+    {
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/admin/dashboard/DashboardComponent.vue'),
