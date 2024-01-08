@@ -11,11 +11,11 @@
         <v-container>
           <template v-if="title === 'Details'">
             <v-tabs v-model="detailTabsTitle">
-              <v-tab value="Details" text="Details"/>
+              <v-tab value="Details" text="Details" v-if="hasGeneratedDetails"/>
               <v-tab v-for="tab in detailTabs" :key="tab.title" :value="tab.title" :text="tab.title"/>
             </v-tabs>
             <v-window v-model="detailTabsTitle">
-              <v-window-item value="Details">
+              <v-window-item value="Details" v-if="hasGeneratedDetails">
                 <item-form :item-fields="itemFields" :item="item" :allDisabled="true"/>
               </v-window-item>
               <v-window-item v-for="tab in detailTabs" :key="tab.title" :value="tab.title">
@@ -38,6 +38,7 @@ import ItemForm from "@/components/base/ItemForm.vue";
 import TeamProjectsTable from "@/components/tables/TeamProjectsTable.vue";
 import ProductStockLevelsTable from "@/components/tables/ProductStockLevelsTable.vue";
 import ProjectMaterialsTable from "@/components/tables/ProjectMaterialsTable.vue";
+import InventoryTransactionsTable from "@/components/tables/InventoryTransactionsTable.vue";
 
 export default {
   name: 'FormDialog',
@@ -45,7 +46,8 @@ export default {
     ItemForm,
     TeamProjectsTable,
     ProductStockLevelsTable,
-    ProjectMaterialsTable
+    ProjectMaterialsTable,
+    InventoryTransactionsTable
   },
   props: {
     open: {
@@ -67,6 +69,10 @@ export default {
     detailTabs: {
       type: Array,
       required: false
+    },
+    hasGeneratedDetails: {
+      type: Boolean,
+      default: true
     },
     maxWidth: {
       type: String,

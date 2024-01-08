@@ -7,7 +7,7 @@
 
 <script>
 import {Team} from "@/models/Team";
-import EntityDataTable from "@/components/EntityDataTable.vue";
+import EntityDataTable from "@/components/base/EntityDataTable.vue";
 
 export default {
   name: "TeamsComponent",

@@ -153,7 +153,7 @@
 <script>
 import {Transaction} from "@/models/Transaction";
 import {Order} from "@/models/Order";
-import dataFilter from "@/components/DataFilterComponent.vue";
+import dataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   name: "InventoryComponent",

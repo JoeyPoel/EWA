@@ -300,7 +300,7 @@
 
 <script>
 import {Warehouse} from "@/models/Warehouse";
-import dataFilter from "@/components/DataFilterComponent.vue";
+import dataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   name: "WarehousesComponent",

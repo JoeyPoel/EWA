@@ -16,7 +16,7 @@ export class Transaction extends Model{
 
     static get CATEGORY() {
         return {
-            ORDER: 'Order',
+            INVENTORY_ORDER: 'Order',
             PROJECT_MATERIAL: 'Project Material',
             TRANSFER: 'Transfer',
             ADJUSTMENT: 'Adjustment',
@@ -38,7 +38,7 @@ export class Transaction extends Model{
 
     static getTransactionFlow(transaction, warehouseId) {
         switch (transaction.transactionType) {
-            case Transaction.CATEGORY.ORDER:
+            case Transaction.CATEGORY.INVENTORY_ORDER:
             case Transaction.CATEGORY.RETURN:
                 return 'IN';
             case Transaction.CATEGORY.PROJECT_MATERIAL:
@@ -53,6 +53,21 @@ export class Transaction extends Model{
                 return transaction.quantity > 0 ? 'IN' : 'OUT';
             default:
                 throw new Error('Invalid transaction type for transaction: ' + transaction.id +
+                    ' transaction type: ' + transaction.transactionType);
+        }
+    }
+
+    static getTransactionFlowColor(transaction, warehouseId) {
+        switch (this.getTransactionFlow(transaction, warehouseId)) {
+            case 'IN':
+                return 'green';
+            case 'OUT':
+                return 'red';
+            default:
+                console.error(transaction);
+                console.error(warehouseId);
+                console.error(Transaction.CATEGORY.INVENTORY_ORDER)
+                throw new Error('Invalid transaction flow for transaction: ' + transaction.id +
                     ' transaction type: ' + transaction.transactionType);
         }
     }

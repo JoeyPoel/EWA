@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import EntityDataTable from "@/components/EntityDataTable.vue";
+import EntityDataTable from "@/components/base/EntityDataTable.vue";
 import {Project} from "@/models/Project";
 
 export default {

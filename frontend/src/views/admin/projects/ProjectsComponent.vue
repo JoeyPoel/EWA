@@ -200,7 +200,7 @@
 <script>
 import {Project} from "@/models/Project.js";
 import {Task} from "@/models/Task";
-import dataFilter from "@/components/DataFilterComponent.vue";
+import dataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   // TODO: Fix date format for new and edit

@@ -14,7 +14,7 @@
           </v-col>
         </v-row>
       </template>
-      <template v-if="tableConfig.actions" v-slot:[`item.actions`]="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-icon v-for="(action, key) in tableConfig.actions" :key="key" @click="handleAction(action, item)">
           {{ action.icon }}
         </v-icon>
@@ -23,9 +23,10 @@
         <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
       </template>
     </v-data-table>
-    <dialog-component v-if="dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
+    <dialog-component v-if="dialogConfig && dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
                       :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
-                      :title="dialog.title" @close="handleClose" @delete="handleDelete" @save="handleSave"/>
+                      :title="dialog.title" @close="handleClose" @delete="handleDelete" @save="handleSave"
+    :has-generated-details="dialog.hasGeneratedDetails"/>
   </v-card>
 </template>
 
@@ -49,7 +50,7 @@ export default {
     },
     dialogConfig: {
       type: Object,
-      required: true,
+      required: false,
     }
   },
   data() {
@@ -79,6 +80,8 @@ export default {
         this.dialog.itemFields = newVal.itemFields;
         this.dialog.detailTabs = newVal.detailTabs;
         this.dialog.open = newVal.open;
+        this.dialog.maxWidth = newVal.maxWidth;
+        this.dialog.hasGeneratedDetails = newVal.hasGeneratedDetails;
       },
       deep: true
     },
@@ -95,8 +98,6 @@ export default {
   },
   created() {
     this.actions = [...this.tableConfig.actions];
-  },
-  mounted() {
   },
   methods: {
     handleAction(action, item) {

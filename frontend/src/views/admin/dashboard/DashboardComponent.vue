@@ -24,7 +24,7 @@
 import LifeTimeStats from "@/components/charts/LifeTimeStats.vue";
 import ProjectsBar from "@/components/charts/ProjectsBar.vue";
 import InventoryLine from "@/components/charts/InventoryLine.vue";
-import DataFilter from "@/components/DataFilterComponent.vue";
+import DataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   components: {

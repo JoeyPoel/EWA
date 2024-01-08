@@ -131,7 +131,7 @@
 
 <script>
 import {Team} from "@/models/Team";
-import dataFilter from "@/components/DataFilterComponent.vue";
+import dataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   name: "TeamsComponent",

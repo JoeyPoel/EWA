@@ -169,7 +169,7 @@
 
 <script>
 import {Product} from "@/models/Product";
-import dataFilter from "@/components/DataFilterComponent.vue";
+import dataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
   name: "ProductsComponent",
