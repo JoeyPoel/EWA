@@ -248,7 +248,7 @@
                     <!--                                        </v-btn>-->
                     <!--                                      </template>-->
                     <!--                                      <v-list>-->
-                    <!--                                        <v-list-item v-for="product in item.products" :key="product.id">-->
+                    <!--                                        <v-list-item v-for="product in item.product" :key="product.id">-->
                     <!--                                          <v-list-item-title>-->
                     <!--                                            {{ product.name }} ({{ product.quantity }})-->
                     <!--                                          </v-list-item-title>-->

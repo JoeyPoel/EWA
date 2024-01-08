@@ -25,7 +25,7 @@
 
 <script>
 
-import BaseLineChart from "@/components/charts/base/LineChart.vue";
+import BaseLineChart from "@/components/base/LineChart.vue";
 export default {
   name: "InventoryLine.vue",
   inject: ['chartsService', "productsService"],

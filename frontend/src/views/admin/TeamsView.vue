@@ -212,9 +212,9 @@ export default {
     },
     // 'dialogConfig.open': function (val) {
     //   if (!val) {
-    //     this.$router.push('/admin/teams');
+    //     this.$router.push('/admin/team');
     //   }else {
-    //     this.$router.push('/admin/teams/' + this.dialogConfig.type + '/' + this.selectedTeam.id);
+    //     this.$router.push('/admin/team/' + this.dialogConfig.type + '/' + this.selectedTeam.id);
     //   }
     // },
     selectedTeam(val) {

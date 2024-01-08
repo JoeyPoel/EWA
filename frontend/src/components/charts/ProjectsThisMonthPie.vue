@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BasePieChart from "@/components/charts/base/PieChart.vue";
+import BasePieChart from "@/components/base/PieChart.vue";
 
 export default {
   name: "ProjectsThisMonthPie",

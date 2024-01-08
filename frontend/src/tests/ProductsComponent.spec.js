@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, test, expect, jest } from '@jest/globals';
-import ProductsComponent from './ProductsComponent.vue';
+import ProductsComponent from '../views/admin/ProductsView.vue';
 import ProductAdaptor from "@/services/ProductAdaptor";
 import { reactive } from "vue";
 

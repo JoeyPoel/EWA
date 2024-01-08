@@ -208,7 +208,7 @@ export default {
 
         console.log(this.projects);
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        console.error("Error fetching project:", error);
       }
     },
 
@@ -217,7 +217,7 @@ export default {
         this.projectProducts = await this.projectsService.asyncFindProjectProducts(this.selectedProject.id);
         console.log(this.projectProducts);
       } catch (error) {
-        console.error("Error fetching project products:", error);
+        console.error("Error fetching project product:", error);
       }
     },
 

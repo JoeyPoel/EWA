@@ -17,7 +17,7 @@ export default class ProductAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all products asynchronously.
+     * Retrieves all product asynchronously.
      *
      * @async
      * @returns {Promise<Array<Product> | null>} - An array of Product objects if successful, or null if there wa an

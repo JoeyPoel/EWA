@@ -35,14 +35,14 @@
 <script>
 
 import ItemForm from "@/components/base/ItemForm.vue";
-import TeamProjectsTable from "@/components/tables/TeamProjectsTable.vue";
-import ProductStockLevelsTable from "@/components/tables/ProductStockLevelsTable.vue";
-import ProjectMaterialsTable from "@/components/tables/ProjectMaterialsTable.vue";
-import InventoryTransactionsTable from "@/components/tables/InventoryTransactionsTable.vue";
-import WarehouseStockLevelsTable from "@/components/tables/WarehouseStockLevelsTable.vue";
-import WarehouseProjectsTable from "@/components/tables/WarehouseProjectsTable.vue";
-import WarehouseTeamsTable from "@/components/tables/WarehouseTeamsTable.vue";
-import WarehouseTransactionsTable from "@/components/tables/WarehouseTransactionsTable.vue";
+import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
+import ProductStockLevelsTable from "@/components/product/ProductStockLevelsTable.vue";
+import ProjectMaterialsTable from "@/components/project/ProjectMaterialsTable.vue";
+import InventoryTransactionsTable from "@/components/inventory/InventoryTransactionsTable.vue";
+import WarehouseStockLevelsTable from "@/components/warehouses/WarehouseStockLevelsTable.vue";
+import WarehouseProjectsTable from "@/components/warehouses/WarehouseProjectsTable.vue";
+import WarehouseTeamsTable from "@/components/warehouses/WarehouseTeamsTable.vue";
+import WarehouseTransactionsTable from "@/components/warehouses/WarehouseTransactionsTable.vue";
 
 export default {
   name: 'FormDialog',

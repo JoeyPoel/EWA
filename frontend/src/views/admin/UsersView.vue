@@ -208,7 +208,7 @@ export default {
         return;
       }
 
-      //Find the selected team in the teams array
+      //Find the selected team in the team array
       const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
 
       const userToSave = {
@@ -238,7 +238,7 @@ export default {
         return;
       }
 
-      // Find the selected team in the teams array
+      // Find the selected team in the team array
       const selectedTeam = this.teams.find(team => team.id === this.editedUser.team);
 
       const userToSave = {

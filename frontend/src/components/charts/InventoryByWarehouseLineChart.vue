@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import LineChart from "@/components/charts/base/LineChart.vue";
+import LineChart from "@/components/base/LineChart.vue";
 
 export default {
   name: "InventoryByWarehouseLineChart",

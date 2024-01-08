@@ -56,7 +56,7 @@
     }
     if (this.canSortByTeam) {
       this.teams = await this.teamsService.asyncFindAll();
-      this.teams.unshift({id: null, name: 'All teams'});
+      this.teams.unshift({id: null, name: 'All team'});
     }
   },
   watch: {

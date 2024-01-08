@@ -4,9 +4,9 @@ import {jwtDecode} from "jwt-decode";
 
 const routes = [
     {
-        path: '/inventories',
+        path: '/inventory',
         name: 'Inventories',
-        component: () => import('@/views/admin/inventories/InventoriesComponent.vue'),
+        component: () => import('@/views/admin/InventoriesView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -15,7 +15,7 @@ const routes = [
     {
         path: '/inventories2',
         name: 'Inventories2',
-        component: () => import('@/views/admin/inventories/InventoriesV2.vue'),
+        component: () => import('@/components/inventory/InventoryEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -24,7 +24,7 @@ const routes = [
     {
         path: '/warehouses',
         name: 'Warehouses',
-        component: () => import('@/views/admin/warehouses/WarehousesComponent.vue'),
+        component: () => import('@/views/admin/WarehousesComponent.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -33,16 +33,16 @@ const routes = [
     {
         path: '/warehouses2',
         name: 'Warehouses2',
-        component: () => import('@/views/admin/warehouses/WarehousesV2.vue'),
+        component: () => import('@/components/warehouses/WarehousesEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
         },
     },
     {
-        path: '/products',
+        path: '/product',
         name: 'Products',
-        component: () => import('@/views/admin/products/ProductsComponent.vue'),
+        component: () => import('@/views/admin/ProductsView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -51,16 +51,16 @@ const routes = [
     {
         path: '/products2',
         name: 'Products2',
-        component: () => import('@/views/admin/products/ProductsV2.vue'),
+        component: () => import('@/components/product/ProductEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
         },
     },
     {
-        path: '/projects',
+        path: '/project',
         name: 'Projects',
-        component: () => import('@/views/admin/projects/ProjectsComponent.vue'),
+        component: () => import('@/views/admin/ProjectsView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['ADMIN'],
@@ -69,7 +69,7 @@ const routes = [
     {
         path: '/projects2',
         name: 'Projects2',
-        component: () => import('@/views/admin/projects/ProjectsV2.vue'),
+        component: () => import('@/components/project/ProjectsEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['ADMIN'],
@@ -78,7 +78,7 @@ const routes = [
     {
         path: '/users',
         name: 'Users',
-        component: () => import('@/views/admin/users/UsersComponent.vue'),
+        component: () => import('@/views/admin/UsersView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['ADMIN'],
@@ -87,7 +87,7 @@ const routes = [
     {
         path: '/users2',
         name: 'Users2',
-        component: () => import('@/views/admin/users/UsersV2.vue'),
+        component: () => import('@/components/user/UsersEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['ADMIN'],
@@ -96,16 +96,16 @@ const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
-        component: () => import('@/views/admin/dashboard/DashboardComponent.vue'),
+        component: () => import('@/views/admin/DashboardView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
         },
     },
     {
-        path: '/teams',
+        path: '/team',
         name: 'Teams',
-        component: () => import('@/views/admin/teams/TeamsComponent.vue'),
+        component: () => import('@/views/admin/TeamsView.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -114,7 +114,7 @@ const routes = [
     {
         path: '/teams2',
         name: 'Teams2',
-        component: () => import('@/views/admin/teams/TeamsV2.vue'),
+        component: () => import('@/components/team/TeamsEntityTable.vue'),
         meta: {
             requiresAuth: true,
             roles: ['USER', 'ADMIN'],
@@ -148,7 +148,7 @@ const routes = [
         },
     },
     {
-        path: '/team-projects',
+        path: '/team-project',
         name: 'Team Projects',
         component: () => import('@/views/user/projects/ProjectsComponent.vue'),
         meta: {
