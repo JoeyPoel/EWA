@@ -1,6 +1,6 @@
 <template>
   <entity-data-table :dialog-config="dialogConfig" :filter-config="filterConfig" :table-config="tableConfig"
-                     title="Teams" @delete="handleDelete" @save="handleSave"
+                     title="Products" @delete="handleDelete" @save="handleSave"
                      @update-tableConfig="tableConfig = $event" @update-dialogConfig="dialogConfig = $event"
                      @update-filterConfig="filterConfig = $event"/>
 </template>
@@ -47,7 +47,7 @@ export default {
           {name: 'categoryId', label: 'Category', type: 'select', required: true, items: []}
         ],
         detailTabs: [
-          {title: 'Projects', component: 'ProductStockLevelsTable'},
+          {title: 'Stock', component: 'ProductStockLevelsTable'},
         ]
       },
       filterConfig: {
@@ -65,7 +65,9 @@ export default {
     async initialize() {
       await this.fetchProducts();
       await this.fetchCategories();
+      this.dialogConfig.itemFields.find(field => field.name === 'categoryId').items = this.categories;
     },
+
     async fetchProducts() {
       this.products = await this.productsService.asyncFindAll();
       this.products.forEach(product => {
@@ -73,8 +75,12 @@ export default {
       });
       this.tableConfig.items = this.products;
     },
+
     async fetchCategories() {
-      this.categories = await this.productsService.asyncFindAllCategories();
+      let data = await this.productsService.asyncFindAllCategories();
+      this.categories = data.map(category => {
+        return {id: category.id, name: category.name}
+      })
     },
     async handleSave(item) {
       const savedItem = item.id ?
