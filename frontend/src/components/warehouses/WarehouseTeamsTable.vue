@@ -82,14 +82,21 @@ export default {
       this.warehouseTeams = id ? await this.teamsService.asyncFindAllByWarehouseId(id) :
           await this.teamsService.asyncFindAll();
 
-      for (const team of this.warehouseTeams) {
-        if (team.leaderId !== null) {
-          team.teamLeader = await this.usersService.asyncGetById(team.leaderId);
+      for (let i = 0; i < this.warehouseTeams.length; i++) {
+        this.warehouseTeams[i].teamLeader = '';
+        if (this.warehouseTeams[i].leaderId !== null) {
+          const leader = await this.usersService.asyncGetById(this.warehouseTeams[i].leaderId);
+          if (leader){
+            this.warehouseTeams[i].teamLeader = leader.name;
+          }
         }
-        if (team.teamMembers !== null) {
-          team.teamMembers = await this.usersService.asyncFindAllByTeamId(team.id);
+
+        if (this.warehouseTeams[i].teamMembers !== null) {
+          this.warehouseTeams[i].teamMembers = await this.usersService.asyncFindAllByTeamId(this.warehouseTeams[i].id);
         }
       }
+
+      console.log(this.warehouseTeams);
     },
   },
 }
