@@ -95,8 +95,6 @@ export default {
           this.warehouseTeams[i].teamMembers = await this.usersService.asyncFindAllByTeamId(this.warehouseTeams[i].id);
         }
       }
-
-      console.log(this.warehouseTeams);
     },
   },
 }

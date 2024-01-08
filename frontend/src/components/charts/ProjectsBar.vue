@@ -4,7 +4,7 @@
       <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Projects</h5></v-card-title>
       <base-bar-chart :options="chartOptions" :charts-data="chartData"/>
       <v-card-actions>
-        <v-container fluid="true">
+        <v-container :fluid="true">
           <v-row>
             <v-col cols="8">
               <v-row>

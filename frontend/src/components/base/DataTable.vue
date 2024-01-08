@@ -116,6 +116,7 @@ export default {
       this.$emit('delete', item);
     },
     handleClose() {
+      this.dialog.item =
       this.dialog.open = false;
     }
   },

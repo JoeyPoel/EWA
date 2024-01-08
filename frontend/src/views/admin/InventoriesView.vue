@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid="true">
+  <v-container :fluid="true">
     <inventory-entity-table/>
   </v-container>
 </template>

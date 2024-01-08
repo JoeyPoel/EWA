@@ -36,6 +36,10 @@
           </template>
         </v-container>
       </v-card-text>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn text="Close" color="primary" @click="closeDialog"/>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
