@@ -7,7 +7,7 @@
           <v-col cols="12" :md="table.canAdd ? '10' : '12'">
             <slot name="filter"/>
           </v-col>
-          <v-col v-if="table.canAdd" class="mt-sm-2" cols="10" md="2">
+          <v-col v-if="table.canAdd" class="mt-md-2" cols="12" md="2">
             <v-btn :block="true" color="primary" rounded="sm" variant="elevated" @click="openNewItemDialog">
               New {{ tableConfig.entityName }}
             </v-btn>

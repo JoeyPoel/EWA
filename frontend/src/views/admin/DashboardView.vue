@@ -27,6 +27,7 @@ import InventoryLine from "@/components/charts/InventoryLine.vue";
 import DataFilter from "@/components/base/DataFilterComponent.vue";
 
 export default {
+  name: "DashboardViewAdmin",
   components: {
     DataFilter,
     ProjectsBar,

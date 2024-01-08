@@ -10,7 +10,7 @@ import EntityDataTable from "@/components/base/EntityDataTable.vue";
 import {Product} from "@/models/Product";
 
 export default {
-  name: "ProductsV2",
+  name: "ProductEntityTable",
   inject: ['productsService'],
   components: {EntityDataTable},
   data() {

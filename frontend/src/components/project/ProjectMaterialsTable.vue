@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "ProjectMaterials",
+  name: "ProjectMaterialsTable",
   inject: ['projectsService'],
   props: {
     item: {

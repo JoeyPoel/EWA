@@ -11,7 +11,7 @@ import EntityDataTable from "@/components/base/EntityDataTable.vue";
 import {Project} from "@/models/Project";
 
 export default {
-  name: "ProjectsV2",
+  name: "ProjectEntityTable",
   computed: {
     Project() {
       return Project

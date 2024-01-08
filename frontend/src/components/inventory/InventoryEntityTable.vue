@@ -9,7 +9,7 @@
 import EntityDataTable from "@/components/base/EntityDataTable.vue";
 
 export default {
-  name: "InventoriesComponentV2",
+  name: "InventoryEntityTable",
   inject: ['inventoryService', 'productsService', 'warehousesService'],
   components: {EntityDataTable},
   data() {

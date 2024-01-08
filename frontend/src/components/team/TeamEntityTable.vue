@@ -10,7 +10,7 @@ import {Team} from "@/models/Team";
 import EntityDataTable from "@/components/base/EntityDataTable.vue";
 
 export default {
-  name: "TeamsComponent",
+  name: "TeamEntityTable",
   inject: ['teamsService', 'warehousesService', 'usersService'],
   components: {
     EntityDataTable,
