@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "WarehouseStockLevelsTable",
+  name: "WarehouseTeamsTable",
   inject: ['teamsService', 'usersService'],
   props: {
     item:{
