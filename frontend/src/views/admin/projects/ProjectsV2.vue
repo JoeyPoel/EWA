@@ -60,7 +60,7 @@ export default {
           {name: 'description', label: 'Description', type: 'text', required: false}
         ],
         detailTabs: [
-          {title: 'Tasks', component: 'ProjectTasksTable'},
+          {title: 'Materials', component: 'ProjectMaterialsTable'},
         ]
       },
       filterConfig: {

@@ -120,7 +120,7 @@
                             </v-list-item>
                             <v-list-item>
                               <v-list-item-title>Status</v-list-item-title>
-                              <v-list-item-subtitle>{{ getStatusDisplayName(selectedProject.status) }}</v-list-item-subtitle>
+                              <v-list-item-subtitle>{{ Project.getStatusDisplayName(selectedProject.status) }}</v-list-item-subtitle>
                             </v-list-item>
                             <v-list-item>
                               <v-list-item-title>Team</v-list-item-title>
@@ -156,7 +156,7 @@
                             :sort-by="['order']"
                             class="elevation-1">
                           <template v-slot:[`item.status`]="{ item }">
-                            <v-chip :color="getStatusColor(item)">
+                            <v-chip :color="Project.getStatusColor(item)">
                               {{ getTaskStatusDisplayName(item.status) }}
                             </v-chip>
                           </template>

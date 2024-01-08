@@ -35,15 +35,17 @@
 <script>
 
 import ItemForm from "@/components/base/ItemForm.vue";
-import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
-import ProductStockLevelsTable from "@/components/product/ProductStockLevelsTable.vue";
+import TeamProjectsTable from "@/components/tables/TeamProjectsTable.vue";
+import ProductStockLevelsTable from "@/components/tables/ProductStockLevelsTable.vue";
+import ProjectMaterialsTable from "@/components/tables/ProjectMaterialsTable.vue";
 
 export default {
   name: 'FormDialog',
   components: {
     ItemForm,
     TeamProjectsTable,
-    ProductStockLevelsTable
+    ProductStockLevelsTable,
+    ProjectMaterialsTable
   },
   props: {
     open: {
@@ -75,7 +77,6 @@ export default {
     return {
       detailTabsTitle: 'Details',
       dialog: false,
-      teamProjects: TeamProjectsTable,
     }
   },
   mounted() {
