@@ -40,7 +40,10 @@ export default {
         baseObject: new Warehouse(),
         itemFields: [
           {name: 'name', label: 'Name', type: 'text', required: true},
+          {name: 'address', label: 'Address', type: 'text', required: true},
           {name: 'location', label: 'Location', type: 'text', required: true},
+          {name: 'postcode', label: 'Postcode', type: 'text', required: true},
+          {name: 'country', label: 'Country', type: 'text', required: true},
           {name: 'contactName', label: 'Contact Name', type: 'text', required: true},
           {name: 'contactEmail', label: 'Contact Email', type: 'text', required: true},
           {name: 'contactPhone', label: 'Contact Phone', type: 'text', required: true},
@@ -71,14 +74,19 @@ export default {
     },
     async handleSave(item) {
       if (item.id) {
-        await this.warehousesService.update(item);
+        await this.warehousesService.asyncUpdate(item.id, item);
       } else {
-        await this.warehousesService.create(item);
+        await this.warehousesService.asyncAdd(item)
       }
       await this.initialize();
     },
     async handleDelete(item) {
-      await this.warehousesService.delete(item.id);
+      const deletedItem = await this.warehousesService.asyncDeleteById(item.id);
+      if (deletedItem) {
+        this.dialogConfig.open = false;
+      } else {
+        console.error("Failed to delete item");
+      }
       await this.initialize();
     }
   }
