@@ -31,6 +31,15 @@ const routes = [
         },
     },
     {
+        path: '/products2',
+        name: 'Products2',
+        component: () => import('@/views/admin/products/ProductsV2.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['USER', 'ADMIN'],
+        },
+    },
+    {
         path: '/projects',
         name: 'Projects',
         component: () => import('@/views/admin/projects/ProjectsComponent.vue'),

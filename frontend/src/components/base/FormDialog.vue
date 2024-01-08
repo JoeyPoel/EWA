@@ -36,12 +36,14 @@
 
 import ItemForm from "@/components/base/ItemForm.vue";
 import TeamProjectsTable from "@/components/team/TeamProjectsTable.vue";
+import ProductStockLevelsTable from "@/components/product/ProductStockLevelsTable.vue";
 
 export default {
   name: 'FormDialog',
   components: {
     ItemForm,
     TeamProjectsTable,
+    ProductStockLevelsTable
   },
   props: {
     open: {

@@ -68,7 +68,7 @@ export default {
   watch: {
     selectedWarehouse: {
       handler: async function () {
-        this.tableConfig.items = await this.getTeams();
+        this.tableConfig.items = await this.fetchTeams();
       },
       deep: true
     },
@@ -76,15 +76,15 @@ export default {
 
   methods: {
     async initialize() {
-      this.warehouses = await this.getWarehouses();
-      this.users = await this.getUsers();
-      this.tableConfig.items = await this.getTeams();
+      this.warehouses = await this.fetchWarehouses();
+      this.users = await this.fetchUsers();
+      this.tableConfig.items = await this.fetchTeams();
 
       this.dialogConfig.itemFields[1].items = this.warehouses;
       this.dialogConfig.itemFields[2].items = this.users;
       this.dialogConfig.itemFields[3].items = this.users;
     },
-    async getTeams() {
+    async fetchTeams() {
       let teams = this.selectedWarehouse ?
           await this.teamsService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
           await this.teamsService.asyncFindAll();
@@ -96,7 +96,7 @@ export default {
         }
       })
     },
-    async getWarehouses() {
+    async fetchWarehouses() {
       let data = await this.warehousesService.asyncFindAll();
       return data.map(warehouse => {
         return {
@@ -105,7 +105,7 @@ export default {
         }
       })
     },
-    async getUsers() {
+    async fetchUsers() {
       let data = await this.usersService.asyncFindAll();
       return data.map(user => {
         return {

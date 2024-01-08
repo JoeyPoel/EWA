@@ -1,9 +1,11 @@
 <template>
-  <v-col v-if="!disabled" cols="12" md="6">
-    <v-text-field v-if="type === 'text'"
+  <v-col cols="12" md="6">
+    <v-text-field v-if="type === 'text' || type === 'number'"
                   v-model="ItemCopy"
                   :label="label"
                   :rules="rules"
+                  :type="type"
+                  :readonly="disabled"
                   @update:model-value="onInputChange"/>
     <v-select v-else-if="type === 'select'"
               v-model="ItemCopy"
@@ -12,6 +14,7 @@
               :items="items"
               item-title="name"
               item-value="id"
+              :readonly="disabled"
               @update:model-value="onInputChange"/>
     <v-select v-else-if="type === 'selectMultiple'"
               v-model="ItemCopy"
@@ -22,16 +25,8 @@
               item-value="id"
               :multiple="true"
               :chips="true"
+              :readonly="disabled"
               @update:model-value="onInputChange"/>
-  </v-col>
-  <v-col v-else cols="12" md="6">
-    <v-card v-if="type === 'text'" :subtitle="label" class="pa-2">{{ ItemCopy }}</v-card>
-    <v-card v-else-if="type === 'select'" :subtitle="label" class="pa-2">
-      {{ItemCopy !== null ? items[ItemCopy].name : " " }}
-    </v-card>
-    <v-card v-else-if="type === 'selectMultiple'" :subtitle="label" class="pa-2">
-      <v-chip v-for="item in ItemCopy" :key="item.id" class="ma-1">{{items[item].name}}</v-chip>
-    </v-card>
   </v-col>
 </template>
 

@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-card>
       <v-data-table
           :headers="projectHeaders"
@@ -14,7 +13,6 @@
         </template>
       </v-data-table>
     </v-card>
-  </v-container>
 </template>
 
 <script>
