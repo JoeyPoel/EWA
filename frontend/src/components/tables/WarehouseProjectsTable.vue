@@ -1,14 +1,16 @@
 <template>
-  <v-data-table
-      :headers="warehouseProjectHeaders"
-      :items="warehouseProjects"
-      :sort-by="['startDate']"
-      :items-per-page-options="detailTableItemsPerPageOptions"
-      class="elevation-1">
+  <v-container>
+    <v-data-table
+        :headers="warehouseProjectHeaders"
+        :items="warehouseProjects"
+        :sort-by="['startDate']"
+        :items-per-page-options="detailTableItemsPerPageOptions"
+        class="elevation-1">
       <template v-slot:[`item.status`]="{ item }">
         <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
       </template>
-  </v-data-table>
+    </v-data-table>
+  </v-container>
 </template>
 
 <script>

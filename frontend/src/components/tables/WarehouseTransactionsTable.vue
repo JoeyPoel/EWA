@@ -64,6 +64,7 @@ export default {
     async loadWarehouseTransactions() {
       this.warehouseTransactions = await this.transactionsService.asyncFindAllByWarehouseId(this.item.id);
       for (const transaction of this.warehouseTransactions) {
+        transaction.transactionDate =
         transaction.transactionType = Transaction.CATEGORY[transaction.transactionType] || transaction.transactionType;
         transaction.color = Transaction.getTransactionFlowColor(transaction, this.item.warehouseId);
       }
