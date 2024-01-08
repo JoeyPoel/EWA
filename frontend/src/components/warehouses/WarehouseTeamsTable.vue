@@ -20,14 +20,19 @@
 </template>
 
 <script>
+
 export default {
   name: "WarehouseTeamsTable",
   inject: ['teamsService', 'usersService'],
   props: {
     item:{
       type: Object,
-      required: true
+      required: false
     },
+    warehouseId:{
+      type: Number,
+      required: false
+    }
   },
   data() {
     return {
@@ -50,7 +55,9 @@ export default {
   },
   methods: {
     async loadWarehouseTeams() {
-      this.warehouseTeams = await this.teamsService.asyncFindAllByWarehouseId(this.item.id);
+      const id = this.warehouseId ? this.warehouseId : this.item.id;
+      this.warehouseTeams = await this.teamsService.asyncFindAllByWarehouseId(id);
+
       for (const team of this.warehouseTeams) {
         if (team.leaderId !== null) {
           team.teamLeader = await this.usersService.asyncGetById(team.leaderId);

@@ -1,6 +1,7 @@
 <template>
   <v-container fluid="true">
-    <v-card title="Inventory" class="text-center elevation-2 chart">
+    <v-card class="mt-1 font-weight-bold">
+      <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Inventory</h5></v-card-title>
       <base-line-chart :options="chartOptions" :charts-data="chartData" />
       <v-card-actions>
         <v-container fluid="true">
