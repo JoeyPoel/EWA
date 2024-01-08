@@ -1,6 +1,7 @@
 <template>
   <v-container fluid="true">
-    <v-card title="Inventory" class="text-center elevation-2 chart">
+    <v-card class="mt-1 font-weight-bold">
+      <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Inventory</h5></v-card-title>
       <base-line-chart :options="chartOptions" :charts-data="chartData" />
       <v-card-actions>
         <v-container fluid="true">
@@ -25,7 +26,7 @@
 
 <script>
 
-import BaseLineChart from "@/components/base/BaseLineChart.vue";
+import BaseLineChart from "@/components/base/LineChart.vue";
 export default {
   name: "InventoryLine.vue",
   inject: ['chartsService', "productsService"],
@@ -87,9 +88,7 @@ export default {
   },
   methods: {
     async updateChartData() {
-      console.log(this.warehouseId, this.startDate, this.endDate, this.interval)
       this.chartData = await this.getChartData(this.warehouseId, this.startDate, this.endDate, this.interval);
-      console.log(this.chartData)
     },
     async loadProductIds() {
       const products = await this.productsService.asyncFindAllActive();

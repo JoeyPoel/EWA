@@ -17,10 +17,10 @@ export default class ProjectAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all projects asynchronously.
+     * Retrieves all project asynchronously.
      *
      * @returns {Promise<Array<Project>|null>} - A promise that resolves to an array of Project objects
-     * representing all projects, or null if no projects are found.
+     * representing all project, or null if no project are found.
      *
      * @async
      */
@@ -98,11 +98,11 @@ export default class ProjectAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all projects by warehouse ID.
+     * Retrieves all project by warehouse ID.
      *
      * @param {number} warehouseId - The ID of the warehouse.
      *
-     * @return {Promise<Project[]|null>} A promise that resolves to an array of projects mapped from the response JSON,
+     * @return {Promise<Project[]|null>} A promise that resolves to an array of project mapped from the response JSON,
      * or null if response is falsy.
      */
     async asyncFindAllByWarehouseId(warehouseId) {
