@@ -1,26 +1,54 @@
+<template>
+  <v-dialog v-model="isOpen" max-width="450px">
+    <v-card>
+      <v-card-text>
+        <v-row class="text-center justify-space-between">
+            <v-card-title class="ps-3 pb-5"><h3>Something went wrong!</h3></v-card-title>
+            <v-btn @click="closeDialog" icon="$close" color="secondary"/>
+        </v-row>
+        <v-row :no-gutters="true">
+          <v-col>
+            <p v-html="formattedMessage"></p>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+</template>
+
 <script>
 export default {
-  name: "ErrorComponent"
+  props: {
+    open: {
+      type: Boolean,
+      required: true,
+    },
+    message:{
+      type: String,
+      required: false
+    },
+  },
+  methods: {
+    closeDialog() {
+      this.$emit('close');
+    },
+  },
+  computed: {
+    formattedMessage() {
+      return this.message.replace(/\n/g, '<br>');
+    },
+    isOpen: {
+      get() {
+        return this.open;
+      },
+      set() {
+        this.closeDialog();
+      }
+    },
+  },
 }
 </script>
 
-<template>
-  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0 bg-custom w-100">
-    <div class="container  justify-content-center">
-      <div class="col-7 mx-auto bg-transparent">
-        <div class="card-body">
-          <div class="brand-wrapper text-center">
-            <img class="logo2" src="../assets/logo.png" alt="logo">
-            <h1 class="pt-5">Sorry, something went wrong!</h1>
-            <h5 class="pt-1 pb-3">Contact an administrator for support.</h5>
-            <router-link to="/dashboard" class="btn button btn-primary">Back to dashboard</router-link>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-</template>
-
 <style scoped>
-@import "@/assets/styles/userFormStyles.css";
+
 </style>

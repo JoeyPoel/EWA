@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid="true">
+  <v-container :fluid="true">
     <v-card class="mt-1 font-weight-bold">
       <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Inventory</h5></v-card-title>
       <base-line-chart :options="chartOptions" :charts-data="chartData" />
       <v-card-actions>
-        <v-container fluid="true">
+        <v-container :fluid="true">
           <v-row>
             <v-col cols="8">
               <v-row>
@@ -28,7 +28,7 @@
 
 import BaseLineChart from "@/components/base/LineChart.vue";
 export default {
-  name: "InventoryLine.vue",
+  name: "InventoryLine",
   inject: ['chartsService', "productsService"],
   components: {
     BaseLineChart
@@ -45,7 +45,7 @@ export default {
       menu: false,
       productIds: [],
       selectedProductIds: [],
-      startDate: new Date (new Date().setMonth(new Date().getMonth() - 12)).toISOString().substring(0, 10),
+      startDate: new Date (new Date().setMonth(new Date().getMonth() - 5)).toISOString().substring(0, 10),
       endDate: new Date(new Date().setMonth(new Date().getMonth() + 5)).toISOString().substring(0, 10),
       chartData: null,
       chartOptions: {
@@ -57,14 +57,6 @@ export default {
         {title: 'Week', value: 'week'},
         {title: 'Month', value: 'month'},
       ],
-      colors: {
-        background: '#f8f8f8',
-        surface: '#ffffff',
-        primary: '#c7d02c',
-        'primary-darken-1': '#572700',
-        secondary: '#333333',
-        'secondary-darken-1': '#bfbfbf',
-      }
     }
   },
   watch: {

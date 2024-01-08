@@ -1,4 +1,5 @@
 <template>
+  <FormDialog title="Error" :open="error.isOpen" :item="error" @close="error.isOpen = false" max-width="450px" />
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
     <v-main v-bind:class="getClass()">
@@ -24,15 +25,25 @@ import EmailAdaptor from "@/services/EmailAdaptor";
 import {FetchInterceptor} from "./services/FetchInterceptor";
 
 import logo from "@/assets/console.png";
+import FormDialog from "@/components/base/FormDialog.vue";
 
 export default {
   name: 'App',
   components: {
+    FormDialog,
     NavbarComponent
+  },
+  created() {
+    this.$router.app = this; // Add this line
   },
   data() {
     return {
       theFetchInterceptor: null,
+      error: {
+        title: "Something went wrong!",
+        message: "",
+        isOpen: false
+      }
     };
   },
   mounted() {
@@ -99,26 +110,5 @@ body {
   var(--gradient-color-middle) 25%,
   var(--gradient-color-almost-end) 75%,
   var(--gradient-color-end) 100%);
-}
-
-.btn-primary, .btn-success {
-  background-color: #fff !important;
-  color: #000 !important;
-  border: 1px solid rgba(108, 117, 125, 0.45) !important;
-  border-radius: 0.375rem !important;
-  box-shadow: 0 0 4px rgba(108, 117, 125, 0.35) !important;
-}
-
-.btn-primary:hover, .btn-success:hover {
-  background-color: var(--button-color) !important;
-  box-shadow: 0 0 2px #6c757d !important;
-}
-
-.btn-primary:active, .btn-success:active {
-  box-shadow: 0 0 4px #6c757d inset !important;
-}
-
-.btn-primary:focus, .btn-success:focus {
-  box-shadow: 0 0 0 0.25rem rgba(232, 241, 82, 0.5) !important;
 }
 </style>

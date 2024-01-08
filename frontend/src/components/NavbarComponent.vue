@@ -40,7 +40,7 @@ export default {
         { name: 'projects', icon: '$project', title: 'Projects', to: '/project', roles: ['ADMIN'] },
         { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN', 'USER'] },
         { name: 'products', icon: '$product', title: 'Products', to: '/product', roles: ['ADMIN'] },
-        { name: 'team', icon: '$team', title: 'Team', to: '/team', roles: ['ADMIN', 'USER'] },
+        { name: 'team', icon: '$team', title: 'Teams', to: '/team', roles: ['ADMIN', 'USER'] },
         { name: 'users', icon: '$user', title: 'Users', to: '/users', roles: ['ADMIN'] },
       ],
     };

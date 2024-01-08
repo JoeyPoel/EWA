@@ -13,7 +13,6 @@
 <script>
 import {CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js'
 import {Line as ChartLine} from 'vue-chartjs'
-import {ChartsData} from "@/models/charts/ChartsData";
 import NoDataComponent from "@/components/charts/NoDataComponent.vue";
 
 ChartJS.register(
@@ -34,8 +33,7 @@ export default {
   },
   props: {
     chartsData: {
-      type: ChartsData,
-      required: true
+      type: Object,
     },
     options: {
       type: Object,

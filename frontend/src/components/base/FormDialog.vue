@@ -3,7 +3,9 @@
     <v-card>
       <v-card-text>
         <v-row>
-          <v-col cols="10"/>
+          <v-col cols="10">
+            <h3 v-if="item && item.title" class="text-center">{{ item.title }}</h3>
+          </v-col>
           <v-col cols="2">
             <v-btn @click="closeDialog" icon="$close" color="secondary" class="float-right"/>
           </v-col>
@@ -27,8 +29,17 @@
             <item-form :item-fields="itemFields" :item="item" :is-new-item="title === 'New'" @save="handleSave"
                        @delete="handleDelete"/>
           </template>
+          <template v-if="title === 'Error'">
+            <v-row  >
+              <p class="ml-1" v-html="formattedMessage"></p>
+            </v-row>
+          </template>
         </v-container>
       </v-card-text>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn text="Close" color="primary" @click="closeDialog"/>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -62,17 +73,17 @@ export default {
       type: Boolean,
       required: true
     },
-    item:{
+    item: {
       type: Object,
-      required: true
+      required: false
     },
-    title:{
+    title: {
       type: String,
       required: true
     },
     itemFields: {
       type: Array,
-      required: true
+      required: false
     },
     detailTabs: {
       type: Array,
@@ -97,6 +108,9 @@ export default {
     this.dialog = this.open;
   },
   computed: {
+    formattedMessage() {
+      return this.item.message.replace(/\n/g, '<br>');
+    },
     isOpen: {
       get() {
         return this.open;

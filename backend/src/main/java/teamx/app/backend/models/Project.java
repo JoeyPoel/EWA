@@ -3,6 +3,7 @@ package teamx.app.backend.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,9 @@ public class Project implements Model<ProjectDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "Name is required")
     private String name;
+    @NotNull(message = "Description is required")
     private String description;
     private String location;
     private String clientName;
@@ -37,12 +40,15 @@ public class Project implements Model<ProjectDTO> {
     private String clientPhone;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @NotNull(message = "Start date is required")
     private Date startDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @NotNull(message = "End date is required")
     private Date endDate;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status is required")
     private Status status;
 
     @Override
