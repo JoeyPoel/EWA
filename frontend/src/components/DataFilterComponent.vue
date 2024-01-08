@@ -28,9 +28,6 @@
   name: 'dataFilter',
   inject: ['warehousesService', 'teamsService'],
   props: {
-    warehouse: {
-      required: false,
-    },
     canSearch: {
       type: Boolean,
       default: false,

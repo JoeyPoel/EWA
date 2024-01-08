@@ -20,7 +20,7 @@
                   New User</v-btn>
               </template>
               <v-card>
-                <v-card-title><h5>{{ title[dialog.type] }}</h5></v-card-title>
+                <v-card-title><h5>{{ title[dialogConfig.type] }}</h5></v-card-title>
                 <v-card-text>
                   <v-form>
                     <v-container>

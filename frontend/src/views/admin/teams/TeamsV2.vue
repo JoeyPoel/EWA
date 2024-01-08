@@ -1,44 +1,32 @@
 <template>
-  <v-container :fluid="true">
-    <v-card class="mt-1 font-weight-bold">
-      <v-card-title class="bg-secondary text-center">
-        <h3 class="fs-1">Teams</h3>
-      </v-card-title>
-      <DataTable :dialog-config="dialog" :table-config="table" @action="handleDialogAction(true, $event.action, $event.item)"
-                 @delete="handleDelete" @save="handleSave">
-        <template v-slot:filter>
-          <data-filter :can-search="true" :can-sort-by-warehouse="true" :warehouse="table.searchTerm"
-                       @filterChange="table.searchTerm = $event" @warehouseChange="selectedWarehouse = $event"/>
-        </template>
-      </DataTable>
-    </v-card>
-  </v-container>
+  <entity-data-table :dialog-config="dialogConfig" :filter-config="filterConfig" :table-config="tableConfig"
+                     title="Teams" @delete="handleDelete" @save="handleSave"
+                     @update-tableConfig="tableConfig = $event" @update-dialogConfig="dialogConfig = $event"
+                     @update-filterConfig="filterConfig = $event" @warehouse-change="selectedWarehouse = $event"/>
 </template>
-
 <script>
-import dataFilter from "@/components/DataFilterComponent.vue";
-import DataTable from "@/components/base/DataTable.vue";
 import {Team} from "@/models/Team";
+import EntityDataTable from "@/components/EntityDataTable.vue";
 
 export default {
   name: "TeamsComponent",
   inject: ['teamsService', 'warehousesService', 'usersService'],
   components: {
-    DataTable,
-    dataFilter,
+    EntityDataTable,
+
   },
   data() {
     return {
+      selectedWarehouse: null,
       teams: [],
       warehouses: [],
       users: [],
-      selectedWarehouse: null,
-      table: {
+      tableConfig: {
         entityName: 'Team',
         headers: [
           {title: 'Name', value: 'name', key: 'name'},
           {title: 'Warehouse', value: 'warehouseName', key: 'warehouseName'},
-          {title: 'Team Lead', value: 'teamLeadName', key:  'teamLeadName'},
+          {title: 'Team Lead', value: 'teamLeadName', key: 'teamLeadName'},
           {title: 'Actions', value: 'actions', sortable: false}
         ],
         items: this.teams,
@@ -50,7 +38,7 @@ export default {
         ],
         canAdd: true,
       },
-      dialog: {
+      dialogConfig: {
         open: false,
         title: '',
         item: {},
@@ -65,6 +53,11 @@ export default {
           {title: 'Projects', component: 'TeamProjectsTable'},
         ]
       },
+      filterConfig: {
+        canSearch: true,
+        canSortByWarehouse: true,
+        selectedWarehouse: null
+      }
     }
   },
 
@@ -75,7 +68,7 @@ export default {
   watch: {
     selectedWarehouse: {
       handler: async function () {
-        this.table.items = await this.getTeams();
+        this.tableConfig.items = await this.getTeams();
       },
       deep: true
     },
@@ -85,11 +78,11 @@ export default {
     async initialize() {
       this.warehouses = await this.getWarehouses();
       this.users = await this.getUsers();
-      this.table.items = await this.getTeams();
+      this.tableConfig.items = await this.getTeams();
 
-      this.dialog.itemFields[1].items = this.warehouses;
-      this.dialog.itemFields[2].items = this.users;
-      this.dialog.itemFields[3].items = this.users;
+      this.dialogConfig.itemFields[1].items = this.warehouses;
+      this.dialogConfig.itemFields[2].items = this.users;
+      this.dialogConfig.itemFields[3].items = this.users;
     },
     async getTeams() {
       let teams = this.selectedWarehouse ?
@@ -133,30 +126,29 @@ export default {
         return teamLead.name;
       }
     },
-    handleDialogAction(open, action, item) {
-      this.dialog.title = action.action;
-      this.dialog.item = item;
-      this.dialog.open = open;
-    },
     async handleSave(item) {
-      if (item.id !== undefined) {
-        await this.teamsService.asyncUpdate(item.id, item);
+      const savedItem = item.id !== undefined ?
+          await this.teamsService.asyncUpdate(item.id, item) :
+          await this.teamsService.asyncAdd(item);
+      if (savedItem) {
+        this.dialogConfig.item = {};
+        this.dialogConfig.open = false;
+        await this.initialize();
       } else {
-        await this.teamsService.asyncAdd(item);
+        // TODO: Show error message
+        console.error("Failed to save item")
       }
-      await this.initialize();
     },
     async handleDelete(item) {
       const deletedItem = await this.teamsService.asyncDeleteById(item.id)
       if (deletedItem) {
-        this.dialog.item = {};
-        this.dialog.open = false;
+        this.dialogConfig.item = {};
+        this.dialogConfig.open = false;
         await this.initialize();
       } else {
         console.error("Failed to delete item")
       }
-    },
-
+    }
   }
 }
 </script>

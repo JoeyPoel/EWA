@@ -234,7 +234,7 @@
                     <!--                          <v-container>-->
                     <!--                            <v-row>-->
                     <!--                              <v-col>-->
-                    <!--                                <v-data-table-->
+                    <!--                                <v-data-tableConfig-->
                     <!--                                    :headers="warehouseOrderHeaders"-->
                     <!--                                    :items="warehouseOrders"-->
                     <!--                                    :search="warehouseOrderSearch"-->
@@ -259,7 +259,7 @@
                     <!--                                  <template v-slot:[`item.actions`]="{ item }">-->
                     <!--                                    <v-icon class="me-2" size="small" @click="goToEditOrder(item)">$edit</v-icon>-->
                     <!--                                  </template>-->
-                    <!--                                </v-data-table>-->
+                    <!--                                </v-data-tableConfig>-->
                     <!--                              </v-col>-->
                     <!--                            </v-row>-->
                     <!--                          </v-container>-->

@@ -210,11 +210,11 @@ export default {
         this.teams = await this.teamsService.asyncFindAll();
       }
     },
-    // 'dialog.open': function (val) {
+    // 'dialogConfig.open': function (val) {
     //   if (!val) {
     //     this.$router.push('/admin/teams');
     //   }else {
-    //     this.$router.push('/admin/teams/' + this.dialog.type + '/' + this.selectedTeam.id);
+    //     this.$router.push('/admin/teams/' + this.dialogConfig.type + '/' + this.selectedTeam.id);
     //   }
     // },
     selectedTeam(val) {
