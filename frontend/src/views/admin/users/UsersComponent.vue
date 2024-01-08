@@ -263,8 +263,6 @@ export default {
 
       const savedUser = await this.usersService.asyncSave(userToSave);
       if (savedUser) {
-        this.snackbar.message = `User created successfully. The generated password is: ${password}`;
-        this.snackbar.show = true;
         // Call the passwordMail function to send the password reset email
         await this.passwordMail(userToSave.password);
         await this.close();
