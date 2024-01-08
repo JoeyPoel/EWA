@@ -1,4 +1,5 @@
 <template>
+  <FormDialog title="Error" :open="error.isOpen" :item="error" @close="error.isOpen = false" :max-width="450" />
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
     <v-main v-bind:class="getClass()">
@@ -24,15 +25,25 @@ import EmailAdaptor from "@/services/EmailAdaptor";
 import {FetchInterceptor} from "./services/FetchInterceptor";
 
 import logo from "@/assets/console.png";
+import FormDialog from "@/components/base/FormDialog.vue";
 
 export default {
   name: 'App',
   components: {
+    FormDialog,
     NavbarComponent
+  },
+  created() {
+    this.$router.app = this; // Add this line
   },
   data() {
     return {
       theFetchInterceptor: null,
+      error: {
+        title: "Something went wrong!",
+        message: "",
+        isOpen: false
+      }
     };
   },
   mounted() {
