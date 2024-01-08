@@ -5,7 +5,7 @@
         <life-time-stats ref="lifeTimeStats" :warehouse-id="this.warehouseId">
           <template v-slot:warehouse>
             <v-col cols="12">
-              <data-filter :can-sort-by-warehouse="true" @warehouse="this.warehouseId = $event"/>
+              <data-filter :can-sort-by-warehouse="true" @warehouse-change="this.warehouseId = $event"/>
             </v-col>
           </template>
         </life-time-stats>
