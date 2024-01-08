@@ -4,7 +4,7 @@ import {jwtDecode} from "jwt-decode";
 
 const routes = [
     {
-        path: '/inventory',
+        path: '/inventories',
         name: 'Inventories',
         component: () => import('@/views/admin/InventoriesView.vue'),
         meta: {
@@ -22,7 +22,7 @@ const routes = [
         },
     },
     {
-        path: '/product',
+        path: '/products',
         name: 'Products',
         component: () => import('@/views/admin/ProductsView.vue'),
         meta: {
@@ -31,7 +31,7 @@ const routes = [
         },
     },
     {
-        path: '/project',
+        path: '/projects',
         name: 'Projects',
         component: () => import('@/views/admin/ProjectsView.vue'),
         meta: {
@@ -49,6 +49,15 @@ const routes = [
         }
     },
     {
+        path: '/orders',
+        name: 'Orders',
+        component: () => import('@/views/admin/OrdersView.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['ADMIN'],
+        }
+    },
+    {
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/admin/DashboardView.vue'),
@@ -58,7 +67,7 @@ const routes = [
         },
     },
     {
-        path: '/team',
+        path: '/teams',
         name: 'Teams',
         component: () => import('@/views/admin/TeamsView.vue'),
         meta: {
@@ -94,7 +103,7 @@ const routes = [
         },
     },
     {
-        path: '/team-project',
+        path: '/team-projects',
         name: 'Team Projects',
         component: () => import('@/views/user/projects/ProjectsComponent.vue'),
         meta: {
