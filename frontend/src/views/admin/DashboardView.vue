@@ -16,7 +16,12 @@
         <life-time-stats ref="lifeTimeStats" :warehouse-id="this.warehouseId"/>
       </v-col>
       <v-col cols="12" md="6">
-        <WarehouseTeamsTable :warehouse-id="this.warehouseId"/>
+        <v-container>
+          <v-card class="mt-1 font-weight-bold">
+            <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Teams</h5></v-card-title>
+            <WarehouseTeamsTable :density="'compact'" :items-per-page="5" :warehouseId="this.warehouseId"/>
+          </v-card>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>

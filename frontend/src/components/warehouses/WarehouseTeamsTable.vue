@@ -3,14 +3,16 @@
     <v-data-table
         :headers="warehouseTeamHeaders"
         :items="warehouseTeams"
-        :sort-by="['name']"
         :items-per-page-options="itemsPerPageOptions"
-        class="elevation-1"
+        :items-per-page="itemsPerPage"
         :show-expand="true"
+        :sort-by="['name']"
+        class="elevation-1"
+        density="compact"
     >
       <template v-slot:expanded-row="{ item }">
         <v-chip-group>
-          <v-chip v-for="member in item.teamMembers" :key="member.id" variant="elevated" color="primary">
+          <v-chip v-for="member in item.teamMembers" :key="member.id" color="primary" variant="elevated">
             {{ member.name }}
           </v-chip>
         </v-chip-group>
@@ -25,13 +27,28 @@ export default {
   name: "WarehouseTeamsTable",
   inject: ['teamsService', 'usersService'],
   props: {
-    item:{
+    item: {
       type: Object,
       required: false
     },
-    warehouseId:{
+    warehouseId: {
       type: Number,
       required: false
+    },
+    itemsPerPage:{
+      type: Number,
+      required: false,
+      default: 10
+    },
+    density:{
+      type: String,
+      required: false,
+      default: 'comfortable'
+    }
+  },
+  watch: {
+    warehouseId(){
+      this.loadWarehouseTeams();
     }
   },
   data() {
@@ -55,8 +72,15 @@ export default {
   },
   methods: {
     async loadWarehouseTeams() {
-      const id = this.warehouseId ? this.warehouseId : this.item.id;
-      this.warehouseTeams = await this.teamsService.asyncFindAllByWarehouseId(id);
+      let id = null;
+      if (this.warehouseId) {
+        id = this.warehouseId;
+      } else if (this.item && this.item.id) {
+        id = this.item.id;
+      }
+
+      this.warehouseTeams = id ? await this.teamsService.asyncFindAllByWarehouseId(id) :
+          await this.teamsService.asyncFindAll();
 
       for (const team of this.warehouseTeams) {
         if (team.leaderId !== null) {

@@ -88,9 +88,7 @@ export default {
   },
   methods: {
     async updateChartData() {
-      console.log(this.warehouseId, this.startDate, this.endDate, this.interval)
       this.chartData = await this.getChartData(this.warehouseId, this.startDate, this.endDate, this.interval);
-      console.log(this.chartData)
     },
     async loadProductIds() {
       const products = await this.productsService.asyncFindAllActive();
