@@ -4,10 +4,10 @@
                   :search="table.searchTerm">
       <template v-slot:top>
         <v-row class="mt-1 p-1">
-          <v-col cols="12" md="10">
+          <v-col cols="12" :md="table.canAdd ? '10' : '12'">
             <slot name="filter"/>
           </v-col>
-          <v-col class="mt-sm-2" cols="10" md="2">
+          <v-col v-if="table.canAdd" class="mt-sm-2" cols="10" md="2">
             <v-btn :block="true" color="primary" rounded="sm" variant="elevated" @click="openNewItemDialog">
               New {{ tableConfig.entityName }}
             </v-btn>
@@ -92,6 +92,7 @@ export default {
         this.table.itemsPerPage = newVal.itemsPerPage;
         this.table.searchTerm = newVal.searchTerm;
         this.table.actions = newVal.actions;
+        this.table.canAdd = newVal.canAdd;
       },
       deep: true
     },

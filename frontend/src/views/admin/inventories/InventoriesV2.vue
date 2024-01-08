@@ -19,7 +19,7 @@ export default {
       products: [],
       warehouses: [],
       tableConfig: {
-        entityName: 'Inventory',
+        entityName: '',
         headers: [
           {title: 'Product', key: 'name'},
           {title: 'Quantity', key: 'quantity'},
@@ -31,9 +31,8 @@ export default {
         searchTerm: '',
         actions: [
           {action: 'Details', icon: '$info', color: 'primary'},
-          {action: 'Edit', icon: '$edit', color: 'primary'},
         ],
-        canAdd: true,
+        canAdd: false,
       },
       dialogConfig: {
         open: false,
@@ -50,9 +49,10 @@ export default {
           {name: 'transferFromWarehouseId', label: 'Transfer From Warehouse ID', type: 'text', required: false},
         ],
         detailTabs: [
-          {title: 'Stock', component: 'InventoryTransactionsTable'},
+          {title: 'Transactions', component: 'InventoryTransactionsTable'},
         ],
         hasGeneratedDetails: false,
+        maxWidth: '1000px',
       },
       filterConfig: {
         canSearch: true,
