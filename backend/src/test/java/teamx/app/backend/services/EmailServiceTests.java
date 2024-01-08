@@ -14,6 +14,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
+/**
+ * Tests for email service
+ *
+ * @author Joey van der Poel
+ */
 @SpringBootTest
 class EmailServiceTest {
 
