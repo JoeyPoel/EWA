@@ -21,6 +21,11 @@ body {
     height: 80px;
 }
 
+.logo2 {
+    height: 110px;
+    width: auto;
+}
+
 .login-card {
     border: 0;
     border-radius: 27px;
@@ -64,6 +69,10 @@ form {
 
 .form-control::placeholder {
     color: #919aa3;
+}
+
+.btn-primary {
+
 }
 
 .login-btn {

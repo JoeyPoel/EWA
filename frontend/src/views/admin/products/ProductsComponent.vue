@@ -71,6 +71,15 @@
                         <v-text-field v-model="editedProduct.price" label="Price"
                                       type="text"></v-text-field>
                       </v-row>
+                      <v-row>
+                        <v-select
+                            v-model="editedProduct.categoryId"
+                            :items="categories"
+                            :item-title="item => item.name"
+                            :item-value="item => item.id"
+                            label="Category"
+                        />
+                      </v-row>
                     </v-col>
                   </v-form>
                 </v-card-text>
@@ -105,6 +114,10 @@
                               <v-list-item>
                                 <v-list-item-title>Product Price</v-list-item-title>
                                 <v-list-item-subtitle>{{ selectedProduct.price }}</v-list-item-subtitle>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Product Category</v-list-item-title>
+                                <v-list-item-subtitle>{{ selectedProduct.categoryName }}</v-list-item-subtitle>
                               </v-list-item>
                             </v-list>
                           </v-col>
@@ -289,7 +302,13 @@ export default {
       this.editedProduct = Object.assign(new Product(), product);
       this.defaultProduct = Object.assign(new Product(), product);
       this.selectedProduct = Object.assign(new Product(), product);
+      this.selectedProduct.categoryName = this.getCategoryNameById(this.selectedProduct.categoryId);
     },
+
+    getCategoryNameById(categoryId) {
+      const category = this.categories.find(cat => cat.id === categoryId);
+      return category ? category.name : 'Unknown';
+    }
   }
 }
 </script>

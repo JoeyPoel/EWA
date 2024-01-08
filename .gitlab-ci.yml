@@ -1,37 +1,118 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Docker.gitlab-ci.yml
+stages:
+  - test
+  - build-frontend
+  - build-backend
 
-# Build a Docker image with CI/CD and push to the GitLab registry.
-# Docker-in-Docker documentation: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
-#
-# This template uses one generic job with conditional builds
-# for the default branch and all other (MR) branches.
-
-docker-build:
-  # Use the official docker image.
-  image: docker:cli
-  stage: build
-  services:
-    - docker:dind
-  variables:
-    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  # All branches are tagged with $DOCKER_IMAGE_NAME (defaults to commit ref slug)
-  # Default branch is also tagged with `latest`
+test-backend:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  tags:
+    - hva
   script:
-    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME"
+    - cd backend
+    - mvn test
+  rules:
+    - when: always
+
+test-frontend:
+  image: node:latest
+  stage: test
+  tags:
+    - hva
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm install
+    - npm run test
+  rules:
+    - when: always
+
+
+build-fe:
+  image: node:latest
+  stage: build-frontend
+  tags:
+    - hva
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm install
+    - npm run buildprod
+  artifacts:
+    paths:
+      - frontend/dist/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - frontend/**/*
+
+.docker-build-fe:
+  image: docker:19.03.12
+  stage: build-frontend
+  tags:
+    - hva
+  services:
+    - docker:19.03.12-dind
+  needs:
+    - job: build-fe
+      artifacts: true
+  script:
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+    - docker build -t "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" -f frontend/Dockerfile .
+    - docker push "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
-        docker push "$CI_REGISTRY_IMAGE:latest"
+        docker tag "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-fe:latest"
+        docker push "solar3ewa/ewa-boolets-fe:latest"
       fi
-  # Run this job in a branch where a Dockerfile exists
   rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - Dockerfile
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - frontend/**/*
+
+build-be:
+  image: maven:3.8.4-openjdk-17
+  stage: build-backend
+  tags:
+    - hva
+  script:
+    - cd backend
+    - mvn clean package -DskipTests
+    - cp target/*.jar ../my-app.jar
+  artifacts:
+    paths:
+      - my-app.jar
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - backend/**/*
+
+.docker-build-be:
+  image: docker:19.03.12
+  stage: build-backend
+  tags:
+    - hva
+  services:
+    - docker:19.03.12-dind
+  needs:
+    - job: build-be
+      artifacts: true
+  script:
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+    - docker build -t "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" -f backend/Dockerfile .
+    - docker push "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG"
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        docker tag "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-be:latest"
+        docker push "solar3ewa/ewa-boolets-be:latest"
+      fi
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - backend/**/*

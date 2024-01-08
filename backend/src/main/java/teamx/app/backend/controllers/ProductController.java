@@ -81,8 +81,8 @@ public class ProductController {
      * @return ResponseEntity object with a ProductDTO object representing the deleted product.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDTO> deleteById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.delete(id).toDTO());
+    public ResponseEntity<Product> deleteById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.delete(id));
     }
 
     /**
