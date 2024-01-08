@@ -3,16 +3,16 @@
     <v-data-table :headers="table.headers" :items="tableConfig.items" :itemsPerPage="table.itemsPerPage"
                   :search="table.searchTerm">
       <template v-slot:top>
-            <v-row class="mt-1">
-              <v-col cols="12" md="10">
-                <slot name="filter"/>
-              </v-col>
-              <v-col class="mt-sm-2" cols="10" md="2">
-                <v-btn :block="true" color="primary" rounded="sm" variant="elevated" @click="openNewItemDialog">
-                  New {{ tableConfig.entityName }}
-                </v-btn>
-              </v-col>
-            </v-row>
+        <v-row class="mt-1 p-1">
+          <v-col cols="12" md="10">
+            <slot name="filter"/>
+          </v-col>
+          <v-col class="mt-sm-2" cols="10" md="2">
+            <v-btn :block="true" color="primary" rounded="sm" variant="elevated" @click="openNewItemDialog">
+              New {{ tableConfig.entityName }}
+            </v-btn>
+          </v-col>
+        </v-row>
       </template>
       <template v-if="tableConfig.actions" v-slot:[`item.actions`]="{ item }">
         <v-icon v-for="(action, key) in tableConfig.actions" :key="key" @click="handleAction(action, item)">
