@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-data-table :headers="table.headers" :items="table.items" :itemsPerPage="table.itemsPerPage"
+    <v-data-table :headers="table.headers" :items="tableConfig.items" :itemsPerPage="table.itemsPerPage"
                   :search="table.searchTerm">
       <template v-slot:top>
             <v-row class="mt-1">
@@ -88,7 +88,7 @@ export default {
         this.table.items = newVal.items;
         this.table.itemsPerPage = newVal.itemsPerPage;
         this.table.searchTerm = newVal.searchTerm;
-        this.table.aActions = newVal.actions;
+        this.table.actions = newVal.actions;
       },
       deep: true
     },

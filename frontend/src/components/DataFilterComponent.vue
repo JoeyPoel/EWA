@@ -7,8 +7,7 @@
               </v-col>
               <v-col v-if="canSortByWarehouse" cols="12" :sm="columWidth" class="align-self-center px-sm-2">
                 <v-select v-model="selectedWarehouse" :items="warehouses" item-title="name" item-value="id"
-                          label="Warehouse"
-                          prepend-inner-icon="$warehouse" variant="outlined"/>
+                          label="Warehouse" prepend-inner-icon="$warehouse" variant="outlined"/>
               </v-col>
               <v-col v-if="canSortByTeam" cols="12" :sm="columWidth" class="align-self-center px-sm-2">
                 <v-select v-model="selectedTeam" :items="teams" item-title="name" item-value="id" label="Team"
@@ -70,7 +69,7 @@
       this.$emit('warehouseChange', this.selectedWarehouse);
     },
     selectedTeam() {
-      this.$emit('team', this.selectedTeam);
+      this.$emit('teamChange', this.selectedTeam);
     }
   },
   computed: {

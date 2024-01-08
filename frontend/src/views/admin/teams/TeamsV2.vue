@@ -76,10 +76,6 @@ export default {
       this.warehouses = await this.fetchWarehouses();
       this.users = await this.fetchUsers();
       this.tableConfig.items = await this.fetchTeams();
-
-      this.dialogConfig.itemFields[1].items = this.warehouses;
-      this.dialogConfig.itemFields[2].items = this.users;
-      this.dialogConfig.itemFields[3].items = this.users;
     },
     async fetchTeams() {
       let teams = this.selectedWarehouse ?
@@ -95,21 +91,26 @@ export default {
     },
     async fetchWarehouses() {
       let data = await this.warehousesService.asyncFindAll();
-      return data.map(warehouse => {
+      data.map(warehouse => {
         return {
           id: warehouse.id,
           name: warehouse.name
         }
       })
+      this.dialogConfig.itemFields[1].items = data;
+      return data;
     },
     async fetchUsers() {
       let data = await this.usersService.asyncFindAll();
-      return data.map(user => {
+      data.map(user => {
         return {
           id: user.id,
           name: user.name
         }
       });
+      this.dialogConfig.itemFields[2].items = data;
+      this.dialogConfig.itemFields[3].items = data;
+      return data;
     },
     mapWarehouseName(warehouseId) {
       const warehouse = this.warehouses.find(warehouse => warehouse.id === warehouseId);

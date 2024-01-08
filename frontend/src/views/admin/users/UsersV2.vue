@@ -60,6 +60,14 @@ export default {
   async mounted() {
     await this.initialize();
   },
+  watch: {
+    selectedTeam: {
+      handler: async function () {
+        await this.fetchUsers();
+      },
+      deep: true
+    }
+  },
   methods: {
     async initialize() {
       await this.fetchTeams();
@@ -76,21 +84,17 @@ export default {
         }
       })
       this.tableConfig.items = this.users;
-      console.log(this.users)
     },
     async fetchTeams() {
       let data = this.teams = await this.teamsService.asyncFindAll();
       this.dialogConfig.itemFields.find(field => field.name === 'teamId').items =
           data.map(team => ({name: team.name, id: team.id}));
-      console.log(this.teams)
     },
     async handleSave(item) {
-      console.log(item)
       const savedItem = item.id ?
           await this.usersService.asyncUpdate(item.id, item) :
           await this.usersService.asyncSave(item);
       if (savedItem) {
-        console.log(savedItem)
         this.dialogConfig.open = false;
       } else {
         console.error("Failed to save item");

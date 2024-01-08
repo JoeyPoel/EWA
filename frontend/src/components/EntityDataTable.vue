@@ -11,7 +11,7 @@
         <template v-slot:filter>
           <data-filter :can-search="filter.canSearch" :can-sort-by-team="filter.canSortByTeam"
                        :can-sort-by-warehouse="filter.canSortByWarehouse" @filterChange="table.searchTerm = $event"
-                       @handleSelectedTeam="handleSelectedTeam" @warehouseChange="handleSelectedWarehouse"/>
+                       @teamChange="handleSelectedTeam" @warehouseChange="handleSelectedWarehouse"/>
         </template>
       </DataTable>
     </v-card>
