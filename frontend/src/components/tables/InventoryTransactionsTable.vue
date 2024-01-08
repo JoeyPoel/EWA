@@ -6,11 +6,17 @@
       :loading="transactionsLoading"
       :sort-by="[{key: 'transactionDate', order: 'desc'}]"
       item-value="id">
-    <template v-slot:[`item.transactionCategory`]="{ value }">
-      <v-chip :color="value.color">
-        {{ value }}
-      </v-chip>
+    <template v-slot:item="{ item }">
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.transactionDate }}</td>
+        <td>
+          <v-chip :color="item.color" text-color="white" small>{{ item.transactionType }}</v-chip>
+        </td>
+        <td>{{ item.quantity }}</td>
+      </tr>
     </template>
+
   </v-data-table>
 </template>
 
@@ -38,7 +44,7 @@ export default {
       transactionsHeaders: [
         {title: 'ID', key: 'id'},
         {title: 'Date', key: 'transactionDate'},
-        {title: 'Category', key: 'transactionCategory'},
+        {title: 'Type', value: 'transactionType', key: 'transactionType'},
         {title: 'Quantity', key: 'quantity'},
       ],
       transactionsLoading: true,
@@ -55,13 +61,11 @@ export default {
       const serverData = await this.transactionsService.asyncFindAllByProductId(
           this.item.productId)
 
-      console.log(serverData)
       this.transactions = serverData.map(transaction => {
-        console.log(transaction)
+        transaction.transactionType = Transaction.CATEGORY[transaction.transactionType] || transaction.transactionType
         return {
           id: transaction.id,
-          transactionCategory: Transaction.CATEGORY[transaction.transactionType] || transaction.transactionType ||
-              'Unknown',
+          transactionType: transaction.transactionType,
           quantity: transaction.quantity,
           transactionDate: new Date(transaction.transactionDate).toLocaleDateString(),
           color: Transaction.getTransactionFlowColor(transaction, this.item.warehouseId)
@@ -71,7 +75,7 @@ export default {
       console.log(this.transactions)
 
       this.transactionsLoading = false;
-      },
+    },
 
   },
 }

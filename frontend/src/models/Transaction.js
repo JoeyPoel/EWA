@@ -16,8 +16,8 @@ export class Transaction extends Model{
 
     static get CATEGORY() {
         return {
-            INVENTORY_ORDER: 'Order',
-            PROJECT_MATERIAL: 'Project Material',
+            INVENTORY_ORDER: "Order",
+            PROJECT_MATERIAL: "Project Material",
             TRANSFER: 'Transfer',
             ADJUSTMENT: 'Adjustment',
             RETURN: 'Return',
