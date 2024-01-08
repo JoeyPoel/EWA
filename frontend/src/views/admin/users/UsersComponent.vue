@@ -121,7 +121,7 @@ import dataFilter from "@/components/DataFilterComponent.vue";
 
 export default {
   name: "UsersComponent",
-  inject: ['teamsService', 'usersService'],
+  inject: ['teamsService', 'usersService', 'emailService'],
   components: {dataFilter, BaseCard},
   data() {
     return {
@@ -216,6 +216,15 @@ export default {
       }
       return result;
     },
+    async passwordMail(password) {
+      try {
+        // Pass the email of the newly created user directly
+        const email = this.editedUser.email;
+        await this.emailService.sendPassGenEmail(email, password)
+      } catch (e) {
+        console.error("Failed to send password reset email: ", e);
+      }
+    },
 
     async saveNew() {
       // Validate the form fields
@@ -256,6 +265,8 @@ export default {
       if (savedUser) {
         this.snackbar.message = `User created successfully. The generated password is: ${password}`;
         this.snackbar.show = true;
+        // Call the passwordMail function to send the password reset email
+        await this.passwordMail(userToSave.password);
         await this.close();
       } else {
         this.snackbar.message = "Failed to create user. Please try again.";

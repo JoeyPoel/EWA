@@ -80,6 +80,45 @@ public class EmailController {
     }
 
     /**
+     * Endpoint for sending a password reset email.
+     * @param user UserDTO object containing user email.
+     * @return ResponseEntity indicating the success or failure of sending the email.
+     */
+    @PostMapping("/sendPassGenEmail")
+    public ResponseEntity<String> sendPassGenEmail(@RequestBody UserDTO user, @RequestParam String generatedPassword) {
+        UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
+        if (foundUser != null) {
+            String passwordResetLink = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
+            String subject = "Password generation request";
+            String content = "Your new password is: " + generatedPassword + ". Please click the link below to create your own personal password for the solar sedum website";
+
+            Map<String, Object> model = new HashMap<>();
+            model.putAll(Map.of(
+                    "content", content,
+                    "passwordResetLink", passwordResetLink,
+                    "name", user.getEmail().split("@")[0], // Set name as everything before @ on the email address
+                    "dynamicImageUrl", "https://i.imgur.com/nvh7yZ4.png"
+            ));
+
+            DTO.MailRequest request = new DTO.MailRequest();
+            request.setTo(user.getEmail());
+            request.setName(user.getEmail().split("@")[0]); // Set name as everything before @ on the email address
+            request.setSubject(subject);
+
+            String templateFileName = "email-template-password-reset.ftl";
+            try {
+                emailService.sendEmail(request, model, templateFileName);
+            } catch (Exception e) {
+                // Log the exception for further analysis or debugging
+                logger.error("An error occurred while sending an email: {}", e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
+            }
+            return ResponseEntity.ok("Password Reset Email sent.");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Found user was null!");
+    }
+
+    /**
      * Scheduled task to send project update emails daily at 12 PM.
      * Fetches ongoing projects and sends an update to the administrators.
      * @return ResponseEntity indicating the success or failure of sending the email.
