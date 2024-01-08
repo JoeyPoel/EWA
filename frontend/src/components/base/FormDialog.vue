@@ -40,6 +40,9 @@ import ProductStockLevelsTable from "@/components/tables/ProductStockLevelsTable
 import ProjectMaterialsTable from "@/components/tables/ProjectMaterialsTable.vue";
 import InventoryTransactionsTable from "@/components/tables/InventoryTransactionsTable.vue";
 import WarehouseStockLevelsTable from "@/components/tables/WarehouseStockLevelsTable.vue";
+import WarehouseProjectsTable from "@/components/tables/WarehouseProjectsTable.vue";
+import WarehouseTeamsTable from "@/components/tables/WarehouseTeamsTable.vue";
+import WarehouseTransactionsTable from "@/components/tables/WarehouseTransactionsTable.vue";
 
 export default {
   name: 'FormDialog',
@@ -50,6 +53,9 @@ export default {
     ProjectMaterialsTable,
     InventoryTransactionsTable,
     WarehouseStockLevelsTable,
+    WarehouseProjectsTable,
+    WarehouseTeamsTable,
+    WarehouseTransactionsTable
   },
   props: {
     open: {
