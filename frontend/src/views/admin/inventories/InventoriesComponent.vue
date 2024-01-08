@@ -1,6 +1,6 @@
 <template>
   <v-container :fluid="true">
-    <base-card class="mt-1" color="secondary" title="Inventories">
+    <v-card class="mt-1" color="secondary" title="Inventories">
       <data-filter :search="search" :can-search="true" @input="search = $event"
                    :can-sort-by-warehouse="true" @warehouse="selectedWarehouse = $event"/>
       <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
@@ -146,7 +146,7 @@
           </v-card>
         </template>
       </v-data-table>
-    </base-card>
+    </v-card>
   </v-container>
 </template>
 
@@ -274,7 +274,7 @@ export default {
     },
 
     getColor(category) {
-      return Transaction.getTransactionFlow(category, this.selectedWarehouse.id) === 'IN' ? 'green' : 'red';
+      return Transaction.getTransactionFlow(category, this.selectedWarehouse) === 'IN' ? 'green' : 'red';
     },
 
 

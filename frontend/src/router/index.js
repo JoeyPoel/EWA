@@ -22,6 +22,15 @@ const routes = [
         },
     },
     {
+        path: '/warehouses2',
+        name: 'Warehouses2',
+        component: () => import('@/views/admin/warehouses/WarehousesV2.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['USER', 'ADMIN'],
+        },
+    },
+    {
         path: '/products',
         name: 'Products',
         component: () => import('@/views/admin/products/ProductsComponent.vue'),
