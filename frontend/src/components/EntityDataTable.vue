@@ -5,6 +5,9 @@
       <DataTable :dialog-config="dialog" :table-config="table"
                  @action="handleDialogAction(true, $event.action, $event.item)"
                  @delete="handleDelete" @save="handleSave">
+        <template v-for="customValue in table.customValues" v-slot:[`${customValue.value}`]>
+          <slot :name="customValue.value"/>
+        </template>
         <template v-slot:filter>
           <data-filter :can-search="filter.canSearch" :can-sort-by-team="filter.canSortByTeam"
                        :can-sort-by-warehouse="filter.canSortByWarehouse" @filterChange="table.searchTerm = $event"

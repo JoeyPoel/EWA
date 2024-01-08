@@ -19,6 +19,9 @@
           {{ action.icon }}
         </v-icon>
       </template>
+      <template v-slot:[`item.status`]="{ item }">
+        <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
+      </template>
     </v-data-table>
     <dialog-component v-if="dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
                       :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
@@ -28,8 +31,14 @@
 
 <script>
 import FormDialog from "@/components/base/FormDialog.vue";
+import {Project} from "@/models/Project";
 
 export default {
+  computed: {
+    Project() {
+      return Project
+    }
+  },
   components: {
     dialogComponent: FormDialog
   },

@@ -49,6 +49,15 @@ const routes = [
         }
     },
     {
+        path: '/projects2',
+        name: 'Projects2',
+        component: () => import('@/views/admin/projects/ProjectsV2.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ['ADMIN'],
+        }
+    },
+    {
         path: '/users',
         name: 'Users',
         component: () => import('@/views/admin/users/UsersComponent.vue'),

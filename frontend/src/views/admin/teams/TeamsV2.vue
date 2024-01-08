@@ -4,6 +4,7 @@
                      @update-tableConfig="tableConfig = $event" @update-dialogConfig="dialogConfig = $event"
                      @update-filterConfig="filterConfig = $event" @warehouse-change="selectedWarehouse = $event"/>
 </template>
+
 <script>
 import {Team} from "@/models/Team";
 import EntityDataTable from "@/components/EntityDataTable.vue";
@@ -13,7 +14,6 @@ export default {
   inject: ['teamsService', 'warehousesService', 'usersService'],
   components: {
     EntityDataTable,
-
   },
   data() {
     return {
@@ -60,11 +60,9 @@ export default {
       }
     }
   },
-
   async created() {
     await this.initialize();
   },
-
   watch: {
     selectedWarehouse: {
       handler: async function () {
@@ -73,7 +71,6 @@ export default {
       deep: true
     },
   },
-
   methods: {
     async initialize() {
       this.warehouses = await this.fetchWarehouses();

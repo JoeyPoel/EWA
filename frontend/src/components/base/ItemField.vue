@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12" md="6">
-    <v-text-field v-if="type === 'text' || type === 'number'"
+    <v-text-field v-if="type === 'text' || type === 'number' || type === 'date'"
                   v-model="ItemCopy"
                   :label="label"
                   :rules="rules"
