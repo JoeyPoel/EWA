@@ -18,8 +18,24 @@ export class Project extends Model{
     }
 
     static statusList = [
-
         { value: "IN_PROGRESS", displayName: "In Progress" },
         { value: "FINISHED", displayName: "Finished" },
     ];
+
+    static getStatusColor(project) {
+        switch (project.status) {
+            case "IN_PROGRESS":
+                return "blue";
+            case "FINISHED" || "DONE":
+                return "green";
+            case "TODO":
+                return "red";
+            default:
+                return "grey";
+        }
+    }
+
+    static getStatusDisplayName(status) {
+        return Project.statusList.find(s => s.value === status)?.displayName;
+    }
 }

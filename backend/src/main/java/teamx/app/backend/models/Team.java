@@ -60,7 +60,7 @@ public class Team implements Model<TeamDTO> {
                 .name(name)
                 .warehouseId(warehouse != null ? warehouse.getId() : null)
                 .leaderId(leader != null ? leader.getId() : null)
-                .membersIds(members.isEmpty() ? null : members.stream().map(User::getId).toList())
+                .membersIds(members != null && !members.isEmpty() ? members.stream().map(User::getId).toList() : null)
                 .build();
     }
 }

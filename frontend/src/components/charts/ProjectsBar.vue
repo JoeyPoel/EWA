@@ -1,6 +1,7 @@
 <template>
   <v-container :fluid="true">
-    <v-card title="Projects" class="text-center elevation-2">
+    <v-card class="mt-1 font-weight-bold">
+      <v-card-title class="bg-secondary text-center"><h5 class="fs-3">Projects</h5></v-card-title>
       <base-bar-chart :options="chartOptions" :charts-data="chartData"/>
       <v-card-actions>
         <v-container fluid="true">
@@ -25,7 +26,7 @@
 
 <script>
 
-import BaseBarChart from "@/components/base/BaseBarChart.vue";
+import BaseBarChart from "@/components/base/BarChart.vue";
 
 export default {
   name: "ProjectsBar",

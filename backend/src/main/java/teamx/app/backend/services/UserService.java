@@ -9,7 +9,9 @@ import teamx.app.backend.models.InventoryOrder;
 import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
 import teamx.app.backend.repositories.OrderRepository;
+import teamx.app.backend.repositories.TeamRepository;
 import teamx.app.backend.repositories.UserRepository;
+import teamx.app.backend.utils.DTO.UserDTO ;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,10 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    private final TeamRepository teamRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository, OrderRepository orderRepository) {
+    public UserService(UserRepository userRepository, OrderRepository orderRepository, TeamRepository teamRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.teamRepository = teamRepository;
     }
 
     public List<User> findByRole(User.Role role) {
@@ -70,15 +75,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User update(User user, Long id) {
+    public User update(UserDTO user, Long id) {
         User existingUser = getById(id);
-
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
         existingUser.setPassword(user.getPassword());
-        existingUser.setRole(user.getRole());
-        existingUser.setTeam(user.getTeam());
-
+        existingUser.setRole(User.Role.valueOf(user.getRole()));
+        existingUser.setTeam(user.getTeamId() != null ?
+                teamRepository.findById(user.getTeamId()).orElse(null) :
+                null
+        );
         return userRepository.save(existingUser);
     }
 

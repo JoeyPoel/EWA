@@ -1,7 +1,7 @@
 import TeamsAdaptor from "@/services/TeamsAdaptor";
 import '@jest/globals'; // Import Jest's global functions and matchers
 /**
- * Tests for teams adaptor
+ * Tests for team adaptor
  *
  * @author Joey van der Poel
  */
@@ -16,7 +16,7 @@ describe('TeamsAdaptor', () => {
     });
 
     describe('asyncFindAll', () => {
-        it('should fetch all teams from the API', async () => {
+        it('should fetch all team from the API', async () => {
             const teams = await teamsAdaptor.asyncFindAll();
             expect(teams).toEqual([]);
             expect(teamsAdaptor.fetchJson).toHaveBeenCalledWith(resourceUrl, expect.any(Object));
@@ -43,7 +43,7 @@ describe('TeamsAdaptor', () => {
     });
 
     describe('asyncFindAllByWarehouseId', () => {
-        it('should fetch teams by warehouse ID from the API', async () => {
+        it('should fetch team by warehouse ID from the API', async () => {
             const warehouseId = '456';
             const teams = await teamsAdaptor.asyncFindAllByWarehouseId(warehouseId);
             expect(teams).toEqual([]);
