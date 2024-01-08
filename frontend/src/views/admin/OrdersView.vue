@@ -1,11 +1,14 @@
 <template>
-  <v-container>
-    <h1>OrderViewAdmin</h1>
+  <v-container :fluid="true">
+    <order-entity-table/>
   </v-container>
 </template>
 
 <script>
+import OrderEntityTable from "@/components/order/OrderEntityTable.vue";
+
 export default {
-  name: "OrderViewAdmin"
+  name: "OrderViewAdmin",
+  components: {OrderEntityTable}
 }
 </script>
