@@ -33,7 +33,7 @@ export default {
       session: true,
       routes: [
         { name: 'dashboard', icon: '$dashboard', title: 'Dashboard', to: '/dashboard',  roles: ['ADMIN', 'USER'] },
-        { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventory', roles: ['ADMIN'] },
+        { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventories', roles: ['ADMIN'] },
         { name: 'orders', icon: '$order', title: 'Orders', to: '/orders', roles: ['ADMIN'] },
         { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-projects', roles: ['USER'] },
         { name: 'projects', icon: '$project', title: 'Projects', to: '/projects', roles: ['ADMIN'] },

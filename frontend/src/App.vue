@@ -26,6 +26,7 @@ import {FetchInterceptor} from "./services/FetchInterceptor";
 
 import logo from "@/assets/console.png";
 import FormDialog from "@/components/base/FormDialog.vue";
+import {OrderAdaptor} from "@/services/OrderAdaptor";
 
 export default {
   name: 'App',
@@ -84,7 +85,8 @@ export default {
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
       authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth", this.$router),
       chartsService: new ChartsAdaptor(CONFIG.BACKEND_URL + "/charts"),
-      emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail")
+      emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail"),
+      orderService: new OrderAdaptor(CONFIG.BACKEND_URL + "/orders"),
     }
   },
 }

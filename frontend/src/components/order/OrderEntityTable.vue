@@ -1,8 +1,8 @@
 <template>
   <entity-data-table :dialog-config="dialogConfig" :filter-config="filterConfig" :table-config="tableConfig"
-                     title="Inventories" @delete="handleDelete" @save="handleSave"
+                     title="Orders" @delete="handleDelete" @save="handleSave"
                      @update-tableConfig="tableConfig = $event" @update-dialogConfig="dialogConfig = $event"
-                     @update-filterConfig="filterConfig = $event" @warehouse-change="selectedWarehouse = $event"/>
+                     @update-filterConfig="filterConfig = $event" @warehouse-change="selectedWarehouseId = $event"/>
 </template>
 
 <script>
@@ -11,18 +11,17 @@ import EntityDataTable from "@/components/base/EntityDataTable.vue";
 export default {
   name: "OrderEntityTable",
   components: {EntityDataTable},
-  inject: ['inventoryService', 'productsService', 'warehousesService'],
+  inject: ['orderService', 'warehousesService'],
   data() {
     return {
-      selectedWarehouse: null,
+      selectedWarehouseId: null,
       tableConfig: {
         entityName: 'Order',
         headers: [
           {title: 'ID', key: 'id'},
-          {title: 'Warehouse', key: 'warehouseId'},
+          {title: 'Warehouse', key: 'warehouseName'},
           {title: 'Order Date', key: 'orderDate'},
           {title: 'Delivery Date', key: 'deliveryDate'},
-          {title: 'Project', key: 'projectId'},
           {title: 'Actions', key: 'actions', align: 'center', sortable: false}
         ],
         items: [],
@@ -44,6 +43,8 @@ export default {
           {name: 'orderDate', label: 'Order Date', type: 'date', required: true},
           {name: 'deliveryDate', label: 'Delivery Date', type: 'date', required: false},
           {name: 'projectId', label: 'Project ID', type: 'number', required: false},
+          {name: 'description', label: 'Description', type: 'text', required: false},
+          {name: 'status', label: 'Status', type: 'orderStatus', required: false},
         ],
         detailTabs: [
           {title: 'Order Items', component: 'OrderItemsTable'},
@@ -61,19 +62,30 @@ export default {
     await this.initialize();
   },
   watch: {
-    selectedWarehouse() {
+    selectedWarehouseId() {
       this.fetchInventoryItems();
     }
   },
   methods: {
     async initialize() {
       this.warehouses = await this.warehousesService.asyncFindAll();
-      this.products = await this.productsService.asyncFindAll();
+      this.dialogConfig.itemFields[0].items = this.warehouses;
       await this.fetchOrders();
     },
     async fetchOrders() {
-     alert(`Not implemented`);
-     this.tableConfig.items = [];
+      this.tableConfig.items = this.selectedWarehouseId ?
+          await this.orderService.asyncFindAllByWarehouseId(this.selectedWarehouseId) :
+          await this.orderService.asyncFindAll();
+      this.tableConfig.items = this.tableConfig.items.map(item => {
+        item.warehouseName = item.warehouseId ?
+            this.warehouses.find(warehouse => warehouse.id === item.warehouseId).name :
+            '';
+        item.projectName = item.projectId ?
+            this.projects.find(project => project.id === item.projectId).name :
+            '';
+        return item;
+      });
+      console.log(this.tableConfig.items);
     },
     async handleDelete(item) {
       alert(`Not implemented${JSON.stringify(item)}`);
