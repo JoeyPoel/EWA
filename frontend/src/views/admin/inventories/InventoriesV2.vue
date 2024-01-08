@@ -2,7 +2,7 @@
   <entity-data-table :dialog-config="dialogConfig" :filter-config="filterConfig" :table-config="tableConfig"
                      title="Inventories" @delete="handleDelete" @save="handleSave"
                      @update-tableConfig="tableConfig = $event" @update-dialogConfig="dialogConfig = $event"
-                     @update-filterConfig="filterConfig = $event" @warehouse-change="handleSelectedWarehouse"/>
+                     @update-filterConfig="filterConfig = $event" @warehouse-change="selectedWarehouse = $event"/>
 </template>
 
 <script>
@@ -64,6 +64,11 @@ export default {
   async mounted() {
     await this.initialize();
   },
+  watch: {
+    selectedWarehouse() {
+      this.fetchInventoryItems();
+    }
+  },
   methods: {
     async initialize() {
       await this.fetchInventoryItems();
@@ -72,9 +77,8 @@ export default {
     },
     async fetchInventoryItems() {
       this.inventories = this.selectedWarehouse ?
-          await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse.id) :
+          await this.inventoryService.asyncFindAllByWarehouseId(this.selectedWarehouse) :
           await this.inventoryService.asyncFindAll();
-      console.log(this.inventories)
       this.tableConfig.items = this.inventories;
     },
     async fetchProducts() {
@@ -107,14 +111,6 @@ export default {
       }
       await this.initialize();
     },
-    async handleSelectedWarehouse(warehouse) {
-      this.filterConfig.selectedWarehouse = warehouse;
-      await this.fetchInventoryItems();
-    },
   }
 }
 </script>
-
-<style scoped>
-
-</style>
