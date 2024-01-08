@@ -2,12 +2,10 @@ package teamx.app.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import teamx.app.backend.models.Capacity;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.repositories.ProductCategoryRepository;
 import teamx.app.backend.repositories.ProductRepository;
-import teamx.app.backend.utils.DTO;
 import teamx.app.backend.utils.DTO.ProductDTO;
 
 import java.util.List;
@@ -17,13 +15,11 @@ import java.util.NoSuchElementException;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
-    private final CapacityService capacityService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, CapacityService capacityService) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
-        this.capacityService = capacityService;
     }
 
     public List<Product> findAll() {
@@ -96,20 +92,5 @@ public class ProductService {
 
     public List<Product> findAllActive() {
         return productRepository.findAllByTransactionsIsNotEmpty();
-    }
-
-    public int getMinimumStock(Product product) {
-        List<DTO.CapacityDTO> capacities = capacityService.getAllCapacities();
-        DTO.CapacityDTO capacity = (DTO.CapacityDTO) capacities.stream()
-                .filter(c -> c.getCategoryId().equals(product.getCategory().getId()));
-        return capacity.getMinimumStockLevel();
-    }
-
-    public int setMinimumStock(Product product, int newMinimumStock) {
-        List<DTO.CapacityDTO> capacities = capacityService.getAllCapacities();
-        DTO.CapacityDTO capacity = (DTO.CapacityDTO) capacities.stream()
-                .filter(c -> c.getCategoryId().equals(product.getCategory().getId()));
-        capacity.setMinimumStockLevel(newMinimumStock);
-        return capacity.getMinimumStockLevel();
     }
 }
