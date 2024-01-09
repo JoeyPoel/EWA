@@ -2,7 +2,6 @@ package teamx.app.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import teamx.app.backend.models.Capacity;
 import teamx.app.backend.models.Product;
 import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.repositories.ProductCategoryRepository;
