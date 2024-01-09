@@ -4,7 +4,7 @@ This document provides instructions on how to set up the backend for our project
 built using Java, Maven, and Docker.
 
 - Link to go to the [Frontend Setup](/frontend/README.md)
-- Link to go back to the [Main Page](README.md)
+- Link to go back to the [Main Page](../README.md)
 
 ## Prerequisites
 - Java 17: Ensure Java 17 is installed and configured on your system.

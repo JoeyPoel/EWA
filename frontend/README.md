@@ -4,7 +4,7 @@ This document provides step-by-step instructions for setting up the frontend of 
 which utilizes Node.js and npm.
 
 - Link to go to the [Backend Setup](/backend/README.md)
-- Link to go back to the [Main Page](README.md)
+- Link to go back to the [Main Page](../README.md)
 
 ## Prerequisites
 - Node.js: Version 16.13.1
