@@ -128,28 +128,6 @@ export default {
     },
 
     async handleSave(item) {
-      // Validate the form fields
-      if (!item.name || item.name.length < 3) {
-        alert("Name must be at least 3 characters.");
-        return;
-      }
-
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!item.email || !emailRegex.test(item.email)) {
-        alert("Please enter a valid email.");
-        return;
-      }
-
-      if (!item.role) {
-        alert("Please select a role.");
-        return;
-      }
-
-      if (!item.teamId) {
-        alert("Please select a team.");
-        return;
-      }
-
       // Generate a password for new users
       let password;
       if (!item.id) {
