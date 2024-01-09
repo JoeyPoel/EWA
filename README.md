@@ -1,4 +1,4 @@
-# Solar Sedum EWA X - Local Setup Guide
+# Solar Sedum EWA X
 ### Introduction
 This an application designed for the Solar Sedum team to efficiently manage inventory, projects, teams, and more. 
 This guide provides instructions for setting up and running the application locally.
