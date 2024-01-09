@@ -11,9 +11,10 @@ import EntityDataTable from "@/components/base/EntityDataTable.vue";
 export default {
   name: "OrderEntityTable",
   components: {EntityDataTable},
-  inject: ['orderService', 'warehousesService'],
+  inject: ['orderService', 'warehousesService', 'productsService'],
   data() {
     return {
+      products: [],
       selectedWarehouseId: null,
       productLinesCopy: [],
       tableConfig: {
@@ -47,7 +48,6 @@ export default {
           {name: 'status', label: 'Status', type: 'orderStatus', required: false},
         ],
         detailTabs: [
-          {title: 'Order Items', component: 'OrderItemsTable'},
         ],
         maxWidth: '1000px',
       },
@@ -59,6 +59,7 @@ export default {
     }
   },
   async mounted() {
+    await this.fetchProducts();
     await this.initialize();
   },
   watch: {
@@ -72,6 +73,9 @@ export default {
       this.dialogConfig.itemFields[0].items = this.warehouses;
       await this.fetchOrders();
     },
+    async fetchProducts() {
+      this.products = await this.productsService.asyncFindAll();
+    },
     async fetchOrders() {
       this.tableConfig.items = this.selectedWarehouseId ?
           await this.orderService.asyncFindAllByWarehouseId(this.selectedWarehouseId) :
@@ -83,6 +87,9 @@ export default {
         item.projectName = item.projectId ?
             this.projects.find(project => project.id === item.projectId).name :
             '';
+        for(let i = 0; i < item.products.length; i++) {
+          item.products[i].productName = this.products.find(product => product.id === item.products[i].productId).name;
+        }
         return item;
       });
       console.log(this.tableConfig.items);
