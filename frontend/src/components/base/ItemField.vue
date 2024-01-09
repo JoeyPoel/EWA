@@ -27,12 +27,20 @@
               :chips="true"
               :readonly="disabled"
               @update:model-value="onInputChange"/>
+    <product-line-entity-table
+        v-else-if="type === 'productLine'"
+        :product-lines="ItemCopy"
+        @update:model-value="onInputChange"/>
+    <v-container v-else><h4>Unknown item field type!</h4></v-container>
   </v-col>
 </template>
 
 <script>
+import ProductLineEntityTable from "@/components/product/ProductLineEntityTable.vue";
+
 export default {
   name: "ItemField",
+  components: {ProductLineEntityTable},
   props: {
     type: {
       type: String,
@@ -64,6 +72,7 @@ export default {
       required: false,
       default: () => []
     },
+
   },
   watch: {
   },

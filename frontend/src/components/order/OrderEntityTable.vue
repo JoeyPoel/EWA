@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       selectedWarehouseId: null,
+      productLinesCopy: [],
       tableConfig: {
         entityName: 'Order',
         headers: [
@@ -31,7 +32,6 @@ export default {
           {action: 'Details', icon: '$info', color: 'primary'},
           {action: 'Edit', icon: '$edit', color: 'primary'},
         ],
-        canAdd: false,
       },
       dialogConfig: {
         open: false,
