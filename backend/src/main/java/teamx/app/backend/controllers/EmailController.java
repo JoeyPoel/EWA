@@ -88,7 +88,7 @@ public class EmailController {
     public ResponseEntity<String> sendPassGenEmail(@RequestBody UserDTO user, @RequestParam String generatedPassword) {
         UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
         if (foundUser != null) {
-            String passwordResetLink = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
+            String passwordResetLink = "https://ewa-boolets-fe.onrender/pass-reset:" + foundUser.getJwtToken();
             String subject = "Password generation request";
             String content = "Your new password is: " + generatedPassword + ". Please click the link below to create your own personal password for the solar sedum website";
 
