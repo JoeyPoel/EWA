@@ -1,5 +1,10 @@
 # Backend Setup
-This document provides instructions on how to set up the backend for our project.
+
+This document provides instructions on how to set up the backend for our project, which is 
+built using Java, Maven, and Docker.
+
+- Link to go to the [Frontend Setup](/frontend/README.md)
+- Link to go back to the [Main Page](README.md)
 
 ## Prerequisites
 - Java 17: Ensure Java 17 is installed and configured on your system.
@@ -7,8 +12,6 @@ This document provides instructions on how to set up the backend for our project
 - Docker 19.03.12: Docker is used for building and running containerized versions of the application.
 
 ## Steps
-
-
 
 1. Navigate to the Backend Directory
    Change into the backend directory of the project:
@@ -23,19 +26,13 @@ cd backend
 mvn clean package -DskipTests
 ```
 
-3. Build the Docker Image
-   Create a Docker image for the project. Replace <tag> with an appropriate tag for your Docker image, which could be a version number or 'latest'.
+3. Run the Application for Development
+   For development purposes, you can run the application directly using Maven:
 
 ```bash
-docker build -t "solar3ewa/ewa-boolets-be:<tag>" -f Dockerfile .
+mvn spring-boot:run
 ```
-
-4. Run the Docker Image
-   Run the Docker image on your local machine. The application will be accessible on port 8080. Again, replace <tag> with the tag you used in the previous step.
-
-```bash
-docker run -p 8080:8080 "solar3ewa/ewa-boolets-be:<tag>"
-```
+This will start the Spring Boot application using its embedded server. By default, it can be accessed at http://localhost:8080
 
 ## Testing
 To execute the unit tests for the application, use the following command:
@@ -45,7 +42,25 @@ mvn test
 ```
 
 ## Deployment
-The project is configured for continuous integration and deployment using GitLab CI/CD. Any changes pushed to the main branch will trigger an automated build and deployment process.
+The project is configured for continuous integration and deployment using GitLab CI/CD. Any changes 
+pushed to the main branch will trigger an automated build and deployment process.
 
-## Contributing
-For information on contributing to this project, please read CONTRIBUTING.md. This document includes details on the code of conduct and the process for submitting pull requests.
+1. Docker Image Build
+Create a Docker image for the project. Replace <tag> with an appropriate tag for your Docker image:
+
+```bash
+docker build -t "solar3ewa/ewa-boolets-be:<tag>" -f Dockerfile .
+```
+2. Docker Image Run
+Run the Docker image on your local machine. The application will be accessible on port 8080:
+
+```bash
+docker run -p 8080:8080 "solar3ewa/ewa-boolets-be:<tag>"
+```
+
+3. Docker Image Push
+Push the Docker image to a repository. Ensure you're logged into your Docker registry:
+
+```bash
+docker push "solar3ewa/ewa-boolets-be:<tag>"
+```
