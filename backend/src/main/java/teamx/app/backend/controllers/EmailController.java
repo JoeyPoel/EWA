@@ -49,7 +49,7 @@ public class EmailController {
     public ResponseEntity<String> sendPassResetEmail(@RequestBody UserDTO user) {
         UserDTO foundUser = this.authenthicationService.generateResetPassToken(user.getEmail());
         if (foundUser != null) {
-            String passwordResetLink = "http://localhost:8080/#/pass-reset:" + foundUser.getJwtToken();
+            String passwordResetLink = "https://ewa-boolets-fe.onrender/#/pass-reset:" + foundUser.getJwtToken();
             String subject = "Password reset request";
             String content = "Please click this link underneath to reset your password for the solar sedum website";
 
