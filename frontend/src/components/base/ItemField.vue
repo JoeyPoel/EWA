@@ -33,6 +33,7 @@
 <script>
 export default {
   name: "ItemField",
+  inject: ['productsService'],
   props: {
     type: {
       type: String,
@@ -64,6 +65,15 @@ export default {
       required: false,
       default: () => []
     },
+
+  },
+  data() {
+    return {
+      headers: [
+        {title: "Name", value: "productName"},
+        {title: "Quantity", value: "quantity"},
+      ]
+    }
   },
   watch: {
   },

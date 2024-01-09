@@ -1,84 +1,62 @@
 -- generate data for the database
 
 -- generate warehouses
-insert into warehouses (name, location, address, postcode, country, contact_name, contact_email, contact_phone)
-values ('solar warehouse', 'amsterdam', 'amsterdamseweg 1', '1111aa', 'the netherlands', 'john doe', 'jane@gmail.com',
-        '0612345678'),
-       ('lunar warehouse', 'rotterdam', 'rotterdamseweg 2', '2222bb', 'the netherlands', 'jane doe', 'john@gmail.com',
-        '0712345678'),
-       ('star warehouse', 'the hague', 'haagseweg 3', '3333cc', 'the netherlands', 'jim doe', 'jim@gmail.com',
-        '0812345678'),
-       ('galaxy warehouse', 'utrecht', 'utrechtseweg 4', '4444dd', 'the netherlands', 'jill doe', 'jill@gmail.com',
-        '0912345678');
+INSERT INTO warehouses (name, location, address, postcode, country, contact_name, contact_email, contact_phone)
+VALUES
+    ('Andromeda Warehouse', 'Amsterdam', 'Andromedaweg 1', '1001AD', 'The Netherlands', 'Alice Star', 'alice@andromeda.com', '0611111111'),
+    ('Sirius Storage', 'Rotterdam', 'Siriusstraat 2', '2002SR', 'The Netherlands', 'Bob Bright', 'bob@sirius.com', '0622222222'),
+    ('Milky Way Depot', 'The Hague', 'Milkyweg 3', '3003MW', 'The Netherlands', 'Carol Cosmos', 'carol@milkyway.com', '0633333333'),
+    ('Orion Facility', 'Utrecht', 'Orionlaan 4', '4004OR', 'The Netherlands', 'Dave Orion', 'dave@orion.com', '0644444444'),
+    ('Vega Vault', 'Leiden', 'Vegaweg 5', '5005VG', 'The Netherlands', 'Eve Vega', 'eve@vega.com', '0655555555'),
+    ('Centauri Center', 'Eindhoven', 'Centauristraat 6', '6006CN', 'The Netherlands', 'Frank Centauri', 'frank@centauri.com', '0666666666'),
+    ('Polaris Port', 'Groningen', 'Polarisplein 7', '7007PL', 'The Netherlands', 'Grace Polaris', 'grace@polaris.com', '0677777777'),
+    ('Lyra Loft', 'Maastricht', 'Lyralaan 8', '8008LY', 'The Netherlands', 'Henry Lyra', 'henry@lyra.com', '0688888888'),
+    ('Cassiopeia Compound', 'Breda', 'Cassiopeiaweg 9', '9009CS', 'The Netherlands', 'Ivy Cassiopeia', 'ivy@cassiopeia.com', '0699999999'),
+    ('Galileo Garage', 'Almere', 'Galileistraat 10', '1010GL', 'The Netherlands', 'Jack Galileo', 'jack@galileo.com', '0610101010');
+
 
 -- generate product categories
-insert into product_categories (name, description)
-values ('solar panel',
-        'a solar panel is a panel designed to absorb the sun"s rays as a source of energy for generating electricity or heating.'),
-       ('solar inverter',
-        'a solar inverter, or pv inverter, converts the variable direct current (dc) output of a photovoltaic (pv) solar panel into a utility frequency alternating current (ac).'),
-       ('solar battery',
-        'a solar battery is a rechargeable battery that integrates a solar cell with battery power storage.'),
-       ('solar charge controller',
-        'a solar charge controller, or solar regulator, is an electronic device that prevents batteries from overcharging.'),
-       ('solar mounting system',
-        'a solar mounting system is used to fix solar panels on surfaces like roofs, building facades, or the ground.'),
-       ('solar cable', 'a solar cable is the interconnection cable used in photovoltaic power generation.'),
-       ('solar connector', 'a solar connector is an electrical connector designed to connect solar panels.');
+INSERT INTO product_categories (name, description)
+VALUES
+    ('Solar Panel', 'Photovoltaic modules designed for converting solar energy into electrical power'),
+    ('Inverter', 'Device that converts direct current (DC) from solar panels into alternating current (AC) for use in homes and businesses'),
+    ('Solar Energy Monitoring System', 'Systems designed to monitor and manage the performance and output of solar energy installations');
 
 -- generate products
-insert into products (name, description, category_id , price)
-values ('solar panel 100w', '100w solar panel for generating electricity',
-        (select id from product_categories where name = 'solar panel'), 100.00),
-       ('solar panel 200w', '200w solar panel for generating electricity',
-        (select id from product_categories where name = 'solar panel'), 200.00),
-       ('solar panel 300w', '300w solar panel for generating electricity',
-        (select id from product_categories where name = 'solar panel'), 300.00),
-       ('solar panel 400w', '400w solar panel for generating electricity',
-        (select id from product_categories where name = 'solar panel'), 400.00),
-       ('solar inverter 500w', '500w solar inverter for converting dc to ac',
-        (select id from product_categories where name = 'solar inverter'), 500.00),
-       ('solar inverter 600w', '600w solar inverter for converting dc to ac',
-        (select id from product_categories where name = 'solar inverter'), 600.00),
-       ('solar inverter 700w', '700w solar inverter for converting dc to ac',
-        (select id from product_categories where name = 'solar inverter'), 700.00),
-       ('solar inverter 800w', '800w solar inverter for converting dc to ac',
-        (select id from product_categories where name = 'solar inverter'), 800.00),
-       ('solar battery 200ah', '200ah solar battery for storing electricity',
-        (select id from product_categories where name = 'solar battery'), 200.00),
-       ('solar battery 300ah', '300ah solar battery for storing electricity',
-        (select id from product_categories where name = 'solar battery'), 300.00),
-       ('solar battery 400ah', '400ah solar battery for storing electricity',
-        (select id from product_categories where name = 'solar battery'), 400.00),
-       ('solar battery 500ah', '500ah solar battery for storing electricity',
-        (select id from product_categories where name = 'solar battery'), 500.00),
-       ('solar charge controller 20a', '20a solar charge controller for controlling charge',
-        (select id from product_categories where name = 'solar charge controller'), 20.00),
-       ('solar mounting system', 'solar mounting system for mounting solar panels',
-        (select id from product_categories where name = 'solar mounting system'), 150.00),
-       ('solar cable 10m', '10m solar cable for connecting solar components',
-        (select id from product_categories where name = 'solar cable'), 10.00),
-       ('solar connector', 'solar connector for connecting solar panels',
-        (select id from product_categories where name = 'solar connector'), 5.00);
+INSERT INTO products (name, description, category_id, price)
+VALUES
+    ('Enphase IQ7+', 'Advanced microinverter for efficient solar energy conversion', 2, 210.00),
+    ('DENIM 405 Black', 'High-performance black solar panel with a 405W capacity', 1, 180.00),
+    ('MB 385 White', 'Eco-friendly white solar panel with a 385W capacity', 1, 170.00),
+    ('Gateway Standard', 'Standard solar system gateway for monitoring and control', 2, 120.00),
+    ('MB 390wp White', 'Energy-efficient white solar panel with 390 watts peak power', 1, 175.00),
+    ('Enphase Envoy', 'Smart solar energy monitoring system for efficient management', 3, 200.00);
 
 -- generate teams
-insert into teams (name, warehouse_id)
-values ('solar warriors', 1),
-       ('solar legends', 2),
-       ('solar heroes', 3),
-       ('solar champions', 4),
-       ('lunar amazonians', 2),
-       ('lunar spartans', 2),
-       ('lunar titans', 2),
-       ('lunar gods', 2),
-       ('star jupiter', 3),
-       ('star saturn', 3),
-       ('star mars', 3),
-       ('star venus', 3),
-       ('galaxy andromeda', 4),
-       ('galaxy milky way', 4),
-       ('galaxy black hole', 4),
-       ('galaxy big bang', 4);
+INSERT INTO teams (name, warehouse_id)
+VALUES
+    ('Galaxy Orion', 5),
+    ('Galaxy Nebula', 5),
+    ('Galaxy Comet', 5),
+    ('Galaxy Cosmos', 5),
+    ('Cosmic Pioneers', 6),
+    ('Cosmic Voyagers', 6),
+    ('Cosmic Explorers', 6),
+    ('Cosmic Navigators', 6),
+    ('Stellar Supernovas', 7),
+    ('Stellar Meteors', 7),
+    ('Stellar Quasars', 7),
+    ('Stellar Pulsars', 7),
+    ('Solar Pioneers', 1),
+    ('Solar Voyagers', 1),
+    ('Solar Explorers', 1),
+    ('Solar Navigators', 1),
+    ('Lunar Rangers', 2),
+    ('Lunar Pathfinders', 2),
+    ('Lunar Discoverers', 2),
+    ('Star Astronauts', 3),
+    ('Star Cosmonauts', 3),
+    ('Galaxy Astronomers', 4);
 
 -- generate users
 insert into users (name, email, password, role, team_id)
@@ -126,190 +104,156 @@ values ('john doe', 'admin@admin.com', 'admin', 'ADMIN', 1),
        ('robert oppenheimer', 'robert.oppenheimer@company.com', 'robertoppenheimerpassword', 'USER', 12),
        ('louis pasteur', 'louis.pasteur@company.com', 'louispasteurpassword', 'USER', 13),
        ('alexander fleming', 'alexander.fleming@company.com', 'alexanderflemingpassword', 'USER', 13),
-       ('gregor mendel', 'gregor.mendel@company.com', 'gregormendelpassword', 'USER', null),
-       ('charles darwin', 'charles.darwin@company.com', 'charlesdarwinpassword', 'USER', null),
-       ('rosalind franklin', 'rosalind.franklin@company.com', 'rosalindfranklinpassword', 'USER', null),
-       ('francis crick', 'francis.crick@company.com', 'franciscrickpassword', 'USER', null),
-       ('james watson', 'james.watson@company.com', 'jameswatsonpassword', 'USER', null),
-       ('maurice wilkins', 'maurice.wilkins@company.com', 'mauricewilkinspassword', 'USER', null),
+       ('gregor mendel', 'gregor.mendel@company.com', 'gregormendelpassword', 'USER', 17),
+       ('charles darwin', 'charles.darwin@company.com', 'charlesdarwinpassword', 'USER', 18),
+       ('rosalind franklin', 'rosalind.franklin@company.com', 'rosalindfranklinpassword', 'USER', 19),
+       ('francis crick', 'francis.crick@company.com', 'franciscrickpassword', 'USER', 20),
+       ('james watson', 'james.watson@company.com', 'jameswatsonpassword', 'USER', 22),
+       ('maurice wilkins', 'maurice.wilkins@company.com', 'mauricewilkinspassword', 'USER', 21),
        ('johnny magielse', 'johnnymihai33@gmail.com', 'johnny', 'ADMIN', null);
 
 insert into warehouse_product_category_capacities (capacity, minimum_stock_level, warehouse_id, product_category_id)
 values
-    (100, 10, 1, 1),
-    (200, 20, 1, 2),
-    (300, 30, 1, 3),
-    (400, 40, 1, 4),
-    (500, 50, 1, 5),
-    (600, 60, 1, 6),
-    (700, 70, 1, 7),
-    (800, 80, 2, 1),
-    (900, 90, 2, 2),
-    (1000, 100, 2, 3),
-    (1100, 110, 2, 4),
-    (1200, 120, 2, 5),
-    (1300, 130, 2, 6),
-    (1400, 140, 2, 7),
-    (1500, 150, 3, 1),
-    (1600, 160, 3, 2),
-    (1700, 170, 3, 3),
-    (1800, 180, 3, 4),
-    (1900, 190, 3, 5),
-    (2000, 200, 3, 6),
-    (2100, 210, 3, 7),
-    (2200, 220, 4, 1),
-    (2300, 230, 4, 2),
-    (2400, 240, 4, 3),
-    (2500, 250, 4, 4),
-    (2600, 260, 4, 5),
-    (2700, 270, 4, 6),
-    (2800, 280, 4, 7);
+    (500, 50, 1, 1),  -- Warehouse 1, Solar Panel
+    (300, 30, 1, 2),  -- Warehouse 1, Inverter
+    (200, 20, 1, 3),  -- Warehouse 1, Solar Energy Monitoring System
+    (450, 45, 2, 1),  -- Warehouse 2, Solar Panel
+    (350, 35, 2, 2),  -- Warehouse 2, Inverter
+    (250, 25, 2, 3),  -- Warehouse 2, Solar Energy Monitoring System
+    (400, 40, 3, 1),  -- Warehouse 3, Solar Panel
+    (200, 20, 3, 2),  -- Warehouse 3, Inverter
+    (150, 15, 3, 3),  -- Warehouse 3, Solar Energy Monitoring System
+    (550, 55, 4, 1),  -- Warehouse 4, Solar Panel
+    (250, 25, 4, 2),  -- Warehouse 4, Inverter
+    (100, 10, 4, 3),  -- Warehouse 4, Solar Energy Monitoring System
+    (500, 50, 5, 1),  -- Warehouse 5, Solar Panel
+    (300, 30, 5, 2),  -- Warehouse 5, Inverter
+    (200, 20, 5, 3),  -- Warehouse 5, Solar Energy Monitoring System
+    (450, 45, 6, 1),  -- Warehouse 6, Solar Panel
+    (350, 35, 6, 2),  -- Warehouse 6, Inverter
+    (250, 25, 6, 3),  -- Warehouse 6, Solar Energy Monitoring System
+    (400, 40, 7, 1),  -- Warehouse 7, Solar Panel
+    (200, 20, 7, 2),  -- Warehouse 7, Inverter
+    (150, 15, 7, 3),  -- Warehouse 7, Solar Energy Monitoring System
+    (550, 55, 8, 1),  -- Warehouse 8, Solar Panel
+    (250, 25, 8, 2),  -- Warehouse 8, Inverter
+    (100, 10, 8, 3),  -- Warehouse 8, Solar Energy Monitoring System
+    (500, 50, 9, 1),  -- Warehouse 9, Solar Panel
+    (300, 30, 9, 2),  -- Warehouse 9, Inverter
+    (200, 20, 9, 3),  -- Warehouse 9, Solar Energy Monitoring System
+    (450, 45, 10, 1),  -- Warehouse 10, Solar Panel
+    (350, 35, 10, 2),  -- Warehouse 10, Inverter
+    (250, 25, 10, 3);  -- Warehouse 10, Solar Energy Monitoring System
 
-insert into inventoryorders (description, is_delivered, order_date, delivery_date, warehouse_id, ordered_by_id)
-values ('inventoryorder 1', false, '2023-01-01', '2023-01-10', 1, 1),
-       ('inventoryorder 2', true, '2023-02-01', '2023-02-10', 1, 2),
-       ('inventoryorder 3', false, '2023-03-01', '2023-03-10', 2, 3),
-       ('inventoryorder 4', true, '2023-04-01', '2023-04-10', 2, 4),
-       ('inventoryorder 5', false, '2023-05-01', '2023-05-10', 3, 5),
-       ('inventoryorder 6', true, '2023-06-01', '2023-06-10', 3, 6),
-       ('inventoryorder 7', false, '2023-07-01', '2023-07-10', 4, 7),
-       ('inventoryorder 8', true, '2023-08-01', '2023-08-10', 4, 8),
-       ('inventoryorder 9', false, '2023-07-01', '2023-07-10', 1, 9),
-       ('inventoryorder 10', true, '2023-07-15', '2023-07-25', 1, 10),
-       ('inventoryorder 11', false, '2023-07-30', '2023-08-09', 2, 11),
-       ('inventoryorder 12', true, '2023-08-14', '2023-08-24', 2, 12),
-       ('inventoryorder 13', false, '2023-08-29', '2023-09-08', 3, 13),
-       ('inventoryorder 14', true, '2023-09-13', '2023-09-23', 3, 14),
-       ('inventoryorder 15', false, '2023-09-28', '2023-10-08', 4, 15),
-       ('inventoryorder 16', true, '2023-10-13', '2023-10-23', 4, 16),
-       ('inventoryorder 17', false, '2023-10-28', '2023-11-07', 1, 17),
-       ('inventoryorder 18', true, '2023-11-12', '2023-11-22', 1, 18),
-       ('inventoryorder 19', false, '2023-12-03', '2023-12-13', 2, 19),
-       ('inventoryorder 20', true, '2024-01-20', '2024-01-30', 3, 20),
-       ('inventoryorder 21', false, '2023-12-18', '2023-12-28', 4, 21),
-       ('inventoryorder 22', true,  '2024-01-04', '2024-01-14', 1, 22),
-       ('inventoryorder 23', false, '2024-01-19', '2024-01-29', 2, 23),
-       ('inventoryorder 24', true,  '2024-02-03', '2024-02-13', 3, 24),
-       ('inventoryorder 25', false, '2024-02-18', '2024-02-28', 4, 25),
-       ('inventoryorder 26', true,  '2023-12-13', '2023-12-23', 4, 26),
-       ('inventoryorder 27', false, '2024-01-08', '2024-01-18', 1, 27),
-       ('inventoryorder 28', true,  '2024-01-13', '2024-01-23', 2, 28),
-       ('inventoryorder 29', false, '2024-02-08', '2024-02-18', 3, 29),
-       ('inventoryorder 30', true,  '2024-02-23', '2024-03-05', 4, 30);
+
+INSERT INTO inventoryorders (description, order_date, delivery_date, warehouse_id, ordered_by_id)
+VALUES
+    ('Solar Panel Bulk Order', '2023-04-15', '2023-04-25', 1, 1),
+    ('Inverter Supply Order', '2023-04-20', '2023-04-30', 2, 2),
+    ('Solar Monitoring Kit Order', '2023-04-25', '2023-05-05', 3, 3),
+    ('Photovoltaic System Order', '2023-05-01', '2023-05-11', 4, 4),
+    ('Green Energy Equipment Order', '2023-05-10', '2023-05-20', 5, 5),
+    ('Advanced Inverter Purchase', '2023-05-15', '2023-05-25', 6, 6),
+    ('Residential Solar Panel Order', '2023-05-22', '2023-06-01', 7, 7),
+    ('Commercial Solar Equipment Order', '2023-06-01', '2023-06-11', 8, 8),
+    ('Solar Battery Systems Order', '2023-06-10', '2023-06-20', 9, 9),
+    ('Eco-friendly Solar Accessories', '2023-06-18', '2023-06-28', 10, 10),
+    ('Solar Energy Storage Solutions', '2023-07-01', '2023-07-11', 1, 1),
+    ('High-Efficiency Solar Panels', '2023-07-15', '2023-07-25', 2, 2),
+    ('Innovative Solar Inverters', '2023-07-22', '2023-08-01', 3, 3),
+    ('Smart Solar Monitoring Systems', '2023-08-05', '2023-08-15', 4, 4),
+    ('Renewable Energy Supply Order', '2023-08-28', '2023-09-05', 5, 5),
+    ('Bulk Order of Solar Panels', '2023-09-05', '2023-09-15', 6, 1),
+    ('Order for High-capacity Inverters', '2023-09-20', '2023-09-30', 7, 2),
+    ('Renewable Energy Equipment', '2023-10-10', '2023-10-20', 8, 3),
+    ('Solar Monitoring Systems', '2023-11-05', '2023-11-15', 9, 4),
+    ('Photovoltaic Panels Procurement', '2023-12-01', '2023-12-11', 10, 5),
+    ('Advanced Solar Inverter Order', '2024-01-02', '2024-01-12', 1, 6),
+    ('Green Energy Supply Order', '2024-01-07', '2024-01-17', 2, 7),
+    ('Sustainable Solar Equipments', '2024-01-15', '2024-01-25', 3, 8),
+    ('High Efficiency Solar Panels', '2024-01-20', '2024-01-30', 4, 9),
+    ('Solar Panel Bulk Order', '2023-10-05', '2023-10-15', 1, 1),
+    ('Inverter Supply Order', '2023-10-20', '2023-10-30', 2, 2),
+    ('Solar Monitoring Kit Order', '2023-11-03', '2023-11-13', 3, 3),
+    ('Photovoltaic System Order', '2023-11-17', '2023-11-27', 4, 4),
+    ('Green Energy Equipment Order', '2023-12-01', '2023-12-11', 5, 5),
+    ('Advanced Inverter Purchase', '2023-12-15', '2023-12-25', 6, 6),
+    ('Residential Solar Panel Order', '2024-01-08', '2024-01-18', 7, 7),
+    ('Solar Chargers', '2023-09-05', '2023-09-15', 8, 8),
+    ('Energy Storage', '2023-09-20', '2023-09-30', 9, 9),
+    ('Eco Inverters', '2023-10-10', '2023-10-20', 10, 10),
+    ('PV Panels', '2023-10-25', '2023-11-04', 1, 1),
+    ('Solar Kits', '2023-11-10', '2023-11-20', 2, 2),
+    ('Battery Systems', '2023-11-25', '2023-12-05', 3, 3),
+    ('Panel Procurement', '2023-12-10', '2023-12-20', 4, 4),
+    ('Inverter Purchase', '2023-12-25', '2024-01-04', 5, 5),
+    ('Monitoring Systems', '2024-01-10', '2024-01-20', 6, 6),
+    ('Eco Accessories', '2024-01-25', '2024-02-04', 7, 7);
+
 
 insert into projects (name, description, location, client_name, client_email, client_phone, start_date, end_date, status,
                       team_id)
-values ('energy infrastructure', 'revamping the energy infrastructure', 'amsterdam', 'amsterdam municipality', 'municipality1@email.com', '112-113-1141',
-        '2023-07-01', '2023-10-15', 'IN_PROGRESS', 1),
-       ('the canal rejuvenation', 'improving the quality of canals', 'rotterdam', 'rotterdam city', 'cityrotterdam@email.com', '221-212-2222',
-        '2023-07-05', '2023-11-01', 'FINISHED', 2),
-       ('implementing smart city', 'implementation of smart city solutions', 'eindhoven', 'eindhoven city', 'cityeindhoven@email.com', '331-333-3311',
-        '2023-07-15', '2023-11-15', 'IN_PROGRESS', 3),
-       ('transport campaign', 'launch of new transport campaign', 'utrecht', 'utrecht govt.', 'govtutrecht@email.com', '441-422-4442',
-        '2023-08-01', '2023-12-01', 'IN_PROGRESS', 4),
-       ('cycling track enhancement', 'improvement and enhancement of cycling tracks', 'groningen', 'groningen city', 'citygroningen@email.com', '551-532-5550',
-        '2023-08-05', '2023-10-30', 'FINISHED', 5),
-       ('smart parking solution', 'introduction of smart parking solutions', 'the hague', 'hague city', 'cityhague@email.com', '661-644-6664',
-        '2023-09-01', '2024-01-01', 'IN_PROGRESS', 6),
-       ('urban reforming', 'urban reforming projects', 'delft', 'delft city', 'citydelft@email.com', '771-772-7772',
-        '2023-10-01', '2024-01-15', 'IN_PROGRESS', 7),
-       ('modern agriculture', 'introduction of modern agriculture techniques', 'tilburg', 'tilburg city', 'citytilburg@email.com', '881-882-8882',
-        '2023-10-15', '2024-01-10', 'FINISHED', 8),
-       ('smart traffic signals', 'implementing smart traffic signals', 'nijmegen', 'nijmegen govt.', 'govtnijmegen@email.com', '991-992-9992',
-        '2023-11-01', '2024-01-10', 'IN_PROGRESS', 9),
-       ('eco-friendly solutions', 'introducing eco-friendly living solutions', 'haarlem', 'haarlem city', 'cityhaarlem@email.com', '101-112-1102',
-        '2023-12-01', '2024-01-05', 'IN_PROGRESS', 10),
-       ('tourism enhancement', 'projects enhancing tourism possibilities', 'dordrecht', 'dordrecht city', 'citydordrecht@email.com', '121-132-1212',
-        '2023-12-01', '2024-01-15', 'IN_PROGRESS', 11),
-       ('digitalization of libraries', 'digitalizing the city libraries', 'amsterdam', 'amsterdam city', 'cityamsterdam1@email.com', '131-142-1312',
-        '2023-09-01', '2024-01-02', 'FINISHED', 12),
-       ('modern sanitation', 'introducing modern sanitation and recycling', 'enschede', 'enschede govt.', 'govtenschede@email.com', '141-152-1422',
-        '2023-09-15', '2023-12-31', 'IN_PROGRESS', 13),
-       ('city wifi project', 'providing wi-fi connectivity in public places', 'leeuwarden', 'leeuwarden city', 'cityleeuwarden@email.com', '151-162-1512',
-        '2023-08-01', '2023-12-15', 'IN_PROGRESS', 1),
-       ('urban gardening', 'promoting urban gardening', 'arnhem', 'arnhem city', 'cityarnhem@email.com', '162-163-1622',
-        '2023-07-01', '2023-12-31', 'FINISHED', 2),
-       ('renewable energy', 'promotion of renewable energy usage', 'breda', 'breda govt.', 'govtbreda@email.com', '173-174-1732',
-        '2023-08-01', '2023-12-10', 'IN_PROGRESS', 3),
-       ('health campaign', 'health awareness campaign', 'almere', 'almere city', 'cityalmere@email.com', '184-185-1842',
-        '2023-08-15', '2024-01-05', 'IN_PROGRESS', 4),
-       ('public transport upgrade', 'upgrading public transport system', 'spijkenisse', 'spijkenisse city', 'cityspijkenisse@email.com', '195-196-1952',
-        '2023-07-15', '2023-10-30', 'FINISHED', 5),
-       ('revamp of parks', 'revamping of city parks', 'apeldoorn', 'apeldoorn city', 'cityapeldoorn@email.com', '206-207-2062',
-        '2023-09-01', '2023-12-20', 'IN_PROGRESS', 6),
-       ('affordable housing', 'projects for affordable housing', 'venlo', 'venlo govt.', 'govtvenlo@email.com', '217-218-2172',
-        '2023-08-01', '2023-12-15', 'IN_PROGRESS', 7),
-       ('city aquatics', 'improvement of city aquatics facilities', 'zaanstad', 'zaanstad city', 'cityzaanstad@email.com', '228-229-2282',
-        '2023-07-01', '2023-10-20', 'FINISHED', 8),
-       ('vinex housing project', 'working on large-scale vinex housing projects', 'utrecht', 'utrecht govt.', 'govtutrecht1@email.com', '239-240-2392',
-        '2023-08-01', '2023-12-30', 'IN_PROGRESS', 9),
-       ('elderly care houses', 'building elderly care houses', 's-hertogenbosch', 's-hertogenbosch city', 'cityshertogenbosch@email.com', '250-251-2502',
-        '2023-07-01', '2023-11-01', 'IN_PROGRESS', 10),
-       ('museum renovation', 'renovation of the city museum', 'zoetermeer', 'zoetermeer city', 'cityzoetermeer@email.com', '261-262-2612',
-        '2023-09-01', '2023-12-31', 'FINISHED', 11),
-       ('public space upgradation', 'improving public spaces', 'maastricht', 'maastricht city', 'citymaastricht@email.com', '272-273-2722',
-        '2023-10-01', '2024-01-15', 'IN_PROGRESS', 12),
-       ('historic sites revival', 'revival of historic sites', 'leiden', 'leiden city', 'cityleiden@email.com', '287-282-2882',
-        '2023-10-01', '2023-12-31', 'FINISHED', 13),
-       ('smart street lighting', 'implementing smart street lighting', 'zwolle', 'zwolle city', 'cityzwolle@email.com', '296-290-2990',
-        '2023-09-01', '2023-12-27', 'FINISHED', 14),
-       ('solar power harvesting', 'solar power harvesting projects', 'lelystad', 'lelystad city', 'citylelystad@email.com', '309-310-3020',
-        '2023-07-25', '2023-12-24', 'FINISHED', 15),
-       ('water management', 'water management and waste water treatment', 'roermond', 'roermond city', 'cityroermond@email.com', '312-311-3131',
-        '2023-09-01', '2024-01-01', 'FINISHED', 16),
-       ('educational reform', 'educational reform in primary schools', 'zutphen', 'zutphen govt.', 'govtzutphen@email.com', '324-322-3232',
-        '2023-09-15', '2024-01-01', 'FINISHED', 1),
-       ('public health care', 'upgrade of public health care facilities', 'assen', 'assen city', 'cityassen@email.com', '335-332-3422',
-        '2023-07-10', '2023-10-31', 'FINISHED', 2),
-       ('music fest organization', 'organizing the annual music festival', 'goes', 'goes city', 'citygoes@email.com', '345-352-3512',
-        '2023-09-09', '2023-12-09', 'FINISHED', 3),
-       ('public library expansion', 'expansion of public libraries', 'vlissingen', 'vlissingen city', 'cityvlissingen@email.com', '365-364-3634',
-        '2023-07-07', '2023-11-07', 'FINISHED', 4),
-       ('recycling campaign', 'citywide recycling and waste management campaign', 'alkmaar', 'alkmaar city', 'cityalkmaar@email.com', '375-374-3734',
-        '2023-09-01', '2024-01-01', 'FINISHED', 5),
-       ('digital governance', 'implementing digital governance system', 'gouda', 'gouda govt.', 'govtgouda@email.com', '387-386-3854',
-        '2023-11-01', '2024-01-05', 'FINISHED', 6),
-       ('green transport initiative', 'improving green transport methods', 'amsterdam', 'amsterdam municipality', 'municipality1@email.com', '388-389-3901',
-        '2024-01-01', '2024-04-15', 'IN_PROGRESS', 1),
-       ('smart city project', 'upgrading city infrastructures with smart solutions', 'rotterdam', 'rotterdam city', 'cityrotterdam@email.com', '391-392-3932',
-        '2024-01-05', '2024-05-01', 'FINISHED', 2),
-       ('digital education', 'implementing digital education in schools', 'eindhoven', 'eindhoven city', 'cityeindhoven@email.com', '394-395-3963',
-        '2024-01-10', '2024-05-15', 'IN_PROGRESS', 3),
-       ('tourism promotion campaign', 'promoting regional tourism', 'utrecht', 'utrecht govt.', 'govtutrecht@email.com', '397-398-3994',
-        '2024-01-15', '2024-05-20', 'IN_PROGRESS', 4),
-       ('eco city project', 'transitioning towards an eco-friendly city', 'groningen', 'groningen city', 'citygroningen@email.com', '400-401-4025',
-        '2024-01-20', '2024-05-25', 'FINISHED', 5),
-       ('digital economy', 'encouraging the digital economy through various initiatives', 'the hague', 'hague city', 'cityhague@email.com', '403-404-4056',
-        '2024-01-25', '2024-05-30', 'IN_PROGRESS', 6),
-       ('renewable energy project', 'implementing renewable energy solutions', 'delft', 'delft city', 'citydelft@email.com', '406-407-4087',
-        '2024-01-30', '2024-06-05', 'IN_PROGRESS', 7),
-       ('smart agriculture', 'modernizing agriculture with smart techniques', 'tilburg', 'tilburg city', 'citytilburg@email.com', '409-410-4118',
-        '2024-02-04', '2024-06-10', 'FINISHED', 8),
-       ('smart traffic management', 'upgrading traffic signals and management', 'nijmegen', 'nijmegen govt.', 'govtnijmegen@email.com', '412-413-4149',
-        '2024-02-09', '2024-06-15', 'IN_PROGRESS', 9),
-       ('environmental awareness campaign', 'running an environmental awareness campaign', 'haarlem', 'haarlem city', 'cityhaarlem@email.com', '415-416-4170',
-        '2024-02-14', '2024-06-20', 'IN_PROGRESS', 10),
-       ('public safety measures', 'enhancing public safety measures', 'dordrecht', 'dordrecht city', 'citydordrecht@email.com', '418-419-4201',
-        '2024-02-19', '2024-06-25', 'IN_PROGRESS', 11),
-       ('heritage site restoration', 'restoration and preservation of heritage sites', 'amsterdam', 'amsterdam city', 'cityamsterdam1@email.com', '421-422-4232',
-        '2024-02-24', '2024-06-30', 'FINISHED', 12),
-       ('public healthcare improvement', 'upgrading public healthcare facilities and services', 'enschede', 'enschede govt.', 'govtenschede@email.com', '424-425-4263',
-        '2024-02-29', '2024-07-05', 'IN_PROGRESS', 13),
-       ('rural development project', 'improving infrastructure and opportunities in rural areas', 'leeuwarden', 'leeuwarden city', 'cityleeuwarden@email.com', '427-428-4294',
-        '2024-03-05', '2024-07-10', 'IN_PROGRESS', 1),
-       ('free public wifi', 'implementing free public wifi in select city areas', 'arnhem', 'arnhem city', 'cityarnhem@email.com', '430-431-4325',
-        '2024-03-10', '2024-07-15', 'FINISHED', 2),
-       ('public library digitalization', 'digitalizing public libraries', 'breda', 'breda govt.', 'govtbreda@email.com', '433-434-4356',
-        '2024-03-15', '2024-07-20', 'IN_PROGRESS', 3),
-       ('urban housing scheme', 'initiating affordable urban housing projects', 'spijkenisse', 'spijkenisse city', 'cityspijkenisse@email.com', '436-437-4387',
-        '2024-03-20', '2024-07-25', 'IN_PROGRESS', 4),
-       ('riverfront development', 'developing and beautifying the riverfront area', 'apeldoorn', 'apeldoorn city', 'cityapeldoorn@email.com', '439-440-4418',
-        '2024-03-25', '2024-07-30', 'FINISHED', 5),
-       ('public transport reform', 'reforming public transport for better efficiency and reach', 'venlo', 'venlo govt.', 'govtvenlo@email.com', '442-443-4449',
-        '2024-03-30', '2024-08-04', 'IN_PROGRESS', 6),
-       ('solar energy project', 'implementing solar energy projects and schemes', 'zaanstad', 'zaanstad city', 'cityzaanstad@email.com', '445-446-4470',
-        '2024-04-04', '2024-08-09', 'IN_PROGRESS', 7);
-
+values ('Urban Solar Initiative', 'Installation of solar panels in urban areas', 'Amsterdam', 'Green Amsterdam', 'contact@greenamsterdam.nl', '011-223-3344', '2023-11-15', '2023-12-20', 'FINISHED', 1),
+       ('Renewable Energy Development', 'Development of renewable energy resources', 'Rotterdam', 'Rotterdam Energy', 'info@rotterdamenergy.nl', '022-334-4455', '2023-07-01', '2023-09-30', 'FINISHED', 2),
+       ('Eco-friendly Infrastructure', 'Building eco-friendly infrastructure in public spaces', 'The Hague', 'The Hague Municipality', 'municipality@thehague.nl', '033-445-5566', '2023-10-10', '2023-10-10', 'FINISHED', 3),
+       ('Smart City Solutions', 'Implementing smart city technology', 'Eindhoven', 'Eindhoven Smart City', 'smartcity@eindhoven.nl', '044-556-6677', '2023-07-20', '2024-01-05', 'FINISHED', 4),
+       ('Green Transport System', 'Developing a green public transport system', 'Utrecht', 'Utrecht Transport', 'transport@utrecht.nl', '055-667-7788', '2023-12-05', '2024-02-10', 'IN_PROGRESS', 5),
+       ('Sustainable Housing Project', 'Creating sustainable housing developments', 'Groningen', 'Groningen Housing', 'housing@groningen.nl', '066-778-8899', '2023-12-01', '2024-03-15', 'IN_PROGRESS', 6),
+       ('Energy Efficiency Program', 'Program to enhance energy efficiency in buildings', 'Leiden', 'Leiden Energy', 'energy@leiden.nl', '077-889-9900', '2023-10-15', '2024-04-20', 'IN_PROGRESS', 7),
+       ('Solar Park Development', 'Construction of a large solar park', 'Maastricht', 'Maastricht Solar', 'solar@maastricht.nl', '088-990-0011', '2023-11-05', '2024-05-10', 'IN_PROGRESS', 8),
+       ('Eco-Park Initiative', 'Development of an eco-friendly park', 'Breda', 'Breda Eco', 'eco@breda.nl', '099-001-1122', '2023-12-10', '2024-06-15', 'IN_PROGRESS', 9),
+       ('Climate Resilience Study', 'Study to improve city climate resilience', 'Almere', 'Almere Climate', 'climate@almere.nl', '010-112-2233', '2024-01-05', '2024-07-10', 'IN_PROGRESS', 10),
+       ('Citywide LED Upgrade', 'Upgrading street lighting to energy-efficient LEDs', 'Amsterdam', 'Amsterdam Public Works', 'publicworks@amsterdam.nl', '101-202-3030', '2023-04-15', '2023-08-15', 'FINISHED', 11),
+       ('Green School Initiative', 'Implementing green energy solutions in schools', 'Rotterdam', 'Rotterdam Education Board', 'education@rotterdam.nl', '202-303-4040', '2023-05-10', '2023-09-01', 'FINISHED', 12),
+       ('Solar Farm Expansion', 'Expanding existing solar farm capacity', 'Utrecht', 'Utrecht Energy', 'info@utrechtenergy.nl', '303-404-5050', '2023-10-05', '2023-11-05', 'FINISHED', 13),
+       ('Eco-friendly Public Transit', 'Developing eco-friendly public transportation options', 'The Hague', 'The Hague Transit Authority', 'transit@thehague.nl', '404-505-6060', '2023-07-01', '2023-12-01', 'FINISHED', 14),
+       ('Urban Tree Planting', 'Large-scale urban tree planting and green space development', 'Leiden', 'Leiden City Council', 'citycouncil@leiden.nl', '505-606-7070', '2023-08-15', '2024-01-15', 'FINISHED', 15),
+       ('Sustainable Water Management', 'Implementing sustainable water management practices', 'Eindhoven', 'Eindhoven Water Board', 'waterboard@eindhoven.nl', '606-707-8080', '2023-11-10', '2024-02-10', 'IN_PROGRESS', 16),
+       ('Renewable Energy Research', 'Research project on renewable energy technologies', 'Groningen', 'Groningen University', 'university@groningen.nl', '707-808-9090', '2023-10-05', '2024-03-05', 'IN_PROGRESS', 17),
+       ('Waste Recycling Program', 'Developing a comprehensive waste recycling program', 'Maastricht', 'Maastricht Waste Management', 'waste@maastricht.nl', '808-909-1010', '2023-11-01', '2024-04-01', 'IN_PROGRESS', 18),
+       ('Energy Saving Initiative', 'City-wide initiative to reduce energy consumption', 'Breda', 'Breda Energy Board', 'energy@breda.nl', '909-101-1111', '2023-12-15', '2024-05-15', 'IN_PROGRESS', 19),
+       ('Green Building Regulations', 'Developing new green building regulations and codes', 'Almere', 'Almere City Planning', 'cityplanning@almere.nl', '101-111-1212', '2024-01-10', '2024-06-10', 'IN_PROGRESS', 1),
+       ('Public Park Renewal', 'Renewing and upgrading public parks with sustainable features', 'Nijmegen', 'Nijmegen Parks Department', 'parks@nijmegen.nl', '111-121-1313', '2024-02-15', '2024-07-15', 'IN_PROGRESS',2),
+       ('Community Solar Project', 'Developing a community-based solar power project', 'Haarlem', 'Haarlem Community Energy', 'community@haarlem.nl', '121-131-1414', '2024-03-20', '2024-08-20', 'IN_PROGRESS', 3),
+       ('Eco Mobility Plan', 'Creating a plan for eco-friendly mobility in the city', 'Delft', 'Delft Urban Planning', 'urbanplanning@delft.nl', '131-141-1515', '2024-04-25', '2024-09-25', 'IN_PROGRESS', 4),
+       ('Sustainable Agriculture Initiative', 'Supporting sustainable agricultural practices in rural areas', 'Zwolle', 'Zwolle Agriculture Board', 'agriculture@zwolle.nl', '141-151-1616', '2024-03-30', '2024-09-30', 'IN_PROGRESS', 5),
+       ('Urban Green Spaces', 'Creating and enhancing urban green spaces for sustainability', 'Tilburg', 'Tilburg Municipality', 'municipality@tilburg.nl', '151-161-1717', '2023-04-20', '2023-10-20', 'FINISHED', 6),
+       ('Renewable Urban Solutions', 'Integrating renewable solutions in urban planning', 'Haarlem', 'Haarlem City Council', 'citycouncil@haarlem.nl', '161-171-1818', '2023-05-05', '2023-11-05', 'FINISHED', 7),
+       ('Eco-friendly Transportation System', 'Developing an eco-friendly transportation network', 'Nijmegen', 'Nijmegen Transport Authority', 'transport@nijmegen.nl', '171-181-1919', '2023-06-15', '2024-01-15', 'IN_PROGRESS', 8),
+       ('Sustainable Energy Research', 'Conducting research on sustainable energy solutions', 'Delft', 'Delft University of Technology', 'tech@delftuniversity.nl', '181-191-2020', '2023-07-10', '2024-02-10', 'IN_PROGRESS', 9),
+       ('Green Building Project', 'Promoting green building practices in construction', 'Groningen', 'Groningen Construction Board', 'construction@groningen.nl', '191-202-2121', '2023-08-01', '2024-03-01', 'IN_PROGRESS', 10),
+       ('Solar Energy Advancement', 'Advancing solar energy technology and application', 'Leiden', 'Leiden Energy Lab', 'energy@leidenlab.nl', '202-212-2222', '2023-09-25', '2024-04-15', 'IN_PROGRESS', 1),
+       ('Eco-friendly Urban Development', 'Urban development projects with a focus on sustainability', 'Maastricht', 'Maastricht Urban Planning', 'urban@maastricht.nl', '212-222-2323', '2023-10-10', '2024-05-10', 'IN_PROGRESS', 2),
+       ('Water Conservation Initiative', 'Initiative to promote water conservation in cities', 'Breda', 'Breda Water Board', 'water@breda.nl', '222-232-2424', '2023-11-20', '2024-06-20', 'IN_PROGRESS', 3),
+       ('Community Renewable Projects', 'Community-led projects for renewable energy', 'Almere', 'Almere Community Energy', 'community@almereenergy.nl', '232-242-2525', '2024-01-01', '2024-07-01', 'IN_PROGRESS', 4),
+       ('Sustainable Public Housing', 'Developing sustainable public housing projects', 'Eindhoven', 'Eindhoven Housing Authority', 'housing@eindhoven.nl', '242-252-2626', '2024-02-20', '2024-08-20', 'IN_PROGRESS', 5),
+       ('Urban Renewal Initiative', 'Revitalizing urban areas with sustainable practices', 'Zwolle', 'Zwolle City Council', 'citycouncil@zwolle.nl', '252-262-2727', '2023-04-25', '2023-10-25', 'FINISHED', 6),
+       ('Green Tech Innovation', 'Fostering green technology innovations in the city', 'Delft', 'Delft Tech Hub', 'techhub@delft.nl', '262-272-2828', '2023-05-15', '2023-11-15', 'FINISHED', 7),
+       ('Eco-friendly Waste Management', 'Implementing eco-friendly waste management systems', 'Leiden', 'Leiden Environmental Dept.', 'environment@leiden.nl', '272-282-2929', '2023-06-20', '2024-01-20', 'IN_PROGRESS', 8),
+       ('Sustainable Urban Mobility', 'Developing sustainable mobility solutions for urban areas', 'Groningen', 'Groningen Mobility Board', 'mobility@groningen.nl', '282-292-3030', '2023-07-10', '2024-02-10', 'IN_PROGRESS', 9),
+       ('Climate Adaptation Strategy', 'Creating strategies for climate adaptation in urban planning', 'Maastricht', 'Maastricht Climate Board', 'climate@maastricht.nl', '292-303-3131', '2023-08-05', '2024-02-05', 'IN_PROGRESS', 10),
+       ('Clean Energy Campaign', 'Promoting the use of clean and renewable energy sources', 'Haarlem', 'Haarlem Energy Board', 'energy@haarlem.nl', '303-313-3232', '2023-09-10', '2024-02-10', 'IN_PROGRESS', 1),
+       ('Urban Biodiversity Project', 'Enhancing urban biodiversity through sustainable landscaping', 'Tilburg', 'Tilburg Environmental Dept.', 'environment@tilburg.nl', '313-323-3333', '2023-10-15', '2024-01-15', 'IN_PROGRESS', 2),
+       ('Urban Green Spaces', 'Creating green areas in cities', 'Zwolle', 'Zwolle Municipality', 'info@zwolle.nl', '100-111-2222', '2023-09-05', '2024-01-15', 'IN_PROGRESS', 10),
+       ('Water Conservation Project', 'Efficient water use initiatives', 'Nijmegen', 'Nijmegen Water Board', 'water@nijmegen.nl', '111-222-3333', '2023-10-10', '2024-02-20', 'IN_PROGRESS', 1),
+       ('Recycling Enhancement', 'Improving city recycling programs', 'Almere', 'Almere City', 'recycle@almere.nl', '122-333-4444', '2023-11-15', '2024-02-25', 'IN_PROGRESS', 2),
+       ('Renewable Energy Education', 'Educational programs on renewable energy', 'Leeuwarden', 'Leeuwarden Education', 'edu@leeuwarden.nl', '133-444-5555', '2023-12-20', '2024-04-30', 'IN_PROGRESS', 3),
+       ('Eco-friendly Tourism', 'Sustainable tourism initiatives', 'Middelburg', 'Middelburg Tourism', 'tourism@middelburg.nl', '144-555-6666', '2024-01-24', '2024-02-22', 'IN_PROGRESS', 4),
+       ('Green Building Standards', 'Implementing sustainable building codes', 'Assen', 'Assen Construction', 'build@assen.nl', '155-666-7777', '2024-02-28', '2024-03-30', 'IN_PROGRESS', 5),
+       ('Urban Farming Expansion', 'Expanding urban agriculture', 'Haarlem', 'Haarlem Agriculture', 'farm@haarlem.nl', '166-777-8888', '2024-03-05', '2024-04-10', 'IN_PROGRESS', 6),
+       ('Community Solar Program', 'Solar energy for community buildings', 'Lelystad', 'Lelystad Community', 'community@lelystad.nl', '177-888-9999', '2024-03-20', '2024-5-25', 'IN_PROGRESS', 7),
+       ('Waste-to-Energy Plant', 'Building a waste-to-energy facility', 'Gouda', 'Gouda Energy', 'energy@gouda.nl', '188-999-0000', '2024-04-04', '2024-05-09', 'IN_PROGRESS', 8),
+       ('Sustainable Urban Design', 'Eco-friendly urban development project', 'Dordrecht', 'Dordrecht Design', 'design@dordrecht.nl', '199-000-1111', '2024-04-15', '2024-06-20', 'IN_PROGRESS', 9),
+       ('Urban Renewable Energy', 'Urban solar and wind energy integration', 'Venlo', 'Venlo Energy', 'energy@venlo.nl', '200-111-2223', '2023-09-12', '2024-04-22', 'IN_PROGRESS', 10),
+       ('Green Public Transport', 'Eco-friendly public transport systems', 'Amersfoort', 'Amersfoort Transit', 'transit@amersfoort.nl', '211-222-3334', '2023-10-17', '2024-05-27', 'IN_PROGRESS', 1),
+       ('Sustainable Landscaping', 'Eco-friendly urban landscaping projects', 'Sittard', 'Sittard Landscaping', 'landscape@sittard.nl', '222-333-4445', '2023-11-21', '2024-05-31', 'IN_PROGRESS', 2),
+       ('Eco Education Initiative', 'Sustainability education programs', 'Hoofddorp', 'Hoofddorp Schools', 'education@hoofddorp.nl', '233-444-5556', '2023-12-26', '2024-05-05', 'IN_PROGRESS', 3),
+       ('Renewable Resource Research', 'Research on new renewable resources', 'Vlaardingen', 'Vlaardingen Research', 'research@vlaardingen.nl', '244-555-6667', '2024-01-30', '2024-06-09', 'IN_PROGRESS', 4),
+       ('Community Eco Projects', 'Community-driven environmental projects', 'Heerlen', 'Heerlen Community', 'community@heerlen.nl', '255-666-7778', '2024-03-07', '2024-07-16', 'IN_PROGRESS', 5),
+       ('Smart Energy Systems', 'Implementation of smart energy solutions', 'Emmen', 'Emmen Energy', 'smart@emmen.nl', '266-777-8889', '2024-03-22', '2024-07-31', 'IN_PROGRESS', 6),
+       ('Eco-friendly Material Use', 'Promoting sustainable materials in construction', 'Roosendaal', 'Roosendaal Construction', 'material@roosendaal.nl', '277-888-9990', '2024-03-06', '2024-05-15', 'IN_PROGRESS', 7),
+       ('Waste Management Improvement', 'Enhanced waste management and recycling', 'Drachten', 'Drachten Waste', 'waste@drachten.nl', '288-999-0001', '2024-02-20', '2024-07-29', 'IN_PROGRESS', 8),
+       ('City Biodiversity Project', 'Projects to increase urban biodiversity', 'Zaandam', 'Zaandam Environment', 'biodiversity@zaandam.nl', '299-000-1112', '2024-02-05', '2024-04-09', 'IN_PROGRESS', 9);
 -- Tasks
 INSERT INTO Tasks (task_order, name, description, deadline, status, project_id, personaltodolistowner_id) VALUES
 -- User 1 tasks
@@ -338,71 +282,45 @@ INSERT INTO Tasks (task_order, name, description, deadline, status, project_id, 
 (18, 'Task 18', 'This task is about the risk analysis of the project', '2023-07-18', 'DONE', 9, 6);
 
 -- generate project transactions
-insert into transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, inventory_order_id, transaction_type)
-select 10, 1, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 2, 5, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 5, 10, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 5, 13, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 10, 14, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 15, 15, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data
-union all
-select 12, 16, start_date, (select warehouse_id from teams where id = project_id), project_id, null, null, 'PROJECT_MATERIAL'
-from (select id as project_id, start_date from projects where id between 1 and 30) as project_data;
+INSERT INTO transactions (quantity, product_id, transaction_date, warehouse_id, project_id, transfer_from_id, inventory_order_id, transaction_type)
+SELECT 5, 1, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data
+UNION ALL
+SELECT 10, 2, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data
+UNION ALL
+SELECT 7, 3, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data
+UNION ALL
+SELECT 6, 4, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data
+UNION ALL
+SELECT 11, 5, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data
+UNION ALL
+SELECT 7, 6, start_date, (SELECT warehouse_id FROM teams WHERE id = project_id), project_id, NULL, NULL, 'PROJECT_MATERIAL'
+FROM (SELECT id AS project_id, start_date FROM projects WHERE id BETWEEN 1 AND 60) AS project_data;
+
 
 -- generate inventoryorder transactions
 insert into transactions (quantity, product_id, transaction_date, warehouse_id, inventory_order_id, project_id, transfer_from_id, transaction_type)
-select 12, 1, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
+select 14, 1, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data
 union all
-select 3, 5, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
+select 20, 2, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data
 union all
-select 6, 10, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
+select 17, 3, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data
 union all
-select 7, 13, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
+select 14, 4, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data
 union all
-select 13, 14, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
+select 21, 5, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data
 union all
-select 16, 15, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
-union all
-select 17, 16, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 18) as inventoryOrder_data
-union all
-select 12, 1, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 3, 5, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 6, 10, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 7, 13, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 13, 14, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 16, 15, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data
-union all
-select 17, 16, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
-from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 19 and 30) as inventoryOrder_data;
+select 16, 6, order_date, warehouse_id, order_id, null, null, 'INVENTORY_ORDER'
+from (select id as order_id, order_date, warehouse_id from INVENTORYORDERS where id between 1 and 50) as inventoryOrder_data;
 
 
 

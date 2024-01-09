@@ -109,6 +109,7 @@ export default {
   },
   computed: {
     formattedMessage() {
+      if (!this.item || !this.item.message) return;
       return this.item.message.replace(/\n/g, '<br>');
     },
     isOpen: {
