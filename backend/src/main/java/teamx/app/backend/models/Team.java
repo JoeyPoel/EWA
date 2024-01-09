@@ -2,6 +2,7 @@ package teamx.app.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +31,13 @@ public class Team implements Model<TeamDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "Name is required")
     private String name;
 
     @ManyToOne
     @JsonIgnore
+    @NotNull(message = "Warehouse is required")
     private Warehouse warehouse;
 
     // TODO: Can a team have multiple leaders?
@@ -60,7 +64,7 @@ public class Team implements Model<TeamDTO> {
                 .name(name)
                 .warehouseId(warehouse != null ? warehouse.getId() : null)
                 .leaderId(leader != null ? leader.getId() : null)
-                .membersIds(members.isEmpty() ? null : members.stream().map(User::getId).toList())
+                .membersIds(members != null && !members.isEmpty() ? members.stream().map(User::getId).toList() : null)
                 .build();
     }
 }

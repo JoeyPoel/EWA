@@ -1,7 +1,8 @@
 <template>
+  <FormDialog title="Error" :open="error.isOpen" :item="error" @close="error.isOpen = false" max-width="450px" />
   <v-layout class="rounded rounded-md">
     <NavbarComponent/>
-    <v-main class="px-16">
+    <v-main v-bind:class="getClass()">
       <router-view/>
     </v-main>
   </v-layout>
@@ -21,17 +22,39 @@ import TransactionsAdaptor from "@/services/TransactionsAdaptor";
 import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
 import {ChartsAdaptor} from "@/services/ChartsAdaptor";
 import EmailAdaptor from "@/services/EmailAdaptor";
+import {FetchInterceptor} from "./services/FetchInterceptor";
 
 import logo from "@/assets/console.png";
+import FormDialog from "@/components/base/FormDialog.vue";
 
 export default {
   name: 'App',
   components: {
+    FormDialog,
     NavbarComponent
+  },
+  created() {
+    this.$router.app = this; // Add this line
+  },
+  data() {
+    return {
+      theFetchInterceptor: null,
+      error: {
+        title: "Something went wrong!",
+        message: "",
+        isOpen: false
+      }
+    };
   },
   mounted() {
     document.title = 'Solar Console';
     this.setFavicon(logo);
+    this.theFetchInterceptor = new FetchInterceptor(this.$router);
+  },
+  beforeUnmount() {
+    if (this.theFetchInterceptor) {
+      this.theFetchInterceptor.unregister();
+    }
   },
   methods: {
     setFavicon(href) {
@@ -40,6 +63,13 @@ export default {
       link.rel = 'shortcut icon';
       link.href = href;
       document.getElementsByTagName('head')[0].appendChild(link);
+    },
+    getClass() {
+      if (!this.$route.meta.hideNavbar && !this.$route.meta.noPadding) {
+        return {
+          'px-16': 1
+        }
+      }
     }
   },
   provide() {
@@ -52,7 +82,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
-      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth"),
+      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth", this.$router),
       chartsService: new ChartsAdaptor(CONFIG.BACKEND_URL + "/charts"),
       emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail")
     }
@@ -74,24 +104,11 @@ export default {
   --button-color: rgba(232, 241, 82, .5);
 }
 
-.btn-primary, .btn-success {
-  background-color: #fff !important;
-  color: #000 !important;
-  border: 1px solid rgba(108, 117, 125, 0.45) !important;
-  border-radius: 0.375rem !important;
-  box-shadow: 0 0 4px rgba(108, 117, 125, 0.35) !important;
-}
-
-.btn-primary:hover, .btn-success:hover {
-  background-color: var(--button-color) !important;
-  box-shadow: 0 0 2px #6c757d !important;
-}
-
-.btn-primary:active, .btn-success:active {
-  box-shadow: 0 0 4px #6c757d inset !important;
-}
-
-.btn-primary:focus, .btn-success:focus {
-  box-shadow: 0 0 0 0.25rem rgba(232, 241, 82, 0.5) !important;
+body {
+  background: linear-gradient(90deg,
+  var(--gradient-color-start) 0%,
+  var(--gradient-color-middle) 25%,
+  var(--gradient-color-almost-end) 75%,
+  var(--gradient-color-end) 100%);
 }
 </style>

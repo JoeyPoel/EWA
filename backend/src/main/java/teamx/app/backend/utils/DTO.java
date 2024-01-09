@@ -188,8 +188,31 @@ public class DTO {
         private Long id;
         private String name;
         private String email;
+        private String password;
         private String role;
         private Long teamId;
         private String jwtToken;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MailRequest {
+        private String name;
+        private String to;
+        private String from;
+        private String subject;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MailResponse {
+        private String message;
+        private boolean status;
     }
 }

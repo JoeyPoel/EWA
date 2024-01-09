@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import teamx.app.backend.models.Product;
+import teamx.app.backend.models.ProductCategory;
 import teamx.app.backend.models.Transaction;
 import teamx.app.backend.models.Warehouse;
 
@@ -26,6 +27,13 @@ class ProductRepositoryTests {
 
     @BeforeEach
     void setUp() {
+
+        ProductCategory category = ProductCategory.builder()
+                .name("Test Category")
+                .description("Test Category Description")
+                .build();
+        category = entityManager.persist(category);
+
         warehouse = new Warehouse();
         warehouse.setName("Test Warehouse");
         warehouse.setLocation("Test Location");
@@ -38,6 +46,7 @@ class ProductRepositoryTests {
         product.setName("Test Product");
         product.setDescription("Test Description");
         product.setPrice(100.0);
+        product.setCategory(category);
 
         Transaction transaction = new Transaction();
         transaction.setProduct(product);

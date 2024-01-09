@@ -1,9 +1,12 @@
 import {User} from "@/models/User";
 import {Adaptor} from "@/services/Adaptor";
+import {FetchInterceptor} from "@/services/FetchInterceptor";
 
 export default class AuthenthicationAdaptor extends Adaptor {
-    constructor(URL) {
+    constructor(URL, router) {
         super(URL);
+        this.router = router;
+        this.fetchInterceptor = new FetchInterceptor(this.router);
     }
 
     async asyncLogin(user) {

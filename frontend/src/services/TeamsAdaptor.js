@@ -2,7 +2,7 @@ import {Adaptor} from "./Adaptor.js";
 import {Team} from "@/models/Team.js";
 
 /**
- * Represents an adaptor for interacting with teams through a REST API.
+ * Represents an adaptor for interacting with team through a REST API.
  * Extends the base Adaptor class.
  *
  * @extends Adaptor
@@ -16,19 +16,24 @@ export default class TeamsAdaptor extends Adaptor {
     }
 
     /**
-     * Fetches all teams from the REST API.
+     * Fetches all team from the REST API.
      *
      * @async
-     * @returns {Promise<*>} The teams.
+     * @returns {Promise<*>} The team.
      */
     async asyncFindAll() {
         const options = {
-            method: "GET", headers: {"Content-Type": "application/json"},
-        }
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        };
 
         const response = await this.fetchJson(this.resourceUrl, options);
 
-        return response ? response.map(team => Team.fromJson(team)) : null;
+        if (Array.isArray(response)) {
+            return response.map(team => Team.fromJson(team));
+        } else {
+            return []; // Return an empty array when no team are retrieved
+        }
     }
 
     /**
@@ -49,10 +54,10 @@ export default class TeamsAdaptor extends Adaptor {
     }
 
     /**
-     * Retrieves all teams by warehouse ID.
+     * Retrieves all team by warehouse ID.
      *
-     * @param {string} warehouseId - The warehouse ID to filter teams by.
-     * @returns {Promise<Array<Team>|null>} - A promise that resolves to an array of Team objects or null if no teams
+     * @param {string} warehouseId - The warehouse ID to filter team by.
+     * @returns {Promise<Array<Team>|null>} - A promise that resolves to an array of Team objects or null if no team
      * are found.
      */
     async asyncFindAllByWarehouseId(warehouseId) {
@@ -62,7 +67,11 @@ export default class TeamsAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/warehouse/" + warehouseId, options);
 
-        return response ? response.map(team => Team.fromJson(team)) : null;
+        if (Array.isArray(response)) {
+            return response.map(team => Team.fromJson(team));
+        } else {
+            return []; // Return an empty array when no team are retrieved
+        }
     }
 
     /**

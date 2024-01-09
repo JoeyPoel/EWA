@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer v-if="!$route.meta.hideNavbar" class="bg-white bg-custom"
-                       :expand-on-hover="true" rail="50px" :permanent="true">
+                       :expand-on-hover="true" :rail="true" :permanent="true">
     <v-list>
       <router-link to="/dashboard">
         <v-list-item prepend-icon="">
@@ -35,12 +35,12 @@ export default {
       session: true,
       routes: [
         { name: 'dashboard', icon: '$dashboard', title: 'Dashboard', to: '/dashboard',  roles: ['ADMIN', 'USER'] },
-        { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventories', roles: ['ADMIN'] },
-        { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-projects', roles: ['USER'] },
-        { name: 'projects', icon: '$project', title: 'Projects', to: '/projects', roles: ['ADMIN'] },
+        { name: 'inventories', icon: '$inventory', title: 'Inventories', to: '/inventory', roles: ['ADMIN'] },
+        { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-project', roles: ['USER'] },
+        { name: 'projects', icon: '$project', title: 'Projects', to: '/project', roles: ['ADMIN'] },
         { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN', 'USER'] },
-        { name: 'products', icon: '$product', title: 'Products', to: '/products', roles: ['ADMIN'] },
-        { name: 'team', icon: '$team', title: 'Team', to: '/teams', roles: ['ADMIN', 'USER'] },
+        { name: 'products', icon: '$product', title: 'Products', to: '/product', roles: ['ADMIN'] },
+        { name: 'team', icon: '$team', title: 'Teams', to: '/team', roles: ['ADMIN', 'USER'] },
         { name: 'users', icon: '$user', title: 'Users', to: '/users', roles: ['ADMIN'] },
       ],
     };

@@ -15,6 +15,7 @@ import java.util.List;
  * The ProductController class is a REST controller that handles product-related operations.
  * It exposes endpoints for retrieving, adding, updating, and deleting products.
  *
+ * @author Jayden Gunhan
  * @author Joey van der Poel
  * @author Junior Javier Brito Perez
  */

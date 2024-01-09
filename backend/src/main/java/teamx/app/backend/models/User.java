@@ -1,6 +1,7 @@
 package teamx.app.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +26,17 @@ public class User implements Model<UserDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "Name is required")
     private String name;
+
+    @NotNull(message = "Email is required")
     private String email;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Role is required")
     private Role role;
 
     @ManyToOne()

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamx.app.backend.models.User;
 import teamx.app.backend.services.UserService;
+import teamx.app.backend.utils.DTO.UserDTO;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.update(user, id));
     }
 
