@@ -44,8 +44,8 @@ export default {
     return {
       interval: 'week',
       menu: false,
-      startDate: new Date (new Date().setMonth(new Date().getMonth() - 7)).toISOString().substring(0, 10),
-      endDate: new Date(new Date().setMonth(new Date().getMonth() + 5)).toISOString().substring(0, 10),
+      startDate: new Date (new Date().setMonth(new Date().getMonth() - 4)).toISOString().substring(0, 10),
+      endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString().substring(0, 10),
       chartData: null,
       chartOptions: {
         responsive: true,

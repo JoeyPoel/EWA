@@ -70,7 +70,8 @@ public class InventoryOrder implements Model<OrderDTO> {
                 .orderDate(orderDate)
                 .deliveryDate(deliveryDate)
                 .warehouseId(warehouse.getId())
-                .ProjectId(transactions.get(0).getProject() != null ? transactions.get(0).getProject().getId() : null)
+                .ProjectId(!transactions.isEmpty() && transactions.get(0).getProject() != null ?
+                        transactions.get(0).getProject().getId() : null)
                 .userId(orderedBy.getId())
                 .build();
     }

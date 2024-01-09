@@ -45,8 +45,8 @@ export default {
       menu: false,
       productIds: [],
       selectedProductIds: [],
-      startDate: new Date (new Date().setMonth(new Date().getMonth() - 2)).toISOString().substring(0, 10),
-      endDate: new Date(new Date().setMonth(new Date().getMonth() + 4)).toISOString().substring(0, 10),
+      startDate: new Date (new Date().setMonth(new Date().getMonth() - 4)).toISOString().substring(0, 10),
+      endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString().substring(0, 10),
       chartData: null,
       chartOptions: {
         responsive: true,
