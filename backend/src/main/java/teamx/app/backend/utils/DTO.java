@@ -78,6 +78,7 @@ public class DTO {
     @AllArgsConstructor
     public static class OrderDTO extends DTO {
         private Long id;
+        private String description;
         private List<OrderLineDTO> products;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         Date orderDate;

@@ -39,4 +39,22 @@ export class OrderAdaptor extends Adaptor {
             return response.map(order => Order.fromJson(order));
         }
     }
+
+    /**
+     * Deletes an order asynchronously.
+     *
+     * @param {string} id - The id of the order to delete.
+     * @return {Promise<Order>} - A Promise that resolves to the deleted Order
+     *     instance.
+     */
+    async asyncDeleteById(id) {
+        const options = {
+            method: "DELETE", headers: {"Content-Type": "application/json"},
+        }
+        const response = await this.fetchJson(
+            `${this.resourceUrl}/${id}`, options);
+        if (response) {
+            return Order.fromJson(response);
+        }
+    }
 }

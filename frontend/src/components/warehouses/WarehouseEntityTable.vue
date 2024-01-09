@@ -83,6 +83,7 @@ export default {
     async handleDelete(item) {
       const deletedItem = await this.warehousesService.asyncDeleteById(item.id);
       if (deletedItem) {
+        this.dialogConfig.item = Object.assign({}, this.dialogConfig.baseObject);
         this.dialogConfig.open = false;
       } else {
         console.error("Failed to delete item");

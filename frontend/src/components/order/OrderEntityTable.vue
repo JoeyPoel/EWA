@@ -88,7 +88,14 @@ export default {
       console.log(this.tableConfig.items);
     },
     async handleDelete(item) {
-      alert(`Not implemented${JSON.stringify(item)}`);
+      const deletedItem = await this.orderService.asyncDeleteById(item.id);
+      if (deletedItem) {
+        this.dialogConfig.item = Object.assign({}, this.dialogConfig.baseObject);
+        this.dialogConfig.open = false;
+        await this.fetchOrders();
+      } else {
+        console.error("Failed to delete item");
+      }
     },
     async handleSave(item) {
       alert(`Not implemented${JSON.stringify(item)}`);
