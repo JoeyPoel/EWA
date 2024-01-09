@@ -55,7 +55,24 @@ public class InventoryOrder implements Model<OrderDTO> {
 
     @Override
     public OrderDTO toDTO() {
-        return OrderDTO.builder().id(id).products(transactions.stream().map(transaction -> new DTO.OrderLineDTO(transaction.getProduct().getId(), transaction.getQuantity())).toList()).description(description).orderDate(orderDate).deliveryDate(deliveryDate).warehouseId(warehouse.getId()).ProjectId(transactions.get(0).getProject() != null ? transactions.get(0).getProject().getId() : null).userId(orderedBy.getId()).build();
+        return OrderDTO.builder()
+                .id(id)
+                .products(transactions
+                        .stream()
+                        .map(transaction -> new DTO.OrderLineDTO(
+                                transaction.getId(),
+                                transaction.getProduct().getId(),
+                                transaction.getQuantity())
+                        )
+                        .toList()
+                )
+                .description(description)
+                .orderDate(orderDate)
+                .deliveryDate(deliveryDate)
+                .warehouseId(warehouse.getId())
+                .ProjectId(transactions.get(0).getProject() != null ? transactions.get(0).getProject().getId() : null)
+                .userId(orderedBy.getId())
+                .build();
     }
 
     public enum Status {

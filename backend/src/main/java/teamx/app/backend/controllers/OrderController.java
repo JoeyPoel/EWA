@@ -34,4 +34,22 @@ public class OrderController {
     public ResponseEntity<OrderDTO> deleteById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.deleteById(id).toDTO());
     }
+
+//       public InventoryOrder add(InventoryOrder order) {
+//        return orderRepository.save(order);
+//    }
+//
+//    public InventoryOrder update(Long id, InventoryOrder order) {
+//        if (!id.equals(order.getId())) throw new IllegalArgumentException("Order ID does not match");
+//        return orderRepository.save(order);
+//    }
+    @PostMapping
+    public ResponseEntity<OrderDTO> add(@RequestBody OrderDTO orderDTO) {
+        return ResponseEntity.ok(orderService.add(orderDTO).toDTO());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDTO> update(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+        return ResponseEntity.ok(orderService.update(id, orderDTO).toDTO());
+    }
 }
