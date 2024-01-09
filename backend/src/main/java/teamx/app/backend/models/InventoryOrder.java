@@ -31,7 +31,9 @@ public class InventoryOrder implements Model<OrderDTO> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private boolean isDelivered = false;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDING;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date orderDate;
@@ -47,7 +49,7 @@ public class InventoryOrder implements Model<OrderDTO> {
     @JsonIgnore
     private User orderedBy;
 
-    @OneToMany(mappedBy = "inventoryOrder")
+    @OneToMany(mappedBy = "inventoryOrder", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Transaction> transactions;
 
@@ -55,16 +57,26 @@ public class InventoryOrder implements Model<OrderDTO> {
     public OrderDTO toDTO() {
         return OrderDTO.builder()
                 .id(id)
-                .products(transactions.stream()
+                .products(transactions
+                        .stream()
                         .map(transaction -> new DTO.OrderLineDTO(
+                                transaction.getId(),
                                 transaction.getProduct().getId(),
-                                transaction.getQuantity()
-                        )).toList())
+                                transaction.getQuantity())
+                        )
+                        .toList()
+                )
+                .description(description)
                 .orderDate(orderDate)
                 .deliveryDate(deliveryDate)
                 .warehouseId(warehouse.getId())
-                .ProjectId(transactions.get(0).getProject() != null ? transactions.get(0).getProject().getId() : null)
+                .ProjectId(!transactions.isEmpty() && transactions.get(0).getProject() != null ?
+                        transactions.get(0).getProject().getId() : null)
                 .userId(orderedBy.getId())
                 .build();
+    }
+
+    public enum Status {
+        PENDING, DELIVERED, DELAYED, CANCELLED
     }
 }

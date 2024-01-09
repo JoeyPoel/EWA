@@ -23,7 +23,7 @@
         <v-chip :color="Project.getStatusColor(item)" :text="Project.getStatusDisplayName(item.status)"/>
       </template>
     </v-data-table>
-    <dialog-component v-if="dialogConfig && dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
+    <form-dialog v-if="dialogConfig && dialog.open" :detail-tabs="dialog.detailTabs" :item="dialog.item"
                       :item-fields="dialog.itemFields" :max-width="dialog.maxWidth" :open="dialog.open"
                       :title="dialog.title" @close="handleClose" @delete="handleDelete" @save="handleSave"
     :has-generated-details="dialog.hasGeneratedDetails"/>
@@ -35,13 +35,14 @@ import FormDialog from "@/components/base/FormDialog.vue";
 import {Project} from "@/models/Project";
 
 export default {
+  name: "DataTable",
   computed: {
     Project() {
       return Project
     }
   },
   components: {
-    dialogComponent: FormDialog
+    FormDialog
   },
   props: {
     tableConfig: {

@@ -17,4 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> getAllByProduct(Product product);
 
     List<Transaction> getAllByWarehouse(Warehouse warehouse);
+
+    void deleteAllByInventoryOrder_Id(Long id);
 }

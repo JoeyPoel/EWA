@@ -16,7 +16,7 @@ import {
     mdiMagnify,
     mdiNut, mdiOpenInNew,
     mdiPencilOutline, mdiPlus, mdiRestore,
-    mdiSolarPowerVariantOutline,
+    mdiSolarPowerVariantOutline, mdiStore,
     mdiTrashCanOutline,
     mdiViewDashboardOutline,
     mdiWarehouse
@@ -90,7 +90,8 @@ export default createVuetify({
             open_in_new: mdiOpenInNew,
             new: mdiPlus,
             close: mdiClose,
-            restore: mdiRestore
+            restore: mdiRestore,
+            order: mdiStore
         },
         sets: {
             mdi
