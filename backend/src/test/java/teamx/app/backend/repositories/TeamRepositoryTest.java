@@ -1,23 +1,19 @@
 package teamx.app.backend.repositories;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import teamx.app.backend.models.Team;
+import teamx.app.backend.models.Warehouse;
+
 import java.util.Optional;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Tests team repository
- *
- * @author Joey van der Poel
- */
 @DataJpaTest
-class TeamRepositoryTests {
+class TeamRepositoryTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -25,38 +21,56 @@ class TeamRepositoryTests {
     @Autowired
     private TestEntityManager entityManager;
 
+    private Warehouse testWarehouse;
+
+    @BeforeEach
+    void setUp() {
+        testWarehouse = new Warehouse();
+        testWarehouse.setName("Warehouse Name");
+        testWarehouse.setLocation("Warehouse Location");
+        testWarehouse.setAddress("Warehouse Address");
+        testWarehouse.setPostcode("1234XK");
+        testWarehouse.setCountry("Warehouse Country");
+        testWarehouse = entityManager.persist(testWarehouse);
+    }
+
     @Test
     void testSaveTeam_ReturnsSavedTeam() {
         // Arrange
         Team teamToSave = new Team();
+        teamToSave.setName("Team Name");
+        teamToSave.setWarehouse(testWarehouse);
 
         // Act
         Team savedTeam = teamRepository.save(teamToSave);
 
         // Assert
         assertEquals(teamToSave, savedTeam);
-        assertNotNull(savedTeam.getId()); // Ensure ID is assigned after saving
+        assertNotNull(savedTeam.getId());
     }
 
     @Test
     void testFindById_ExistingId_ReturnsTeam() {
         // Arrange
         Team teamToFind = new Team();
+        teamToFind.setName("Team Name");
+        teamToFind.setWarehouse(testWarehouse);
         entityManager.persistAndFlush(teamToFind);
 
         // Act
         Optional<Team> foundTeamOptional = teamRepository.findById(teamToFind.getId());
-        Team foundTeam = foundTeamOptional.orElse(null);
 
         // Assert
         assertTrue(foundTeamOptional.isPresent());
-        assertEquals(teamToFind, foundTeam);
+        assertEquals(teamToFind, foundTeamOptional.get());
     }
 
     @Test
     void testDeleteById_ExistingId_DeletesTeam() {
         // Arrange
         Team teamToDelete = new Team();
+        teamToDelete.setName("Team Name");
+        teamToDelete.setWarehouse(testWarehouse);
         entityManager.persistAndFlush(teamToDelete);
 
         // Act
