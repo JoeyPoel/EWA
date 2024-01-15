@@ -37,9 +37,9 @@ export default {
         { name: 'orders', icon: '$order', title: 'Orders', to: '/orders', roles: ['ADMIN'] },
         { name: 'teamProjects', icon: '$project', title: 'Projects', to: '/team-projects', roles: ['USER'] },
         { name: 'projects', icon: '$project', title: 'Projects', to: '/projects', roles: ['ADMIN'] },
-        { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN', 'USER'] },
+        { name: 'warehouses', icon: '$warehouse', title: 'Warehouses', to: '/warehouses', roles: ['ADMIN'] },
         { name: 'products', icon: '$product', title: 'Products', to: '/products', roles: ['ADMIN'] },
-        { name: 'team', icon: '$team', title: 'Teams', to: '/teams', roles: ['ADMIN', 'USER'] },
+        { name: 'team', icon: '$team', title: 'Teams', to: '/teams', roles: ['ADMIN'] },
         { name: 'users', icon: '$user', title: 'Users', to: '/users', roles: ['ADMIN'] },
       ],
     };
