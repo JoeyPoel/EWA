@@ -37,13 +37,13 @@ backend/...
 backend/src/main/java/teamx/app/backend/...
 
 controllers:
-- AuthenticationController:
+- AuthenticationController: Nizar
 - ChartController:
 - EmailController: Johnny, Joey, Kaifie
 - InventoryController:
 - OrderController:
 - ProductController: Jayden
-- ProjectController:
+- ProjectController: Nizar
 - TeamController:
 - TransactionController:
 - UserController: Kaifie, Johnny, Junior
@@ -51,15 +51,15 @@ controllers:
 
 models:
 - dto:  
-  - InventoryProjectDTO:
-  - TaskDTO:
+  - InventoryProjectDTO: Nizar
+  - TaskDTO: Nizar
 - Capacity:
 - InventoryOrder:
-- JWToken:
+- JWToken: Nizar
 - Notification:
 - Product: Jayden
 - ProductCategory:
-- Project:
+- Project: Nizar
 - Task:
 - Team:
 - Transaction:
@@ -71,7 +71,7 @@ repositories:
 - OrderRepository:
 - ProductCategoryRepository:
 - ProductRepository: Jayden
-- ProjectRepository:
+- ProjectRepository: Nizar
 - TaskRepository:
 - TeamRepository:
 - TransactionRepository:
@@ -86,7 +86,7 @@ services:
 - InventoryService:
 - OrderService:
 - ProductService: Jayden
-- ProjectService:
+- ProjectService: Nizar
 - TeamService:
 - TransactionService:
 - UserService: Johnny
@@ -118,7 +118,7 @@ components:
 - inventory:
 - order:
 - product: Jayden
-- project:
+- project: Nizar
 - team:
 - user: Johnny
 - warehouses:
@@ -128,13 +128,13 @@ components:
 models:
 - charts: Junior
 - InventoryProduct:
-- InventoryProject:
+- InventoryProject: Nizar
 - Model:
 - Order:
 - Product: Jayden
 - ProductCategory:
 - ProductLine:
-- Project:
+- Project: Nizar
 - Task:
 - Team:
 - Transaction:
@@ -145,14 +145,14 @@ plugins, router: Everyone
 
 services:
 - Adaptor:
-- AuthenticationAdaptor:
+- AuthenticationAdaptor: Nizar
 - ChartsAdaptor:
 - EmailAdaptor: Johnny
 - FetchInterceptor: Johnny
 - InventoryAdaptor:
 - OrderAdaptor:
 - ProductAdaptor: Jayden
-- ProjectAdaptor:
+- ProjectAdaptor: Nizar
 - TeamsAdaptor:
 - TransactionsAdaptor:
 - UserAdaptor: Johnny
@@ -166,7 +166,7 @@ admin:
 - InventoriesView:
 - OrdersView:
 - ProductsView: Jayden
-- ProjectsView:
+- ProjectsView: Nizar
 - TeamsView:
 - UsersView:
 - WarehousesView:
