@@ -3,8 +3,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import teamx.app.backend.models.Project;
 
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 
