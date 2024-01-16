@@ -39,14 +39,14 @@ backend/src/main/java/teamx/app/backend/...
 controllers:
 - AuthenticationController:
 - ChartController:
-- EmailController:
+- EmailController: Johnny, Joey, Kaifie
 - InventoryController:
 - OrderController:
 - ProductController: Jayden
 - ProjectController:
 - TeamController:
 - TransactionController:
-- UserController:
+- UserController: Kaifie, Johnny, Junior
 - WarehouseController:
 
 models:
@@ -75,11 +75,11 @@ repositories:
 - TaskRepository:
 - TeamRepository:
 - TransactionRepository:
-- UserRepository:
+- UserRepository: Johnny
 - WarehouseRepository:
 
 services:
-- AuthenticationService:
+- AuthenticationService: Johnny, Nizar
 - CapacityService:
 - ChartService:
 - EmailService:
@@ -89,7 +89,7 @@ services:
 - ProjectService:
 - TeamService:
 - TransactionService:
-- UserService:
+- UserService: Johnny
 - WarehouseService:
 
 utils:
@@ -120,9 +120,9 @@ components:
 - product: Jayden
 - project:
 - team:
-- user:
+- user: Johnny
 - warehouses:
-- ErrorComponent: Junior
+- ErrorComponent: Junior, Johnny
 - NavbarComponent: Junior, Nizar & Jayden
 
 models:
@@ -138,7 +138,7 @@ models:
 - Task:
 - Team:
 - Transaction:
-- User:
+- User: Johnny, Kaifie
 - Warehouse:
 
 plugins, router: Everyone
@@ -147,14 +147,15 @@ services:
 - Adaptor:
 - AuthenticationAdaptor:
 - ChartsAdaptor:
-- EmailAdaptor:
+- EmailAdaptor: Johnny
+- FetchInterceptor: Johnny
 - InventoryAdaptor:
 - OrderAdaptor:
 - ProductAdaptor: Jayden
 - ProjectAdaptor:
 - TeamsAdaptor:
 - TransactionsAdaptor:
-- UserAdaptor:
+- UserAdaptor: Johnny
 - ValidationRules:
 - WarehousesAdaptor:
 
