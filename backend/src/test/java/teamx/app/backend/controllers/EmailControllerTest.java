@@ -179,4 +179,25 @@ class EmailControllerTests {
         // Creating a sample product with a high quantity (greater than the minimum stock)
         return new DTO.InventoryProductDTO(123L, 4L, "Sample Product", "Warehouse A", 3.00, 99999999);
     }
+
+    // Kaifie
+    @Test
+    void sendPassGenEmail_Success() throws Exception {
+        // Mock the necessary dependencies
+        when(authenthicationService.generateResetPassToken(any())).thenReturn(createSampleUserDTO());
+
+        // Create a sample user DTO to be used in the request body
+        DTO.UserDTO sampleUserDTO = new DTO.UserDTO();
+        sampleUserDTO.setEmail("test@example.com");
+        String generatedPassword = "password123";
+
+        // Perform the request and assert the response
+        mockMvc.perform(post("/mail/sendPassGenEmail")
+                        .param("generatedPassword", generatedPassword)
+                        .content(asJsonString(sampleUserDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password Reset Email sent."));
+    }
+
 }

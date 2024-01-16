@@ -68,4 +68,30 @@ class UserTest {
         assertEquals(user.getTeam().getId(), dto.getTeamId());
         assertEquals(jwtToken, dto.getJwtToken());
     }
+
+    // Kaifie
+    @Test
+    void testUserConstructor() {
+        User user = new User(1L, "John Doe", "john@example.com", "password123", User.Role.USER, team);
+        assertEquals(1L, user.getId());
+        assertEquals("John Doe", user.getName());
+        assertEquals("john@example.com", user.getEmail());
+        assertEquals("password123", user.getPassword());
+        assertEquals(User.Role.USER, user.getRole());
+        assertEquals(team, user.getTeam());
+    }
+
+    // Kaifie
+    @Test
+    void testUserToDTOWithNullTeam() {
+        User userWithNullTeam = new User(1L, "John Doe", "john@example.com", "password123", User.Role.USER, null);
+        UserDTO dto = userWithNullTeam.toDTO();
+        assertNotNull(dto);
+        assertEquals(userWithNullTeam.getId(), dto.getId());
+        assertEquals(userWithNullTeam.getName(), dto.getName());
+        assertEquals(userWithNullTeam.getEmail(), dto.getEmail());
+        assertEquals(String.valueOf(userWithNullTeam.getRole()), dto.getRole());
+        assertNull(dto.getTeamId());
+        assertNull(dto.getJwtToken());
+    }
 }

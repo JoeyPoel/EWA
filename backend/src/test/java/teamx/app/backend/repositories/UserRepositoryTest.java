@@ -4,8 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.DirtiesContext;
+import teamx.app.backend.models.Team;
 import teamx.app.backend.models.User;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +63,34 @@ class UserRepositoryTest {
 
         assertEquals(2, foundAdmins.size());
         assertTrue(foundAdmins.stream().allMatch(user -> user.getRole() == User.Role.ADMIN));
+    }
+
+    // Kaifie
+    @Test
+    void getAllByIdIn_ReturnsUsers() {
+        entityManager.clear();
+        entityManager.flush();
+        // Arrange
+        User user1 = new User();
+        user1.setEmail("test1@example.com");
+        user1.setName("Visitor1");
+        user1.setRole(User.Role.USER);
+        entityManager.persistAndFlush(user1);
+
+        User user2 = new User();
+        user2.setEmail("test2@example.com");
+        user2.setName("Visitor2");
+        user2.setRole(User.Role.USER);
+        entityManager.persistAndFlush(user2);
+
+        List<Long> ids = Arrays.asList(user1.getId(), user2.getId());
+
+        // Act
+        List<User> foundUsers = userRepository.getAllByIdIn(ids);
+
+        // Assert
+        assertEquals(2, foundUsers.size());
+        assertTrue(foundUsers.stream().allMatch(u -> ids.contains(u.getId())));
     }
 }
 

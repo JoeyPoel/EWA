@@ -63,7 +63,7 @@ models:
 - Task:
 - Team:
 - Transaction:
-- User:
+- User: Kaifie
 - Warehouse:
 
 repositories:
@@ -75,7 +75,7 @@ repositories:
 - TaskRepository:
 - TeamRepository:
 - TransactionRepository:
-- UserRepository: Johnny
+- UserRepository: Johnny, Kaifie
 - WarehouseRepository:
 
 services:
@@ -89,7 +89,7 @@ services:
 - ProjectService: Nizar
 - TeamService:
 - TransactionService:
-- UserService: Johnny
+- UserService: Johnny, Kaifie
 - WarehouseService:
 
 utils:
@@ -120,7 +120,7 @@ components:
 - product: Jayden
 - project: Nizar
 - team:
-- user: Johnny
+- user: Johnny, Kaifie
 - warehouses:
 - ErrorComponent: Junior, Johnny
 - NavbarComponent: Junior, Nizar & Jayden
@@ -155,7 +155,7 @@ services:
 - ProjectAdaptor: Nizar
 - TeamsAdaptor:
 - TransactionsAdaptor:
-- UserAdaptor: Johnny
+- UserAdaptor: Johnny, Kaifie
 - ValidationRules:
 - WarehousesAdaptor:
 
@@ -168,7 +168,7 @@ admin:
 - ProductsView: Jayden
 - ProjectsView: Nizar
 - TeamsView:
-- UsersView:
+- UsersView: Kaifie
 - WarehousesView:
 
 user:
