@@ -33,7 +33,6 @@
 </template>
 
 <script>
-// import User from "@/models/User";
 
 export default {
   name: "LoginComponent",
@@ -61,9 +60,7 @@ export default {
 
         if (response) {
           localStorage.setItem("email", response.email);
-          console.log('Token from server:', response.jwtToken);
           localStorage.setItem("token", response.jwtToken);
-          console.log(response)
           this.$router.push("/dashboard");
           window.location.reload()
         } else {

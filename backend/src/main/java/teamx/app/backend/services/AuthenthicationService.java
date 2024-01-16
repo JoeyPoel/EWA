@@ -10,6 +10,15 @@ import teamx.app.backend.repositories.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * AuthenticationController handles authentication-related HTTP requests.
+ * This controller provides an endpoint for user login. It receives a User object
+ * in the request body and attempts to authenticate the user.
+ * Further implementation will be added
+ *
+ * @author Nizar Amine
+ * @author Johnny Magielse
+ */
 @Service
 public class AuthenthicationService {
 
@@ -51,6 +60,13 @@ public class AuthenthicationService {
         return null;
     }
 
+    /**
+     * Generates a JWT token for the password reset request.
+     *
+     * @param email The User object containing login credentials.
+     * @return UserDTO with user details and JWT token on successful authentication,
+     * null otherwise.
+     */
     public UserDTO generateResetPassToken(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {

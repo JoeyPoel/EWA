@@ -37,7 +37,7 @@ backend/...
 backend/src/main/java/teamx/app/backend/...
 
 controllers:
-- AuthenticationController: Nizar
+- AuthenticationController: Nizar, Johnny
 - ChartController:
 - EmailController: Johnny, Joey, Kaifie
 - InventoryController:
@@ -145,7 +145,7 @@ plugins, router: Everyone
 
 services:
 - Adaptor:
-- AuthenticationAdaptor: Nizar
+- AuthenticationAdaptor: Johnny
 - ChartsAdaptor:
 - EmailAdaptor: Johnny
 - FetchInterceptor: Johnny

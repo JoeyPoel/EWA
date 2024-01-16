@@ -14,6 +14,7 @@ import teamx.app.backend.utils.DTO.UserDTO;
  * Further implementation will be added
  *
  * @author Nizar Amine
+ * @author Johnny Magielse
  */
 
 @CrossOrigin(origins = "*")

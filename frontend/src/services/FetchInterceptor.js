@@ -1,10 +1,21 @@
 import fetchIntercept from 'fetch-intercept';
 
+/**
+ * This class intercepts all fetch requests and responses and shows the error messages in a popup.
+ * It is used to show the error messages from the backend in a popup.
+ * The error messages are shown in a popup because the backend returns a 400+ status code when an error occurs.
+ *
+ * @author Johnny Magielse
+ */
 export class FetchInterceptor {
     static theInstance;
     unregister;
     router;
 
+    /**
+     * Returns the singleton instance of this class.
+     * @param router
+     */
     constructor(router) {
         this.router = router;
         FetchInterceptor.theInstance = this;
