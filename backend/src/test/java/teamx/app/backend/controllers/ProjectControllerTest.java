@@ -25,6 +25,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests for project controller
+ *  @Author Nizar Amine
+ */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ProjectController.class)
 class ProjectControllerTests {
@@ -70,7 +74,6 @@ class ProjectControllerTests {
 
         when(projectService.findAll()).thenReturn(projects);
         when(projectService.findById(1L)).thenReturn(project1);
-
     }
 
     @Test
