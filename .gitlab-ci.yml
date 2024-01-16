@@ -71,10 +71,6 @@ build-fe:
         docker tag "solar3ewa/ewa-boolets-fe:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-fe:latest"
         docker push "solar3ewa/ewa-boolets-fe:latest"
       fi
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - frontend/**/*
 
 build-be:
   image: maven:3.8.4-openjdk-17
@@ -112,7 +108,3 @@ build-be:
         docker tag "solar3ewa/ewa-boolets-be:$CI_COMMIT_REF_SLUG" "solar3ewa/ewa-boolets-be:latest"
         docker push "solar3ewa/ewa-boolets-be:latest"
       fi
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - backend/**/*
