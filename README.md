@@ -42,15 +42,15 @@ controllers:
 - EmailController: Johnny, Joey, Kaifie
 - InventoryController: Junior
 - OrderController: Junior
-- ProductController: Jayden
-- ProjectController: Nizar
-- TeamController: Joey
-- TransactionController:
+- ProductController: Jayden, Junior
+- ProjectController: Nizar, Junior
+- TeamController: Joey, Junior
+- TransactionController:Junior
 - UserController: Kaifie, Johnny, Junior
-- WarehouseController: Joey
+- WarehouseController: Junior, Joey
 
 models:
-- dto:  
+- dto:  Junior
   - InventoryProjectDTO: Nizar
   - TaskDTO: Nizar
 - Capacity: Junior
@@ -61,10 +61,10 @@ models:
 - ProductCategory: Junior
 - Project: Nizar
 - Task: Junior
-- Team: Joey
+- Team: Joey, Junior
 - Transaction: Junior
-- User: Kaifie
-- Warehouse: Joey
+- User: Kaifie, Junior
+- Warehouse: Junior, Joey
 
 repositories:
 - CapacityRepository: Joey
@@ -79,18 +79,18 @@ repositories:
 - WarehouseRepository: Joey
 
 services:
-- AuthenticationService: Johnny, Nizar
-- CapacityService: Joey
+- AuthenticationService: Johnny, Nizar, Junior
+- CapacityService: Joey, Junior
 - ChartService: Junior
 - EmailService: Joey
 - InventoryService: Junior
 - OrderService: Junior
-- ProductService: Jayden
-- ProjectService: Nizar
-- TeamService: Joey
+- ProductService: Jayden, Junior
+- ProjectService: Nizar, Junior
+- TeamService: Joey, Junior
 - TransactionService: Junior
 - UserService: Johnny, Kaifie
-- WarehouseService: Joey
+- WarehouseService: Junior
 
 utils:
 - DTO: Junior
@@ -117,10 +117,10 @@ components:
 - charts: Junior
 - inventory: Junior
 - order: Junior
-- product: Jayden
-- project: Nizar
+- product: Jayden, Junior
+- project: Nizar, Junior
 - team: Joey, Junior
-- user: Johnny, Kaifie
+- user: Johnny, Kaifie, Junior
 - warehouses: Joey, Junior
 - ErrorComponent: Junior, Johnny
 - NavbarComponent: Junior, Nizar & Jayden
@@ -132,7 +132,7 @@ models:
 - Model: Junior
 - Order: Junior
 - Product: Jayden
-- ProductCategory:
+- ProductCategory: Junior
 - ProductLine: Junior
 - Project: Nizar
 - Task: Junior
@@ -151,13 +151,13 @@ services:
 - FetchInterceptor: Johnny
 - InventoryAdaptor: Junior
 - OrderAdaptor: Junior
-- ProductAdaptor: Jayden
-- ProjectAdaptor: Nizar
-- TeamsAdaptor: Joey
+- ProductAdaptor: Jayden, Junior
+- ProjectAdaptor: Nizar, Junior
+- TeamsAdaptor: Joey, Junior
 - TransactionsAdaptor: Junior
-- UserAdaptor: Johnny, Kaifie
+- UserAdaptor: Johnny, Kaifie, Junior
 - ValidationRules: Junior
-- WarehousesAdaptor: Joey
+- WarehousesAdaptor: Joey, Junior
 
 frontend/src/views/...
 
@@ -165,10 +165,10 @@ admin:
 - DashboardView: Junior
 - InventoriesView: Junior
 - OrdersView: Junior
-- ProductsView: Jayden
-- ProjectsView: Nizar
+- ProductsView: Jayden, Junior
+- ProjectsView: Nizar, Junior
 - TeamsView: Joey, Junior
-- UsersView: Kaifie
+- UsersView: Kaifie, Junior
 - WarehousesView: Joey, Junior
 
 user:
