@@ -1,15 +1,15 @@
 package teamx.app.backend.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import teamx.app.backend.controllers.EmailController;
 import teamx.app.backend.models.Project;
 import teamx.app.backend.services.*;
 import teamx.app.backend.utils.DTO;
@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Tests for email controller
  *
  * @author Joey van der Poel
+ * @author Johnny Magielse
  */
 @ExtendWith(MockitoExtension.class)
 class EmailControllerTests {
@@ -50,6 +51,9 @@ class EmailControllerTests {
 
     @InjectMocks
     private EmailController emailController;
+
+    @Mock
+    private AuthenthicationService authenthicationService;
 
     @BeforeEach
     void setUp() {
@@ -102,6 +106,60 @@ class EmailControllerTests {
                 .andExpect(content().string("No products need care."));
     }
 
+    // johnny
+    @Test
+    void sendPassResetEmail_Success() throws Exception {
+        // Mock the necessary dependencies
+        when(authenthicationService.generateResetPassToken(any())).thenReturn(createSampleUserDTO());
+
+        // Set up the mockMvc
+        mockMvc = MockMvcBuilders.standaloneSetup(emailController).build();
+
+        // Create a sample user DTO to be used in the request body
+        DTO.UserDTO sampleUserDTO = new DTO.UserDTO();
+        sampleUserDTO.setEmail("test@example.com");
+
+        // Perform the request and assert the response
+        mockMvc.perform(post("/mail/sendPassResetEmail")
+                        .content(asJsonString(sampleUserDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password Reset Email sent."));
+    }
+
+    // johnny
+    @Test
+    void sendPassResetEmail_UserNotFound() throws Exception {
+        // Mock the necessary dependencies
+        when(authenthicationService.generateResetPassToken(any())).thenReturn(null);
+
+        // Set up the mockMvc
+        mockMvc = MockMvcBuilders.standaloneSetup(emailController).build();
+
+        // Create a sample user DTO to be used in the request body
+        DTO.UserDTO sampleUserDTO = new DTO.UserDTO();
+        sampleUserDTO.setEmail("test@example.com");
+
+        // Perform the request and assert the response
+        mockMvc.perform(post("/mail/sendPassResetEmail")
+                        .content(asJsonString(sampleUserDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("Found user was null!"));
+    }
+
+    private DTO.UserDTO createSampleUserDTO() {
+        DTO.UserDTO userDTO = new DTO.UserDTO();
+        userDTO.setEmail("test@example.com");
+        userDTO.setJwtToken("sampleJwtToken");
+        // Set other properties as needed
+        return userDTO;
+    }
+
+    // Helper method to convert an object to JSON string
+    private static String asJsonString(Object obj) throws Exception {
+        return new ObjectMapper().writeValueAsString(obj);
+    }
 
     private Project createSampleProject() {
         Project project = new Project();

@@ -39,14 +39,14 @@ backend/src/main/java/teamx/app/backend/...
 controllers:
 - AuthenticationController: Nizar
 - ChartController:
-- EmailController:
+- EmailController: Johnny, Joey, Kaifie
 - InventoryController:
 - OrderController:
 - ProductController: Jayden
 - ProjectController: Nizar
 - TeamController:
 - TransactionController:
-- UserController:
+- UserController: Kaifie, Johnny, Junior
 - WarehouseController:
 
 models:
@@ -75,11 +75,11 @@ repositories:
 - TaskRepository:
 - TeamRepository:
 - TransactionRepository:
-- UserRepository:
+- UserRepository: Johnny
 - WarehouseRepository:
 
 services:
-- AuthenticationService: Nizar
+- AuthenticationService: Johnny, Nizar
 - CapacityService:
 - ChartService:
 - EmailService:
@@ -89,7 +89,7 @@ services:
 - ProjectService: Nizar
 - TeamService:
 - TransactionService:
-- UserService:
+- UserService: Johnny
 - WarehouseService:
 
 utils:
@@ -120,25 +120,25 @@ components:
 - product: Jayden
 - project: Nizar
 - team:
-- user:
+- user: Johnny
 - warehouses:
-- ErrorComponent: Junior
+- ErrorComponent: Junior, Johnny
 - NavbarComponent: Junior, Nizar & Jayden
 
 models:
 - charts: Junior
 - InventoryProduct:
-- InventoryProject:
+- InventoryProject: Nizar
 - Model:
 - Order:
 - Product: Jayden
 - ProductCategory:
 - ProductLine:
 - Project: Nizar
-- Task: Junior, Nizar
+- Task:
 - Team:
 - Transaction:
-- User:
+- User: Johnny, Kaifie
 - Warehouse:
 
 plugins, router: Everyone
@@ -147,14 +147,15 @@ services:
 - Adaptor:
 - AuthenticationAdaptor: Nizar
 - ChartsAdaptor:
-- EmailAdaptor:
+- EmailAdaptor: Johnny
+- FetchInterceptor: Johnny
 - InventoryAdaptor:
 - OrderAdaptor:
 - ProductAdaptor: Jayden
 - ProjectAdaptor: Nizar
 - TeamsAdaptor:
 - TransactionsAdaptor:
-- UserAdaptor:
+- UserAdaptor: Johnny
 - ValidationRules:
 - WarehousesAdaptor:
 
