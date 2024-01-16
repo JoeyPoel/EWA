@@ -38,63 +38,63 @@ backend/src/main/java/teamx/app/backend/...
 
 controllers:
 - AuthenticationController: Nizar
-- ChartController:
+- ChartController: Junior
 - EmailController: Johnny, Joey, Kaifie
-- InventoryController:
-- OrderController:
+- InventoryController: Junior
+- OrderController: Junior
 - ProductController: Jayden
 - ProjectController: Nizar
-- TeamController:
+- TeamController: Joey
 - TransactionController:
 - UserController: Kaifie, Johnny, Junior
-- WarehouseController:
+- WarehouseController: Joey
 
 models:
 - dto:  
   - InventoryProjectDTO: Nizar
   - TaskDTO: Nizar
-- Capacity:
-- InventoryOrder:
+- Capacity: Junior
+- InventoryOrder: Junior
 - JWToken: Nizar
 - Notification:
 - Product: Jayden
-- ProductCategory:
+- ProductCategory: Junior
 - Project: Nizar
-- Task:
-- Team:
-- Transaction:
+- Task: Junior
+- Team: Joey
+- Transaction: Junior
 - User: Kaifie
-- Warehouse:
+- Warehouse: Joey
 
 repositories:
-- CapacityRepository:
-- OrderRepository:
-- ProductCategoryRepository:
+- CapacityRepository: Joey
+- OrderRepository: Junior
+- ProductCategoryRepository: Junior
 - ProductRepository: Jayden
 - ProjectRepository: Nizar
-- TaskRepository:
-- TeamRepository:
-- TransactionRepository:
+- TaskRepository: Junior
+- TeamRepository: Joey
+- TransactionRepository: Junior
 - UserRepository: Johnny, Kaifie
-- WarehouseRepository:
+- WarehouseRepository: Joey
 
 services:
 - AuthenticationService: Johnny, Nizar
-- CapacityService:
-- ChartService:
-- EmailService:
-- InventoryService:
-- OrderService:
+- CapacityService: Joey
+- ChartService: Junior
+- EmailService: Joey
+- InventoryService: Junior
+- OrderService: Junior
 - ProductService: Jayden
 - ProjectService: Nizar
-- TeamService:
-- TransactionService:
+- TeamService: Joey
+- TransactionService: Junior
 - UserService: Johnny, Kaifie
-- WarehouseService:
+- WarehouseService: Joey
 
 utils:
-- DTO:
-- Model:
+- DTO: Junior
+- Model: Junior
 
 src/main/...
 
@@ -114,62 +114,62 @@ frontend/src/...
 
 components:
 - base: Junior
-- charts: 
-- inventory:
-- order:
+- charts: Junior
+- inventory: Junior
+- order: Junior
 - product: Jayden
 - project: Nizar
-- team:
+- team: Joey, Junior
 - user: Johnny, Kaifie
-- warehouses:
+- warehouses: Joey, Junior
 - ErrorComponent: Junior, Johnny
 - NavbarComponent: Junior, Nizar & Jayden
 
 models:
 - charts: Junior
-- InventoryProduct:
+- InventoryProduct: Junior
 - InventoryProject: Nizar
-- Model:
-- Order:
+- Model: Junior
+- Order: Junior
 - Product: Jayden
 - ProductCategory:
-- ProductLine:
+- ProductLine: Junior
 - Project: Nizar
-- Task:
-- Team:
+- Task: Junior
+- Team: Joey
 - Transaction:
 - User: Johnny, Kaifie
-- Warehouse:
+- Warehouse: Joey
 
 plugins, router: Everyone
 
 services:
-- Adaptor:
+- Adaptor: Junior
 - AuthenticationAdaptor: Nizar
-- ChartsAdaptor:
+- ChartsAdaptor: Junior
 - EmailAdaptor: Johnny
 - FetchInterceptor: Johnny
-- InventoryAdaptor:
-- OrderAdaptor:
+- InventoryAdaptor: Junior
+- OrderAdaptor: Junior
 - ProductAdaptor: Jayden
 - ProjectAdaptor: Nizar
-- TeamsAdaptor:
-- TransactionsAdaptor:
+- TeamsAdaptor: Joey
+- TransactionsAdaptor: Junior
 - UserAdaptor: Johnny, Kaifie
-- ValidationRules:
-- WarehousesAdaptor:
+- ValidationRules: Junior
+- WarehousesAdaptor: Joey
 
 frontend/src/views/...
 
 admin:
 - DashboardView: Junior
-- InventoriesView:
-- OrdersView:
+- InventoriesView: Junior
+- OrdersView: Junior
 - ProductsView: Jayden
 - ProjectsView: Nizar
-- TeamsView:
+- TeamsView: Joey, Junior
 - UsersView: Kaifie
-- WarehousesView:
+- WarehousesView: Joey, Junior
 
 user:
 - projects
