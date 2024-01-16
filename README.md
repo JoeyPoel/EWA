@@ -50,13 +50,13 @@ controllers:
 - WarehouseController: Junior, Joey
 
 models:
-- dto:  Junior
+- dto:
   - InventoryProjectDTO: Nizar
   - TaskDTO: Nizar
 - Capacity: Junior
 - InventoryOrder: Junior
 - JWToken: Nizar
-- Notification:
+- Notification: Junior
 - Product: Jayden
 - ProductCategory: Junior
 - Project: Nizar
@@ -139,7 +139,7 @@ models:
 - Team: Joey
 - Transaction:
 - User: Johnny, Kaifie
-- Warehouse: Joey
+- Warehouse: Junior
 
 plugins, router: Everyone
 
