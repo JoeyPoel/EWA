@@ -2,7 +2,7 @@ import {User} from "@/models/User";
 import {Adaptor} from "@/services/Adaptor";
 import {FetchInterceptor} from "@/services/FetchInterceptor";
 
-export default class AuthenthicationAdaptor extends Adaptor {
+export default class AuthenticationAdaptor extends Adaptor {
     constructor(URL, router) {
         super(URL);
         this.router = router;

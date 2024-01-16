@@ -1,4 +1,4 @@
-import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
+import AuthenticationAdaptor from "@/services/AuthenticationAdaptor";
 import { User } from "@/models/User";
 
 jest.mock('@/services/FetchInterceptor', () => {
@@ -18,7 +18,7 @@ describe('AuthenthicationAdaptor', () => {
             push: jest.fn(),
         };
 
-        adaptor = new AuthenthicationAdaptor('https://localhost.com', mockRouter);
+        adaptor = new AuthenticationAdaptor('https://localhost.com', mockRouter);
     });
 
     test('asyncLogin sends a POST request and returns a User object on success', async () => {

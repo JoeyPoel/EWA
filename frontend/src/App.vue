@@ -19,7 +19,7 @@ import UserAdaptor from "@/services/UserAdaptor";
 import ProjectAdaptor from "@/services/ProjectAdaptor";
 import {InventoryAdaptor} from "@/services/InventoryAdaptor";
 import TransactionsAdaptor from "@/services/TransactionsAdaptor";
-import AuthenthicationAdaptor from "@/services/AuthenthicationAdaptor";
+import AuthenticationAdaptor from "@/services/AuthenticationAdaptor";
 import {ChartsAdaptor} from "@/services/ChartsAdaptor";
 import EmailAdaptor from "@/services/EmailAdaptor";
 import {FetchInterceptor} from "./services/FetchInterceptor";
@@ -83,7 +83,7 @@ export default {
       projectsService: new ProjectAdaptor(CONFIG.BACKEND_URL + "/projects"),
       inventoryService: new InventoryAdaptor(CONFIG.BACKEND_URL + "/inventories"),
       transactionsService: new TransactionsAdaptor(CONFIG.BACKEND_URL + "/transactions"),
-      authenthicationService: new AuthenthicationAdaptor(CONFIG.BACKEND_URL + "/auth", this.$router),
+      authenthicationService: new AuthenticationAdaptor(CONFIG.BACKEND_URL + "/auth", this.$router),
       chartsService: new ChartsAdaptor(CONFIG.BACKEND_URL + "/charts"),
       emailService: new EmailAdaptor(CONFIG.BACKEND_URL + "/mail"),
       orderService: new OrderAdaptor(CONFIG.BACKEND_URL + "/orders"),

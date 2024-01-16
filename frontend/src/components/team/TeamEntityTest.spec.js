@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { reactive } from 'vue';
-import TeamEntityTable from "@/components/team/TeamEntityTable";
+import TeamEntityTable from "@/components/team/TeamEntityTable.vue";
 
 /**
  * Tests for Team Entity Table
