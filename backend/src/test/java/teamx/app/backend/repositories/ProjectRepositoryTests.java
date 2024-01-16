@@ -23,6 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests for project repository
+ *  @Author Nizar Amine
+ */
+
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @DataJpaTest
 class ProjectRepositoryTests {
