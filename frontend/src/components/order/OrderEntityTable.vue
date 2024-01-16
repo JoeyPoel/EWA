@@ -47,8 +47,7 @@ export default {
           {name: 'description', label: 'Description', type: 'text', required: false},
           {name: 'status', label: 'Status', type: 'orderStatus', required: false},
         ],
-        detailTabs: [
-        ],
+        detailTabs: [],
         maxWidth: '1000px',
       },
       filterConfig: {
@@ -92,7 +91,6 @@ export default {
         }
         return item;
       });
-      console.log(this.tableConfig.items);
     },
     async handleDelete(item) {
       const deletedItem = await this.orderService.asyncDeleteById(item.id);
