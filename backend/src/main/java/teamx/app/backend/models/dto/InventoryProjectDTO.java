@@ -11,7 +11,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class InventoryProjectDTO {
 
-    // Product Fields
     private Long id;
     private int quantity;
     private String ProductName;

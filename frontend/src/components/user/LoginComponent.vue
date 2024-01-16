@@ -65,7 +65,6 @@ export default {
           localStorage.setItem("token", response.jwtToken);
           console.log(response)
           this.$router.push("/dashboard");
-          //TODO After login navbar isnt loaded in properly firsly, after refresh it is
           window.location.reload()
         } else {
           this.formIsValid = false;
