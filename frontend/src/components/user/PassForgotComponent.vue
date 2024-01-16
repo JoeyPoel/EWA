@@ -43,7 +43,6 @@ export default {
         this.emailSent = true;
       } catch(e) {
         //TODO change this error
-        console.log("bleh")
       }
 
     }

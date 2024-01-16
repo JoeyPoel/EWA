@@ -12,9 +12,6 @@ export default class EmailAdaptor extends Adaptor {
             body: JSON.stringify({"email": email})
         }
 
-        const response = await fetch(this.resourceUrl + "/sendPassResetEmail", options);
-        console.log(response)
-
         return await this.fetchJson(this.resourceUrl + "/sendPassResetEmail", options);
     }
     async sendPassGenEmail(email, newPassword) {
