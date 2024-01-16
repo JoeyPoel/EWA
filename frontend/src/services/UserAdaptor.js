@@ -26,7 +26,7 @@ export default class UserAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/team/" + teamId, options);
 
-        return response ? response.map(user => User.fromJson(user)) : null;
+        return Array.isArray(response) ? response.map(user => User.fromJson(user)) : null;
     }
 
     async asyncFindAllByNoTeam() {
@@ -37,7 +37,7 @@ export default class UserAdaptor extends Adaptor {
 
         const response = await this.fetchJson(this.resourceUrl + "/noTeam", options);
 
-        return response ? response.map(user => User.fromJson(user)) : null;
+        return Array.isArray(response) ? response.map(user => User.fromJson(user)) : null;
     }
 
     async asyncDeleteById(id) {

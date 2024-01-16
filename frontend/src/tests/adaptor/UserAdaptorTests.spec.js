@@ -5,6 +5,7 @@ import '@jest/globals';
  * Tests for user adaptor
  *
  * @Author Johnny Magielse
+ * @Author Kaifie Dil.
  */
 describe('UserAdaptor', () => {
     let userAdaptor;
@@ -36,6 +37,38 @@ describe('UserAdaptor', () => {
             expect(userAdaptor.fetchJson).toHaveBeenCalledWith(`${resourceUrl}/passReset`, expect.objectContaining({
                 method: 'PUT',
                 body: JSON.stringify({ password, id }),
+            }));
+        });
+    });
+
+    // Kaifie
+    describe('asyncFindAllByTeamId', () => {
+        it('should fetch users by team ID from the API', async () => {
+            const teamId = '123';
+            await userAdaptor.asyncFindAllByTeamId(teamId);
+            expect(userAdaptor.fetchJson).toHaveBeenCalledWith(`${resourceUrl}/team/${teamId}`, expect.objectContaining({
+                method: 'GET',
+            }));
+        });
+    });
+
+// Kaifie
+    describe('asyncFindAllByNoTeam', () => {
+        it('should fetch users with no team from the API', async () => {
+            await userAdaptor.asyncFindAllByNoTeam();
+            expect(userAdaptor.fetchJson).toHaveBeenCalledWith(`${resourceUrl}/noTeam`, expect.objectContaining({
+                method: 'GET',
+            }));
+        });
+    });
+
+// Kaifie
+    describe('asyncGetUserInfo', () => {
+        it('should fetch user information by user ID from the API', async () => {
+            const id = '123';
+            await userAdaptor.asyncGetUserInfo(id);
+            expect(userAdaptor.fetchJson).toHaveBeenCalledWith(`${resourceUrl}${id}`, expect.objectContaining({
+                method: 'GET',
             }));
         });
     });
