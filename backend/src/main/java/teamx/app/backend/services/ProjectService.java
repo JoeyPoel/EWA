@@ -113,7 +113,7 @@ public class ProjectService {
         return dto;
     }
 
-  /*  private TaskDTO mapTasksToDTO(Task task) {
+    private TaskDTO mapTasksToDTO(Task task) {
         TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
         dto.setOrder(task.getTaskOrder());
@@ -125,28 +125,7 @@ public class ProjectService {
         dto.setPersonalTodoListOwnerId(task.getPersonalTodoListOwner().getId());
         dto.setPersonalTodoListOwnerName(task.getPersonalTodoListOwner().getName());
         return dto;
-    }*/
-
-    // Made for the Unit test @ProjectServiceTest because of deadline.
-    private TaskDTO mapTasksToDTO(Task task) {
-        TaskDTO dto = new TaskDTO();
-        dto.setId(task.getId());
-        dto.setOrder(task.getTaskOrder());
-        dto.setName(task.getName());
-        dto.setDescription(task.getDescription());
-
-        // Add a null check for the deadline
-        if (task.getDeadline() != null) {
-            dto.setDeadline(task.getDeadline().toString());
-        }
-
-        dto.setStatus(String.valueOf(task.getStatus()));
-        dto.setProjectId(task.getProject().getId());
-        dto.setPersonalTodoListOwnerId(task.getPersonalTodoListOwner().getId());
-        dto.setPersonalTodoListOwnerName(task.getPersonalTodoListOwner().getName());
-        return dto;
     }
-
 
     public List<InventoryProjectDTO> getProjectMaterials(Long projectId) {
         Project project = projectRepository.findById(projectId).orElse(null);
