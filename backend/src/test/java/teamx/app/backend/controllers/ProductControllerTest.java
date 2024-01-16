@@ -16,7 +16,8 @@ import teamx.app.backend.utils.DTO.ProductDTO;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,23 +32,12 @@ class ProductControllerTests {
     @MockBean
     private ProductService productService;
 
-    private Product product1;
-    private Product product2;
+    private Product product1, product2;
+
     @BeforeEach
     void setUp() {
-        product1 = new Product();
-
-        product1.setId(1L);
-        product1.setName("Test Product 1");
-        product1.setDescription("Description 1");
-        product1.setPrice(100.0);
-
-        product2 = new Product();
-
-        product2.setId(2L);
-        product2.setName("Test Product 2");
-        product2.setDescription("Description 2");
-        product2.setPrice(200.0);
+        product1 = new Product(1L, "Test Product 1", "Description 1", 100.0, null, null);
+        product2 = new Product(2L, "Test Product 2", "Description 2", 200.0, null, null);
 
         List<Product> products = Arrays.asList(product1, product2);
 
@@ -99,5 +89,19 @@ class ProductControllerTests {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isOk());
         verify(productService).delete(1L);
+    }
+
+    @Test
+    void deleteNonExistingProduct() throws Exception {
+        doThrow(new IllegalArgumentException("Product not found")).when(productService).delete(999L);
+        mockMvc.perform(delete("/products/999"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getProductByIdNotFound() throws Exception {
+        when(productService.findById(999L)).thenReturn(null);
+        mockMvc.perform(get("/products/999"))
+                .andExpect(status().isInternalServerError());
     }
 }

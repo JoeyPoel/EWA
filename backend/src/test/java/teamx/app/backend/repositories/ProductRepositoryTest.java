@@ -27,12 +27,10 @@ class ProductRepositoryTests {
 
     @BeforeEach
     void setUp() {
-
-        ProductCategory category = ProductCategory.builder()
-                .name("Test Category")
-                .description("Test Category Description")
-                .build();
-        category = entityManager.persist(category);
+        ProductCategory category = new ProductCategory();
+        category.setName("Test Category");
+        category.setDescription("Test Category Description");
+        entityManager.persist(category);
 
         warehouse = new Warehouse();
         warehouse.setName("Test Warehouse");
@@ -40,39 +38,64 @@ class ProductRepositoryTests {
         warehouse.setCountry("Test Country");
         warehouse.setPostcode("1234AB");
         warehouse.setAddress("Test Address");
-        warehouse = entityManager.persist(warehouse);
+        entityManager.persist(warehouse);
 
         Product product = new Product();
         product.setName("Test Product");
         product.setDescription("Test Description");
         product.setPrice(100.0);
         product.setCategory(category);
+        entityManager.persist(product);
 
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
         transaction.setWarehouse(warehouse);
         transaction.setQuantity(10);
-
-        entityManager.persist(product);
         entityManager.persist(transaction);
-    }
-
-
-    @Test
-    public void testFindAll() {
-        List<Product> products = productRepository.findAll();
-        assertFalse(products.isEmpty(), "Should return non-empty list of products");
     }
 
     @Test
     public void testGetAllByTransactionsWarehouseId() {
         List<Product> products = productRepository.getAllByTransactions_Warehouse_Id(warehouse.getId());
+
         assertFalse(products.isEmpty(), "Should return non-empty list for specific warehouse ID");
+
+        Product firstProduct = products.get(0);
+        assertEquals("Test Product", firstProduct.getName());
+        assertEquals("Test Description", firstProduct.getDescription());
+        assertEquals(100.0, firstProduct.getPrice());
     }
 
     @Test
     public void testFindAllByTransactionsIsNotEmpty() {
         List<Product> products = productRepository.findAllByTransactionsIsNotEmpty();
         assertFalse(products.isEmpty(), "Should return non-empty list of products with transactions");
+    }
+
+    @Test
+    public void testGetAllByTransactionsWarehouseIdWithNoTransactions() {
+        Warehouse emptyWarehouse = new Warehouse();
+        emptyWarehouse.setName("Empty Warehouse");
+        emptyWarehouse.setLocation("No Location");
+        emptyWarehouse.setCountry("No Country");
+        emptyWarehouse.setPostcode("0000AB");
+        emptyWarehouse.setAddress("No Address");
+        emptyWarehouse = entityManager.persist(emptyWarehouse);
+
+        List<Product> products = productRepository.getAllByTransactions_Warehouse_Id(emptyWarehouse.getId());
+        assertTrue(products.isEmpty(), "Should return an empty list for warehouse with no transactions");
+    }
+
+    @Test
+    public void testGetAllByNonExistentWarehouseId() {
+        Long nonExistentWarehouseId = 999L; // ID that does not exist in the database
+        List<Product> products = productRepository.getAllByTransactions_Warehouse_Id(nonExistentWarehouseId);
+        assertTrue(products.isEmpty(), "Should return an empty list for non-existent warehouse ID");
+    }
+
+    @Test
+    public void testFindAll() {
+        List<Product> products = productRepository.findAll();
+        assertFalse(products.isEmpty(), "Should return non-empty list of products");
     }
 }
